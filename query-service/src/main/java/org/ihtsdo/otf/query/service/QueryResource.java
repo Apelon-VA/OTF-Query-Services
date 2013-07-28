@@ -16,10 +16,11 @@
 package org.ihtsdo.otf.query.service;
 
 import java.io.IOException;
-import java.io.InputStream;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  *
@@ -27,21 +28,25 @@ import javax.ws.rs.Produces;
  */
 @Path("/query")
 public class QueryResource {
-    static {
-        TccSingleton.get();
-    }
+//    static {
+//        TccSingleton.get();
+//    }
     @GET
     @Path("test")
     @Produces("text/plain")
     public String getSequence() throws IOException {
-        return Long.toString(TccSingleton.get().getSequence());
+        //return Long.toString(TccSingleton.get().getSequence());
+        return "33";
     }
 
     @GET
-    @Path("{key}")
+    @Path("process")
     @Produces("text/plain")
-    public String doQuery(InputStream is) throws IOException  {
-        String queryString = is.toString();
+    public String doQuery(@QueryParam("FOR") String forValue,
+                          @QueryParam("LET") String letValue, 
+                          @QueryParam("WHERE") String whereValue) throws IOException  {
+        String queryString = forValue + "|" + letValue+ "|" + whereValue;
+        System.out.println("Recieved: " + queryString);
         return queryString;
     }
     
