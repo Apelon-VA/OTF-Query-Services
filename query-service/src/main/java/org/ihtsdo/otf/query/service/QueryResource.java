@@ -16,11 +16,17 @@
 package org.ihtsdo.otf.query.service;
 
 import java.io.IOException;
-import javax.ws.rs.DefaultValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBException;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.query.QueryFromJaxb;
 
 /**
  *
@@ -28,26 +34,32 @@ import javax.ws.rs.QueryParam;
  */
 @Path("/query")
 public class QueryResource {
-//    static {
-//        TccSingleton.get();
-//    }
-    @GET
-    @Path("test")
-    @Produces("text/plain")
-    public String getSequence() throws IOException {
-        //return Long.toString(TccSingleton.get().getSequence());
-        return "33";
+    static {
+        TccSingleton.get();
     }
 
     @GET
     @Path("process")
     @Produces("text/plain")
-    public String doQuery(@QueryParam("FOR") String forValue,
+    public String doQuery(@QueryParam("VIEWPOINT") String viewValue,
+                          @QueryParam("FOR") String forValue,
                           @QueryParam("LET") String letValue, 
-                          @QueryParam("WHERE") String whereValue) throws IOException  {
+                          @QueryParam("WHERE") String whereValue) throws IOException, JAXBException, Exception  {
         String queryString = forValue + "|" + letValue+ "|" + whereValue;
         System.out.println("Recieved: " + queryString);
-        return queryString;
+        QueryFromJaxb query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
+        NativeIdSetBI resultSet = query.compute();
+        System.out.println("ResultSet: " + resultSet.getSetValues());
+        System.out.println("ResultSize: " + resultSet.size());
+        System.out.println("ResultSetAsList: " + Arrays.asList(resultSet.getSetValues()).toString());
+        NativeIdSetItrBI iterator = resultSet.getIterator();
+        List<Integer> results = new ArrayList<>(resultSet.size());
+        while (iterator.next()) {
+            results.add(iterator.nid());
+        }
+        
+        
+        return results.toString();
     }
     
 }
