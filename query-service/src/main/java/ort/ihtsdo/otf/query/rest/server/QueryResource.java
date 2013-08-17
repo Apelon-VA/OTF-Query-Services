@@ -18,6 +18,7 @@ package ort.ihtsdo.otf.query.rest.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -26,6 +27,7 @@ import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.query.QueryFromJaxb;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 
 /**
  *
@@ -33,10 +35,6 @@ import org.ihtsdo.otf.tcc.api.query.QueryFromJaxb;
  */
 @Path("/query")
 public class QueryResource {
-    static {
-        //BdbSingleton.get();
-    }
-
     @GET
     @Produces("text/plain")
     public String doQuery(@QueryParam("VIEWPOINT") String viewValue,
