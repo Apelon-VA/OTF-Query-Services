@@ -44,7 +44,7 @@ public class QueryResource {
                           @QueryParam("LET") String letValue, 
                           @QueryParam("WHERE") String whereValue) throws IOException, JAXBException, Exception  {
         String queryString = forValue + "\n   " + letValue+ "\n   " + whereValue;
-        System.out.println("Recieved: \n   " + queryString);
+        System.out.println("Received: \n   " + queryString);
         QueryFromJaxb query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
         NativeIdSetBI resultSet = query.compute();
         NativeIdSetItrBI iterator = resultSet.getIterator();
