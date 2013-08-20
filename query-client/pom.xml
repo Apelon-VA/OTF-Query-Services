@@ -10,7 +10,7 @@
     </parent>
     <artifactId>query-client</artifactId>
  
-    <name>${branch}: Query REST client</name>
+    <name>${branch}: Query rest client</name>
     <dependencies>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>

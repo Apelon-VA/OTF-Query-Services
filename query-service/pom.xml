@@ -11,7 +11,7 @@
     <artifactId>query-service</artifactId>
     <packaging>war</packaging>
 
-    <name>${branch}: Query REST service</name>
+    <name>${branch}: Query rest service</name>
 
     <dependencies>
         <dependency>

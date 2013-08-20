@@ -59,5 +59,6 @@
         <module>query-client</module>
         <module>query-integration-tests</module>
         <module>query-implementation</module>
-    </modules>
+        <module>query-documentation</module>
+  </modules>
 </project>
