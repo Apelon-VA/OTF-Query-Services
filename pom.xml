@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.ihtsdo</groupId>
@@ -11,15 +11,53 @@
     <version>1.1-sprint2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${branch}: (MMP) Query service parent</name>
+    <scm>
+        <connection>scm:git:https://github.com/IHTSDO/OTF-Query-Services.git</connection>
+        <developerConnection>scm:git:git@github.com:IHTSDO/OTF-Query-Services.git</developerConnection>
+        <url>https://github.com/IHTSDO/OTF-Query-Services</url>
+        <tag>sprint2</tag>
+    </scm>
+    <distributionManagement>
+        <site>
+            <id>site</id>
+            <url>scm:git:git@github.com:IHTSDO/OTF-Query-Services.git</url>
+        </site>
+    </distributionManagement>
     <properties>
-        <branch>QS trunk</branch>
+        <branch>QS ${project.scm.tag}</branch>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jersey-version>2.1</jersey-version>
+        <jersey-version>2.2</jersey-version>
         <junit.version>4.11</junit.version>
+        <terminology-component-chronicle.version>1.1-sprint2-SNAPSHOT</terminology-component-chronicle.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <scope>test</scope>
+                <version>${junit.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <modules>
         <module>query-service</module>
         <module>query-client</module>
+        <module>query-integration-tests</module>
+        <module>query-implementation</module>
     </modules>
 </project>
