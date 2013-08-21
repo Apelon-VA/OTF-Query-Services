@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<article xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <info>
+        <title>Query Documetation</title>
+        <author>
+            <orgname>IHTSDO</orgname>
+            <address>
+                <city>Copenhagen K</city>
+                <street>Gammeltorv 4, 1.</street>
+                <postcode>1457</postcode>
+                <country>Denmark</country>
+            </address>
+            <email>user@example.com</email>
+        </author>
+    </info>
+    <section>
+        <title>Section1 Title</title>
+        <subtitle>Section1 Subtitle</subtitle>
+        <para>Text</para>
+    </section>
+    
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-client/query-client.xml" 
+         xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-implementation/query-implementaton.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-integration-tests/query-integration-tests.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-parent/query-parent.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-service/query-service.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</article>

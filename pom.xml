@@ -39,9 +39,26 @@
                 <scope>test</scope>
                 <version>${junit.version}</version>
             </dependency>
+            <dependency>
+                <groupId>net.sf.docbook</groupId>
+                <artifactId>docbook-xml</artifactId>
+                <version>5.0-all</version>
+                <classifier>resources</classifier>
+                <type>zip</type>
+                <scope>runtime</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.agilejava.docbkx</groupId>
+                    <artifactId>docbkx-maven-plugin</artifactId>
+                    <version>2.0.14</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -52,6 +69,24 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-docbook</id>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/docbook.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <modules>
@@ -60,5 +95,5 @@
         <module>query-integration-tests</module>
         <module>query-implementation</module>
         <module>query-documentation</module>
-  </modules>
+    </modules>
 </project>

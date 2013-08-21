@@ -1,0 +1,13 @@
+<assembly>
+  <id>docbook</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>src/docbkx/</directory>
+      <outputDirectory>${project.groupId}/${project.artifactId}</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <includeBaseDirectory>false</includeBaseDirectory>
+</assembly>
