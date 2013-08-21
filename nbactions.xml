@@ -11,4 +11,11 @@
                 <stagingSiteURL>file:/Sites/query</stagingSiteURL>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-generate website</actionName>
+            <displayName>generate website</displayName>
+            <goals>
+                <goal>site:site</goal>
+            </goals>
+        </action>
     </actions>
