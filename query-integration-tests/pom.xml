@@ -11,7 +11,6 @@
     <groupId>org.ihtsdo.otf</groupId>
     <artifactId>query-integration-tests</artifactId>
     <name>${branch}: Query integration tests</name>
-    <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
