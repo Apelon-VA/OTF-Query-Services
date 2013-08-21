@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
 import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
@@ -42,6 +44,20 @@ import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.datastore.Bdb;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.ComponentChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.TypedComponentVersionDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
 
 /**
  * Executes queries within the terminology hierarchy and returns the nids of the
@@ -196,18 +212,68 @@ public abstract class Query {
         }
     }
 
-    public ArrayList<String> returnResultSet(NativeIdSetBI resultSet) throws IOException, ContradictionException {
-        ArrayList<String> resultSetDesc = null;
-        NativeIdSetItrBI iter = resultSet.getIterator();
-        while (iter.next() && resultSetDesc.size() <= resultSetLimit) {
-            ComponentChronicleBI chronicle = Ts.get().getComponent(iter.nid());
-            resultSetDesc.add(chronicle.getVersion(StandardViewCoordinates.getSnomedInferredLatest()).toUserString(null));
+    /**
+     * Return the desired Display Objects, which are specified by
+     * <code>ReturnTypes</code>.
+     *
+     * @param resultSet results from the Query
+     * @param returnTypes an <code>EnumSet</code> of <code>ReturnTypes</code>,
+     * the desired Display Object types
+     * @return an <code>ArrayList</code> of the Display Objects
+     * @throws IOException
+     * @throws ContradictionException
+     */
+    public ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, EnumSet<ReturnTypes> returnTypes) throws IOException, ContradictionException {
+        ArrayList<Object> results = new ArrayList<>();
+        for (ReturnTypes rt : returnTypes) {
+            NativeIdSetItrBI iter = resultSet.getIterator();
+
+            switch (rt) {
+                case UUIDS:
+                    while (iter.next()) {
+                        results.add(Ts.get().getComponent(iter.nid()).getVersion(viewCoordinate).getPrimordialUuid());
+                    }
+                    break;
+                case NIDS:
+                    while (iter.next()) {
+                        results.add(iter.nid());
+                    }
+                    break;
+                case CONCEPT_VERSION:
+                    while (iter.next()) {
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        results.add(cc);
+                    }
+                    break;
+                case DESCRIPTION_VERSION_FSN:
+                    while (iter.next()) {
+                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getFullySpecifiedDescription();
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
+                        results.add(descChronicle);
+                    }
+                    break;
+                case DESCRIPTION_VERSION_PREFERRED:
+                    while (iter.next()) {
+                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getPreferredDescription();
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
+                        results.add(descChronicle);
+                    }
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Return type not supported");
+            }
         }
-        return resultSetDesc;
+
+        return results;
 
     }
-    
-    public void setResultSetLimit(int limit){
+
+    public void setResultSetLimit(int limit) {
         this.resultSetLimit = limit;
     }
 

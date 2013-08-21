@@ -15,15 +15,16 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
+import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
@@ -105,57 +106,56 @@ public class QueryTest {
     }
 
     /*@Test
-    public void testDescriptionLuceneMatch() throws IOException, Exception {
-        System.out.println("Sequence: " + Ts.get().getSequence());
+     public void testDescriptionLuceneMatch() throws IOException, Exception {
+     System.out.println("Sequence: " + Ts.get().getSequence());
 
-        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
-            @Override
-            protected NativeIdSetBI For() throws IOException {
-                return Ts.get().getAllConceptNids();
-            }
+     Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+     @Override
+     protected NativeIdSetBI For() throws IOException {
+     return Ts.get().getAllConceptNids();
+     }
 
-            @Override
-            protected void Let() throws IOException {
-                let("momentum", "momentum");
-            }
+     @Override
+     protected void Let() throws IOException {
+     let("momentum", "momentum");
+     }
 
-            @Override
-            protected Clause Where() {
-                return Or(DescriptionLuceneMatch("momentum"));
-            }
-        };
-        NativeIdSetBI results = q.compute();
-        System.out.println(results.size());
-        Assert.assertEquals(2, results.size());
+     @Override
+     protected Clause Where() {
+     return Or(DescriptionLuceneMatch("momentum"));
+     }
+     };
+     NativeIdSetBI results = q.compute();
+     System.out.println(results.size());
+     Assert.assertEquals(2, results.size());
 
-    }*/
+     }*/
 
     /*@Test
-    public void testDescriptionLuceneMatch2() throws IOException, Exception {
-        System.out.println("Sequence: " + Ts.get().getSequence());
+     public void testDescriptionLuceneMatch2() throws IOException, Exception {
+     System.out.println("Sequence: " + Ts.get().getSequence());
 
-        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
-            @Override
-            protected NativeIdSetBI For() throws IOException {
-                return Ts.get().getAllConceptNids();
-            }
+     Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+     @Override
+     protected NativeIdSetBI For() throws IOException {
+     return Ts.get().getAllConceptNids();
+     }
 
-            @Override
-            protected void Let() throws IOException {
-                let("Specimen source", "\"Specimen source\"");
-            }
+     @Override
+     protected void Let() throws IOException {
+     let("Specimen source", "\"Specimen source\"");
+     }
 
-            @Override
-            protected Clause Where() {
-                return Or(DescriptionLuceneMatch("Specimen source"));
-            }
-        };
-        NativeIdSetBI results = q.compute();
-        System.out.println(results.size());
-        Assert.assertEquals(49, results.size());
+     @Override
+     protected Clause Where() {
+     return Or(DescriptionLuceneMatch("Specimen source"));
+     }
+     };
+     NativeIdSetBI results = q.compute();
+     System.out.println(results.size());
+     Assert.assertEquals(49, results.size());
 
-    }*/
-
+     }*/
     @Test
     public void testXor() throws IOException, Exception {
 
@@ -180,6 +180,20 @@ public class QueryTest {
         NativeIdSetBI results = q.compute();
         System.out.println("Xor result size: " + results.size());
         Assert.assertEquals(6, results.size());
+
+        ArrayList<Object> resultSet = q.returnDisplayObjects(results, EnumSet.of(ReturnTypes.DESCRIPTION_VERSION_FSN));
+        for (Object id : resultSet) {
+            System.out.println(id);
+        }
+
+        Assert.assertEquals(6, resultSet.size());
+
+        ArrayList<Object> resultSet2 = q.returnDisplayObjects(results, EnumSet.of(ReturnTypes.DESCRIPTION_VERSION_PREFERRED));
+        for (Object id : resultSet2) {
+            System.out.println(id);
+        }
+
+        Assert.assertEquals(6, resultSet2.size());
 
 
     }
@@ -265,32 +279,6 @@ public class QueryTest {
         Assert.assertEquals(7, results.size());
 
     }
-
-    /*@Test
-    public void TestRelType() throws IOException, Exception {
-        System.out.println("Sequence: " + Ts.get().getSequence());
-        
-        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
-
-            @Override
-            protected NativeIdSetBI For() throws IOException {
-                return Ts.get().getAllConceptNids();
-            }
-
-            @Override
-            protected void Let() throws IOException {
-                let("Associated with", Snomed.ASSOCIATED_WITH);
-                let("Diabetes metillus", Snomed.DIABETES_MELLITUS);
-            }
-
-            @Override
-            protected Clause Where() {
-                return Or(RelType("Associated with", "Diabetes metillus"));
-            }
-        };
-        NativeIdSetBI results = q.compute();
-        System.out.println("Rel type query result size: " + results.size());
-    }*/
     
     @Test
     public void testQuery() throws IOException, Exception {
@@ -366,8 +354,19 @@ public class QueryTest {
         IsDescendentOfTest isDescendent = new IsDescendentOfTest();
         Query q4 = isDescendent.getQuery();
         NativeIdSetBI results4 = q4.compute();
-        System.out.println("Query result count " + results4.size());
+        System.out.println("ConceptIsDescendentOf query result count " + results4.size());
         Assert.assertEquals(6, results4.size());
+
+        ArrayList<Object> resultSet = q4.returnDisplayObjects(results4, EnumSet.of(ReturnTypes.UUIDS, ReturnTypes.NIDS));
+        for (Object id : resultSet) {
+            System.out.println(id);
+        }
+        
+        Assert.assertEquals(12, resultSet.size());
+        
+        for(int id: results4.getSetValues()){
+            System.out.println(id);
+        }
 
         IsKindOfTest kindOf = new IsKindOfTest();
         Query kindOfQuery = kindOf.getQuery();

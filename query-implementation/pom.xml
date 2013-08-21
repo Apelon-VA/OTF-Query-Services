@@ -25,5 +25,17 @@
             <artifactId>tcc-api</artifactId>
             <version>${terminology-component-chronicle.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-dto-ddo</artifactId>
+            <version>${terminology-component-chronicle.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-datastore</artifactId>
+            <version>${terminology-component-chronicle.version}</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>
