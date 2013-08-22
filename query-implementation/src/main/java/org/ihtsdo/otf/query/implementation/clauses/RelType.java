@@ -29,9 +29,12 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.datastore.Bdb;
 
 /**
  * TODO: Not implemented yet.
+ *
  * @author dylangrald
  */
 public class RelType extends LeafClause {
@@ -44,9 +47,11 @@ public class RelType extends LeafClause {
     ConceptSpec relType;
     String relTypeKey;
     NativeIdSetBI cache;
-    
+    ConceptSpec relRestrictionSpec;
+    String relRestriction;
+    Boolean subsumption;
 
-    public RelType(Query enclosingQuery, String relTypeKey, String conceptSpecKey, String viewCoordinateKey) {
+    public RelType(Query enclosingQuery, String relTypeKey, String conceptSpecKey, String relRestriction, String viewCoordinateKey, Boolean subsumption) {
         super(enclosingQuery);
         this.conceptSpecKey = conceptSpecKey;
         this.conceptSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(conceptSpecKey);
@@ -54,6 +59,10 @@ public class RelType extends LeafClause {
         this.enclosingQuery = enclosingQuery;
         this.relTypeKey = relTypeKey;
         this.relType = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relTypeKey);
+        this.relRestriction = relRestriction;
+        this.relRestrictionSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relRestriction);
+        this.subsumption = subsumption;
+
 
     }
 
@@ -70,7 +79,7 @@ public class RelType extends LeafClause {
 
     @Override
     public EnumSet<ClauseComputeType> getComputePhases() {
-        return ITERATION;
+        return PRE_AND_POST_ITERATION;
     }
 
     @Override
@@ -80,18 +89,25 @@ public class RelType extends LeafClause {
         } else {
             this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
-        NativeIdSetBI resultSet = new ConcurrentBitSet();
-        resultSet = incomingPossibleComponents;
         NativeIdSetBI relTypeSet = new ConcurrentBitSet();
         relTypeSet.add(this.relType.getNid());
-        //NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.conceptSpec.getNid(), relTypeSet);
-        //resultSet.and(relationshipSet);
-        return resultSet;
+        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.conceptSpec.getNid(), relTypeSet);
+        getResultsCache().or(relationshipSet);
+        if (this.relRestrictionSpec != null) {
+            int parentNid = relRestrictionSpec.getNid();
+            if (this.subsumption != null) {
+                if (this.subsumption) {
+                    getResultsCache().and(Ts.get().isKindOfSet(parentNid, this.vc));
+                } else {
+                    getResultsCache().and(Ts.get().isChildOfSet(parentNid, this.vc));
+                }
+            }
+        }
+        return getResultsCache();
     }
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-        //TO DO
-
+        //Nothing to do here...
     }
 }

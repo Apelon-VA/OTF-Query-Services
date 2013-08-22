@@ -26,7 +26,7 @@ import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 
 /**
- *
+ * 
  * @author dylangrald
  */
 public class ConceptForComponentTest {

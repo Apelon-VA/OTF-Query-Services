@@ -28,7 +28,7 @@ import org.ihtsdo.otf.query.implementation.Where;
  * @author dylangrald
  */
 public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
-    
+
     
     public DescriptionActiveLuceneMatch(Query enclosingQuery, String luceneMatchKey) {
         super(enclosingQuery, luceneMatchKey);
@@ -41,7 +41,7 @@ public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) {
-        //TO DO
+        //TODO
     }
     @Override
     public Where.WhereClause getWhereClause() {

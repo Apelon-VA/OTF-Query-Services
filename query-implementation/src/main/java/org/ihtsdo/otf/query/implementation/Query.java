@@ -21,9 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
 import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
@@ -44,17 +41,9 @@ import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
-import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
-import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
-import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
-import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
-import org.ihtsdo.otf.tcc.ddo.concept.component.ComponentChronicleDdo;
-import org.ihtsdo.otf.tcc.ddo.concept.component.TypedComponentVersionDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
-import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
 import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
 import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
@@ -227,7 +216,6 @@ public abstract class Query {
         ArrayList<Object> results = new ArrayList<>();
         for (ReturnTypes rt : returnTypes) {
             NativeIdSetItrBI iter = resultSet.getIterator();
-
             switch (rt) {
                 case UUIDS:
                     while (iter.next()) {
@@ -265,7 +253,7 @@ public abstract class Query {
                     }
                     break;
                 default:
-                    throw new UnsupportedOperationException("Return type not supported");
+                    throw new UnsupportedOperationException("Return type not supported.");
             }
         }
 
@@ -326,11 +314,19 @@ public abstract class Query {
     }
 
     protected RelType RelType(String relTypeKey, String conceptSpecKey) {
-        return new RelType(this, relTypeKey, conceptSpecKey, this.currentViewCoordinateKey);
+        return new RelType(this, relTypeKey, conceptSpecKey, null, this.currentViewCoordinateKey, null);
     }
 
     protected RelType RelType(String relTypeKey, String conceptSpecKey, String viewCoordinateKey) {
-        return new RelType(this, relTypeKey, conceptSpecKey, viewCoordinateKey);
+        return new RelType(this, relTypeKey, conceptSpecKey, null, viewCoordinateKey, null);
+    }
+    
+    protected RelType RelType(String relTypeKey, String conceptSpecKey, String relRestrictionKey, Boolean subsumption){
+        return new RelType(this, relTypeKey, conceptSpecKey, null, this.currentViewCoordinateKey, subsumption);
+    }
+    
+    protected RelType RelType(String relTypeKey, String conceptSpecKey, String relRestrictionKey, String viewCoordinateKey, Boolean subsumption){
+        return new RelType(this, relTypeKey, conceptSpecKey, relRestrictionKey, viewCoordinateKey, subsumption);
     }
 
     protected PreferredNameForConcept PreferredNameForConcept(Clause clause) {

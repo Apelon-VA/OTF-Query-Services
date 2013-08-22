@@ -16,10 +16,32 @@
 package org.ihtsdo.otf.query.implementation;
 
 /**
+ * The Display Objects to be returned from the result set of a query. 
  *
  * @author dylangrald
  */
 public enum ReturnTypes {
 
-    NIDS, UUIDS, CONCEPT_VERSION, DESCRIPTION_VERSION_FSN, DESCRIPTION_VERSION_PREFERRED;
+    /**
+     * The native identifier of the component.
+     */
+    NIDS,
+    /**
+     * The UUID of the component.
+     */
+    UUIDS,
+    /**
+     * The Concept version specified by the
+     * <code>ViewCoordinate</code> from the
+     * <code>Query</code>.
+     */
+    CONCEPT_VERSION,
+    /**
+     * Description version of the fully specified name.
+     */
+    DESCRIPTION_VERSION_FSN,
+    /**
+     * Description version of the preferred version.
+     */
+    DESCRIPTION_VERSION_PREFERRED;
 }

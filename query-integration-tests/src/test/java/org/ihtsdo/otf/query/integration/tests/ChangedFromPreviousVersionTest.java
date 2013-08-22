@@ -45,7 +45,6 @@ public class ChangedFromPreviousVersionTest {
                 forSet.add(Snomed.NEUROLOGICAL_SYMPTOM.getNid());
                 forSet.add(Snomed.ACCELERATION.getNid());
                 return forSet;
-                //return Ts.get().getAllConceptNids();
             }
 
             @Override
@@ -56,7 +55,6 @@ public class ChangedFromPreviousVersionTest {
             @Override
             protected Clause Where() {
                 return And(ConceptForComponent(ChangedFromPreviousVersion("v2")));
-                //return Or(ConceptIsKindOf("allergic-asthma"), ConceptIsKindOf("respiratory disorder"));
             }
         };
 

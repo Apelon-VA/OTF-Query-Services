@@ -105,57 +105,6 @@ public class QueryTest {
         }
     }
 
-    /*@Test
-     public void testDescriptionLuceneMatch() throws IOException, Exception {
-     System.out.println("Sequence: " + Ts.get().getSequence());
-
-     Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
-     @Override
-     protected NativeIdSetBI For() throws IOException {
-     return Ts.get().getAllConceptNids();
-     }
-
-     @Override
-     protected void Let() throws IOException {
-     let("momentum", "momentum");
-     }
-
-     @Override
-     protected Clause Where() {
-     return Or(DescriptionLuceneMatch("momentum"));
-     }
-     };
-     NativeIdSetBI results = q.compute();
-     System.out.println(results.size());
-     Assert.assertEquals(2, results.size());
-
-     }*/
-
-    /*@Test
-     public void testDescriptionLuceneMatch2() throws IOException, Exception {
-     System.out.println("Sequence: " + Ts.get().getSequence());
-
-     Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
-     @Override
-     protected NativeIdSetBI For() throws IOException {
-     return Ts.get().getAllConceptNids();
-     }
-
-     @Override
-     protected void Let() throws IOException {
-     let("Specimen source", "\"Specimen source\"");
-     }
-
-     @Override
-     protected Clause Where() {
-     return Or(DescriptionLuceneMatch("Specimen source"));
-     }
-     };
-     NativeIdSetBI results = q.compute();
-     System.out.println(results.size());
-     Assert.assertEquals(49, results.size());
-
-     }*/
     @Test
     public void testXor() throws IOException, Exception {
 
@@ -226,9 +175,8 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
     }
 
-    @Ignore
     @Test
-    public void testRefsetLuceneMatch() throws IOException, Exception {
+    public void testLuceneMatch() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
@@ -238,19 +186,74 @@ public class QueryTest {
 
             @Override
             protected void Let() throws IOException {
-                let("Body", "Body");
+                let("Centrifugal", "Centrifugal");
             }
 
             @Override
             protected Clause Where() {
-                return Or(RefsetLuceneMatch("Body"));
+                return Or(DescriptionLuceneMatch("Centrifugal"));
 
             }
         };
 
         NativeIdSetBI results = q.compute();
-        System.out.println("Refset lucene search test: " + results.size());
-        Assert.assertEquals(31145, results.size());
+        System.out.println("Description lucene search test: " + results.size());
+        Assert.assertEquals(18, results.size());
+    }
+
+    @Ignore
+    @Test
+    public void testRelType() throws IOException, Exception {
+        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            protected void Let() throws IOException {
+                let("Finding site", Snomed.FINDING_SITE);
+                let("Endocrine", Snomed.STRUCTURE_OF_ENDOCRINE_SYSTEM);
+            }
+
+            @Override
+            protected Clause Where() {
+                return Or(RelType("Finding site", "Endocrine"));
+            }
+        };
+
+        NativeIdSetBI results = q.compute();
+        System.out.println("Relationship test: " + results.size());
+        Assert.assertEquals(501, results.size());
+    }
+    
+    @Ignore
+    @Test
+    public void TestRelTypeRestriction() throws IOException, Exception{
+        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            protected void Let() throws IOException {
+                let("Physical force", Snomed.PHYSICAL_FORCE);
+                let("Motion", Snomed.MOTION);
+                let("Is a", Snomed.IS_A);
+            }
+
+            @Override
+            protected Clause Where() {
+                return Or(RelType("Is a", "Physical force", "Motion", true));
+            }
+        };
+        
+        NativeIdSetBI results = q.compute();
+        System.out.println("Rel restriction count: " + results.size());
+        Assert.assertEquals(6, results.size());
+        
     }
 
     @Test
@@ -279,7 +282,7 @@ public class QueryTest {
         Assert.assertEquals(7, results.size());
 
     }
-    
+
     @Test
     public void testQuery() throws IOException, Exception {
         System.out.println("Sequence: " + Ts.get().getSequence());
@@ -311,40 +314,7 @@ public class QueryTest {
         } catch (Exception ex) {
             Assert.fail(ex.toString());
         }
-        /*
-         System.out.println("Sequence: " + Ts.get().getSequence());
-         OrTest orTest = new OrTest();
-         Query q2 = orTest.getOrTest();
-         NativeIdSetBI results2 = q2.compute();
-         System.out.println("Query result count:" + results2.size());
-         Assert.assertEquals(11 + 427, results2.size());
-         */
 
-        //System.out.println("Sequence: " + Ts.get().getSequence());
-
-        /*
-         NotTest notTest = new NotTest();
-         Query notQuery = notTest.getQuery();
-         NativeIdSetBI notResults = notQuery.compute();
-         System.out.println("Query result count: " + notResults.size());
-         Assert.assertEquals(5, notResults.size());
-         */
-
-        /*
-         ChangedFromPreviousVersionTest versionTest = new ChangedFromPreviousVersionTest();
-         Query versionQuery = versionTest.getQuery();
-         NativeIdSetBI versionResults = versionQuery.compute();
-         System.out.println("Changed from previous version result count: " + versionResults.size());
-         Assert.assertEquals(5, versionResults.size());
-         */
-
-        /*        
-         MemberOfRefsetTest refsetTest = new MemberOfRefsetTest();
-         Query refsetQuery = refsetTest.getQuery();
-         NativeIdSetBI refsetResults = refsetQuery.compute();
-         System.out.println("Refset result count: " + refsetResults.size());
-         Assert.assertEquals(4, refsetResults.size());
-         */
         IsChildOfTest isChildOfTest = new IsChildOfTest();
         Query q3 = isChildOfTest.getQuery();
         NativeIdSetBI results3 = q3.compute();
@@ -361,10 +331,10 @@ public class QueryTest {
         for (Object id : resultSet) {
             System.out.println(id);
         }
-        
+
         Assert.assertEquals(12, resultSet.size());
-        
-        for(int id: results4.getSetValues()){
+
+        for (int id : results4.getSetValues()) {
             System.out.println(id);
         }
 
