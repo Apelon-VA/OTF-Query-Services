@@ -65,7 +65,7 @@
                 <executions>
                     <execution>
                         <id>extract-docbook-sources</id>
-                        <phase>process-sources</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
@@ -83,7 +83,7 @@
                 <executions>
                     <execution>
                         <id>generate-docbook</id>
-                        <phase>process-resources</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-pdf</goal>
                             <goal>generate-html</goal>
