@@ -42,12 +42,12 @@ public class IsKindOfTest {
             }
 
             @Override
-            protected void Let() throws IOException {
+            public void Let() throws IOException {
                 let("Physical force", Snomed.PHYSICAL_FORCE);
             }
 
             @Override
-            protected Clause Where() {
+            public Clause Where() {
                     return And(ConceptIsKindOf("Physical force"));
             }
         };

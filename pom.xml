@@ -95,5 +95,6 @@
         <module>query-integration-tests</module>
         <module>query-implementation</module>
         <module>query-documentation</module>
-    </modules>
+    <module>query-data-display-objects</module>
+  </modules>
 </project>

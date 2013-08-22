@@ -16,8 +16,6 @@
 package org.ihtsdo.otf.query.integration.tests.rest;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
@@ -41,12 +39,12 @@ public class ExampleQuery extends Query {
     }
 
     @Override
-    protected void Let() throws IOException {
+    public void Let() throws IOException {
         let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
     }
 
     @Override
-    protected Clause Where() {
+    public Clause Where() {
             return And(ConceptIsKindOf("allergic-asthma"));
     }
 }

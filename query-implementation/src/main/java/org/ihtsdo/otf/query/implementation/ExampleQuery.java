@@ -40,12 +40,12 @@ public class ExampleQuery {
                 }
 
                 @Override
-                protected void Let() throws IOException {
+                public void Let() throws IOException {
                     let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
                 }
 
                 @Override
-                protected Clause Where() {
+                public Clause Where() {
                         return And(ConceptIsKindOf("allergic-asthma"),
                                 Not(ConceptIsKindOf("another-let")),
                                 Intersection(ConceptIsKindOf(""),

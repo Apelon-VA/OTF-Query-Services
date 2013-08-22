@@ -20,7 +20,6 @@ package org.ihtsdo.otf.query.integration.tests;
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
@@ -43,12 +42,12 @@ public class IsChildOfTest {
             }
 
             @Override
-            protected void Let() throws IOException {
+            public void Let() throws IOException {
                 let("Physical force", Snomed.PHYSICAL_FORCE);
             }
 
             @Override
-            protected Clause Where() {
+            public Clause Where() {
                 return And(ConceptIsChildOf("Physical force"));
             }
         };

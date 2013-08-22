@@ -49,12 +49,12 @@ public class ConceptForComponentTest {
             }
 
             @Override
-            protected void Let() throws IOException {
+            public void Let() throws IOException {
                 let("motion", Snomed.MOTION);
             }
 
             @Override
-            protected Clause Where() {
+            public Clause Where() {
                 return And(ConceptIsChildOf("motion"), ConceptForComponent(DescriptionRegexMatch("[Dd]eceleration")));
             }
         };

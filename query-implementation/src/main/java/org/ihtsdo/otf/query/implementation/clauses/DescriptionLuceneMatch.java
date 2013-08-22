@@ -61,22 +61,24 @@ public class DescriptionLuceneMatch extends LeafClause {
 
     @Override
     public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws CorruptIndexException, IOException {
-        Collection<Integer> nids = new HashSet<>();
-        try {
-            nids = Ts.get().searchLucene(luceneMatch, SearchType.DESCRIPTION);
-        } catch (org.apache.lucene.queryparser.classic.ParseException ex) {
-            Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        NativeIdSetBI outgoingNids = new ConcurrentBitSet();
-        for (Integer nid : nids) {
-            outgoingNids.add(nid);
-
-        }
-
-        getResultsCache().or(outgoingNids);
-
-        return outgoingNids;
+        throw new UnsupportedOperationException();
+        
+        //        Collection<Integer> nids = new HashSet<>();
+////        try {
+////            nids = Ts.get().searchLucene(luceneMatch, SearchType.DESCRIPTION);
+////        } catch (org.apache.lucene.queryparser.classic.ParseException ex) {
+////            Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+//
+//        NativeIdSetBI outgoingNids = new ConcurrentBitSet();
+//        for (Integer nid : nids) {
+//            outgoingNids.add(nid);
+//
+//        }
+//
+//        getResultsCache().or(outgoingNids);
+//
+//        return outgoingNids;
 
     }
 

@@ -48,12 +48,12 @@ public class ChangedFromPreviousVersionTest {
             }
 
             @Override
-            protected void Let() throws IOException {
+            public void Let() throws IOException {
                 let("v2", setViewCoordinate.getViewCoordinate());
             }
 
             @Override
-            protected Clause Where() {
+            public Clause Where() {
                 return And(ConceptForComponent(ChangedFromPreviousVersion("v2")));
             }
         };

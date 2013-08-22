@@ -26,6 +26,7 @@ import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
 
 /**
  *
@@ -33,6 +34,9 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
  */
 @Path("/query")
 public class QueryResource {
+    private static final BdbTerminologyStore singleton = new BdbTerminologyStore();
+    
+    
     @GET
     @Produces("text/plain")
     public String doQuery(@QueryParam("VIEWPOINT") String viewValue,

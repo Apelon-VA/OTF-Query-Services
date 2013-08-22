@@ -41,14 +41,14 @@ public class OrTest {
             }
 
             @Override
-            protected void Let() throws IOException {
+            public void Let() throws IOException {
                 let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
                 let("respiratory disorder", Snomed.RESPIRATORY_DISORDER);
                 let("person", Snomed.PERSON);
             }
 
             @Override
-            protected Clause Where() {
+            public Clause Where() {
                     return Or(ConceptIsKindOf("person"), ConceptIsKindOf("allergic-asthma"));
                     //return Or(ConceptIsKindOf("allergic-asthma"), ConceptIsKindOf("respiratory disorder"));
             }

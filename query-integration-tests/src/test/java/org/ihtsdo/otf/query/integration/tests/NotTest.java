@@ -53,7 +53,7 @@ public class NotTest {
             }
 
             @Override
-            protected void Let() throws IOException {
+            public void Let() throws IOException {
                 let("motion", Snomed.MOTION);
                 let("acceleration", Snomed.ACCELERATION);
                 let("person", Snomed.PERSON);
@@ -62,7 +62,7 @@ public class NotTest {
             }
 
             @Override
-            protected Clause Where() {
+            public Clause Where() {
                 return And(ConceptIsDescendentOf("motion"), Not(ConceptForComponent(DescriptionRegexMatch("regex"))));
             }
         };

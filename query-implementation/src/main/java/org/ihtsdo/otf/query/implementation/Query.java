@@ -111,14 +111,14 @@ public abstract class Query {
      */
     protected abstract NativeIdSetBI For() throws IOException;
 
-    protected abstract void Let() throws IOException;
+    public abstract void Let() throws IOException;
 
     /**
      * Retrieves the root clause of the query.
      *
      * @return root <code>Clause</code> in the query
      */
-    protected abstract Clause Where();
+    public abstract Clause Where();
 
     public void let(String key, Object object) throws IOException {
         letDeclarations.put(key, object);

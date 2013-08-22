@@ -18,17 +18,12 @@ package org.ihtsdo.otf.query.integration.tests;
 
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  * Creates a test for the
@@ -56,14 +51,14 @@ public class DescriptionRegexMatchTest {
             }
 
             @Override
-            protected void Let() throws IOException {
+            public void Let() throws IOException {
                 let("motion", Snomed.MOTION);
                 let("regex1", "[Dd]eceleration");
                 let("regex2", "[Vv]ibration");
             }
 
             @Override
-            protected Clause Where() {
+            public Clause Where() {
                 return Or(ConceptForComponent(DescriptionRegexMatch("regex1")), ConceptForComponent(DescriptionRegexMatch("regex2")));
             }
         };

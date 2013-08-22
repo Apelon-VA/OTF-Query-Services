@@ -50,12 +50,12 @@ public class QueryFromJaxb extends Query {
     }
 
     @Override
-    protected void Let() throws IOException {
+    public void Let() throws IOException {
         // lets are set in the constructor. 
     }
 
     @Override
-    protected Clause Where() {
+    public Clause Where() {
         return rootClause;
     }
     
