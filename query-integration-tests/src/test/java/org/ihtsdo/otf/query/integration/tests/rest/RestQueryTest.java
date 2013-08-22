@@ -46,9 +46,9 @@ import org.junit.runner.RunWith;
  */
 @RunWith(BdbTestRunner.class)
 @BdbTestRunnerConfig()
-public class QueryTest extends JerseyTest {
+public class RestQueryTest extends JerseyTest {
     
-    public QueryTest() {
+    public RestQueryTest() {
     }
     
     @BeforeClass
@@ -88,46 +88,46 @@ public class QueryTest extends JerseyTest {
             JAXBContext ctx = JaxbForQuery.get();
             
             String viewpointXml = 
-"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-"<view-coordinate>\n" +
-"    <allowedStatusAsString>ACTIVE</allowedStatusAsString>\n" +
-"    <classifierSpec>\n" +
-"        <description>IHTSDO Classifier</description>\n" +
-"        <uuidStrs>7e87cc5b-e85f-3860-99eb-7a44f2b9e6f9</uuidStrs>\n" +
-"    </classifierSpec>\n" +
-"    <contradictionManagerPolicy>IDENTIFY_ALL_CONFLICTS</contradictionManagerPolicy>\n" +
-"    <langPrefConceptSpecList>\n" +
-"        <description>United States of America English language reference set (foundation metadata concept)</description>\n" +
-"        <uuidStrs>bca0a686-3516-3daf-8fcf-fe396d13cfad</uuidStrs>\n" +
-"    </langPrefConceptSpecList>\n" +
-"    <languageSort>RF2_LANG_REFEX</languageSort>\n" +
-"    <languageSpec>\n" +
-"        <description>United States of America English language reference set (foundation metadata concept)</description>\n" +
-"        <uuidStrs>bca0a686-3516-3daf-8fcf-fe396d13cfad</uuidStrs>\n" +
-"    </languageSpec>\n" +
-"    <name>SNOMED Infered-Latest</name>\n" +
-"    <precedence>PATH</precedence>\n" +
-"    <relationshipAssertionType>INFERRED</relationshipAssertionType>\n" +
-"    <vcUuid>0c734870-836a-11e2-9e96-0800200c9a66</vcUuid>\n" +
-"    <viewPosition>\n" +
-"        <path>\n" +
-"            <conceptSpec>\n" +
-"                <description>SNOMED Core</description>\n" +
-"                <uuidStrs>8c230474-9f11-30ce-9cad-185a96fd03a2</uuidStrs>\n" +
-"            </conceptSpec>\n" +
-"            <origins>\n" +
-"                <path>\n" +
-"                    <conceptSpec>\n" +
-"                        <description>Workbench Auxiliary</description>\n" +
-"                        <uuidStrs>2faa9260-8fb2-11db-b606-0800200c9a66</uuidStrs>\n" +
-"                    </conceptSpec>\n" +
-"                </path>\n" +
-"                <time>9223372036854775807</time>\n" +
-"            </origins>\n" +
-"        </path>\n" +
-"        <time>9223372036854775807</time>\n" +
-"    </viewPosition>\n" +
-"</view-coordinate>";
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+            + "<ns2:view-coordinate xmlns:ns2=\"http://api.chronicle.otf.ihtsdo.org\">\n"
+            + "    <allowedStatusAsString>ACTIVE</allowedStatusAsString>\n"
+            + "    <classifierSpec>\n"
+            + "        <description>IHTSDO Classifier</description>\n"
+            + "        <uuidStrs>7e87cc5b-e85f-3860-99eb-7a44f2b9e6f9</uuidStrs>\n"
+            + "    </classifierSpec>\n"
+            + "    <contradictionManagerPolicy>IDENTIFY_ALL_CONFLICTS</contradictionManagerPolicy>\n"
+            + "    <langPrefConceptSpecList>\n"
+            + "        <description>United States of America English language reference set (foundation metadata concept)</description>\n"
+            + "        <uuidStrs>bca0a686-3516-3daf-8fcf-fe396d13cfad</uuidStrs>\n"
+            + "    </langPrefConceptSpecList>\n"
+            + "    <languageSort>RF2_LANG_REFEX</languageSort>\n"
+            + "    <languageSpec>\n"
+            + "        <description>United States of America English language reference set (foundation metadata concept)</description>\n"
+            + "        <uuidStrs>bca0a686-3516-3daf-8fcf-fe396d13cfad</uuidStrs>\n"
+            + "    </languageSpec>\n"
+            + "    <name>SNOMED Infered-Latest</name>\n"
+            + "    <precedence>PATH</precedence>\n"
+            + "    <relationshipAssertionType>INFERRED</relationshipAssertionType>\n"
+            + "    <vcUuid>0c734870-836a-11e2-9e96-0800200c9a66</vcUuid>\n"
+            + "    <viewPosition>\n"
+            + "        <path>\n"
+            + "            <conceptSpec>\n"
+            + "                <description>SNOMED Core</description>\n"
+            + "                <uuidStrs>8c230474-9f11-30ce-9cad-185a96fd03a2</uuidStrs>\n"
+            + "            </conceptSpec>\n"
+            + "            <origins>\n"
+            + "                <path>\n"
+            + "                    <conceptSpec>\n"
+            + "                        <description>Workbench Auxiliary</description>\n"
+            + "                        <uuidStrs>2faa9260-8fb2-11db-b606-0800200c9a66</uuidStrs>\n"
+            + "                    </conceptSpec>\n"
+            + "                </path>\n"
+            + "                <time>9223372036854775807</time>\n"
+            + "            </origins>\n"
+            + "        </path>\n"
+            + "        <time>9223372036854775807</time>\n"
+            + "    </viewPosition>\n"
+            + "</ns2:view-coordinate>";
             
             
             String forXml = getXmlString(ctx, new ForCollection());
@@ -149,7 +149,7 @@ public class QueryTest extends JerseyTest {
                     queryParam("LET", letMapXml).
                     queryParam("WHERE", whereXml).request(MediaType.TEXT_PLAIN).get(String.class);
         } catch (JAXBException | IOException ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RestQueryTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
