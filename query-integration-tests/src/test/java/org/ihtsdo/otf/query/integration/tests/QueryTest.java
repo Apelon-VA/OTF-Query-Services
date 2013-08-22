@@ -105,7 +105,6 @@ public class QueryTest {
         }
     }
 
-    @Ignore
     @Test
     public void testXor() throws IOException, Exception {
 
