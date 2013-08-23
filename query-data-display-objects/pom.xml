@@ -10,6 +10,7 @@
     <groupId>org.ihtsdo.otf</groupId>
     <artifactId>query-data-display-objects</artifactId>
     <name>${branch}: Query data display objects</name>
+    <description>Java data display objects generated from a JAXB generated XSD.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
