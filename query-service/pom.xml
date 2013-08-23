@@ -12,6 +12,7 @@
     <packaging>war</packaging>
 
     <name>${branch}: Query rest service</name>
+    <description>Representational State Transfer (REST) server connectivity and query execution.</description>
 
     <dependencies>
         <dependency>

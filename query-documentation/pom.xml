@@ -10,6 +10,7 @@
     <groupId>org.ihtsdo.otf</groupId>
     <artifactId>query-documentation</artifactId>
     <name>${branch}: Query documentation</name>
+    <description>Contains documentation for construction of queries and getting started guide.</description>
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

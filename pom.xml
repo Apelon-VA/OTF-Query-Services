@@ -12,6 +12,55 @@
     <packaging>pom</packaging>
     <name>${branch}: (MMP) Query service parent</name>
     <description>Parent project of modules that support query services.</description>
+    <developers>
+        <developer>
+            <id>kec</id>
+            <name>Keith Campbell</name>
+            <organization>Informatics</organization>
+            <organizationUrl>http://www.informatics.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-7</timezone>
+        </developer>
+        <developer>
+            <id>aimee</id>
+            <name>Aimee Furber</name>
+            <organization>Informatics</organization>
+            <organizationUrl>http://www.informatics.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-7</timezone>
+        </developer>
+        <developer>
+            <id>dylangrald</id>
+            <name>Dylan Grald</name>
+            <organization>Informatics</organization>
+            <organizationUrl>http://www.informatics.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-7</timezone>
+        </developer>     
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Susan Castillo</name>
+            <organization>Informatics</organization>
+            <roles>
+                <role>contributor</role>
+            </roles>
+            <timezone>-7</timezone>
+        </contributor>
+        <contributor>
+            <name>Rory Davidson</name>
+            <roles>
+                <role>contributor</role>
+            </roles>
+            <timezone>0</timezone>
+        </contributor>
+    </contributors>
     <scm>
         <connection>scm:git:https://github.com/IHTSDO/OTF-Query-Services.git</connection>
         <developerConnection>scm:git:git@github.com:IHTSDO/OTF-Query-Services.git</developerConnection>
@@ -96,6 +145,6 @@
         <module>query-integration-tests</module>
         <module>query-implementation</module>
         <module>query-documentation</module>
-    <module>query-data-display-objects</module>
-  </modules>
+        <module>query-data-display-objects</module>
+    </modules>
 </project>

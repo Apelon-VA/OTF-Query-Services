@@ -16,9 +16,11 @@
 package org.ihtsdo.otf.query.implementation;
 
 /**
- * Specifies the components 
+ * Specifies the components used in a Lucene query.
+ *
  * @author kec
  */
 public enum ClauseComponentType {
+
     CONCEPT, DESCRIPTION, RELATIONSHIP, MEDIA, REFEX
 }

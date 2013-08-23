@@ -11,6 +11,7 @@
     <groupId>org.ihtsdo.otf</groupId>
     <artifactId>query-integration-tests</artifactId>
     <name>${branch}: Query integration tests</name>
+    <description>Performs integration tests for query clauses. Provides examples of query structure to demonstrate how queries can be constructed.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

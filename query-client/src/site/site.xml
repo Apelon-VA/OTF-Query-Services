@@ -35,8 +35,8 @@ limitations under the License.
     </skin>
     <body>
         <menu name="Getting Started Guide">
-            <item name="html" href="docbook/query-documentation.html" />
-            <item name="pdf" href="docbook/query-documentation.pdf" />
+            <item name="html" href="../query-documentation/docbook/query-documentation.html" />
+            <item name="pdf" href="../query-documentation/docbook/query-documentation.pdf" />
         </menu>
         <menu ref="reports"/>
         <footer/>
@@ -45,16 +45,4 @@ limitations under the License.
         </menu>
         <menu ref="reports"/>
     </body>
-    <custom>
-        <fluidoSkin>
-            <googleSearch>
-                <sitesearch/>
-            </googleSearch>            
-            <gitHub>
-                <projectId>IHTSDO/OTF-Query-Services</projectId>
-                <ribbonOrientation>left</ribbonOrientation>
-                <ribbonColor>red</ribbonColor>
-            </gitHub>
-        </fluidoSkin>
-    </custom>
 </project>

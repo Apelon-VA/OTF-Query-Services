@@ -11,6 +11,7 @@
     <artifactId>query-client</artifactId>
 
     <name>${branch}: Query rest client</name>
+    <description>Enables Representational State Transfer (REST) client processing for queries and provides examples.</description>
     <dependencies>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>

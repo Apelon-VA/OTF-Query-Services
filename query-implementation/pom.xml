@@ -11,6 +11,7 @@
     <groupId>org.ihtsdo.otf</groupId>
     <artifactId>query-implementation</artifactId>
     <name>${branch}: Query implementation</name>
+    <description>Query clauses used for the construction and computation of queries.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
