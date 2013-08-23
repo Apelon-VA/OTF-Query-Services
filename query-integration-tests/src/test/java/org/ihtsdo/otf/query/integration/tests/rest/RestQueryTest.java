@@ -30,6 +30,7 @@ import org.ihtsdo.otf.query.rest.server.QueryResource;
 import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.LetMap;
+import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
@@ -143,11 +144,18 @@ public class RestQueryTest extends JerseyTest {
             String whereXml = getXmlString(ctx, where);
 
             
-            final String hello = target("query").
+            final String resultString = target("query").
                     queryParam("VIEWPOINT", viewpointXml).
                     queryParam("FOR", forXml).
                     queryParam("LET", letMapXml).
-                    queryParam("WHERE", whereXml).request(MediaType.TEXT_PLAIN).get(String.class);
+                    queryParam("WHERE", whereXml).
+                    queryParam("RETURN", ReturnTypes.DESCRIPTION_VERSION_FSN.name()).
+                    request(MediaType.TEXT_PLAIN).get(String.class);
+            
+            
+            Logger.getLogger(RestQueryTest.class.getName()).log(Level.INFO, 
+                    "Result: {0}", resultString);
+            
         } catch (JAXBException | IOException ex) {
             Logger.getLogger(RestQueryTest.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -206,17 +206,17 @@ public abstract class Query {
      * <code>ReturnTypes</code>.
      *
      * @param resultSet results from the Query
-     * @param returnTypes an <code>EnumSet</code> of <code>ReturnTypes</code>,
+     * @param returnType an <code>EnumSet</code> of <code>ReturnTypes</code>,
      * the desired Display Object types
      * @return an <code>ArrayList</code> of the Display Objects
      * @throws IOException
      * @throws ContradictionException
      */
-    public ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, EnumSet<ReturnTypes> returnTypes) throws IOException, ContradictionException {
+    public ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType) throws IOException, ContradictionException {
         ArrayList<Object> results = new ArrayList<>();
-        for (ReturnTypes rt : returnTypes) {
+        
             NativeIdSetItrBI iter = resultSet.getIterator();
-            switch (rt) {
+            switch (returnType) {
                 case UUIDS:
                     while (iter.next()) {
                         results.add(Ts.get().getComponent(iter.nid()).getVersion(viewCoordinate).getPrimordialUuid());
@@ -255,7 +255,7 @@ public abstract class Query {
                 default:
                     throw new UnsupportedOperationException("Return type not supported.");
             }
-        }
+        
 
         return results;
 

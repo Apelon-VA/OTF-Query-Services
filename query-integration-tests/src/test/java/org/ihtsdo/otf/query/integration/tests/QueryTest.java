@@ -17,7 +17,6 @@ package org.ihtsdo.otf.query.integration.tests;
  */
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
@@ -130,14 +129,14 @@ public class QueryTest {
         System.out.println("Xor result size: " + results.size());
         Assert.assertEquals(6, results.size());
 
-        ArrayList<Object> resultSet = q.returnDisplayObjects(results, EnumSet.of(ReturnTypes.DESCRIPTION_VERSION_FSN));
+        ArrayList<Object> resultSet = q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_FSN);
         for (Object id : resultSet) {
             System.out.println(id);
         }
 
         Assert.assertEquals(6, resultSet.size());
 
-        ArrayList<Object> resultSet2 = q.returnDisplayObjects(results, EnumSet.of(ReturnTypes.DESCRIPTION_VERSION_PREFERRED));
+        ArrayList<Object> resultSet2 = q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_PREFERRED);
         for (Object id : resultSet2) {
             System.out.println(id);
         }
@@ -328,12 +327,12 @@ public class QueryTest {
         System.out.println("ConceptIsDescendentOf query result count " + results4.size());
         Assert.assertEquals(6, results4.size());
 
-        ArrayList<Object> resultSet = q4.returnDisplayObjects(results4, EnumSet.of(ReturnTypes.UUIDS, ReturnTypes.NIDS));
+        ArrayList<Object> resultSet = q4.returnDisplayObjects(results4, ReturnTypes.UUIDS);
         for (Object id : resultSet) {
             System.out.println(id);
         }
 
-        Assert.assertEquals(12, resultSet.size());
+        Assert.assertEquals(6, resultSet.size());
 
         for (int id : results4.getSetValues()) {
             System.out.println(id);

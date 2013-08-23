@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <version>${project.version}</version>
+            <version>${terminology-component-chronicle.version}</version>
             <artifactId>tcc-datastore</artifactId>
         </dependency>
         <dependency>

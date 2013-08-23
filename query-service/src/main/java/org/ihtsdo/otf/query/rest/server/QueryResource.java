@@ -16,6 +16,7 @@
 package org.ihtsdo.otf.query.rest.server;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -23,10 +24,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
+import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
+import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
+import org.ihtsdo.otf.tcc.ddo.ResultList;
 
 /**
  *
@@ -34,19 +38,37 @@ import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
  */
 @Path("/query")
 public class QueryResource {
+
     private static final BdbTerminologyStore singleton = new BdbTerminologyStore();
-    
-    
+
     @GET
     @Produces("text/plain")
     public String doQuery(@QueryParam("VIEWPOINT") String viewValue,
-                          @QueryParam("FOR") String forValue,
-                          @QueryParam("LET") String letValue, 
-                          @QueryParam("WHERE") String whereValue) throws IOException, JAXBException, Exception  {
-        String queryString = forValue + "\n   " + letValue+ "\n   " + whereValue;
+            @QueryParam("FOR") String forValue,
+            @QueryParam("LET") String letValue,
+            @QueryParam("WHERE") String whereValue,
+            @QueryParam("RETURN") String returnValue) throws IOException, JAXBException, Exception {
+        String queryString = "VIEWPOINT: " + viewValue + "\n   "
+                + "FOR: " + forValue + "\n   "
+                + "LET: " + letValue + "\n   "
+                + "WHERE: " + whereValue + "\n   "
+                + "RETURN: " + returnValue;
         System.out.println("Received: \n   " + queryString);
         QueryFromJaxb query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
         NativeIdSetBI resultSet = query.compute();
+
+        if (returnValue != null && !returnValue.equals("null")) {
+            ArrayList<Object> objectList = query.returnDisplayObjects(resultSet,
+                    ReturnTypes.valueOf(returnValue));
+
+            ResultList resultList = new ResultList();
+            resultList.setResultList(objectList);
+            StringWriter writer = new StringWriter();
+
+            JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
+            return writer.toString();
+        }
+        
         NativeIdSetItrBI iterator = resultSet.getIterator();
         List<Integer> results = new ArrayList<>(resultSet.size());
         while (iterator.next()) {
@@ -55,6 +77,7 @@ public class QueryResource {
         
         
         return results.toString();
+
+
     }
-    
 }

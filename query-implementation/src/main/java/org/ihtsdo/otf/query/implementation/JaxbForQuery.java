@@ -24,6 +24,10 @@ import org.ihtsdo.otf.tcc.api.coordinate.Position;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.RelSpec;
+import org.ihtsdo.otf.tcc.ddo.ResultList;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
 
 /**
  *
@@ -41,7 +45,11 @@ public class JaxbForQuery {
                     Where.class,
                     ForCollection.class,
                     Position.class, LetMap.class,
-                    Path.class, ConceptSpec.class, RelSpec.class);
+                    Path.class, ConceptSpec.class, RelSpec.class, 
+                    ResultList.class,
+                    DescriptionChronicleDdo.class,
+                    DescriptionVersionDdo.class,
+                    ConceptChronicleDdo.class);
         }
         return singleton;
     }
