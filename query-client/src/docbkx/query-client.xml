@@ -2,6 +2,7 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0"
     xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Query Client</title>
-    <para>This is a sample showing that &lt;oXygen/&gt; can be used to edit documents in conformity
-        with the dockbookx.dtd.</para>
+    <para>This query client module demonstrates how to connect to the query service REST server
+        using an <link xlink:href="http://jersey.java.net">Apache Jersey 2.2</link> REST
+        client.</para>
 </section>

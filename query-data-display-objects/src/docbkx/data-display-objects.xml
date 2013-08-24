@@ -2,6 +2,10 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0"
     xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Data Display Objects</title>
-    <para>This is a sample showing that &lt;oXygen/&gt; can be used to edit documents in conformity
-        with the dockbookx.dtd.</para>
+    <para>This module generates java data display objects derived from running the JAXB xjc against
+        the the underlying implementation. This XML Schema Document is then compiled using JAXB
+        schemagen to generate java files. The .xsd document may be similarly useful for generating
+        JSON for javascript developers. Future versions of the project will provide more complete
+        examples using the JAXB generated data display objects to reduce client dependencies on
+        other libraries. </para>
 </section>

@@ -56,6 +56,13 @@
             <classifier>docbook</classifier>
             <type>zip</type>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>query-data-display-objects</artifactId>
+            <version>${project.version}</version>
+            <classifier>docbook</classifier>
+            <type>zip</type>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -80,7 +87,7 @@
             </plugin>  
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
+                    <artifactId>docbkx-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>generate-docbook</id>
