@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-stage-site</actionName>
+            <displayName>stage-site</displayName>
+            <goals>
+                <goal>-e</goal>
+                <goal>org.apache.maven.plugins:maven-site-plugin:3.0:stage-deploy</goal>
+            </goals>
+            <properties>
+                <stagingSiteURL>file:/Sites/query</stagingSiteURL>
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-generate website</actionName>
+            <displayName>generate website</displayName>
+            <goals>
+                <goal>-e</goal>
+                <goal>site:site</goal>
+            </goals>
+        </action>
+    </actions>

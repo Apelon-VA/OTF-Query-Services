@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    version="5.0">
+    <info>
+        <title>Query Service</title>
+        <author>
+            <orgname>IHTSDO</orgname>
+            <address>
+                <city>Copenhagen K</city>
+                <street>Gammeltorv 4, 1.</street>
+                <postcode>1457</postcode>
+                <country>Denmark</country>
+            </address>
+        </author>
+    </info>
+
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-parent/query-parent.xml"
+        xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <section>
+        <title>Maven setup</title>
+        <para>Developers must either install Maven to use from the command line, use an IDE that has
+            Maven already integrated (IntelliJ IDEA, Netbeans), or add a plugin to their IDE
+            (Eclipse) that adds Maven support. Instructions on installing Maven for use from the
+            command line are available at Maven's <link
+                xlink:href="http://maven.apache.org/download.cgi">download site</link>. Integration
+            information for IntelliJ IDEA is available from the Jetbrains wiki for <link
+                xlink:href="http://wiki.jetbrains.net/intellij/Creating_and_importing_Maven_projects"
+                >creating and importing maven projects</link>. Integration information for Netbeans
+            is available from Netbean's <link xlink:href="http://wiki.netbeans.org/Maven">Maven wiki
+                page</link>.</para>
+        <para>To access the artifact dependencies necessary to build the project, the Maven
+            settings.xml file must be appropriately configured. More information about the
+            settings.xml file and it's location is available on Maven's <link
+                xlink:href="http://maven.apache.org/settings.html">Settings Reference</link> web
+            page. </para>
+        <para>Developers will need an account to access the IHTSDO's repository, which can be
+            requested from Rory Davidson. In future releases, the client will be buildable using
+            only a public repository that does not require a user account, but the settings.xml file
+            will still have to be properly configured. </para>
+        <example>
+            <title>Example settings.xml file</title>
+            <para>
+                <programlistingco>
+                    <areaspec>
+                        <area xml:id="ex.plco.ret" coords="12,12" units="linecolumn"/>
+                        <area xml:id="ex.plco.dest" coords="13,13" units="linecolumn"/>
+                    </areaspec>
+                    <programlisting>                    
+&lt;?xml version="1.0" encoding="UTF-8"?> 
+&lt;settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation=
+"http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">> 
+     &lt;servers> 
+         &lt;server>
+             &lt;id>maestro&lt;/id> 
+             &lt;username>username&lt;/username>
+             &lt;password>password&lt;/password> 
+          &lt;/server> 
+      &lt;/servers> 
+      &lt;mirrors>
+         &lt;mirror> 
+             &lt;id>maestro&lt;/id> 
+             &lt;mirrorOf>external:*&lt;/mirrorOf>
+             &lt;name>IHTSDO Maestro&lt;/name>
+ &lt;url>https://mgr.servers.aceworkspace.net/apps/ihtsdo-archiva/repository/all/&lt;/url>
+         &lt;/mirror> 
+     &lt;/mirrors> 
+&lt;/settings> 
+                    </programlisting>
+                </programlistingco>
+            </para>
+
+        </example>
+        <section>
+            <title>Project checkout</title>
+            <para>The Query service project can be checked out anonymously from GIT with this
+                command: </para>
+            <para><code>$git clone https://github.com/IHTSDO/OTF-Query-Services.git</code></para>
+        </section>
+        <section>
+            <title>Maven build</title>
+            <para>The project can be built from a console with this command: </para>
+            <para><code>$mvn clean install</code></para>
+            <para>This will do a maven build using the default profiles. The settings.xml must be
+                properly configured for this command succeed</para>
+        </section>
+        <section>
+            <title>Integration tests</title>
+            <para>Integration tests can be enabled by activating the integration-tests profile, as
+                shown in the following command: </para>
+            <para><code>$mvn clean install -P integration-tests</code></para>
+            <para>This will do a maven build using the default profiles. The settings.xml must be
+                properly configured for this command succeed.</para>
+        </section>
+        <section>
+            <title>Deploy to app server</title>
+            <para>The default build command generates a <code>.war</code> file that can be deployed
+                to an app server. Before deployment the app server must be properly configured with
+                adequate memory, and access to the Berkeley database folder. A .zip file of the
+                Berkeley databas foler can be accessed from the <link
+                    xlink:href="https://csfe.aceworkspace.net/sf/frs/do/listReleases/projects.the_ihtsdo_terminology_open_tool/frs.test_data"
+                    >file releases section</link> of the <link
+                    xlink:href="https://csfe.aceworkspace.net/sf/projects/the_ihtsdo_terminology_open_tool/"
+                    >Open Tooling Framework</link> website.</para>
+            
+            <para>When the rest server starts (currently at first query), it opens the berkeleydb
+                located in the folder berkeley-db, wherever that relative path is on your server. On
+                my server, it is at:</para>
+            <para> /Users/kec/GlassFish_Server/glassfish/domains/ttk/config/berkeley-db </para>
+            <para> (the config directory of the domain appears to be the working directory) You can
+                override the location by setting a system property on the server:</para>
+            <para>
+                <programlisting>
+-Dorg.ihtsdo.otf.tcc.datastore.bdb-location=&lt;the location of the berkeley-db folder>
+                </programlisting>
+            </para>
+            <para>It writes diagnostic output when opening the database as follows: </para>
+            <para>
+                <programlisting> 
+INFO: QS_sprint2:_Query_rest_service was successfully deployed in 3,637 milliseconds. 
+INFO: org.ihtsdo.otf.tcc.datastore.bdb-location not set. Using default location of: berkeley-db 
+INFO: setup dbRoot: berkeley-db 
+INFO: absolute dbRoot: /Users/kec/GlassFish_Server/glassfish/domains/ttk/config/berkeley-db 
+INFO: NidCidMap readOnlyRecords: 812 
+INFO: NidCidMap mutableRecords: 0 
+                </programlisting>
+            </para>
+            <para>And takes a few minutes to open. Inside the test data is an old format view
+                coordinate... So it throws a serialization exception: </para>
+            <para>
+                <programlisting> 
+SEVERE: java.io.StreamCorruptedException: unexpected block data at
+        java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1362) at
+        java.io.ObjectInputStream.defaultReadFields(ObjectInputStream.java:1989) at
+        java.io.ObjectInputStream.readSerialData(ObjectInputStream.java:1913) at
+        java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1796)
+                </programlisting>
+            </para>
+            <para>Just ignore that… It will self heal.</para>
+        </section>
+    </section>
+
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-client/query-client.xml"
+        xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include
+        href="../../target/generated-resources/org.ihtsdo.otf/query-implementation/query-implementaton.xml"
+        xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include
+        href="../../target/generated-resources/org.ihtsdo.otf/query-integration-tests/query-integration-tests.xml"
+        xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include
+        href="../../target/generated-resources/org.ihtsdo.otf/query-service/query-service.xml"
+        xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-data-display-objects/data-display-objects.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+    <xi:include href="documentation-strategy.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</article>
