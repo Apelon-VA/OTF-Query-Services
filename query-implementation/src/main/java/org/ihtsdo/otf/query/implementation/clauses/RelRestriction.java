@@ -17,63 +17,68 @@ package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
-import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
-import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.Where;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.datastore.Bdb;
 
 /**
- * Allows the user to specify a
- * <code>Relationship</code> source and a
- * <code>Relationship</code> type. Queries that specify a
- * <code>Relationship</code> source restriction can be constructed using the
- * <code>RelRestriction</code> clause.
+ * Allows the user to define a restriction on the destination set of the
+ * relationship query. Also allows the user to specify subsumption on the
+ * destination restriction and relType.
  *
  * @author dylangrald
  */
-public class RelType extends LeafClause {
+public class RelRestriction extends LeafClause {
 
-    ConceptSpec sourceSpec;
-    String sourceSpecKey;
-    String viewCoordinateKey;
     ViewCoordinate vc;
     Query enclosingQuery;
-    ConceptSpec relType;
     String relTypeKey;
-    NativeIdSetBI cache;
+    ConceptSpec relType;
+    String sourceSpecKey;
+    ConceptSpec sourceSpec;
+    String relRestrictionSpecKey;
+    ConceptSpec relRestrictionSpec;
+    String viewCoordinateKey;
+    Boolean destinationSubsumption;
     Boolean relTypeSubsumption;
 
-    public RelType(Query enclosingQuery, String relTypeKey, String sourceSpecKey, String viewCoordinateKey, Boolean relTypeSubsumption) {
+    public RelRestriction(Query enclosingQuery, String relRestrictionSpecKey, String relTypeKey, String sourceSpecKey, String viewCoordinateKey, Boolean destinationSubsumption, boolean relTypeSubsumption) {
         super(enclosingQuery);
+        this.enclosingQuery = enclosingQuery;
         this.sourceSpecKey = sourceSpecKey;
         this.sourceSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(sourceSpecKey);
-        this.viewCoordinateKey = viewCoordinateKey;
-        this.enclosingQuery = enclosingQuery;
         this.relTypeKey = relTypeKey;
         this.relType = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relTypeKey);
+        this.relRestrictionSpecKey = relRestrictionSpecKey;
+        this.relRestrictionSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relRestrictionSpecKey);
+        this.viewCoordinateKey = viewCoordinateKey;
         this.relTypeSubsumption = relTypeSubsumption;
+        this.destinationSubsumption = destinationSubsumption;
 
     }
 
     @Override
     public Where.WhereClause getWhereClause() {
         Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.REL_TYPE);
+        whereClause.setSemantic(Where.ClauseSemantic.REL_RESTRICTION);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
         whereClause.getLetKeys().add(sourceSpecKey);
         return whereClause;
+
     }
 
     @Override
@@ -95,13 +100,25 @@ public class RelType extends LeafClause {
         }
         NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.vc);
         getResultsCache().or(relationshipSet);
-        int relTypetNid = this.relType.getNid();
-        if (this.relTypeSubsumption) {
-            NativeIdSetBI relTypeSubsumptionSet = Ts.get().isKindOfSet(relTypetNid, vc);
-            getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(this.sourceSpec.getNid(), relTypeSubsumptionSet, vc));
+        int parentNid = relRestrictionSpec.getNid();
+        NativeIdSetBI restrictionSet = new ConcurrentBitSet();
+        restrictionSet.add(parentNid);
+        restrictionSet.or(Ts.get().isKindOfSet(parentNid, vc));
+        if (!this.destinationSubsumption) {
+            getResultsCache().and(restrictionSet);
+            return getResultsCache();
+        } else {
+            //Default is to compute using subsumption
+            NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
+            NativeIdSetItrBI iter = kindOfSet.getIterator();
+            while (iter.next()) {
+                getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(iter.nid(), relTypeSet, vc));
+            }
         }
+        getResultsCache().and(restrictionSet);
 
         return getResultsCache();
+
     }
 
     @Override

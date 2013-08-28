@@ -49,7 +49,7 @@ public class Where {
         FULLY_SPECIFIED_NAME_FOR_CONCEPT,
         PREFERRED_NAME_FOR_CONCEPT,
         REFSET_LUCENE_MATCH,
-        REL_TYPE,
+        REL_TYPE, REL_RESTRICTION,
     }
     private WhereClause rootClause;
 
@@ -138,13 +138,17 @@ public class Where {
                     assert childClauses.length == 1;
                     return q.PreferredNameForConcept(childClauses[0]);
                 case REFSET_LUCENE_MATCH:
-                    assert childClauses.length == 0: childClauses;
-                    assert letKeys.size() == 1: "Let keys should have one and only one value: " + letKeys;
+                    assert childClauses.length == 0 : childClauses;
+                    assert letKeys.size() == 1 : "Let keys should have one and only one value: " + letKeys;
                     return q.RefsetLuceneMatch(letKeys.get(0));
                 case REL_TYPE:
                     assert childClauses.length == 0 : childClauses;
-                    assert letKeys.size() == 1 : "Let keys should have one and only one value: " + letKeys;
+                    assert letKeys.size() == 2 || letKeys.size() == 3 || letKeys.size() == 4 : "Let keys should have two, three, or four values: " + letKeys;
                     return q.RelType(letKeys.get(0), letKeys.get(1));
+                case REL_RESTRICTION:
+                    assert childClauses.length == 0 : childClauses;
+                    assert letKeys.size() == 3 || letKeys.size() == 4 : "Let keys should have three or four values: " + letKeys;
+                    return q.RelRestriction(letKeys.get(0), letKeys.get(1), letKeys.get(1), true);
                 default:
                     throw new UnsupportedOperationException("Can't handle: " + semantic);
             }
