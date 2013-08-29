@@ -16,6 +16,7 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.EnumSet;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
@@ -25,65 +26,52 @@ import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
-import org.ihtsdo.otf.tcc.datastore.Bdb;
 
 /**
- * Allows the user to define a restriction on the destination set of a
- * relationship query. Also allows the user to specify subsumption on the
- * destination restriction and relType.
+ * <code>LeafClause</code> that computes refsets that contain concepts that are
+ * a kind of concept specified by the input
+ * <code>ConceptSpec</code>.
  *
  * @author dylangrald
  */
-public class RelRestriction extends LeafClause {
+public class RefsetContainsKindOfConcept extends LeafClause {
 
-    ViewCoordinate vc;
     Query enclosingQuery;
-    String relTypeKey;
-    ConceptSpec relType;
-    String sourceSpecKey;
-    ConceptSpec sourceSpec;
-    String relRestrictionSpecKey;
-    ConceptSpec relRestrictionSpec;
+    String conceptSpecKey;
+    ConceptSpec conceptSpec;
     String viewCoordinateKey;
-    Boolean destinationSubsumption;
-    Boolean relTypeSubsumption;
+    ViewCoordinate vc;
 
-    public RelRestriction(Query enclosingQuery, String relRestrictionSpecKey, String relTypeKey, String sourceSpecKey, String viewCoordinateKey, Boolean destinationSubsumption, boolean relTypeSubsumption) {
+    public RefsetContainsKindOfConcept(Query enclosingQuery, String conceptSpecKey, String viewCoordinateKey) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
-        this.sourceSpecKey = sourceSpecKey;
-        this.sourceSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(sourceSpecKey);
-        this.relTypeKey = relTypeKey;
-        this.relType = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relTypeKey);
-        this.relRestrictionSpecKey = relRestrictionSpecKey;
-        this.relRestrictionSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relRestrictionSpecKey);
+        this.conceptSpecKey = conceptSpecKey;
+        this.conceptSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(conceptSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
-        this.relTypeSubsumption = relTypeSubsumption;
-        this.destinationSubsumption = destinationSubsumption;
 
     }
 
     @Override
     public Where.WhereClause getWhereClause() {
         Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.REL_RESTRICTION);
+        whereClause.setSemantic(Where.ClauseSemantic.REFSET_CONTAINS_KIND_OF_CONCEPT);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
-        whereClause.getLetKeys().add(sourceSpecKey);
+        whereClause.getLetKeys().add(conceptSpecKey);
         return whereClause;
 
     }
 
     @Override
     public EnumSet<ClauseComputeType> getComputePhases() {
-        return PRE_AND_POST_ITERATION;
+        return PRE_ITERATION;
     }
 
     @Override
@@ -93,36 +81,22 @@ public class RelRestriction extends LeafClause {
         } else {
             this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
-        NativeIdSetBI relTypeSet = new ConcurrentBitSet();
-        relTypeSet.add(this.relType.getNid());
-        if (this.relTypeSubsumption) {
-            relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), vc));
-        }
-        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.vc);
-        getResultsCache().or(relationshipSet);
-        int parentNid = relRestrictionSpec.getNid();
-        NativeIdSetBI restrictionSet = new ConcurrentBitSet();
-        restrictionSet.add(parentNid);
-        restrictionSet.or(Ts.get().isKindOfSet(parentNid, vc));
-        if (!this.destinationSubsumption) {
-            getResultsCache().and(restrictionSet);
-            return getResultsCache();
-        } else {
-            //Default is to compute using subsumption
-            NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
-            NativeIdSetItrBI iter = kindOfSet.getIterator();
-            while (iter.next()) {
-                getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(iter.nid(), relTypeSet, vc));
+        int parentNid = this.conceptSpec.getNid();
+        NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
+        NativeIdSetItrBI iter = kindOfSet.getIterator();
+        while (iter.next()) {
+            ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, iter.nid());
+            Collection<? extends RefexChronicleBI<?>> refexes = conceptVersion.getRefexes();
+            for (RefexChronicleBI r : refexes) {
+                this.getResultsCache().add(r.getConceptNid());
             }
+
         }
-        getResultsCache().and(restrictionSet);
-
         return getResultsCache();
-
     }
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-        //Nothing to do here...
+        //Nothing to do here
     }
 }

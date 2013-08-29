@@ -30,7 +30,9 @@ import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Where;
 
 /**
- * Calculates descriptions that contain the input Java Regular Expression.
+ * Calculates descriptions that contain the input Java Regular Expression. Very
+ * slow when iterating over a large
+ * <code>For</code> set.
  *
  * @author kec
  */

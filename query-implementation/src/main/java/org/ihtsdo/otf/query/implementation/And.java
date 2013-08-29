@@ -24,8 +24,8 @@ import org.ihtsdo.otf.query.implementation.Where.WhereClause;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
- * Clause that computes the intersection of the set results from given child
- * clauses.
+ * <code>ParentClause</code> that computes the intersection of the set results
+ * from given child clauses.
  *
  * @author kec
  */

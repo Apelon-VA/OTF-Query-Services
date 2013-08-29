@@ -22,8 +22,8 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
- * Computes the exclusive disjunction between the result sets for the child
- * clauses.
+ * Computes the exclusive disjunction between the result sets of each
+ * <code>ChildClause</code>.
  *
  * @author dylangrald
  */

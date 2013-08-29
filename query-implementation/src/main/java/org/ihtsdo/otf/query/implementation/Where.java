@@ -49,7 +49,7 @@ public class Where {
         FULLY_SPECIFIED_NAME_FOR_CONCEPT,
         PREFERRED_NAME_FOR_CONCEPT,
         REFSET_LUCENE_MATCH,
-        REL_TYPE, REL_RESTRICTION,
+        REL_TYPE, REL_RESTRICTION, REFSET_CONTAINS_CONCEPT, REFSET_CONTAINS_KIND_OF_CONCEPT,
     }
     private WhereClause rootClause;
 
@@ -141,6 +141,14 @@ public class Where {
                     assert childClauses.length == 0 : childClauses;
                     assert letKeys.size() == 1 : "Let keys should have one and only one value: " + letKeys;
                     return q.RefsetLuceneMatch(letKeys.get(0));
+                case REFSET_CONTAINS_CONCEPT:
+                    assert childClauses.length == 0 : childClauses;
+                    assert letKeys.size() == 1 || letKeys.size() == 2 : "Let keys should have one or two values: " + letKeys;
+                    return q.RefsetContainsConcept(letKeys.get(0));
+                case REFSET_CONTAINS_KIND_OF_CONCEPT:
+                    assert childClauses.length == 0 : childClauses;
+                    assert letKeys.size() == 1 || letKeys.size() == 2 : "Let keys should have one or two values: " + letKeys;
+                    return q.RefsetContainsKindOfConcept(letKeys.get(0));
                 case REL_TYPE:
                     assert childClauses.length == 0 : childClauses;
                     assert letKeys.size() == 2 || letKeys.size() == 3 || letKeys.size() == 4 : "Let keys should have two, three, or four values: " + letKeys;

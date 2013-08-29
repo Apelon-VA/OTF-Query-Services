@@ -17,6 +17,8 @@ package org.ihtsdo.otf.query.integration.tests;
  */
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
@@ -24,7 +26,10 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.junit.After;
@@ -220,6 +225,7 @@ public class QueryTest {
 
     }
 
+    @Ignore
     @Test
     public void testRelRestrictionSubsumptionTrue() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
@@ -276,6 +282,7 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
     }
 
+    @Ignore
     @Test
     public void testRelRestrictionSubsumptionNull() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
@@ -302,6 +309,96 @@ public class QueryTest {
         Assert.assertEquals(84, results.size());
 
     }
+
+    @Test
+    public void testRefsetContainsConcept() throws IOException, Exception {
+        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("Discharge from hospice", Snomed.DISCHARGE_FROM_HOSPICE);
+            }
+
+            @Override
+            public Clause Where() {
+                return Or(RefsetContainsConcept("Discharge from hospice"));
+            }
+        };
+
+        NativeIdSetBI results = q.compute();
+        System.out.println("Refset contains concept count: " + results.size());
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.UUIDS)) {
+            System.out.println(o);
+        }
+        Assert.assertEquals(1, results.size());
+
+    }
+
+    @Test
+    public void testRefsetContainsKindOfConcept() throws IOException, Exception {
+        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("Discharge from hospice", Snomed.DISCHARGE_FROM_HOSPICE);
+            }
+
+            @Override
+            public Clause Where() {
+                return Or(RefsetContainsKindOfConcept("Discharge from hospice"));
+            }
+        };
+
+        NativeIdSetBI results = q.compute();
+        System.out.println("Refset contains kind of concept count: " + results.size());
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.UUIDS)) {
+            System.out.println(o);
+        }
+        Assert.assertEquals(1, results.size());
+
+    }
+
+//    @Test
+//    public void testRefsetContainsString() throws IOException, Exception {
+//        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+//            @Override
+//            protected NativeIdSetBI For() throws IOException {
+//                ConceptSpec patientDischarge = Snomed.PATIENT_DISCHARGE;
+//                try {
+//                    return Bdb.getNidCNidMap().getKindOfNids(patientDischarge.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+//                } catch (ContradictionException ex) {
+//                    Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public void Let() throws IOException {
+//                let("mild", "[Mm]ild");
+//                let("Severity refset", Snomed.SEVERITY_REFSET);
+//            }
+//
+//            @Override
+//            public Clause Where() {
+//                return Or(RefsetContainsString("Severity refset", "mild"));
+//            }
+//        };
+//
+//        NativeIdSetBI results = q.compute();
+//        for (Object o : q.returnDisplayObjects(results, ReturnTypes.CONCEPT_VERSION)) {
+//            System.out.println(o);
+//        }
+//        Assert.assertEquals(2, results.size());
+//
+//    }
 
     @Test
     public void testFullySpecifiedName() throws IOException, Exception {

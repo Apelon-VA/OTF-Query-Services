@@ -39,6 +39,9 @@ import org.ihtsdo.otf.query.implementation.clauses.DescriptionLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.DescriptionRegexMatch;
 import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
+import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
+import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
+import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsString;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
@@ -341,10 +344,35 @@ public abstract class Query {
     protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey) {
         return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, true, true);
     }
-    
-    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, Boolean destinationSubsumption, Boolean relTypeSubsumption){
+
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, Boolean destinationSubsumption, Boolean relTypeSubsumption) {
         return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, destinationSubsumption, relTypeSubsumption);
     }
+
+    protected RefsetContainsConcept RefsetContainsConcept(String conceptSpecKey) {
+        return new RefsetContainsConcept(this, conceptSpecKey, this.currentViewCoordinateKey);
+    }
+
+    protected RefsetContainsConcept RefsetContainsConcept(String conceptSpecKey, String viewCoordinateKey) {
+        return new RefsetContainsConcept(this, conceptSpecKey, viewCoordinateKey);
+    }
+
+    protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey) {
+        return new RefsetContainsKindOfConcept(this, conceptSpecKey, this.currentViewCoordinateKey);
+    }
+
+    protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey, String viewCoordinateKey) {
+        return new RefsetContainsKindOfConcept(this, conceptSpecKey, viewCoordinateKey);
+    }
+      
+/*    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText) {
+        return new RefsetContainsString(this, refsetSpec, queryText, this.currentViewCoordinateKey);
+    }
+
+    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText, String viewCoordinateKey) {
+        return new RefsetContainsString(this, refsetSpec, queryText, viewCoordinateKey);
+    }*/
+
 
     protected PreferredNameForConcept PreferredNameForConcept(Clause clause) {
         return new PreferredNameForConcept(this, clause);

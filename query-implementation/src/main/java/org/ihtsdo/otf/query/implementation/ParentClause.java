@@ -18,9 +18,7 @@ package org.ihtsdo.otf.query.implementation;
 import java.io.IOException;
 import java.util.EnumSet;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
-import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
  * Acts as root node for the construction of queries. Sorts results from one of
