@@ -2,6 +2,8 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0"
     xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Query Implementation</title>
-    <para>This is a sample showing that &lt;oXygen/&gt; can be used to edit documents in conformity
-        with the dockbookx.dtd.</para>
+    <para>This query implementation module implements queries against Terminology Component
+        Chronicle service, and proved a pure java implementation of query capabilities that may be
+        called independently of the REST service, and is also called by the REST service to perform
+        queries.</para>
 </section>

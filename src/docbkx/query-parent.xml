@@ -1,7 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0"
     xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Query Parent</title>
-    <para>This is a sample showing that &lt;oXygen/&gt; can be used to edit documents in conformity
-        with the dockbookx.dtd.</para>
+    <title>Query service repository structure</title>
+    <para>The query service top-level project is the query-parent project that defines the root of
+        the repository structure. The query service repository holds a maven multi-module project
+        manages the sources and documents for the project. Understanding Maven is a prerequisite to
+        understanding how to build and work with the query service. More information on Maven is
+        available at the <link xlink:href="http://maven.apache.org">Maven</link> web site.</para>
+    <para>Maven supports project aggregation in addition to project inheritance through its module
+        structure. See <link
+            xlink:href="http://maven.apache.org/guides/mini/guide-multiple-modules.html">Maven's
+            Guide to Working with Multiple Modules</link> and <link
+            xlink:href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html"
+            >Maven's Introduction to the POM</link> for more information about Maven modules,
+        project inheritance, and project aggregation. </para>
+ 
+    <section>
+        <title>Maven Modules</title>
+        <para>Within the top level project are six maven modules (subprojects), some of which are
+            only built when a particular build profile is activated.<orderedlist>
+                <listitem>
+                    <para>Client<itemizedlist>
+                            <listitem>
+                                <para>group id: org.ihtsdo.otf</para>
+                            </listitem>
+                            <listitem>
+                                <para>artifact id: query-client</para>
+                            </listitem>
+                            <listitem>
+                                <para>directory: query-client</para>
+                            </listitem>
+                            <listitem>
+                                <para>build profiles: default, all, query-service,
+                                    integration-tests, documentation</para>
+                            </listitem>
+                        </itemizedlist></para>
+                </listitem>
+                <listitem>
+                    <para>Service<itemizedlist>
+                            <listitem>
+                                <para>group id: org.ihtsdo.otf</para>
+                            </listitem>
+                            <listitem>
+                                <para>artifact id: query-service</para>
+                            </listitem>
+                            <listitem>
+                                <para>directory: query-service</para>
+                            </listitem>
+                            <listitem>
+                                <para>build profiles:  all, query-service, integration-tests,
+                                    documentation</para>
+                            </listitem>
+                        </itemizedlist></para>
+                </listitem>
+                <listitem>
+                    <para>Implementation<itemizedlist>
+                            <listitem>
+                                <para>group id: org.ihtsdo.otf</para>
+                            </listitem>
+                            <listitem>
+                                <para>artifact id: query-implementation</para>
+                            </listitem>
+                            <listitem>
+                                <para>directory: query-implementation</para>
+                            </listitem>
+                            <listitem>
+                                <para>build profiles:  all, query-service, integration-tests,
+                                    documentation</para>
+                            </listitem>
+                        </itemizedlist></para>
+                </listitem>
+                <listitem>
+                    <para>JAXB objects<itemizedlist>
+                            <listitem>
+                                <para>group id: org.ihtsdo.otf</para>
+                            </listitem>
+                            <listitem>
+                                <para>artifact id: query-jaxb-objects</para>
+                            </listitem>
+                            <listitem>
+                                <para>directory: query-jaxb-objects</para>
+                            </listitem>
+                            <listitem>
+                                <para>build profiles: all, query-service, integration-tests,
+                                    documentation</para>
+                            </listitem>
+                        </itemizedlist></para>
+                </listitem>
+                <listitem>
+                    <para>Integration tests<itemizedlist>
+                            <listitem>
+                                <para>group id: org.ihtsdo.otf</para>
+                            </listitem>
+                            <listitem>
+                                <para>artifact id: query-integration-tests</para>
+                            </listitem>
+                            <listitem>
+                                <para>directory: query-integration-tests</para>
+                            </listitem>
+                            <listitem>
+                                <para>build profiles: all, integration-tests, documentation</para>
+                            </listitem>
+                        </itemizedlist></para>
+                </listitem>
+                <listitem>
+                    <para>Documentation<itemizedlist>
+                            <listitem>
+                                <para>group id: org.ihtsdo.otf</para>
+                            </listitem>
+                            <listitem>
+                                <para>artifact id: query-documentation</para>
+                            </listitem>
+                            <listitem>
+                                <para>directory: query-documentation</para>
+                            </listitem>
+                            <listitem>
+                                <para>build profiles: all, documentation</para>
+                            </listitem>
+                        </itemizedlist></para>
+                </listitem>
+            </orderedlist></para>
+    </section>
+        <section xmlns="http://docbook.org/ns/docbook">
+        <title>Query service build profiles</title>
+        <para>The query service defines three build profiles described in the following sections.
+            For more information on build profiles, see Maven's<link
+                xlink:href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html"
+                >Introduction to build profiles</link>.</para>
+            <section>
+                <title>Default build profile</title>
+            <para>The default build profile consists of the modules that build when no profile is
+                specifically specified. By default the following modules are built:<orderedlist>
+                    <listitem>
+                        <para>Client</para>
+                    </listitem>
+                    <listitem>
+                        <para>JAXB objects</para>
+                    </listitem>
+                </orderedlist></para>
+            <para>This profile will provide a sufficient build to test the query client provided the
+                repository access is properly configured, and can download the Maven XSD artifacts
+                the JAXB Objects requires. </para>
+            <para>These artifacts should be in the IHTSDO public of the IHTSDO maven repository, and
+                should be able to download automatically by developers who do not have a user
+                account (THIS IS UNTESTED!).</para>
+            </section>
+        <section>
+            <title>Query Service build profile</title>
+            <para>This profile will build the query service and dependent modules. This project has
+                more dependencies, including dependencies in the 3rd party part of the IHTSDO maven
+                repository which is password protected. </para>
+        </section>
+            <section>
+                <title>Integration tests build profile</title>
+                <para>The integration tests build profile adds the integration tests module to the
+                build when the build profile id <emphasis role="italic">integration-tests</emphasis>
+                is activated.  The integration tests are not part of the default build profile
+                because they have an external dependency on a Berkeley SNOMED database that is
+                rather large, and downloading and opening this database may not be necessary for all
+                types of development. Omitting this module from the default build profile makes the
+                default build rapid. </para>
+            <para>The build time for the integration tests module takes about 1 min 20 sec on a
+                high-spec developers laptop, while the other modules in this project take between
+                0.5 and 5 seconds. </para>
+            </section>
+            <section>
+                <title>Documentation profile</title>
+            <para>The documentation build profile adds the integration tests module and the
+                documentation module to the build when the build profile id <emphasis role="italic"
+                    >documentation</emphasis> is activated. Generation of documentation depends of
+                proper execution of the integration tests module, and therefore is removed from the
+                default build profile secondary to the resource requirements and build time of the
+                integration tests module. </para>
+            </section>
+        </section>
 </section>

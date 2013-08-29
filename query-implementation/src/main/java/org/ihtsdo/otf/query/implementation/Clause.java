@@ -86,7 +86,7 @@ public abstract class Clause {
      *
      * @return the where clause of the query
      */
-    public abstract Where.WhereClause getWhereClause();
+    public abstract WhereClause getWhereClause();
 
     /**
      * Getter for the iteration types required to compute the clause.

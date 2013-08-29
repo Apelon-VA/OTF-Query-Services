@@ -41,3 +41,4 @@ Thumbs.db
 
 target
 /query-integration-tests/berkeley-db/
+/query-documentation/src/docbkx/out/

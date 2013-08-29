@@ -8,8 +8,8 @@
         <version>1.1-sprint2-SNAPSHOT</version>
     </parent>
     <groupId>org.ihtsdo.otf</groupId>
-    <artifactId>query-data-display-objects</artifactId>
-    <name>${branch}: Query data display objects</name>
+    <artifactId>query-jaxb-objects</artifactId>
+    <name>${branch}: Query jaxb objects</name>
     <description>Java data display objects generated from a JAXB generated XSD.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,6 +24,22 @@
             <groupId>org.ihtsdo.otf</groupId>
             <artifactId>tcc-dto-ddo</artifactId>
             <version>${terminology-component-chronicle.version}</version>
+            <classifier>xsd</classifier>
+            <scope>runtime</scope>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-api</artifactId>
+            <version>${terminology-component-chronicle.version}</version>
+            <classifier>xsd</classifier>
+            <scope>runtime</scope>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>query-implementation</artifactId>
+            <version>${project.version}</version>
             <classifier>xsd</classifier>
             <scope>runtime</scope>
             <type>zip</type>

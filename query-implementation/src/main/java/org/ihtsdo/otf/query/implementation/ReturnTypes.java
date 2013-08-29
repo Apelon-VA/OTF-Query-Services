@@ -15,11 +15,14 @@
  */
 package org.ihtsdo.otf.query.implementation;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * The Display Objects to be returned from the result set of a query. 
  *
  * @author dylangrald
  */
+@XmlRootElement
 public enum ReturnTypes {
 
     /**

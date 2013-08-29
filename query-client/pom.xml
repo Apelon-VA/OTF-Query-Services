@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>query-implementation</artifactId>
+            <artifactId>query-jaxb-objects</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>

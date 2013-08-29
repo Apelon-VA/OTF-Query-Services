@@ -13,29 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@javax.xml.bind.annotation.XmlSchema (
+      namespace = "http://query.jaxb.otf.ihtsdo.org"
+    )
 package org.ihtsdo.otf.query.implementation;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
- * The WHERE clause is used to extract only those components that fulfill
- * specified criterion.
- *
- * @author kec
+ * Implementation classes for the query module. 
  */
-@XmlRootElement(name = "where")
-@XmlAccessorType(XmlAccessType.PROPERTY)
-public class Where {
-
-    private WhereClause rootClause;
-
-    public WhereClause getRootClause() {
-        return rootClause;
-    }
-
-    public void setRootClause(WhereClause rootClause) {
-        this.rootClause = rootClause;
-    }
-}

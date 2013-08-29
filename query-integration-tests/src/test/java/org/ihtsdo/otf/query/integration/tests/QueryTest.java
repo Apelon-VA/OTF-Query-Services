@@ -134,13 +134,6 @@ public class QueryTest {
         System.out.println("Xor result size: " + results.size());
         Assert.assertEquals(6, results.size());
 
-        ArrayList<Object> resultSet = q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_FSN);
-        for (Object id : resultSet) {
-            System.out.println(id);
-        }
-
-        Assert.assertEquals(6, resultSet.size());
-
 
     }
 
