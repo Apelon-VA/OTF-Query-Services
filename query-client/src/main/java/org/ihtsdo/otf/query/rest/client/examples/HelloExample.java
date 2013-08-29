@@ -40,7 +40,7 @@ public class HelloExample {
      */
     public static void main(String[] args) {
         // default host.
-        String host = "http://localhost:8080";
+        String host = "http://api.snomedtools.com/";
         
         // if host is provided, override default host.
         if (args.length > 0) {

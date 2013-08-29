@@ -34,9 +34,9 @@ public class Xor extends ParentClause {
     }
 
     @Override
-    public Where.WhereClause getWhereClause() {
-        Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.XOR);
+    public WhereClause getWhereClause() {
+        WhereClause whereClause = new WhereClause();
+        whereClause.setSemantic(ClauseSemantic.XOR);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }

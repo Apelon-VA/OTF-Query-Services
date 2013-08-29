@@ -46,9 +46,9 @@ public class Not extends ParentClause {
     }
 
     @Override
-    public Where.WhereClause getWhereClause() {
-        Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.NOT);
+    public WhereClause getWhereClause() {
+        WhereClause whereClause = new WhereClause();
+        whereClause.setSemantic(ClauseSemantic.NOT);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }

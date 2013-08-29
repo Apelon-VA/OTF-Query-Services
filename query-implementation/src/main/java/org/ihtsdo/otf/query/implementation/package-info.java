@@ -13,38 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@javax.xml.bind.annotation.XmlSchema (
+      namespace = "http://query.jaxb.otf.ihtsdo.org"
+    )
 package org.ihtsdo.otf.query.implementation;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
- * The Display Objects to be returned from the result set of a query. 
- *
- * @author dylangrald
+ * Implementation classes for the query module. 
  */
-@XmlRootElement
-public enum ReturnTypes {
-
-    /**
-     * The native identifier of the component.
-     */
-    NIDS,
-    /**
-     * The UUID of the component.
-     */
-    UUIDS,
-    /**
-     * The Concept version specified by the
-     * <code>ViewCoordinate</code> from the
-     * <code>Query</code>.
-     */
-    CONCEPT_VERSION,
-    /**
-     * Description version of the fully specified name.
-     */
-    DESCRIPTION_VERSION_FSN,
-    /**
-     * Description version of the preferred version.
-     */
-    DESCRIPTION_VERSION_PREFERRED;
-}

@@ -24,6 +24,7 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.query.implementation.Where;
+import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
@@ -83,7 +84,7 @@ public class ComponentIsMemberOfRefset extends LeafClause {
     }*/
 
     @Override
-    public Where.WhereClause getWhereClause() {
+    public WhereClause getWhereClause() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

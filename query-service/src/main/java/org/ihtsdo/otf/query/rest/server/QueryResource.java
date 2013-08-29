@@ -16,6 +16,7 @@
 package org.ihtsdo.otf.query.rest.server;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
@@ -58,11 +61,18 @@ public class QueryResource {
         NativeIdSetBI resultSet = query.compute();
 
         if (returnValue != null && !returnValue.equals("null")) {
+            ReturnTypes returnType;
+            if (returnValue.startsWith("<?xml")) {
+                Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
+                returnType = (ReturnTypes) unmarshaller.unmarshal(new StringReader(returnValue));
+            } else {
+                returnType = ReturnTypes.valueOf(returnValue);
+            }
             ArrayList<Object> objectList = query.returnDisplayObjects(resultSet,
-                    ReturnTypes.valueOf(returnValue));
+                    returnType);
 
             ResultList resultList = new ResultList();
-            resultList.setResultList(objectList);
+            resultList.setTheResults(objectList);
             StringWriter writer = new StringWriter();
 
             JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
