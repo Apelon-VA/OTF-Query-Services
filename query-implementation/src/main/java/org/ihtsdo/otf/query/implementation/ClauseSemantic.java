@@ -16,84 +16,100 @@
 package org.ihtsdo.otf.query.implementation;
 
 /**
- * Enumeration for semantics of query clauses. 
+ * Enumeration for semantics of query clauses.
+ *
  * @author kec
  */
 public enum ClauseSemantic {
+
     /**
      * Logical And connective clause.
      */
-    AND, 
+    AND,
     /**
      * Logical OR connective clause.
      */
-    OR, 
-    
+    OR,
     /**
      * Logical NOT unary operator.
      */
-    NOT, 
+    NOT,
     /**
      * Logical XOR, used to determine what changed in membership between two
      * versions.
      */
-    XOR, 
+    XOR,
     /**
-     * Test to see if component has changed from the previous version. 
+     * Test to see if component has changed from the previous version.
      */
-    CHANGED_FROM_PREVIOUS_VERSION, 
+    CHANGED_FROM_PREVIOUS_VERSION,
     /**
      * Substitute the concept for any components matching criterion.
      */
-    CONCEPT_FOR_COMPONENT, 
+    CONCEPT_FOR_COMPONENT,
     /**
-     * Test to see if the concept is a logical child of another. 
+     * Test to see if the concept is a logical child of another.
      */
-    CONCEPT_IS_CHILD_OF, 
+    CONCEPT_IS_CHILD_OF,
     /**
      * Test to see if the concept is a logical descendent of another.
      */
-    CONCEPT_IS_DESCENDENT_OF, 
+    CONCEPT_IS_DESCENDENT_OF,
     /**
-     * Test to see if the concept is a logical kind of another. 
+     * Test to see if the concept is a logical kind of another.
      */
-    CONCEPT_IS_KIND_OF, 
+    CONCEPT_IS_KIND_OF,
     /**
-     * Test to see if a component is a member of a refset. 
+     * Test to see if a component is a member of a refset.
      */
-    COMPONENT_IS_MEMBER_OF_REFSET, 
+    COMPONENT_IS_MEMBER_OF_REFSET,
     /**
-     * Test to see if an active description on a concept matches a Lucene query criterion. 
+     * Test to see if an active description on a concept matches a Lucene query
+     * criterion.
      */
-    DESCRIPTION_ACTIVE_LUCENE_MATCH, 
+    DESCRIPTION_ACTIVE_LUCENE_MATCH,
     /**
-     * Test to see if an active description on a concept matches matches a regex expression. 
+     * Test to see if an active description on a concept matches matches a regex
+     * expression.
      */
-    DESCRIPTION_ACTIVE_REGEX_MATCH, 
-    
+    DESCRIPTION_ACTIVE_REGEX_MATCH,
     /**
-     * Test to see if any description (active or inactive) on a concept matches a Lucene query criterion. 
+     * Test to see if any description (active or inactive) on a concept matches
+     * a Lucene query criterion.
      */
-    DESCRIPTION_LUCENE_MATCH, 
+    DESCRIPTION_LUCENE_MATCH,
     /**
-     * Test to see if any description (active or inactive) on a concept matches matches a regex expression. 
+     * Test to see if any description (active or inactive) on a concept matches
+     * matches a regex expression.
      */
-    DESCRIPTION_REGEX_MATCH, 
+    DESCRIPTION_REGEX_MATCH,
     /**
      * Substitute the fully specified description for a concept.
      */
-    FULLY_SPECIFIED_NAME_FOR_CONCEPT, 
+    FULLY_SPECIFIED_NAME_FOR_CONCEPT,
     /**
-     * Substitute the preferred name for a concept. 
+     * Substitute the preferred name for a concept.
      */
-    PREFERRED_NAME_FOR_CONCEPT, 
+    PREFERRED_NAME_FOR_CONCEPT,
     /**
-     * Test to see if a refset string member matches a Lucene query criterion. 
+     * Test to see if a refset string member matches a Lucene query criterion.
      */
-    REFSET_LUCENE_MATCH, 
+    REFSET_LUCENE_MATCH,
     /**
-     * Test to see if a relationship matches a specified relationship type. 
+     * Test to see if a relationship matches a specified relationship type.
      */
-    REL_TYPE
-    
+    REL_TYPE,
+    /**
+     * Test to see if a relationship matches a specified relationship type and
+     * relationship destination restriction.
+     */
+    REL_RESTRICTION,
+    /**
+     * Test to see if a refset contains a specified concept.
+     */
+    REFSET_CONTAINS_CONCEPT,
+    /**
+     * Test to see if a refset contains a kind of specified concept.
+     */
+    REFSET_CONTAINS_KIND_OF_CONCEPT,
 }
