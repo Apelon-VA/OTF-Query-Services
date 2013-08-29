@@ -41,7 +41,6 @@ import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
-import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsString;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
