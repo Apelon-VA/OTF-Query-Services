@@ -157,7 +157,8 @@ SEVERE: java.io.StreamCorruptedException: unexpected block data at
         href="../../target/generated-resources/org.ihtsdo.otf/query-service/query-service.xml"
         xmlns:xi="http://www.w3.org/2001/XInclude"/>
     
-    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-data-display-objects/data-display-objects.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-jaxb-objects/data-display-objects.xml" 
+        xmlns:xi="http://www.w3.org/2001/XInclude"/>
     
     <xi:include href="documentation-strategy.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </article>
