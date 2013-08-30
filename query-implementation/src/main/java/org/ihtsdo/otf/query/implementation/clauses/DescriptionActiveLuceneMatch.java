@@ -20,7 +20,9 @@ import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.query.implementation.Clause;
+import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.Where;
+import org.ihtsdo.otf.query.implementation.WhereClause;
 
 /**
  * TODO: not implemented yet.
@@ -44,9 +46,9 @@ public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
         //TODO
     }
     @Override
-    public Where.WhereClause getWhereClause() {
-        Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.DESCRIPTION_ACTIVE_LUCENE_MATCH);
+    public WhereClause getWhereClause() {
+        WhereClause whereClause = new WhereClause();
+        whereClause.setSemantic(ClauseSemantic.DESCRIPTION_ACTIVE_LUCENE_MATCH);
         for(Clause clause : getChildren()){
             whereClause.getChildren().add(clause.getWhereClause());
         }

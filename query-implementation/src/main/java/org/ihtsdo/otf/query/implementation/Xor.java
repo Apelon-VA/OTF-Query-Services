@@ -22,8 +22,8 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
- * Computes the exclusive disjunction between the result sets for the child
- * clauses.
+ * Computes the exclusive disjunction between the result sets of each
+ * <code>ChildClause</code>.
  *
  * @author dylangrald
  */
@@ -34,9 +34,9 @@ public class Xor extends ParentClause {
     }
 
     @Override
-    public Where.WhereClause getWhereClause() {
-        Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.XOR);
+    public WhereClause getWhereClause() {
+        WhereClause whereClause = new WhereClause();
+        whereClause.setSemantic(ClauseSemantic.XOR);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }

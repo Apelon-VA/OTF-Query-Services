@@ -20,7 +20,7 @@ import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 
 /**
- * A query clause is a leaf in the tree of clauses of a query. A LeafClause
+ * A leaf in the computation tree of clauses of a query. A LeafClause
  * cannot have any child clauses. Implementations of LeafClause should cache
  * their results in the resultsCache, which is then passed on to the clauses
  * that enclose the LeafClause.

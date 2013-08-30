@@ -13,28 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.otf.query.rest.client;
+package org.ihtsdo.otf.query.integration.tests.rest;
 
 import javax.xml.bind.JAXBException;
-import org.ihtsdo.otf.jaxb.chronicle.api.ContradictionManagerPolicy;
-import org.ihtsdo.otf.jaxb.chronicle.api.LanguageSort;
-import org.ihtsdo.otf.jaxb.chronicle.api.Precedence;
-import org.ihtsdo.otf.jaxb.chronicle.api.RelAssertionType;
-import org.ihtsdo.otf.jaxb.chronicle.api.SimpleConceptSpecification;
-import org.ihtsdo.otf.jaxb.chronicle.api.SimplePath;
-import org.ihtsdo.otf.jaxb.chronicle.api.SimplePosition;
-import org.ihtsdo.otf.jaxb.chronicle.api.SimpleViewCoordinate;
-import org.ihtsdo.otf.jaxb.chronicle.api.Status;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionManagerPolicy;
+import org.ihtsdo.otf.tcc.api.coordinate.LanguageSort;
+import org.ihtsdo.otf.tcc.api.coordinate.Precedence;
+import org.ihtsdo.otf.tcc.api.coordinate.SimplePath;
+import org.ihtsdo.otf.tcc.api.coordinate.SimplePosition;
+import org.ihtsdo.otf.tcc.api.coordinate.SimpleViewCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
+import org.ihtsdo.otf.tcc.api.relationship.RelAssertionType;
+import org.ihtsdo.otf.tcc.api.spec.SimpleConceptSpecification;
 
 /**
  *
  * @author kec
  */
-public class ViewCoordinateExample {
+public class StandardViewCoordinates {
 
     public static SimpleViewCoordinate getSnomedInferredLatest() throws JAXBException {
-        
-        
         SimpleViewCoordinate svc = new SimpleViewCoordinate();
         svc.setName("Snomed Inferred Latest");
         svc.setClassifierSpecification(getSpec("IHTSDO Classifier", 
@@ -64,7 +62,7 @@ public class ViewCoordinateExample {
         
         svc.setRelAssertionType(RelAssertionType.INFERRED);
         svc.setContradictionPolicy(ContradictionManagerPolicy.LAST_COMMIT_WINS);
-        svc.setLangSort(LanguageSort.RF_2_LANG_REFEX);
+        svc.setLangSort(LanguageSort.RF2_LANG_REFEX);
         
         
         return svc;

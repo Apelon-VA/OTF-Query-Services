@@ -39,7 +39,10 @@ import org.ihtsdo.otf.query.implementation.clauses.DescriptionLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.DescriptionRegexMatch;
 import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
+import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
+import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
+import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
@@ -214,48 +217,48 @@ public abstract class Query {
      */
     public ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType) throws IOException, ContradictionException {
         ArrayList<Object> results = new ArrayList<>();
-        
-            NativeIdSetItrBI iter = resultSet.getIterator();
-            switch (returnType) {
-                case UUIDS:
-                    while (iter.next()) {
-                        results.add(Ts.get().getComponent(iter.nid()).getVersion(viewCoordinate).getPrimordialUuid());
-                    }
-                    break;
-                case NIDS:
-                    while (iter.next()) {
-                        results.add(iter.nid());
-                    }
-                    break;
-                case CONCEPT_VERSION:
-                    while (iter.next()) {
-                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                        results.add(cc);
-                    }
-                    break;
-                case DESCRIPTION_VERSION_FSN:
-                    while (iter.next()) {
-                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getFullySpecifiedDescription();
-                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                        results.add(descChronicle);
-                    }
-                    break;
-                case DESCRIPTION_VERSION_PREFERRED:
-                    while (iter.next()) {
-                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getPreferredDescription();
-                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                        results.add(descChronicle);
-                    }
-                    break;
-                default:
-                    throw new UnsupportedOperationException("Return type not supported.");
-            }
-        
+
+        NativeIdSetItrBI iter = resultSet.getIterator();
+        switch (returnType) {
+            case UUIDS:
+                while (iter.next()) {
+                    results.add(Ts.get().getComponent(iter.nid()).getVersion(viewCoordinate).getPrimordialUuid());
+                }
+                break;
+            case NIDS:
+                while (iter.next()) {
+                    results.add(iter.nid());
+                }
+                break;
+            case CONCEPT_VERSION:
+                while (iter.next()) {
+                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                    results.add(cc);
+                }
+                break;
+            case DESCRIPTION_VERSION_FSN:
+                while (iter.next()) {
+                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getFullySpecifiedDescription();
+                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
+                    results.add(descChronicle);
+                }
+                break;
+            case DESCRIPTION_VERSION_PREFERRED:
+                while (iter.next()) {
+                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getPreferredDescription();
+                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
+                    results.add(descChronicle);
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("Return type not supported.");
+        }
+
 
         return results;
 
@@ -314,20 +317,61 @@ public abstract class Query {
     }
 
     protected RelType RelType(String relTypeKey, String conceptSpecKey) {
-        return new RelType(this, relTypeKey, conceptSpecKey, null, this.currentViewCoordinateKey, null);
+        return new RelType(this, relTypeKey, conceptSpecKey, this.currentViewCoordinateKey, true);
     }
 
     protected RelType RelType(String relTypeKey, String conceptSpecKey, String viewCoordinateKey) {
-        return new RelType(this, relTypeKey, conceptSpecKey, null, viewCoordinateKey, null);
+        return new RelType(this, relTypeKey, conceptSpecKey, viewCoordinateKey, true);
     }
-    
-    protected RelType RelType(String relTypeKey, String conceptSpecKey, String relRestrictionKey, Boolean subsumption){
-        return new RelType(this, relTypeKey, conceptSpecKey, null, this.currentViewCoordinateKey, subsumption);
+
+    protected RelType RelType(String relTypeKey, String conceptSpecKey, Boolean subsumption) {
+        return new RelType(this, relTypeKey, conceptSpecKey, this.currentViewCoordinateKey, subsumption);
     }
-    
-    protected RelType RelType(String relTypeKey, String conceptSpecKey, String relRestrictionKey, String viewCoordinateKey, Boolean subsumption){
-        return new RelType(this, relTypeKey, conceptSpecKey, relRestrictionKey, viewCoordinateKey, subsumption);
+
+    protected RelType RelType(String relTypeKey, String conceptSpecKey, String viewCoordinateKey, Boolean subsumption) {
+        return new RelType(this, relTypeKey, conceptSpecKey, viewCoordinateKey, subsumption);
     }
+
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, Boolean destinationSubsumption) {
+        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, destinationSubsumption, true);
+    }
+
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, String viewCoordinateKey) {
+        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, viewCoordinateKey, true, true);
+    }
+
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey) {
+        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, true, true);
+    }
+
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, Boolean destinationSubsumption, Boolean relTypeSubsumption) {
+        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, destinationSubsumption, relTypeSubsumption);
+    }
+
+    protected RefsetContainsConcept RefsetContainsConcept(String conceptSpecKey) {
+        return new RefsetContainsConcept(this, conceptSpecKey, this.currentViewCoordinateKey);
+    }
+
+    protected RefsetContainsConcept RefsetContainsConcept(String conceptSpecKey, String viewCoordinateKey) {
+        return new RefsetContainsConcept(this, conceptSpecKey, viewCoordinateKey);
+    }
+
+    protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey) {
+        return new RefsetContainsKindOfConcept(this, conceptSpecKey, this.currentViewCoordinateKey);
+    }
+
+    protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey, String viewCoordinateKey) {
+        return new RefsetContainsKindOfConcept(this, conceptSpecKey, viewCoordinateKey);
+    }
+      
+/*    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText) {
+        return new RefsetContainsString(this, refsetSpec, queryText, this.currentViewCoordinateKey);
+    }
+
+    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText, String viewCoordinateKey) {
+        return new RefsetContainsString(this, refsetSpec, queryText, viewCoordinateKey);
+    }*/
+
 
     protected PreferredNameForConcept PreferredNameForConcept(Clause clause) {
         return new PreferredNameForConcept(this, clause);

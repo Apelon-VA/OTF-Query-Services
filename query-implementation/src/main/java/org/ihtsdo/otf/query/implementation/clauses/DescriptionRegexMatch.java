@@ -27,10 +27,14 @@ import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.query.implementation.Clause;
+import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.Where;
+import org.ihtsdo.otf.query.implementation.WhereClause;
 
 /**
- * Calculates descriptions that contain the input Java Regular Expression.
+ * Calculates descriptions that contain the input Java Regular Expression. Very
+ * slow when iterating over a large
+ * <code>For</code> set.
  *
  * @author kec
  */
@@ -72,9 +76,9 @@ public class DescriptionRegexMatch extends LeafClause {
     }
 
     @Override
-    public Where.WhereClause getWhereClause() {
-        Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.DESCRIPTION_REGEX_MATCH);
+    public WhereClause getWhereClause() {
+        WhereClause whereClause = new WhereClause();
+        whereClause.setSemantic(ClauseSemantic.DESCRIPTION_REGEX_MATCH);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }

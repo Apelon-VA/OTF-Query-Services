@@ -31,7 +31,8 @@
                                 <para>directory: query-client</para>
                             </listitem>
                             <listitem>
-                                <para>build profiles: default</para>
+                                <para>build profiles: default, all, query-service,
+                                    integration-tests, documentation</para>
                             </listitem>
                         </itemizedlist></para>
                 </listitem>
@@ -47,7 +48,8 @@
                                 <para>directory: query-service</para>
                             </listitem>
                             <listitem>
-                                <para>build profiles: default</para>
+                                <para>build profiles:  all, query-service, integration-tests,
+                                    documentation</para>
                             </listitem>
                         </itemizedlist></para>
                 </listitem>
@@ -63,23 +65,25 @@
                                 <para>directory: query-implementation</para>
                             </listitem>
                             <listitem>
-                                <para>build profiles: default</para>
+                                <para>build profiles:  all, query-service, integration-tests,
+                                    documentation</para>
                             </listitem>
                         </itemizedlist></para>
                 </listitem>
                 <listitem>
-                    <para>Data display objects<itemizedlist>
+                    <para>JAXB objects<itemizedlist>
                             <listitem>
                                 <para>group id: org.ihtsdo.otf</para>
                             </listitem>
                             <listitem>
-                                <para>artifact id: query-client</para>
+                                <para>artifact id: query-jaxb-objects</para>
                             </listitem>
                             <listitem>
-                                <para>directory: query-client</para>
+                                <para>directory: query-jaxb-objects</para>
                             </listitem>
                             <listitem>
-                                <para>build profiles: default</para>
+                                <para>build profiles: all, query-service, integration-tests,
+                                    documentation</para>
                             </listitem>
                         </itemizedlist></para>
                 </listitem>
@@ -95,7 +99,7 @@
                                 <para>directory: query-integration-tests</para>
                             </listitem>
                             <listitem>
-                                <para>build profiles: integration-tests, documentation</para>
+                                <para>build profiles: all, integration-tests, documentation</para>
                             </listitem>
                         </itemizedlist></para>
                 </listitem>
@@ -111,7 +115,7 @@
                                 <para>directory: query-documentation</para>
                             </listitem>
                             <listitem>
-                                <para>build profiles: documentation</para>
+                                <para>build profiles: all, documentation</para>
                             </listitem>
                         </itemizedlist></para>
                 </listitem>
@@ -131,16 +135,22 @@
                         <para>Client</para>
                     </listitem>
                     <listitem>
-                        <para>Service</para>
-                    </listitem>
-                    <listitem>
-                        <para>Implementation</para>
-                    </listitem>
-                    <listitem>
-                        <para>Data Display Objects</para>
+                        <para>JAXB objects</para>
                     </listitem>
                 </orderedlist></para>
+            <para>This profile will provide a sufficient build to test the query client provided the
+                repository access is properly configured, and can download the Maven XSD artifacts
+                the JAXB Objects requires. </para>
+            <para>These artifacts should be in the IHTSDO public of the IHTSDO maven repository, and
+                should be able to download automatically by developers who do not have a user
+                account (THIS IS UNTESTED!).</para>
             </section>
+        <section>
+            <title>Query Service build profile</title>
+            <para>This profile will build the query service and dependent modules. This project has
+                more dependencies, including dependencies in the 3rd party part of the IHTSDO maven
+                repository which is password protected. </para>
+        </section>
             <section>
                 <title>Integration tests build profile</title>
                 <para>The integration tests build profile adds the integration tests module to the

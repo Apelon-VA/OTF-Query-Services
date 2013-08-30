@@ -29,20 +29,44 @@ import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- *
+ * The <code>ForCollection</code> enables the specification of a 
+ * set of object over which the query should iterate. 
+ * The <code>ForCollection</code> can either be specified by an enumeration 
+ * that identifies a standard set, or by an enumerated list. 
  * @author kec
  */
-@XmlRootElement(name = "for")
+@XmlRootElement(name = "forCollection")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ForCollection {
 
+    /**
+     * An enumeration to specify either a standard set of components, 
+     * or a custom collection for query iteration. 
+     */
     public enum ForCollectionContents {
 
-        CONCEPT, COMPONENT, CUSTOM;
+        /**
+         * The query should iterate over a collection of all concepts. 
+         */
+        CONCEPT, 
+        /**
+         * The query should iterate over a collection of all components. 
+         */
+        COMPONENT, 
+        
+        /**
+         * The query should iterate over a provided custom collection. 
+         */
+        CUSTOM;
     }
     ForCollectionContents forCollection = ForCollectionContents.CONCEPT;
     List<UUID> customCollection = new ArrayList<>();
 
+    /**
+     * 
+     * @return a collection of native identifiers that a query should iterate over. 
+     * @throws IOException 
+     */
     public NativeIdSetBI getCollection() throws IOException {
         TerminologyStoreDI ts = Ts.get();
         switch (forCollection) {
@@ -67,10 +91,18 @@ public class ForCollection {
         }
     }
 
+    /**
+     * Return the for collection enumeration as a string. 
+     * @return 
+     */
     public String getForCollectionString() {
         return forCollection.name();
     }
 
+    /**
+     * 
+     * @param forCollectionString 
+     */
     public void setForCollectionString(String forCollectionString) {
         this.forCollection = ForCollectionContents.valueOf(forCollectionString);
     }
@@ -79,15 +111,24 @@ public class ForCollection {
     public ForCollectionContents getForCollection() {
         return forCollection;
     }
-
+    
     public void setForCollection(ForCollectionContents forCollection) {
         this.forCollection = forCollection;
     }
 
+    /**
+     * 
+     * @return a custom collection of UUIDs over which the query should iterate.  
+     */
     public List<UUID> getCustomCollection() {
         return customCollection;
     }
 
+    /**
+     * 
+     * @param customCollection Set the collection of component UUIDs for the 
+     * query to iterate over. 
+     */
     public void setCustomCollection(List<UUID> customCollection) {
         this.customCollection = customCollection;
     }

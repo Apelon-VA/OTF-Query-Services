@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.ihtsdo.otf</groupId>
         <artifactId>query-parent</artifactId>
-        <version>1.1-sprint2-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <artifactId>query-client</artifactId>
 
@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>query-implementation</artifactId>
+            <artifactId>query-jaxb-objects</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>

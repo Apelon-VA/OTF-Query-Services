@@ -21,6 +21,9 @@ import org.ihtsdo.otf.tcc.api.contradiction.strategy.IdentifyAllConflict;
 import org.ihtsdo.otf.tcc.api.contradiction.strategy.LastCommitWins;
 import org.ihtsdo.otf.tcc.api.coordinate.Path;
 import org.ihtsdo.otf.tcc.api.coordinate.Position;
+import org.ihtsdo.otf.tcc.api.coordinate.SimplePath;
+import org.ihtsdo.otf.tcc.api.coordinate.SimplePosition;
+import org.ihtsdo.otf.tcc.api.coordinate.SimpleViewCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.RelSpec;
@@ -28,6 +31,7 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
+import org.ihtsdo.otf.tcc.model.cc.LanguageSortPrefs;
 
 /**
  *
@@ -49,7 +53,12 @@ public class JaxbForQuery {
                     ResultList.class,
                     DescriptionChronicleDdo.class,
                     DescriptionVersionDdo.class,
-                    ConceptChronicleDdo.class);
+                    ConceptChronicleDdo.class, 
+                    SimpleViewCoordinate.class,
+                    SimplePath.class,
+                    SimplePosition.class, 
+                    LanguageSortPrefs.class, 
+                    ReturnTypes.class);
         }
         return singleton;
     }
