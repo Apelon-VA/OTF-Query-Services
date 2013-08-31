@@ -42,8 +42,6 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
 @Path("/query")
 public class QueryResource {
 
-    private static final BdbTerminologyStore singleton = new BdbTerminologyStore();
-
     @GET
     @Produces("text/plain")
     public String doQuery(@QueryParam("VIEWPOINT") String viewValue,

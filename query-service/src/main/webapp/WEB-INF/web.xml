@@ -6,7 +6,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <servlet>
         <servlet-name>Query Module Jersey REST server</servlet-name>
-        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <servlet-class>org.ihtsdo.otf.query.rest.server.QueryServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>org.ihtsdo.otf.query.rest.server</param-value>
