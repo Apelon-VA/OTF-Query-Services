@@ -53,7 +53,7 @@
                 <executions>
                     <execution>
                         <id>extract-schema</id>
-                        <phase>site</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
