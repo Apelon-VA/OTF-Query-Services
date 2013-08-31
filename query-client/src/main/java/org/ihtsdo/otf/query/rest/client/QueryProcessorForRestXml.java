@@ -35,8 +35,9 @@ import org.ihtsdo.otf.jaxb.query.Where;
  */
 public class QueryProcessorForRestXml {
 
-    private static final String DEFAULT_HOST = "http://api.snomedtools.com";
+    //private static final String DEFAULT_HOST = "http://api.snomedtools.com";
     //private static final String DEFAULT_HOST = "http://localhost:8080";
+    private static final String DEFAULT_HOST = "http://www.informatics.com:8080";
     
     // Get JAXBContext for converting objects to XML. 
     private static final  JAXBContext ctx = JaxbForClient.get();
