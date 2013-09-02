@@ -45,6 +45,7 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.SimpleConceptSpecification;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
 
 /**
  *
@@ -70,6 +71,7 @@ public class QueryFromJaxb extends Query {
         super(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
                           .unmarshal(new StringReader(viewCoordinateXml))));
         Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
+        BdbTerminologyStore.waitForSetup();
         ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
         this.forCollection = _for.getCollection();
         LetMap letMap = (LetMap) unmarshaller.unmarshal(new StringReader(letXml));
