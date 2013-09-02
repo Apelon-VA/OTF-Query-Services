@@ -15,17 +15,26 @@
  */
 package org.ihtsdo.otf.query.rest.server;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import javax.servlet.ServletException;
 import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
 
 /**
+ * Overriding ServletContainer to enable access to
+ * <code>init()</code> and
+ * <code>destroy()</code> methods.
  *
  * @author kec
  */
 public class QueryServletContainer extends ServletContainer {
+
     BdbTerminologyStore termStore;
+    CountDownLatch started = new CountDownLatch(1);
+
     public QueryServletContainer() {
     }
 
@@ -36,14 +45,31 @@ public class QueryServletContainer extends ServletContainer {
     @Override
     public void destroy() {
         System.out.println("Destroy QueryServletContainer");
+        try {
+            started.await();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(QueryServletContainer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         termStore.shutdown();
-        super.destroy(); 
+        super.destroy();
     }
 
     @Override
     public void init() throws ServletException {
-        System.out.println("Initialize QueryServletContainer");
-        termStore = new BdbTerminologyStore();
-        super.init(); 
-    }    
+        
+        Thread bdbStartupThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Starting BdbTerminologyStore in backbround thread. ");
+                try {
+                    termStore = new BdbTerminologyStore();
+                } finally {
+                    started.countDown();
+                }
+
+            }
+        }, "Bdb startup thread");
+        bdbStartupThread.start();
+        super.init();
+    }
 }
