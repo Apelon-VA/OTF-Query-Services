@@ -47,67 +47,68 @@
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>      <em class="jxr_comment">//private static final String DEFAULT_HOST = "http://api.snomedtools.com";</em>
 <a class="jxr_linenumber" name="39" href="#39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_HOST = <span class="jxr_string">"http://localhost:8080"</span>;
-<a class="jxr_linenumber" name="40" href="#40">40</a>      
-<a class="jxr_linenumber" name="41" href="#41">41</a>      <em class="jxr_comment">// Get JAXBContext for converting objects to XML. </em>
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong>  JAXBContext ctx = JaxbForClient.get();
-<a class="jxr_linenumber" name="43" href="#43">43</a>  
-<a class="jxr_linenumber" name="44" href="#44">44</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String process(<a href="../../../../../../org/ihtsdo/otf/jaxb/chronicle/api/SimpleViewCoordinate.html">SimpleViewCoordinate</a> viewpoint, 
-<a class="jxr_linenumber" name="45" href="#45">45</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ForCollection.html">ForCollection</a> forObject,
-<a class="jxr_linenumber" name="46" href="#46">46</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/LetMap.html">LetMap</a> letMap,
-<a class="jxr_linenumber" name="47" href="#47">47</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/Where.html">Where</a> where,
-<a class="jxr_linenumber" name="48" href="#48">48</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ReturnTypes.html">ReturnTypes</a> returnType) <strong class="jxr_keyword">throws</strong> JAXBException, IOException {
-<a class="jxr_linenumber" name="49" href="#49">49</a>          <strong class="jxr_keyword">return</strong> process(viewpoint, forObject, letMap, where, returnType, DEFAULT_HOST);
-<a class="jxr_linenumber" name="50" href="#50">50</a>      }
-<a class="jxr_linenumber" name="51" href="#51">51</a>  
-<a class="jxr_linenumber" name="52" href="#52">52</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String process(<a href="../../../../../../org/ihtsdo/otf/jaxb/chronicle/api/SimpleViewCoordinate.html">SimpleViewCoordinate</a> viewpoint, 
-<a class="jxr_linenumber" name="53" href="#53">53</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ForCollection.html">ForCollection</a> forObject,
-<a class="jxr_linenumber" name="54" href="#54">54</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/LetMap.html">LetMap</a> letMap,
-<a class="jxr_linenumber" name="55" href="#55">55</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/Where.html">Where</a> where,
-<a class="jxr_linenumber" name="56" href="#56">56</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ReturnTypes.html">ReturnTypes</a> returnType,
-<a class="jxr_linenumber" name="57" href="#57">57</a>              String host) <strong class="jxr_keyword">throws</strong> JAXBException, IOException {
-<a class="jxr_linenumber" name="58" href="#58">58</a>  
-<a class="jxr_linenumber" name="59" href="#59">59</a>          
+<a class="jxr_linenumber" name="40" href="#40">40</a>      <em class="jxr_comment">//private static final String DEFAULT_HOST = "http://www.informatics.com:8080";</em>
+<a class="jxr_linenumber" name="41" href="#41">41</a>      
+<a class="jxr_linenumber" name="42" href="#42">42</a>      <em class="jxr_comment">// Get JAXBContext for converting objects to XML. </em>
+<a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong>  JAXBContext ctx = JaxbForClient.get();
+<a class="jxr_linenumber" name="44" href="#44">44</a>  
+<a class="jxr_linenumber" name="45" href="#45">45</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String process(<a href="../../../../../../org/ihtsdo/otf/jaxb/chronicle/api/SimpleViewCoordinate.html">SimpleViewCoordinate</a> viewpoint, 
+<a class="jxr_linenumber" name="46" href="#46">46</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ForCollection.html">ForCollection</a> forObject,
+<a class="jxr_linenumber" name="47" href="#47">47</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/LetMap.html">LetMap</a> letMap,
+<a class="jxr_linenumber" name="48" href="#48">48</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/Where.html">Where</a> where,
+<a class="jxr_linenumber" name="49" href="#49">49</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ReturnTypes.html">ReturnTypes</a> returnType) <strong class="jxr_keyword">throws</strong> JAXBException, IOException {
+<a class="jxr_linenumber" name="50" href="#50">50</a>          <strong class="jxr_keyword">return</strong> process(viewpoint, forObject, letMap, where, returnType, DEFAULT_HOST);
+<a class="jxr_linenumber" name="51" href="#51">51</a>      }
+<a class="jxr_linenumber" name="52" href="#52">52</a>  
+<a class="jxr_linenumber" name="53" href="#53">53</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String process(<a href="../../../../../../org/ihtsdo/otf/jaxb/chronicle/api/SimpleViewCoordinate.html">SimpleViewCoordinate</a> viewpoint, 
+<a class="jxr_linenumber" name="54" href="#54">54</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ForCollection.html">ForCollection</a> forObject,
+<a class="jxr_linenumber" name="55" href="#55">55</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/LetMap.html">LetMap</a> letMap,
+<a class="jxr_linenumber" name="56" href="#56">56</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/Where.html">Where</a> where,
+<a class="jxr_linenumber" name="57" href="#57">57</a>              <a href="../../../../../../org/ihtsdo/otf/jaxb/query/ReturnTypes.html">ReturnTypes</a> returnType,
+<a class="jxr_linenumber" name="58" href="#58">58</a>              String host) <strong class="jxr_keyword">throws</strong> JAXBException, IOException {
+<a class="jxr_linenumber" name="59" href="#59">59</a>  
 <a class="jxr_linenumber" name="60" href="#60">60</a>          
-<a class="jxr_linenumber" name="61" href="#61">61</a>          <em class="jxr_comment">// create the client</em>
-<a class="jxr_linenumber" name="62" href="#62">62</a>          Client client = ClientBuilder.newClient();
-<a class="jxr_linenumber" name="63" href="#63">63</a>          <em class="jxr_comment">// specify the host and the path. </em>
-<a class="jxr_linenumber" name="64" href="#64">64</a>          WebTarget target = client.target(host).path(<span class="jxr_string">"query-service/query"</span>);
-<a class="jxr_linenumber" name="65" href="#65">65</a>          
+<a class="jxr_linenumber" name="61" href="#61">61</a>          
+<a class="jxr_linenumber" name="62" href="#62">62</a>          <em class="jxr_comment">// create the client</em>
+<a class="jxr_linenumber" name="63" href="#63">63</a>          Client client = ClientBuilder.newClient();
+<a class="jxr_linenumber" name="64" href="#64">64</a>          <em class="jxr_comment">// specify the host and the path. </em>
+<a class="jxr_linenumber" name="65" href="#65">65</a>          WebTarget target = client.target(host).path(<span class="jxr_string">"query-service/query"</span>);
 <a class="jxr_linenumber" name="66" href="#66">66</a>          
-<a class="jxr_linenumber" name="67" href="#67">67</a>          <strong class="jxr_keyword">return</strong> target.queryParam(<span class="jxr_string">"VIEWPOINT"</span>, getXmlString(viewpoint)).
-<a class="jxr_linenumber" name="68" href="#68">68</a>                        queryParam(<span class="jxr_string">"FOR"</span>, getXmlString(forObject)).
-<a class="jxr_linenumber" name="69" href="#69">69</a>                        queryParam(<span class="jxr_string">"LET"</span>, getXmlString(letMap)).
-<a class="jxr_linenumber" name="70" href="#70">70</a>                        queryParam(<span class="jxr_string">"WHERE"</span>, getXmlString(where)).
-<a class="jxr_linenumber" name="71" href="#71">71</a>                        queryParam(<span class="jxr_string">"RETURN"</span>, getXmlString(returnType)).
-<a class="jxr_linenumber" name="72" href="#72">72</a>                  request(MediaType.TEXT_PLAIN).get(String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="73" href="#73">73</a>  
-<a class="jxr_linenumber" name="74" href="#74">74</a>      }
-<a class="jxr_linenumber" name="75" href="#75">75</a>  
-<a class="jxr_linenumber" name="76" href="#76">76</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getXmlString(Object obj) <strong class="jxr_keyword">throws</strong> JAXBException {
-<a class="jxr_linenumber" name="77" href="#77">77</a>          <strong class="jxr_keyword">if</strong> (obj instanceof SimpleViewCoordinate) {
-<a class="jxr_linenumber" name="78" href="#78">78</a>               org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory();
-<a class="jxr_linenumber" name="79" href="#79">79</a>              obj =  factory.createSimpleViewCoordinate((SimpleViewCoordinate) obj);
-<a class="jxr_linenumber" name="80" href="#80">80</a>  
-<a class="jxr_linenumber" name="81" href="#81">81</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof ForCollection) {
-<a class="jxr_linenumber" name="82" href="#82">82</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
-<a class="jxr_linenumber" name="83" href="#83">83</a>              obj = factory.createForCollection((ForCollection) obj);
-<a class="jxr_linenumber" name="84" href="#84">84</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof LetMap) {
-<a class="jxr_linenumber" name="85" href="#85">85</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
-<a class="jxr_linenumber" name="86" href="#86">86</a>              obj = factory.createLetMap((LetMap) obj);
-<a class="jxr_linenumber" name="87" href="#87">87</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof Where) {
-<a class="jxr_linenumber" name="88" href="#88">88</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
-<a class="jxr_linenumber" name="89" href="#89">89</a>              obj = factory.createWhere((Where) obj);
-<a class="jxr_linenumber" name="90" href="#90">90</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof ReturnTypes) {
-<a class="jxr_linenumber" name="91" href="#91">91</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
-<a class="jxr_linenumber" name="92" href="#92">92</a>              obj = factory.createReturnTypes((ReturnTypes) obj);
-<a class="jxr_linenumber" name="93" href="#93">93</a>          }
-<a class="jxr_linenumber" name="94" href="#94">94</a>          StringWriter writer = <strong class="jxr_keyword">new</strong> StringWriter();
-<a class="jxr_linenumber" name="95" href="#95">95</a>          ctx.createMarshaller().marshal(obj, writer);
-<a class="jxr_linenumber" name="96" href="#96">96</a>          <strong class="jxr_keyword">return</strong> writer.toString();
-<a class="jxr_linenumber" name="97" href="#97">97</a>      }
-<a class="jxr_linenumber" name="98" href="#98">98</a>      
+<a class="jxr_linenumber" name="67" href="#67">67</a>          
+<a class="jxr_linenumber" name="68" href="#68">68</a>          <strong class="jxr_keyword">return</strong> target.queryParam(<span class="jxr_string">"VIEWPOINT"</span>, getXmlString(viewpoint)).
+<a class="jxr_linenumber" name="69" href="#69">69</a>                        queryParam(<span class="jxr_string">"FOR"</span>, getXmlString(forObject)).
+<a class="jxr_linenumber" name="70" href="#70">70</a>                        queryParam(<span class="jxr_string">"LET"</span>, getXmlString(letMap)).
+<a class="jxr_linenumber" name="71" href="#71">71</a>                        queryParam(<span class="jxr_string">"WHERE"</span>, getXmlString(where)).
+<a class="jxr_linenumber" name="72" href="#72">72</a>                        queryParam(<span class="jxr_string">"RETURN"</span>, getXmlString(returnType)).
+<a class="jxr_linenumber" name="73" href="#73">73</a>                  request(MediaType.TEXT_PLAIN).get(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="74" href="#74">74</a>  
+<a class="jxr_linenumber" name="75" href="#75">75</a>      }
+<a class="jxr_linenumber" name="76" href="#76">76</a>  
+<a class="jxr_linenumber" name="77" href="#77">77</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getXmlString(Object obj) <strong class="jxr_keyword">throws</strong> JAXBException {
+<a class="jxr_linenumber" name="78" href="#78">78</a>          <strong class="jxr_keyword">if</strong> (obj instanceof SimpleViewCoordinate) {
+<a class="jxr_linenumber" name="79" href="#79">79</a>               org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory();
+<a class="jxr_linenumber" name="80" href="#80">80</a>              obj =  factory.createSimpleViewCoordinate((SimpleViewCoordinate) obj);
+<a class="jxr_linenumber" name="81" href="#81">81</a>  
+<a class="jxr_linenumber" name="82" href="#82">82</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof ForCollection) {
+<a class="jxr_linenumber" name="83" href="#83">83</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
+<a class="jxr_linenumber" name="84" href="#84">84</a>              obj = factory.createForCollection((ForCollection) obj);
+<a class="jxr_linenumber" name="85" href="#85">85</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof LetMap) {
+<a class="jxr_linenumber" name="86" href="#86">86</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
+<a class="jxr_linenumber" name="87" href="#87">87</a>              obj = factory.createLetMap((LetMap) obj);
+<a class="jxr_linenumber" name="88" href="#88">88</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof Where) {
+<a class="jxr_linenumber" name="89" href="#89">89</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
+<a class="jxr_linenumber" name="90" href="#90">90</a>              obj = factory.createWhere((Where) obj);
+<a class="jxr_linenumber" name="91" href="#91">91</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (obj instanceof ReturnTypes) {
+<a class="jxr_linenumber" name="92" href="#92">92</a>              org.ihtsdo.otf.jaxb.query.ObjectFactory factory = <strong class="jxr_keyword">new</strong> org.ihtsdo.otf.jaxb.query.ObjectFactory();
+<a class="jxr_linenumber" name="93" href="#93">93</a>              obj = factory.createReturnTypes((ReturnTypes) obj);
+<a class="jxr_linenumber" name="94" href="#94">94</a>          }
+<a class="jxr_linenumber" name="95" href="#95">95</a>          StringWriter writer = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="96" href="#96">96</a>          ctx.createMarshaller().marshal(obj, writer);
+<a class="jxr_linenumber" name="97" href="#97">97</a>          <strong class="jxr_keyword">return</strong> writer.toString();
+<a class="jxr_linenumber" name="98" href="#98">98</a>      }
 <a class="jxr_linenumber" name="99" href="#99">99</a>      
-<a class="jxr_linenumber" name="100" href="#100">100</a> }
+<a class="jxr_linenumber" name="100" href="#100">100</a>     
+<a class="jxr_linenumber" name="101" href="#101">101</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

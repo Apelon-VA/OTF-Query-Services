@@ -1,5 +1,8 @@
 org.ihtsdo.otf.jaxb.chronicle.api
 org.ihtsdo.otf.jaxb.object.display
 org.ihtsdo.otf.jaxb.query
+org.ihtsdo.otf.query.implementation
+org.ihtsdo.otf.query.implementation.clauses
 org.ihtsdo.otf.query.rest.client
 org.ihtsdo.otf.query.rest.client.examples
+org.ihtsdo.otf.query.rest.server
