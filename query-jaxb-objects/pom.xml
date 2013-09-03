@@ -53,7 +53,7 @@
                 <executions>
                     <execution>
                         <id>extract-schema</id>
-                        <phase>prepare-package</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
@@ -80,27 +80,13 @@
                         <goals>
                             <goal>xjc</goal>
                         </goals>
-                        <phase>prepare-package</phase>
+                        <phase>generate-sources</phase>
                         <configuration>
                             <schemaDirectory>${project.build.directory}/generated-resources/schema</schemaDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <executions>
-                    <execution>
-                        <id>compile-jaxb</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <phase>prepare-package</phase>
-                    </execution>
-                </executions>
-            </plugin>            
         </plugins>
     </build>
 </project>
