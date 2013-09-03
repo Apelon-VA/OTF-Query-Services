@@ -143,6 +143,12 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.maestrodev</groupId>
+                <artifactId>zip-bundle-maven-plugin</artifactId>
+                <version>1.0</version>
+                <extensions>true</extensions>
+            </plugin>
         </plugins>
     </build>
     <modules>
