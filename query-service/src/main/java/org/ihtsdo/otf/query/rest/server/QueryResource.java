@@ -55,6 +55,14 @@ public class QueryResource {
                 + "WHERE: " + whereValue + "\n   "
                 + "RETURN: " + returnValue;
         System.out.println("Received: \n   " + queryString);
+        if (viewValue == null || forValue == null || letValue == null
+                || whereValue == null || returnValue == null) {
+            return "Malformed query. Query must have VIEWPOINT, FOR, LET, WHERE, and RETURN values. \n"
+                    + "Found: " + queryString +
+                    "\n See: the section on Query Client in the query documentation: \n" +
+                    "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html";
+        }
+        
         QueryFromJaxb query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
         NativeIdSetBI resultSet = query.compute();
 
