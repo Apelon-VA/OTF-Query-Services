@@ -58,8 +58,8 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <type>zip</type>
-                            <classifier>xsd</classifier>
+                            <includeTypes>zip</includeTypes>
+                            <includeClassifiers>xsd</includeClassifiers>
                             <outputDirectory>${project.build.directory}/generated-resources/schema</outputDirectory>
                         </configuration>
                     </execution>
