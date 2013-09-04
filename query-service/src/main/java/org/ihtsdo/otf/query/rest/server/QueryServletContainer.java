@@ -50,7 +50,10 @@ public class QueryServletContainer extends ServletContainer {
         } catch (InterruptedException ex) {
             Logger.getLogger(QueryServletContainer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        termStore.shutdown();
+        if (termStore != null) {
+             termStore.shutdown();
+        }
+       
         super.destroy();
     }
 
