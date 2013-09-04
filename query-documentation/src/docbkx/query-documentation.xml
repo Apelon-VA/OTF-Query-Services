@@ -20,11 +20,12 @@
         xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <section>
         <title>Maven setup</title>
-        <para>Developers must either install Maven to use from the command line, use an IDE that has
-            Maven already integrated (IntelliJ IDEA, Netbeans), or add a plugin to their IDE
-            (Eclipse) that adds Maven support. Instructions on installing Maven for use from the
-            command line are available at Maven's <link
-                xlink:href="http://maven.apache.org/download.cgi">download site</link>. Integration
+        <para>Developers must either install Maven 3.1.0 to use from the command line, use an IDE
+            that has Maven 3.1.0 already integrated (IntelliJ IDEA, Netbeans), or add a plugin to
+            their IDE (Eclipse) that adds Maven 3.1.0 support. Instructions on installing Maven for
+            use from the command line are available at Maven's <link
+                xlink:href="http://maven.apache.org/download.cgi">download site</link>. Please note
+            that the project requires the most recent version of Mavan (3.1.0). Integration
             information for IntelliJ IDEA is available from the Jetbrains wiki for <link
                 xlink:href="http://wiki.jetbrains.net/intellij/Creating_and_importing_Maven_projects"
                 >creating and importing maven projects</link>. Integration information for Netbeans
@@ -32,7 +33,7 @@
                 page</link>.</para>
         <para>To access the artifact dependencies necessary to build the project, the Maven
             settings.xml file must be appropriately configured. More information about the
-            settings.xml file and it's location is available on Maven's <link
+            settings.xml file and its location is available on Maven's <link
                 xlink:href="http://maven.apache.org/settings.html">Settings Reference</link> web
             page. </para>
         <para>Developers will need an account to access the IHTSDO's repository, which can be
@@ -85,7 +86,10 @@
             <para>The project can be built from a console with this command: </para>
             <para><code>$mvn clean install</code></para>
             <para>This will do a maven build using the default profiles. The settings.xml must be
-                properly configured for this command succeed</para>
+                properly configured for this command succeed. On a high-spec laptop, the default
+                build will take approximately ten minutes. </para>
+            <para>Alternatively, the default maven build can be executed in an IDE that supports
+                Maven.</para>
         </section>
         <section>
             <title>Integration tests</title>
@@ -93,19 +97,20 @@
                 shown in the following command: </para>
             <para><code>$mvn clean install -P integration-tests</code></para>
             <para>This will do a maven build using the default profiles. The settings.xml must be
-                properly configured for this command succeed.</para>
+                properly configured for this command succeed. Note that IHTSDO Maestro credentials
+                are currently required for this build.</para>
         </section>
         <section>
             <title>Deploy to app server</title>
             <para>The default build command generates a <code>.war</code> file that can be deployed
                 to an app server. Before deployment the app server must be properly configured with
                 adequate memory, and access to the Berkeley database folder. A .zip file of the
-                Berkeley databas foler can be accessed from the <link
+                Berkeley database folder can be accessed from the <link
                     xlink:href="https://csfe.aceworkspace.net/sf/frs/do/listReleases/projects.the_ihtsdo_terminology_open_tool/frs.test_data"
                     >file releases section</link> of the <link
                     xlink:href="https://csfe.aceworkspace.net/sf/projects/the_ihtsdo_terminology_open_tool/"
                     >Open Tooling Framework</link> website.</para>
-            
+
             <para>When the rest server starts (currently at first query), it opens the berkeleydb
                 located in the folder berkeley-db, wherever that relative path is on your server. On
                 my server, it is at:</para>
@@ -156,9 +161,10 @@ SEVERE: java.io.StreamCorruptedException: unexpected block data at
     <xi:include
         href="../../target/generated-resources/org.ihtsdo.otf/query-service/query-service.xml"
         xmlns:xi="http://www.w3.org/2001/XInclude"/>
-    
-    <xi:include href="../../target/generated-resources/org.ihtsdo.otf/query-jaxb-objects/data-display-objects.xml" 
+
+    <xi:include
+        href="../../target/generated-resources/org.ihtsdo.otf/query-jaxb-objects/data-display-objects.xml"
         xmlns:xi="http://www.w3.org/2001/XInclude"/>
-    
+
     <xi:include href="documentation-strategy.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </article>
