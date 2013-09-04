@@ -1,8 +1,56 @@
 # Query Service
+## What is it?
 The terminology query management module which is one of the components of the IHTSDO Terminology Open Tooling Framework. 
+
+This query implementation module implements queries against the Terminology Component Chronicle service, and is intended to provide a pure java implementation of query capabilities that may be called independently of the REST service, and is also called by the REST service to perform queries.
+
+This module performs tests against a SNOMED CT database and implements a [Jersey 2.2][11] REST service for querying.
+
+This module generates java data display objects derived from running the JAXB xjc against the the underlying implementation. This XML Schema Document is then compiled using JAXB schemagen to generate java files. The .xsd document may be similarly useful for generating JSON for javascript developers. Future versions of the project will provide more complete examples using the JAXB generated data display objects to reduce client dependencies on other libraries.
+
+This project uses [Docbook 5][12] for generating documentation. Docbook enabled distributed editing with configuration mangament, and multiple distribution modalities. Docbook generation is integrated with Maven using [Docbkx Tools][13], and follows in the footsteps of other development projects such as [Sonatype's Maven book][14] and [JBoss's community documentation][15]. More details on how to contribute documentation will come in subsequent versions of this documentation.
+
 The original of this document (with extra examples) can be found at [the OTF documentation website](http://otf.snomedtools.com/query-documentation.html).
 
-## Query service repository structure
+Further documentation can be found here - [http://ihtsdo.github.io/OTF-Query-Services/](http://ihtsdo.github.io/OTF-Query-Services/)
+
+
+## Using the Query Service REST API
+
+This query client module demonstrates how to connect to the query service REST server using an [Apache Jersey 2.2][11] REST client.
+
+There are two example programs: `HelloExample` and `KindOfQueryExample`.
+
+#### HelloExample
+The `HelloExample` program, located in the [query-client package](https://github.com/IHTSDO/OTF-Query-Services/tree/master/query-client/src/main/java/org/ihtsdo/otf/query/rest/client/examples), `org.ihtsdo.otf.query.rest.client.examples` is a simple program that sends a hello request to the rest server.
+
+This program is simply to test connectivity and server status. A simple request of `http://api.snomedtools.com/query-service/hello/frank` should return the following to the console:
+
+`200`
+
+`hello frank.`
+
+The java file contains comments on each line to show the setup of the client, sending the request, and processing the result. The program has a main() and therefore can be invoked from within most IDE's by right clicking on the file, and selecting a run or debug option. Please review the java file for more details.
+
+#### QueryExample
+The `KindOfQueryExample` program, located in again in the [query-client package](https://github.com/IHTSDO/OTF-Query-Services/tree/master/query-client/src/main/java/org/ihtsdo/otf/query/rest/client/examples), `org.ihtsdo.otf.query.rest.client.examples` performs a simple kind of query using the rest server, and returns data display objects with the results.
+
+The structure of a query is defined by
+
+  * a `ViewCoordinate` that defines what version of the terminology to query against, as well as other information like the preferred language for results.
+
+  * a FOR that defines the set of components to iterate over
+
+  * a LET that defines references to concept specifications or other view coordinates used by where clauses.
+
+  * a WHERE that defined the where clauses for the query
+
+  * a RETURN that defines that type of components to return (Concepts, descriptions, etc).
+
+This example's main method will setup a kind-of query that will return concepts that are kind-of SNOMED "allergic asthma" concepts.
+
+## Building the Query Service
+### Query service repository structure
 
 The query service top-level project is the query-parent project that defines the root of the repository structure. The query service repository holds a maven multi-module project manages the sources and documents for the project. Understanding Maven is a prerequisite to understanding how to build and work with the query service. More information on Maven is available at the [Maven][1] web site.
 
@@ -10,7 +58,7 @@ Maven supports project aggregation in addition to project inheritance through it
 
 Within the top level project are six maven modules (subprojects), some of which are only built when a particular build profile is activated.
 
-  1. **Client**
+  1. **query-client**
 
     * group id: org.ihtsdo.otf
 
@@ -20,7 +68,7 @@ Within the top level project are six maven modules (subprojects), some of which 
 
     * build profiles: default, all, query-service, integration-tests, documentation
 
-  2. **Service**
+  2. **query-service**
 
     * group id: org.ihtsdo.otf
 
@@ -30,7 +78,7 @@ Within the top level project are six maven modules (subprojects), some of which 
 
     * build profiles: all, query-service, integration-tests, documentation
 
-  3. **Implementation**
+  3. **query-implementation**
 
     * group id: org.ihtsdo.otf
 
@@ -40,7 +88,7 @@ Within the top level project are six maven modules (subprojects), some of which 
 
     * build profiles: all, query-service, integration-tests, documentation
 
-  4. **JAXB objects**
+  4. **query-jaxb-objects**
 
     * group id: org.ihtsdo.otf
 
@@ -50,7 +98,7 @@ Within the top level project are six maven modules (subprojects), some of which 
 
     * build profiles: all, query-service, integration-tests, documentation
 
-  5. **Integration tests**
+  5. **query-integration-tests**
 
     * group id: org.ihtsdo.otf
 
@@ -60,7 +108,7 @@ Within the top level project are six maven modules (subprojects), some of which 
 
     * build profiles: all, integration-tests, documentation
 
-  6. **Documentation**
+  6. **query-documentation**
 
     * group id: org.ihtsdo.otf
 
@@ -69,6 +117,7 @@ Within the top level project are six maven modules (subprojects), some of which 
     * directory: query-documentation
 
     * build profiles: all, documentation
+    
 
 ### Query service build profiles
 
@@ -151,45 +200,6 @@ And takes a few minutes to open. Inside the test data is an old format view coor
 
 Just ignore that… It will self heal.
 
-This query client module demonstrates how to connect to the query service REST server using an [Apache Jersey 2.2][11] REST client.
-
-There are two example programs: `HelloExample` and `KindOfQueryExample`.
-
-The `HelloExample` program, located in package, `org.ihtsdo.otf.query.rest.client.examples` is a simple program that sends a hello request to the rest server.
-
-This program is simply to test connectivity and server status. A simple request of `http://api.snomedtools.com/query-service/hello/frank` should return the following to the console:
-
-`200`
-
-`hello frank.`
-
-The java file contains comments on each line to show the setup of the client, sending the request, and processing the result. The program has a main() and therefore can be invoked from within most IDE's by right clicking on the file, and selecting a run or debug option. Please review the java file for more details.
-
-The `KindOfQueryExample` program, located in package, `org.ihtsdo.otf.query.rest.client.examples` performs a simple kind of query using the rest server, and returns data display objects with the results.
-
-The structure of a query is defined by
-
-  * a `ViewCoordinate` that defines what version of the terminology to query against, as well as other information like the preferred language for results.
-
-  * a FOR that defines the set of components to iterate over
-
-  * a LET that defines references to concept specifications or other view coordinates used by where clauses.
-
-  * a WHERE that defined the where clauses for the query
-
-  * a RETURN that defines that type of components to return (Concepts, descriptions, etc).
-
-This example's main method will setup a kind-of query that will return concepts that are kind-of SNOMED "allergic asthma" concepts.
-
-This query implementation module implements queries against Terminology Component Chronicle service, and proved a pure java implementation of query capabilities that may be called independently of the REST service, and is also called by the REST service to perform queries.
-
-This module performs tests against a SNOMED CT database.
-
-This module implements a [Jersey 2.2][11] REST service for querying.
-
-This module generates java data display objects derived from running the JAXB xjc against the the underlying implementation. This XML Schema Document is then compiled using JAXB schemagen to generate java files. The .xsd document may be similarly useful for generating JSON for javascript developers. Future versions of the project will provide more complete examples using the JAXB generated data display objects to reduce client dependencies on other libraries.
-
-This project uses [Docbook 5][12] for generating documentation. Docbook enabled distributed editing with configuration mangament, and multiple distribution modalities. Docbook generation is integrated with Maven using [Docbkx Tools][13], and follows in the footsteps of other development projects such as [Sonatype's Maven book][14] and [JBoss's community documentation][15]. More details on how to contribute documentation will come in subsequent versions of this documentation.
 
    [1]: http://maven.apache.org
    [2]: http://maven.apache.org/guides/mini/guide-multiple-modules.html
