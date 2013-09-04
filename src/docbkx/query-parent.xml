@@ -143,13 +143,13 @@
                 the JAXB Objects requires. </para>
             <para>These artifacts should be in the IHTSDO public of the IHTSDO maven repository, and
                 should be able to download automatically by developers who do not have a user
-                account (THIS IS UNTESTED!).</para>
+                account.</para>
             </section>
         <section>
             <title>Query Service build profile</title>
             <para>This profile will build the query service and dependent modules. This project has
                 more dependencies, including dependencies in the 3rd party part of the IHTSDO maven
-                repository which is password protected. </para>
+                repository, which is password protected. </para>
         </section>
             <section>
                 <title>Integration tests build profile</title>
