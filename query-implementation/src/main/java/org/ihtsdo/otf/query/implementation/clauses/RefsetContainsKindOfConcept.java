@@ -90,7 +90,7 @@ public class RefsetContainsKindOfConcept extends LeafClause {
             ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, iter.nid());
             Collection<? extends RefexChronicleBI<?>> refexes = conceptVersion.getRefexes();
             for (RefexChronicleBI r : refexes) {
-                this.getResultsCache().add(r.getConceptNid());
+                this.getResultsCache().add(r.getNid());
             }
 
         }
