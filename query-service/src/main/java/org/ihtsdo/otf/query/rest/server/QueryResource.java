@@ -26,17 +26,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
-import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
 
 /**
- *
+ * Perform a query and return results. 
  * @author kec
  */
 @Path("/query")
@@ -66,7 +64,7 @@ public class QueryResource {
         QueryFromJaxb query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
         NativeIdSetBI resultSet = query.compute();
 
-        if (returnValue != null && !returnValue.equals("null")) {
+        if (!returnValue.equals("null")) {
             ReturnTypes returnType;
             if (returnValue.startsWith("<?xml")) {
                 Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
