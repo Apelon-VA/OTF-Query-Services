@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
+<section xml:id="org.ihtsdo.otf.query_query-client" xmlns="http://docbook.org/ns/docbook"
+    version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Query Client</title>
     <para>This query client module demonstrates how to connect to the query service REST server
-        using an <link xlink:href="http://jersey.java.net">Apache Jersey 2.2</link> REST
+        using an <link xlink:href="http://tomcat.apache.org">Apache Tomcat 7.0</link> REST
         client.</para>
     <para>There are two example programs: <code>HelloExample</code> and
             <code>KindOfQueryExample</code>. </para>
+    <section>
+        <title>Setup</title>
+        <para>Apache Tomcat 7.0 can be downloaded <link
+                xlink:href="http://tomcat.apache.org/download-70.cgi">here</link>. Configure Tomcat
+            with the following startup parameters: -Xmx6g -Xms6g
+            -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=/usr/NetBeansProjects/berkeley-db. Replace
+            the location "/usr/NetBeansProjects/berkeley-db" with the local directory of the
+            berkeley database.</para>
+        <para>This <link
+                xlink:href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/"
+                >link</link> gives directions on how to download Apache 7.0 and configure it to run
+            within Netbeans.</para>
+    </section>
     <section>
         <title>HelloExample</title>
         <para>The <code>HelloExample</code> program, located in package,
