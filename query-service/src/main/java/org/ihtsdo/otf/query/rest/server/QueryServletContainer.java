@@ -50,7 +50,10 @@ public class QueryServletContainer extends ServletContainer {
         } catch (InterruptedException ex) {
             Logger.getLogger(QueryServletContainer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        termStore.shutdown();
+        if (termStore != null) {
+             termStore.shutdown();
+        }
+       
         super.destroy();
     }
 
@@ -60,7 +63,7 @@ public class QueryServletContainer extends ServletContainer {
         Thread bdbStartupThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Starting BdbTerminologyStore in backbround thread. ");
+                System.out.println("Starting BdbTerminologyStore for QueryServletContainer in backbround thread. ");
                 try {
                     termStore = new BdbTerminologyStore();
                 } finally {
@@ -68,7 +71,7 @@ public class QueryServletContainer extends ServletContainer {
                 }
 
             }
-        }, "Bdb startup thread");
+        }, "Bdb QueryServletContainer startup thread");
         bdbStartupThread.start();
         super.init();
     }

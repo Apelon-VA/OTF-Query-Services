@@ -45,8 +45,10 @@ import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
 import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
 import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
@@ -243,7 +245,9 @@ public abstract class Query {
                     ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
                             RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
                     DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                    results.add(descChronicle);
+                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
+                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(viewCoordinate), descVersionBI);
+                    results.add(descVersion);
                 }
                 break;
             case DESCRIPTION_VERSION_PREFERRED:
@@ -252,7 +256,9 @@ public abstract class Query {
                     ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
                             RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
                     DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                    results.add(descChronicle);
+                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
+                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(viewCoordinate), descVersionBI);
+                    results.add(descVersion);
                 }
                 break;
             default:

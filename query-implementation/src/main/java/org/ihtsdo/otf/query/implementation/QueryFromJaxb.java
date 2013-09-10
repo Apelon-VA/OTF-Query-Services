@@ -62,21 +62,20 @@ public class QueryFromJaxb extends Query {
         }
         throw new UnsupportedOperationException("Can't convert to ViewCoordinate: " + obj);
     }
-
-    
     private Clause rootClause;
     private NativeIdSetBI forCollection;
+    
     public QueryFromJaxb(String viewCoordinateXml, String forXml,
             String letXml, String whereXml) throws JAXBException, IOException {
         super(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
-                          .unmarshal(new StringReader(viewCoordinateXml))));
+                .unmarshal(new StringReader(viewCoordinateXml))));
         Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
         BdbTerminologyStore.waitForSetup();
         ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
         this.forCollection = _for.getCollection();
         LetMap letMap = (LetMap) unmarshaller.unmarshal(new StringReader(letXml));
         Map<String, Object> convertedMap = new HashMap<>(letMap.getMap().size());
-        for (Entry entry: letMap.getMap().entrySet()) {
+        for (Entry entry : letMap.getMap().entrySet()) {
             if (entry.getValue() instanceof SimpleConceptSpecification) {
                 ConceptSpec newValue = new ConceptSpec((SimpleConceptSpecification) entry.getValue());
                 convertedMap.put((String) entry.getKey(), newValue);
@@ -93,17 +92,17 @@ public class QueryFromJaxb extends Query {
             rootClause = getWhereClause(this, (WhereClause) obj);
         }
     }
-
+    
     @Override
     protected NativeIdSetBI For() throws IOException {
         return this.forCollection;
     }
-
+    
     @Override
     public void Let() throws IOException {
         // lets are set in the constructor. 
     }
-
+    
     @Override
     public Clause Where() {
         return rootClause;
@@ -112,7 +111,7 @@ public class QueryFromJaxb extends Query {
     public static Clause getWhereClause(Query q, WhereClause clause) throws IOException {
         Clause[] childClauses = new Clause[clause.children.size()];
         for (int i = 0; i < childClauses.length; i++) {
-            WhereClause childClause =  clause.children.get(i);
+            WhereClause childClause = clause.children.get(i);
             childClauses[i] = getWhereClause(q, childClause);
         }
         switch (clause.semantic) {
@@ -177,13 +176,32 @@ public class QueryFromJaxb extends Query {
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
                 return q.RefsetLuceneMatch(clause.letKeys.get(0));
-            case REL_TYPE:
+            case REFSET_CONTAINS_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.RelType(clause.letKeys.get(0), clause.letKeys.get(1));
+                return q.RefsetContainsConcept(clause.letKeys.get(0));
+            case REFSET_CONTAINS_KIND_OF_CONCEPT:
+                assert childClauses.length == 0 : childClauses;
+                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
+                return q.RefsetContainsKindOfConcept(clause.letKeys.get(0));
+            case REL_RESTRICTION:
+                assert childClauses.length == 0 : childClauses;
+                assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 : "Let keys should have three or four values: " + clause.letKeys;
+                if (clause.letKeys.size() == 3) {
+                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                } else {
+                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
+                }
+            case REL_TYPE:
+                assert childClauses.length == 0 : childClauses;
+                assert clause.letKeys.size() == 2 || clause.letKeys.size() == 3 : "Let keys should have two or three values: " + clause.letKeys;
+                if (clause.letKeys.size() == 2) {
+                    return q.RelType(clause.letKeys.get(0), clause.letKeys.get(1));                    
+                } else {
+                    return q.RelType(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                }
             default:
                 throw new UnsupportedOperationException("Can't handle: " + clause.semantic);
         }
     }
-
 }
