@@ -303,6 +303,7 @@ public class QueryTest {
 
     }
 
+    @Ignore
     @Test
     public void testRefsetContainsConcept() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
@@ -331,6 +332,7 @@ public class QueryTest {
 
     }
 
+    @Ignore
     @Test
     public void testRefsetContainsKindOfConcept() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {

@@ -23,24 +23,33 @@
             (IntelliJ IDEA, Netbeans), or add a plugin to their IDE (Eclipse) that adds Maven 3.1.0
             support. Instructions on installing Maven for use from the command line are available at
             Maven's <link xlink:href="http://maven.apache.org/download.cgi">download site</link>.
-            Please note that the project build requires the most recent version of Maven (3.1.0).
             Integration information for IntelliJ IDEA is available from the Jetbrains wiki for <link
                 xlink:href="http://wiki.jetbrains.net/intellij/Creating_and_importing_Maven_projects"
                 >creating and importing maven projects</link>. Integration information for Netbeans
             is available from Netbean's <link xlink:href="http://wiki.netbeans.org/Maven">Maven wiki
                 page</link>.</para>
+        <para>Please note that the project build requires the most recent version of Maven (3.1.0)
+            and Java 1.7 or higher. Ensure that you are running the minimum requirements for Maven
+            and Java by entering the command <code>mvn --version</code>, which will output the Maven
+            and Java versions running on your machine. If the output displays a version less than
+            1.7, download it <link
+                xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html"
+                >here</link> and ensure that JAVA_HOME and PATH variables are set to point at a JDK
+            1.7 or higher. </para>
+        <para>Furthermore, to debug queries, you will need to allocate more space for Java. To set
+            these properties in the NetBeans IDE, add "-J-Xss2m -J-Xms1g -J-Xmx2g
+            -J-XX:PermSize=1600m" to the netbeans_default_options in the netbeans.conf file.</para>
         <para>To access the artifact dependencies necessary to build the project, the Maven
             settings.xml file must be appropriately configured. More information about the
             settings.xml file and its location is available on Maven's <link
                 xlink:href="http://maven.apache.org/settings.html">Settings Reference</link> web
-            page.</para>
+            page. As noted in the Settings Reference page, locate and edit the settings.xml in the
+            directory <code>${user.home}/.m2/</code>.</para>
         <para>For build profiles other than the default build, developers will need an account to
             download artifacts in the IHTSDO's repository, which can be requested from Rory
-            Davidson. In future releases, it will be possible to build the client using only a
-            public repository that does not require a user account. Below is a copy of a
-            settings.xml that allows a user to conduct the default build. In order to perform other
-            build profiles, enter IHTSDO Maestro credentials into the username and password
-            fields.</para>
+            Davidson. Below is a copy of a settings.xml that allows a user to conduct the default
+            build. In order to perform other build profiles, enter IHTSDO Maestro credentials into
+            the username and password fields.</para>
         <example>
             <title>Example settings.xml file</title>
             <para>
@@ -75,6 +84,10 @@
                 </programlistingco>
             </para>
         </example>
+        <section>
+            <title>Java setup</title>
+            <para>The Query service project requires Java 1.7 or higher. </para>
+        </section>
         <section>
             <title>Project checkout</title>
             <para>The Query service project can be checked out anonymously from GIT by entering the
