@@ -31,7 +31,7 @@
         <para>Please note that the project build requires the most recent version of Maven (3.1.0)
             and Java 1.7 or higher. Ensure that you are running the minimum requirements for Maven
             and Java by entering the command <code>mvn --version</code>, which will output the Maven
-            and Java versions running on your machine. If the output displays a version less than
+            and Java versions running on your machine. If the output displays a version earlier than
             1.7, download it <link
                 xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html"
                 >here</link> and ensure that JAVA_HOME and PATH variables are set to point at a JDK
