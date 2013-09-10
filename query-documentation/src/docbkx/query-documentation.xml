@@ -102,25 +102,39 @@
         <title>Deploy to app server</title>
         <para>The default build command generates a <code>.war</code> file that can be deployed to
             an app server. Before deployment the app server must be properly configured with
-            adequate memory, and access to the Berkeley database folder. A .zip file of the Berkeley
-            database folder can be accessed from the <link
+            adequate memory, and access to the Berkeley database folder. The database folder can be
+            accessed from the <link
                 xlink:href="https://csfe.aceworkspace.net/sf/frs/do/listReleases/projects.the_ihtsdo_terminology_open_tool/frs.test_data"
                 >file releases section</link> of the <link
                 xlink:href="https://csfe.aceworkspace.net/sf/projects/the_ihtsdo_terminology_open_tool/"
                 >Open Tooling Framework</link> website.</para>
-
+        <para>Apache Tomcat 7.0 can be downloaded <link
+                xlink:href="http://tomcat.apache.org/download-70.cgi">here</link>. Configure Tomcat
+            with the following startup with the following JVM options: <code>-Xmx6g -Xms6g
+                -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=&lt;location of the berkeley-db
+                folder></code>. This is how these parameters are set based upon your operating system:<orderedlist>
+                <listitem>
+                    <para>Windows - use the command <code>--JvmOptions</code> to set the above
+                        options. For more information on command-line parameters for Tomcat 7 on a
+                        Windows machine, please see this <link
+                            xlink:href="http://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html#Command_line_parameters"
+                            >link</link>.</para>
+                </listitem>
+                <listitem>
+                    <para>Linux/ Unix - add the given parameters as <code>CATALINA_OPTS</code> in
+                        the <code>setenv.sh</code> file, which is located in the <code>/bin</code>
+                        folder within Tomcat. If you haven't already created this file to use for
+                        other reasons, you will need to add it in the directory <code>/bine</code>
+                        within Tomcat.</para>
+                </listitem>
+            </orderedlist>If you want to run Tomcat within Netbeans, this <link
+                xlink:href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/"
+                >link</link> gives directions on how to download Apache 7.0 and configure it to run
+            within Netbeans. Include the startup parameters stated above in the VM Options
+            box.</para>
         <para>When the rest server starts (currently at first query), it opens the berkeleydb
-            located in the folder berkeley-db, wherever that relative path is on your server. On my
-            server, it is at:</para>
-        <para> /Users/kec/GlassFish_Server/glassfish/domains/ttk/config/berkeley-db </para>
-        <para> (the config directory of the domain appears to be the working directory) You can
-            override the location by setting a system property on the server:</para>
-        <para>
-            <programlisting>
--Dorg.ihtsdo.otf.tcc.datastore.bdb-location=&lt;the location of the berkeley-db folder>
-                </programlisting>
-        </para>
-        <para>It writes diagnostic output when opening the database as follows: </para>
+            located in the folder berkeley-db, wherever that relative path is on your server and
+            writes diagnostic output as follows: </para>
         <para>
             <programlisting> 
 INFO: QS_sprint2:_Query_rest_service was successfully deployed in 3,637 milliseconds. 
