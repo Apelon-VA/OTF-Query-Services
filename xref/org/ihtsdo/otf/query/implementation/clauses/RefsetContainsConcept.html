@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="86" href="#86">86</a>          ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, nid);
 <a class="jxr_linenumber" name="87" href="#87">87</a>          Collection&lt;? <strong class="jxr_keyword">extends</strong> RefexChronicleBI&lt;?&gt;&gt; refexes = conceptVersion.getRefexes();
 <a class="jxr_linenumber" name="88" href="#88">88</a>          <strong class="jxr_keyword">for</strong> (RefexChronicleBI r : refexes) {
-<a class="jxr_linenumber" name="89" href="#89">89</a>              <strong class="jxr_keyword">this</strong>.getResultsCache().add(r.getConceptNid());
+<a class="jxr_linenumber" name="89" href="#89">89</a>              <strong class="jxr_keyword">this</strong>.getResultsCache().add(r.getNid());
 <a class="jxr_linenumber" name="90" href="#90">90</a>          }
 <a class="jxr_linenumber" name="91" href="#91">91</a>  
 <a class="jxr_linenumber" name="92" href="#92">92</a>          <strong class="jxr_keyword">return</strong> getResultsCache();

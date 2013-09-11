@@ -111,7 +111,8 @@
 <br>
 <pre>public class <span class="strong">DescriptionLuceneMatch</span>
 extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation">LeafClause</a></pre>
-<div class="block">Calculates the descriptions that match the results from an input Lucene
+<div class="block">TODO: not supported yet. Must move Lucene to Query Services project.
+ Calculates the descriptions that match the results from an input Lucene
  search.</div>
 <dl><dt><span class="strong">Author:</span></dt>
   <dd>kec</dd></dl>
@@ -270,8 +271,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <li class="blockList">
 <h4>computePossibleComponents</h4>
 <pre>public final&nbsp;org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;incomingPossibleComponents)
-                                                                         throws org.apache.lucene.index.CorruptIndexException,
-                                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+                                                                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">Clause</a></code></strong></div>
 <div class="block">Compute components that meet the where clause criterion without using
  iteration. If the set of possibilities cannot be computed without
@@ -281,7 +281,6 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <dd><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computePossibleComponents</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd>
 <dt><span class="strong">Throws:</span></dt>
-<dd><code>org.apache.lucene.index.CorruptIndexException</code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>

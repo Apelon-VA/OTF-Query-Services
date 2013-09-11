@@ -8,56 +8,34 @@ body { background-image: url('images/draft.png');
        /* I think that's just a bit too distracting for the reader... */
        /* background-attachment: fixed; */
        /* background-position: center center; */
-     }</style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article" title="Query Service"><div class="titlepage"><div><div><h1 class="title"><a name="d0e3"></a>Query Service</h1></div><div><div class="author"><h3 class="author"><span class="orgname">IHTSDO</span><div class="address"><p><br>
+     }</style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article" title="Query Service"><div class="titlepage"><div><div><h1 class="title"><a name="org.ihtsdo.otf.query_query-documentation"></a>Query Service</h1></div><div><div class="author"><h3 class="author"><span class="orgname">IHTSDO</span><div class="address"><p><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="city">Copenhagen&nbsp;K</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="street">Gammeltorv&nbsp;4,&nbsp;1.</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="postcode">1457</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="country">Denmark</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></div></h3></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e24">Query service repository structure</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e40">Maven Modules</a></span></dt><dt><span class="section"><a href="#d0e142">Query service build profiles</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e189">Maven setup</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e222">Project checkout</a></span></dt><dt><span class="section"><a href="#d0e230">Maven build</a></span></dt><dt><span class="section"><a href="#d0e240">Integration tests</a></span></dt><dt><span class="section"><a href="#d0e250">Deploy to app server</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e291">Query Client</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e307">HelloExample</a></span></dt><dt><span class="section"><a href="#d0e331">KindOfQueryExample</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e379">Query Implementation</a></span></dt><dt><span class="section"><a href="#d0e384">Query Integration Tests</a></span></dt><dt><span class="section"><a href="#d0e389">Query Service</a></span></dt><dt><span class="section"><a href="#d0e397">JAXB Objects</a></span></dt><dt><span class="section"><a href="#d0e402">Documentation</a></span></dt></dl></div><div class="section" title="Query service repository structure"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24"></a>Query service repository structure</h2></div></div></div><p>The query service top-level project is the query-parent project that defines the root of
-        the repository structure. The query service repository holds a maven multi-module project
-        manages the sources and documents for the project. Understanding Maven is a prerequisite to
-        understanding how to build and work with the query service. More information on Maven is
-        available at the <a class="link" href="http://maven.apache.org" target="_top">Maven</a> web site.</p><p>Maven supports project aggregation in addition to project inheritance through its module
-        structure. See <a class="link" href="http://maven.apache.org/guides/mini/guide-multiple-modules.html" target="_top">Maven's
-            Guide to Working with Multiple Modules</a> and <a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html" target="_top">Maven's Introduction to the POM</a> for more information about Maven modules,
-        project inheritance, and project aggregation. </p><div class="section" title="Maven Modules"><div class="titlepage"><div><div><h3 class="title"><a name="d0e40"></a>Maven Modules</h3></div></div></div><p>Within the top level project are six maven modules (subprojects), some of which are
-            only built when a particular build profile is activated.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Client</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-client</p></li><li class="listitem"><p>directory: query-client</p></li><li class="listitem"><p>build profiles: default, all, query-service,
-                                    integration-tests, documentation</p></li></ul></div></li><li class="listitem"><p>Service</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-service</p></li><li class="listitem"><p>directory: query-service</p></li><li class="listitem"><p>build profiles:  all, query-service, integration-tests,
-                                    documentation</p></li></ul></div></li><li class="listitem"><p>Implementation</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-implementation</p></li><li class="listitem"><p>directory: query-implementation</p></li><li class="listitem"><p>build profiles:  all, query-service, integration-tests,
-                                    documentation</p></li></ul></div></li><li class="listitem"><p>JAXB objects</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-jaxb-objects</p></li><li class="listitem"><p>directory: query-jaxb-objects</p></li><li class="listitem"><p>build profiles: all, query-service, integration-tests,
-                                    documentation</p></li></ul></div></li><li class="listitem"><p>Integration tests</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-integration-tests</p></li><li class="listitem"><p>directory: query-integration-tests</p></li><li class="listitem"><p>build profiles: all, integration-tests, documentation</p></li></ul></div></li><li class="listitem"><p>Documentation</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-documentation</p></li><li class="listitem"><p>directory: query-documentation</p></li><li class="listitem"><p>build profiles: all, documentation</p></li></ul></div></li></ol></div></div><div class="section" title="Query service build profiles"><div class="titlepage"><div><div><h3 class="title"><a name="d0e142"></a>Query service build profiles</h3></div></div></div><p>The query service defines three build profiles described in the following sections.
-            For more information on build profiles, see Maven's<a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html" target="_top">Introduction to build profiles</a>.</p><div class="section" title="Default build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e150"></a>Default build profile</h4></div></div></div><p>The default build profile consists of the modules that build when no profile is
-                specifically specified. By default the following modules are built:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Client</p></li><li class="listitem"><p>JAXB objects</p></li></ol></div><p>This profile will provide a sufficient build to test the query client provided the
-                repository access is properly configured, and can download the Maven XSD artifacts
-                the JAXB Objects requires. </p><p>These artifacts should be in the IHTSDO public of the IHTSDO maven repository, and
-                should be able to download automatically by developers who do not have a user
-                account (THIS IS UNTESTED!).</p></div><div class="section" title="Query Service build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e166"></a>Query Service build profile</h4></div></div></div><p>This profile will build the query service and dependent modules. This project has
-                more dependencies, including dependencies in the 3rd party part of the IHTSDO maven
-                repository which is password protected. </p></div><div class="section" title="Integration tests build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e171"></a>Integration tests build profile</h4></div></div></div><p>The integration tests build profile adds the integration tests module to the
-                build when the build profile id <span class="italic">integration-tests</span>
-                is activated.  The integration tests are not part of the default build profile
-                because they have an external dependency on a Berkeley SNOMED database that is
-                rather large, and downloading and opening this database may not be necessary for all
-                types of development. Omitting this module from the default build profile makes the
-                default build rapid. </p><p>The build time for the integration tests module takes about 1 min 20 sec on a
-                high-spec developers laptop, while the other modules in this project take between
-                0.5 and 5 seconds. </p></div><div class="section" title="Documentation profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e181"></a>Documentation profile</h4></div></div></div><p>The documentation build profile adds the integration tests module and the
-                documentation module to the build when the build profile id <span class="italic">documentation</span> is activated. Generation of documentation depends of
-                proper execution of the integration tests module, and therefore is removed from the
-                default build profile secondary to the resource requirements and build time of the
-                integration tests module. </p></div></div></div><div class="section" title="Maven setup"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e189"></a>Maven setup</h2></div></div></div><p>Developers must either install Maven to use from the command line, use an IDE that has
-            Maven already integrated (IntelliJ IDEA, Netbeans), or add a plugin to their IDE
-            (Eclipse) that adds Maven support. Instructions on installing Maven for use from the
-            command line are available at Maven's <a class="link" href="http://maven.apache.org/download.cgi" target="_top">download site</a>. Integration
-            information for IntelliJ IDEA is available from the Jetbrains wiki for <a class="link" href="http://wiki.jetbrains.net/intellij/Creating_and_importing_Maven_projects" target="_top">creating and importing maven projects</a>. Integration information for Netbeans
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></div></h3></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e24">Maven setup</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e70">Java setup</a></span></dt><dt><span class="section"><a href="#d0e75">Project checkout</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e83">Query service repository structure</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e99">Maven Modules</a></span></dt><dt><span class="section"><a href="#d0e231">Query service build profiles</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e306">Deploy to app server</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-client">Query Client</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e363">Setup</a></span></dt><dt><span class="section"><a href="#d0e379">HelloExample</a></span></dt><dt><span class="section"><a href="#d0e403">KindOfQueryExample</a></span></dt></dl></dd><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-implementation">Query Implementation</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-integration-tests">Query Integration Tests</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-service">Query Service</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_data-display-objects_jaxb">JAXB Objects</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_documentation-strategy">Documentation</a></span></dt></dl></div><div class="section" title="Maven setup"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24"></a>Maven setup</h2></div></div></div><p>In order to build the Query Service project, developers must either install Maven
+            3.1.0 to use from the command line, use an IDE that has Maven 3.1.0 already integrated
+            (IntelliJ IDEA, Netbeans), or add a plugin to their IDE (Eclipse) that adds Maven 3.1.0
+            support. Instructions on installing Maven for use from the command line are available at
+            Maven's <a class="link" href="http://maven.apache.org/download.cgi" target="_top">download site</a>.
+            Integration information for IntelliJ IDEA is available from the Jetbrains wiki for <a class="link" href="http://wiki.jetbrains.net/intellij/Creating_and_importing_Maven_projects" target="_top">creating and importing maven projects</a>. Integration information for Netbeans
             is available from Netbean's <a class="link" href="http://wiki.netbeans.org/Maven" target="_top">Maven wiki
-                page</a>.</p><p>To access the artifact dependencies necessary to build the project, the Maven
+                page</a>.</p><p>Please note that the project build requires the most recent version of Maven (3.1.0)
+            and Java 1.7 or higher. Ensure that you are running the minimum requirements for Maven
+            and Java by entering the command <code class="code">mvn --version</code>, which will output the Maven
+            and Java versions running on your machine. If the output displays a version earlier than
+            1.7, download it <a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html" target="_top">here</a> and ensure that JAVA_HOME and PATH variables are set to point at a JDK
+            1.7 or higher. </p><p>Furthermore, to debug queries, you will need to allocate more space for Java. To set
+            these properties in the NetBeans IDE, add "-J-Xss2m -J-Xms1g -J-Xmx2g
+            -J-XX:PermSize=1600m" to the netbeans_default_options in the netbeans.conf file.</p><p>To access the artifact dependencies necessary to build the project, the Maven
             settings.xml file must be appropriately configured. More information about the
-            settings.xml file and it's location is available on Maven's <a class="link" href="http://maven.apache.org/settings.html" target="_top">Settings Reference</a> web
-            page. </p><p>Developers will need an account to access the IHTSDO's repository, which can be
-            requested from Rory Davidson. In future releases, the client will be buildable using
-            only a public repository that does not require a user account, but the settings.xml file
-            will still have to be properly configured. </p><div class="example"><a name="d0e210"></a><p class="title"><b>Example&nbsp;1.&nbsp;Example settings.xml file</b></p><div class="example-contents"><p>
+            settings.xml file and its location is available on Maven's <a class="link" href="http://maven.apache.org/settings.html" target="_top">Settings Reference</a> web
+            page. As noted in the Settings Reference page, locate and edit the settings.xml in the
+            directory <code class="code">${user.home}/.m2/</code>.</p><p>For build profiles other than the default build, developers will need an account to
+            download artifacts in the IHTSDO's repository, which can be requested from Rory
+            Davidson. Below is a copy of a settings.xml that allows a user to conduct the default
+            build. In order to perform other build profiles, enter IHTSDO Maestro credentials into
+            the username and password fields.</p><div class="example"><a name="d0e58"></a><p class="title"><b>Example&nbsp;1.&nbsp;Example settings.xml file</b></p><div class="example-contents"><p>
                 </p><div class="programlistingco"><pre class="programlisting">                    
 &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -81,22 +59,66 @@ body { background-image: url('images/draft.png');
      &lt;/mirrors&gt; 
 &lt;/settings&gt; 
                     </pre></div><p>
-            </p></div></div><br class="example-break"><div class="section" title="Project checkout"><div class="titlepage"><div><div><h3 class="title"><a name="d0e222"></a>Project checkout</h3></div></div></div><p>The Query service project can be checked out anonymously from GIT with this
-                command: </p><p><code class="code">$git clone https://github.com/IHTSDO/OTF-Query-Services.git</code></p></div><div class="section" title="Maven build"><div class="titlepage"><div><div><h3 class="title"><a name="d0e230"></a>Maven build</h3></div></div></div><p>The project can be built from a console with this command: </p><p><code class="code">$mvn clean install</code></p><p>This will do a maven build using the default profiles. The settings.xml must be
-                properly configured for this command succeed</p></div><div class="section" title="Integration tests"><div class="titlepage"><div><div><h3 class="title"><a name="d0e240"></a>Integration tests</h3></div></div></div><p>Integration tests can be enabled by activating the integration-tests profile, as
-                shown in the following command: </p><p><code class="code">$mvn clean install -P integration-tests</code></p><p>This will do a maven build using the default profiles. The settings.xml must be
-                properly configured for this command succeed.</p></div><div class="section" title="Deploy to app server"><div class="titlepage"><div><div><h3 class="title"><a name="d0e250"></a>Deploy to app server</h3></div></div></div><p>The default build command generates a <code class="code">.war</code> file that can be deployed
-                to an app server. Before deployment the app server must be properly configured with
-                adequate memory, and access to the Berkeley database folder. A .zip file of the
-                Berkeley databas foler can be accessed from the <a class="link" href="https://csfe.aceworkspace.net/sf/frs/do/listReleases/projects.the_ihtsdo_terminology_open_tool/frs.test_data" target="_top">file releases section</a> of the <a class="link" href="https://csfe.aceworkspace.net/sf/projects/the_ihtsdo_terminology_open_tool/" target="_top">Open Tooling Framework</a> website.</p><p>When the rest server starts (currently at first query), it opens the berkeleydb
-                located in the folder berkeley-db, wherever that relative path is on your server. On
-                my server, it is at:</p><p> /Users/kec/GlassFish_Server/glassfish/domains/ttk/config/berkeley-db </p><p> (the config directory of the domain appears to be the working directory) You can
-                override the location by setting a system property on the server:</p><p>
-                </p><pre class="programlisting">
+            </p></div></div><br class="example-break"><div class="section" title="Java setup"><div class="titlepage"><div><div><h3 class="title"><a name="d0e70"></a>Java setup</h3></div></div></div><p>The Query service project requires Java 1.7 or higher. </p></div><div class="section" title="Project checkout"><div class="titlepage"><div><div><h3 class="title"><a name="d0e75"></a>Project checkout</h3></div></div></div><p>The Query service project can be checked out anonymously from GIT by entering the
+                prompt <code class="code">$git clone https://github.com/IHTSDO/OTF-Query-Services.git</code> in
+                an empty directory folder. </p></div></div><div class="section" title="Query service repository structure"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e83"></a>Query service repository structure</h2></div></div></div><p>The query service top-level project is the query-parent project that defines the root of
+        the repository structure. The query service repository holds a maven multi-module project
+        manages the sources and documents for the project. Understanding Maven is a prerequisite to
+        understanding how to build and work with the query service. More information on Maven is
+        available at the <a class="link" href="http://maven.apache.org" target="_top">Maven</a> web site.</p><p>Maven supports project aggregation in addition to project inheritance through its module
+        structure. See <a class="link" href="http://maven.apache.org/guides/mini/guide-multiple-modules.html" target="_top">Maven's
+            Guide to Working with Multiple Modules</a> and <a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html" target="_top">Maven's Introduction to the POM</a> for more information about Maven modules,
+        project inheritance, and project aggregation. </p><div class="section" title="Maven Modules"><div class="titlepage"><div><div><h3 class="title"><a name="d0e99"></a>Maven Modules</h3></div></div></div><p>Within the top level project are six maven modules (subprojects), some of which are
+            only built when a particular build profile is activated.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_query-client" title="Query Client">Client</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>demonstrates how to connect to the query service REST server
+                                    using a <a class="link" href="http://tomcat.apache.org" target="_top">Tomcat
+                                        7.0</a> REST client</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-client</p></li><li class="listitem"><p>directory: query-client</p></li><li class="listitem"><p>build profiles: default, all, query-service,
+                                    integration-tests, documentation</p></li></ul></div></li><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_query-service" title="Query Service">Service</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>implements a <a class="link" href="http://tomcat.apache.org" target="_top">Tomcat 7.0</a> REST service for querying</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-service</p></li><li class="listitem"><p>directory: query-service</p></li><li class="listitem"><p>build profiles: all, query-service, integration-tests,
+                                    documentation</p></li></ul></div></li><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_query-implementation" title="Query Implementation">Implementation</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>implementation of queries against Terminology Component
+                                    Chronicle service</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-implementation</p></li><li class="listitem"><p>directory: query-implementation</p></li><li class="listitem"><p>build profiles: all, query-service, integration-tests,
+                                    documentation</p></li></ul></div></li><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_data-display-objects_jaxb" title="JAXB Objects">JAXB
+                            objects</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>generates java data display objects derived from running the
+                                    JAXB xjc against the the underlying implementation</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-jaxb-objects</p></li><li class="listitem"><p>directory: query-jaxb-objects</p></li><li class="listitem"><p>build profiles: all, query-service, integration-tests,
+                                    documentation</p></li></ul></div></li><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_query-integration-tests" title="Query Integration Tests">Integration
+                            tests</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>conducts tests of queries against a SNOMED CT database</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-integration-tests</p></li><li class="listitem"><p>directory: query-integration-tests</p></li><li class="listitem"><p>build profiles: all, integration-tests, documentation</p></li></ul></div></li><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_documentation-strategy" title="Documentation">Documentation</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>handles compilation of documentation fir Query Services
+                                    project</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-documentation</p></li><li class="listitem"><p>directory: query-documentation</p></li><li class="listitem"><p>build profiles: all, documentation</p></li></ul></div></li></ol></div></div><div class="section" title="Query service build profiles"><div class="titlepage"><div><div><h3 class="title"><a name="d0e231"></a>Query service build profiles</h3></div></div></div><p>The query service defines five build profiles described in the following sections. For
+            more information on build profiles, see Maven's <a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html" target="_top">Introduction to build profiles</a>. The default build is the only build profile
+            that can be conducted without acquiring IHTSDO Maestro credentials.</p><p>A developer can execute the builds from the command line, using the appropriate
+            command described below, or from an IDE that supports Maven by selecting the desired
+            build profile.</p><div class="section" title="Default build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e241"></a>Default build profile</h4></div></div></div><p>The default build profile consists of the modules that build when no profile is
+                specifically specified. By default the following modules are built:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Client</p></li><li class="listitem"><p>JAXB objects</p></li></ol></div><p>This profile will provide a sufficient build to test the query client with the
+                provided settings.xml file. </p><p>These artifacts are located in the IHTSDO public Maven repository, and a user can
+                perform the default build without IHTSDO Maestro credentials.</p><p>The default build can be conducted from the console with the command <code class="code">$mvn
+                    clean install</code>.</p></div><div class="section" title="Query Service build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e262"></a>Query Service build profile</h4></div></div></div><p>This profile will build the query service and dependent modules. This project has
+                more dependencies, including dependencies in the IHTSDO Maven repository, which
+                required a user account. </p><p>The command for this build is <code class="code">$mvn clean install -P
+                query-service</code>.</p></div><div class="section" title="Integration tests build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e272"></a>Integration tests build profile</h4></div></div></div><p>The integration tests build profile adds the integration tests module to the build
+                when the build profile id <span class="italic">integration-tests</span> is
+                activated. The integration tests are not part of the default build profile because
+                they have an external dependency on a Berkeley SNOMED database that is rather large,
+                and downloading and opening this database may not be necessary for all types of
+                development. Omitting this module from the default build profile makes the default
+                build rapid. </p><p>Assuming all of the required dependencies are installed, the build time for the
+                integration tests module takes about 1 min 20 sec on a high-spec developers laptop,
+                while the other modules in this project take between 0.5 and 5 seconds. To build
+                this from the console, use the command <code class="code">$mvn clean install -P
+                    integration-tests</code>.</p></div><div class="section" title="Documentation build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e285"></a>Documentation build profile</h4></div></div></div><p>The documentation build profile adds the integration tests module and the
+                documentation module to the build when the build profile id <span class="italic">documentation</span> is activated. Generation of documentation depends of
+                proper execution of the integration tests module, and therefore is removed from the
+                default build profile secondary to the resource requirements and build time of the
+                integration tests module. </p><p>Execute the documentation profile build with the command <code class="code">$mvn clean install
+                    -P documentation</code>.</p></div><div class="section" title="All build profile"><div class="titlepage"><div><div><h4 class="title"><a name="d0e298"></a>All build profile</h4></div></div></div><p>Perform all of the goals listed in the above build profiles with the command
+                    <code class="code">$mvn clean install -P all</code>.</p></div></div></div><div class="section" title="Deploy to app server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e306"></a>Deploy to app server</h2></div></div></div><p>The default build command generates a <code class="code">.war</code> file that can be deployed to
+            an app server. Before deployment the app server must be properly configured with
+            adequate memory, and access to the Berkeley database folder. A .zip file of the Berkeley
+            database folder can be accessed from the <a class="link" href="https://csfe.aceworkspace.net/sf/frs/do/listReleases/projects.the_ihtsdo_terminology_open_tool/frs.test_data" target="_top">file releases section</a> of the <a class="link" href="https://csfe.aceworkspace.net/sf/projects/the_ihtsdo_terminology_open_tool/" target="_top">Open Tooling Framework</a> website.</p><p>When the rest server starts (currently at first query), it opens the berkeleydb
+            located in the folder berkeley-db, wherever that relative path is on your server. On my
+            server, it is at:</p><p> /Users/kec/GlassFish_Server/glassfish/domains/ttk/config/berkeley-db </p><p> (the config directory of the domain appears to be the working directory) You can
+            override the location by setting a system property on the server:</p><p>
+            </p><pre class="programlisting">
 -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=&lt;the location of the berkeley-db folder&gt;
                 </pre><p>
-            </p><p>It writes diagnostic output when opening the database as follows: </p><p>
-                </p><pre class="programlisting"> 
+        </p><p>It writes diagnostic output when opening the database as follows: </p><p>
+            </p><pre class="programlisting"> 
 INFO: QS_sprint2:_Query_rest_service was successfully deployed in 3,637 milliseconds. 
 INFO: org.ihtsdo.otf.tcc.datastore.bdb-location not set. Using default location of: berkeley-db 
 INFO: setup dbRoot: berkeley-db 
@@ -104,34 +126,45 @@ INFO: absolute dbRoot: /Users/kec/GlassFish_Server/glassfish/domains/ttk/config/
 INFO: NidCidMap readOnlyRecords: 812 
 INFO: NidCidMap mutableRecords: 0 
                 </pre><p>
-            </p><p>And takes a few minutes to open. Inside the test data is an old format view
-                coordinate... So it throws a serialization exception: </p><p>
-                </p><pre class="programlisting"> 
+        </p><p>And takes a few minutes to open. Inside the test data is an old format view
+            coordinate... So it throws a serialization exception: </p><p>
+            </p><pre class="programlisting"> 
 SEVERE: java.io.StreamCorruptedException: unexpected block data at
         java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1362) at
         java.io.ObjectInputStream.defaultReadFields(ObjectInputStream.java:1989) at
         java.io.ObjectInputStream.readSerialData(ObjectInputStream.java:1913) at
         java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1796)
                 </pre><p>
-            </p><p>Just ignore that&#8230; It will self heal.</p></div></div><div class="section" title="Query Client"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e291"></a>Query Client</h2></div></div></div><p>This query client module demonstrates how to connect to the query service REST server
-        using an <a class="link" href="http://jersey.java.net" target="_top">Apache Jersey 2.2</a> REST
-        client.</p><p>There are two example programs: <code class="code">HelloExample</code> and <code class="code">KindOfQueryExample</code>. </p><div class="section" title="HelloExample"><div class="titlepage"><div><div><h3 class="title"><a name="d0e307"></a>HelloExample</h3></div></div></div><p>The <code class="code">HelloExample</code> program, located in package,
+        </p><p>Just ignore that&#8230; It will self heal.</p></div><div class="section" title="Query Client"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="org.ihtsdo.otf.query_query-client"></a>Query Client</h2></div></div></div><p>This query client module demonstrates how to connect to the query service REST server
+        using an <a class="link" href="http://tomcat.apache.org" target="_top">Apache Tomcat 7.0</a> REST
+        client.</p><p>There are two example programs: <code class="code">HelloExample</code> and
+            <code class="code">KindOfQueryExample</code>. </p><div class="section" title="Setup"><div class="titlepage"><div><div><h3 class="title"><a name="d0e363"></a>Setup</h3></div></div></div><p>Apache Tomcat 7.0 can be downloaded <a class="link" href="http://tomcat.apache.org/download-70.cgi" target="_top">here</a>. Configure Tomcat
+            with the following startup parameters: <code class="code">-Xmx6g -Xms6g
+            -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=/usr/NetBeansProjects/berkeley-db</code>. Replace
+            the location "/usr/NetBeansProjects/berkeley-db" with the local directory of the
+            berkeley database on your machine.</p><p>This <a class="link" href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/" target="_top">link</a> gives directions on how to download Apache 7.0 and configure it to run
+            within Netbeans. Include the startup parameters stated above in the VM Options.</p></div><div class="section" title="HelloExample"><div class="titlepage"><div><div><h3 class="title"><a name="d0e379"></a>HelloExample</h3></div></div></div><p>The <code class="code">HelloExample</code> program, located in package,
                 <code class="code">org.ihtsdo.otf.query.rest.client.examples</code> is a simple program that
             sends a hello request to the rest server. </p><p>This program is simply to test connectivity and server status. A simple request of
                 <code class="code">http://api.snomedtools.com/query-service/hello/frank</code> should return the
             following to the console:</p><p><code class="code">200</code></p><p><code class="code">hello frank.</code></p><p>The java file contains comments on each line to show the setup of the client, sending
             the request, and processing the result. The program has a main() and therefore can be
             invoked from within most IDE's by right clicking on the file, and selecting a run or
-            debug option. Please review the java file for more details. </p></div><div class="section" title="KindOfQueryExample"><div class="titlepage"><div><div><h3 class="title"><a name="d0e331"></a>KindOfQueryExample</h3></div></div></div><p>The <code class="code">KindOfQueryExample</code> program, located in package,
+            debug option. Please review the java file for more details.</p></div><div class="section" title="KindOfQueryExample"><div class="titlepage"><div><div><h3 class="title"><a name="d0e403"></a>KindOfQueryExample</h3></div></div></div><p>The <code class="code">KindOfQueryExample</code> program, located in package,
                 <code class="code">org.ihtsdo.otf.query.rest.client.examples</code> performs a simple kind of
-            query using the rest server, and returns data display objects with the results. </p><p>The structure of a query is defined by </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>a <code class="code">ViewCoordinate</code> that defines what version of the terminology
+            query using the rest server, and returns data display objects with the results.</p><p>The structure of a query is defined by:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>a <code class="code">ViewCoordinate</code> that defines what version of the terminology
                         to query against, as well as other information like the preferred language
                         for results.</p></li><li class="listitem"><p>a FOR that defines the set of components to iterate over</p></li><li class="listitem"><p>a LET that defines references to concept specifications or other view
                         coordinates used by where clauses. </p></li><li class="listitem"><p>a WHERE that defined the where clauses for the query</p></li><li class="listitem"><p>a RETURN that defines that type of components to return (Concepts,
-                        descriptions, etc). </p></li></ul></div><p>  This example's main method will setup a kind-of query that will return
-            concepts that are kind-of SNOMED "allergic asthma" concepts. </p><p>Below is an example output that is generated by a successful run (xml formatting was
+                        descriptions, etc). </p></li></ul></div><p> This example's main method will setup a kind-of query that will return
+            concepts that are kind-of SNOMED "allergic asthma" concepts. If a server is not
+            specified, a default server is chosen from the QueryProcessorForRestXml class, located
+            in the package: <code class="code">org.ihtsdo.otf.query.rest.client</code>.</p><p>Run this example with the following command:</p><p><code class="code">$ java -cp
+                query-client/target/query-client-1.1-SNAPSHOT-jar-with-dependencies.jar
+                org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample
+                http://api.snomedtools.com</code></p><p>Below is an example output that is generated by a successful run (xml formatting was
             added after the fact to make the results display better in this document).</p><p>
-            </p><div class="example"><a name="d0e368"></a><p class="title"><b>Example&nbsp;2.&nbsp;<code class="code">KindOfQueryExample</code> output</b></p><div class="example-contents"><p>
+            </p><div class="example"><a name="d0e448"></a><p class="title"><b>Example&nbsp;2.&nbsp;<code class="code">KindOfQueryExample</code> output</b></p><div class="example-contents"><p>
                     </p><pre class="programlisting">
                 INFO: Results: 
 &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
@@ -1396,18 +1429,18 @@ INFO: Returned concept: Saw dust asthma
         
                     </pre><p>
                 </p></div></div><p><br class="example-break">
-        </p></div></div><div class="section" title="Query Implementation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e379"></a>Query Implementation</h2></div></div></div><p>This query implementation module implements queries against Terminology Component
+        </p></div></div><div class="section" title="Query Implementation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="org.ihtsdo.otf.query_query-implementation"></a>Query Implementation</h2></div></div></div><p>This query implementation module implements queries against Terminology Component
         Chronicle service, and proved a pure java implementation of query capabilities that may be
         called independently of the REST service, and is also called by the REST service to perform
-        queries.</p></div><div class="section" title="Query Integration Tests"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e384"></a>Query Integration Tests</h2></div></div></div><p>This module performs tests against a SNOMED CT database.</p></div><div class="section" title="Query Service"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e389"></a>Query Service</h2></div></div></div><p>This module implements a <a class="link" href="http://jersey.java.net" target="_top">Jersey 2.2</a> REST
-        service for querying.</p></div><div class="section" title="JAXB Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e397"></a>JAXB Objects</h2></div></div></div><p>This module generates java data display objects derived from running the JAXB xjc against
+        queries.</p></div><div class="section" title="Query Integration Tests"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="org.ihtsdo.otf.query_query-integration-tests"></a>Query Integration Tests</h2></div></div></div><p>This module performs tests against a SNOMED CT database.</p></div><div class="section" title="Query Service"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="org.ihtsdo.otf.query_query-service"></a>Query Service</h2></div></div></div><p>This module implements a <a class="link" href="http://tomcat.apache.org" target="_top">Tomcat 7.0</a>
+        REST service for querying.</p></div><div class="section" title="JAXB Objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="org.ihtsdo.otf.query_data-display-objects_jaxb"></a>JAXB Objects</h2></div></div></div><p>This module generates java data display objects derived from running the JAXB xjc against
         the the underlying implementation. This XML Schema Document is then compiled using JAXB
         schemagen to generate java files. The .xsd document may be similarly useful for generating
         JSON for javascript developers. Future versions of the project will provide more complete
         examples using the JAXB generated data display objects to reduce client dependencies on
-        other libraries. </p></div><div class="section" title="Documentation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e402"></a>Documentation</h2></div></div></div><p>This project uses <a class="link" href="http://www.docbook.org" target="_top">Docbook 5</a> for
+        other libraries. </p></div><div class="section" title="Documentation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="org.ihtsdo.otf.query_documentation-strategy"></a>Documentation</h2></div></div></div><p>This project uses <a class="link" href="http://www.docbook.org" target="_top">Docbook 5</a> for
         generating documentation. Docbook enabled distributed editing with configuration mangament,
         and multiple distribution modalities. Docbook generation is integrated with Maven using
             <a class="link" href="http://code.google.com/p/docbkx-tools/" target="_top">Docbkx Tools</a>, and
-        follows in the footsteps of other development projects such as  <a class="link" href="http://blog.sonatype.com/people/2008/04/writing-a-book-with-maven-part-i/" target="_top">Sonatype's Maven book</a> and <a class="link" href="https://www.jboss.org/pressgang/jdg" target="_top">JBoss's community documentation</a>. More details on how to contribute documentation
+        follows in the footsteps of other development projects such as <a class="link" href="http://blog.sonatype.com/people/2008/04/writing-a-book-with-maven-part-i/" target="_top">Sonatype's Maven book</a> and <a class="link" href="https://www.jboss.org/pressgang/jdg" target="_top">JBoss's community documentation</a>. More details on how to contribute documentation
         will come in subsequent versions of this documentation. </p></div></div></body></html>
