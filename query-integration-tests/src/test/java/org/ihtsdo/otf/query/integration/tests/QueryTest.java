@@ -62,6 +62,32 @@ public class QueryTest {
     @After
     public void tearDown() {
     }
+ 
+    @Test
+    public void testSimpleQuery() throws IOException, Exception {
+        System.out.println("Simple query: ");
+        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("motion", Snomed.MOTION);
+            }
+
+            @Override
+            public Clause Where() {
+                return ConceptIs("motion");
+            }
+        };
+        System.out.println(q.returnResults().size());
+        for (Object o : q.returnResults()) {
+            System.out.println(o);
+        };
+        Assert.assertEquals(1, q.returnResults().size());
+    }
 
     @Test
     public void testRegexQuery() throws IOException, Exception {
@@ -186,7 +212,6 @@ public class QueryTest {
 //        System.out.println("Description lucene search test: " + results.size());
 //        Assert.assertEquals(18, results.size());
 //    }
-
     @Test
     public void testRelType() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
@@ -389,7 +414,6 @@ public class QueryTest {
 //        Assert.assertEquals(2, results.size());
 //
 //    }
-
     @Test
     public void testFullySpecifiedName() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {

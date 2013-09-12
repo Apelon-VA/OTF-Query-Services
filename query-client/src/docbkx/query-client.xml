@@ -47,10 +47,20 @@
                     <para>a RETURN that defines that type of components to return (Concepts,
                         descriptions, etc). </para>
                 </listitem>
-            </itemizedlist> This example's main method will setup a kind-of query that will return
-            concepts that are kind-of SNOMED "allergic asthma" concepts. If a server is not
-            specified, a default server is chosen from the QueryProcessorForRestXml class, located
-            in the package: <code>org.ihtsdo.otf.query.rest.client</code>.</para>
+            </itemizedlist>The following parameters are required for a query: <orderedlist>
+                <listitem>
+                    <para>Let declarations</para>
+                </listitem>
+                <listitem>
+                    <para>Where clauses</para>
+                </listitem>
+            </orderedlist>If a ViewCoordinate is not specified, then the Snomed inferred latest will
+            be used. The default FOR set is all concepts. And the default RETURN value is the fully
+            specified description version of the components in the result set.</para>
+        <para>This example's main method will setup a kind-of query that will return concepts that
+            are kind-of SNOMED "allergic asthma" concepts. If a server is not specified, a default
+            server is chosen from the QueryProcessorForRestXml class, located in the package:
+                <code>org.ihtsdo.otf.query.rest.client</code>.</para>
         <para>Run this example with the following command:</para>
         <para><code>$ java -cp
                 query-client/target/query-client-1.1-SNAPSHOT-jar-with-dependencies.jar
