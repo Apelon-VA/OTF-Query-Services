@@ -37,7 +37,7 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
  * Perform a query and return results. 
  * @author kec
  */
-@Path("/query")
+@Path("query-service/query")
 public class QueryResource {
 
     @GET
