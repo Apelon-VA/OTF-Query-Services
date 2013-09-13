@@ -52,6 +52,10 @@ public enum ClauseSemantic {
      */
     CONCEPT_IS_CHILD_OF,
     /**
+     * Test to see if there is a concept matching the input concept spec.
+     */
+    CONCEPT_IS,
+    /**
      * Test to see if the concept is a logical descendent of another.
      */
     CONCEPT_IS_DESCENDENT_OF,

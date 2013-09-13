@@ -41,7 +41,7 @@ public class QueryProcessorForRestXml {
     // Get JAXBContext for converting objects to XML. 
     private static final  JAXBContext ctx = JaxbForClient.get();
 
-    public static String process(SimpleViewCoordinate viewpoint, 
+    public static String process(SimpleViewCoordinate viewpoint,
             ForCollection forObject,
             LetMap letMap,
             Where where,
@@ -49,33 +49,33 @@ public class QueryProcessorForRestXml {
         return process(viewpoint, forObject, letMap, where, returnType, DEFAULT_HOST);
     }
 
-    public static String process(SimpleViewCoordinate viewpoint, 
+    public static String process(SimpleViewCoordinate viewpoint,
             ForCollection forObject,
             LetMap letMap,
             Where where,
             ReturnTypes returnType,
             String host) throws JAXBException, IOException {
 
-        
-        
+
+
         // create the client
         Client client = ClientBuilder.newClient();
         // specify the host and the path. 
-        WebTarget target = client.target(host).path("otf/query-service/query");
-        
-        
+        WebTarget target = client.target(host).path("query-service/query");
+
+
         return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
-                      queryParam("FOR", getXmlString(forObject)).
-                      queryParam("LET", getXmlString(letMap)).
-                      queryParam("WHERE", getXmlString(where)).
-                      queryParam("RETURN", getXmlString(returnType)).
+                queryParam("FOR", getXmlString(forObject)).
+                queryParam("LET", getXmlString(letMap)).
+                queryParam("WHERE", getXmlString(where)).
+                queryParam("RETURN", getXmlString(returnType)).
                 request(MediaType.TEXT_PLAIN).get(String.class);
 
     }
 
     private static String getXmlString(Object obj) throws JAXBException {
         if (obj instanceof SimpleViewCoordinate) {
-             org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory factory = new org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory();
+            org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory factory = new org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory();
             obj =  factory.createSimpleViewCoordinate((SimpleViewCoordinate) obj);
 
         } else if (obj instanceof ForCollection) {
