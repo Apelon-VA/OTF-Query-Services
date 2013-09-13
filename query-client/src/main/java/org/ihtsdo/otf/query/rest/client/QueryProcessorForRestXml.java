@@ -25,6 +25,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.jaxb.chronicle.api.SimpleViewCoordinate;
 import org.ihtsdo.otf.jaxb.query.ForCollection;
+import org.ihtsdo.otf.jaxb.query.ForCollectionContents;
 import org.ihtsdo.otf.jaxb.query.LetMap;
 import org.ihtsdo.otf.jaxb.query.ReturnTypes;
 import org.ihtsdo.otf.jaxb.query.Where;
@@ -37,9 +38,8 @@ public class QueryProcessorForRestXml {
 
     //private static final String DEFAULT_HOST = "http://api.snomedtools.com";
     private static final String DEFAULT_HOST = "http://localhost:8080";
-    
     // Get JAXBContext for converting objects to XML. 
-    private static final  JAXBContext ctx = JaxbForClient.get();
+    private static final JAXBContext ctx = JaxbForClient.get();
 
     public static String process(SimpleViewCoordinate viewpoint,
             ForCollection forObject,
@@ -56,7 +56,16 @@ public class QueryProcessorForRestXml {
             ReturnTypes returnType,
             String host) throws JAXBException, IOException {
 
-
+        if (viewpoint == null) {
+            viewpoint = ViewCoordinateExample.getSnomedInferredLatest();
+        }
+        if (forObject == null) {
+            forObject = new ForCollection();
+            forObject.setForCollectionString(ForCollectionContents.CONCEPT.name());
+        }
+        if (returnType == null) {
+            returnType = ReturnTypes.DESCRIPTION_VERSION_FSN;
+        }
 
         // create the client
         Client client = ClientBuilder.newClient();
@@ -95,6 +104,4 @@ public class QueryProcessorForRestXml {
         ctx.createMarshaller().marshal(obj, writer);
         return writer.toString();
     }
-    
-    
 }

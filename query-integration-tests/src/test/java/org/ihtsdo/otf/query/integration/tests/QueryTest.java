@@ -62,14 +62,14 @@ public class QueryTest {
     @After
     public void tearDown() {
     }
- 
+
     @Test
     public void testSimpleQuery() throws IOException, Exception {
         System.out.println("Simple query: ");
-        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        Query q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
-                return Ts.get().getAllConceptNids();
+                return null;
             }
 
             @Override
@@ -346,6 +346,15 @@ public class QueryTest {
         NativeIdSetBI results = q.compute();
         System.out.println("Refset contains concept count: " + results.size());
         for (Object o : q.returnDisplayObjects(results, ReturnTypes.UUIDS)) {
+            System.out.println(o);
+        }
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_FSN)) {
+            System.out.println(o);
+        }
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.NIDS)) {
+            System.out.println(o);
+        }
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.CONCEPT_VERSION)) {
             System.out.println(o);
         }
         Assert.assertEquals(1, results.size());

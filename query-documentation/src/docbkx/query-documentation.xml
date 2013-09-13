@@ -36,6 +36,10 @@
                 xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html"
                 >here</link> and ensure that JAVA_HOME and PATH variables are set to point at a JDK
             1.7 or higher. </para>
+        <para>Once Maven is configured, you will need to download JavaFX artifacts to your local
+            repository by running the command <code>mvn
+                org.codeartisans.javafx:javafx-deployer-maven-plugin:1.2:install</code> from a
+            directory that is not a Maven project.</para>
         <para>Furthermore, to debug queries, you will need to allocate more space for Java. To set
             these properties in the NetBeans IDE, add "-J-Xss2m -J-Xms1g -J-Xmx2g
             -J-XX:PermSize=1600m" to the netbeans_default_options in the netbeans.conf file.</para>
@@ -110,7 +114,7 @@
                 >Open Tooling Framework</link> website.</para>
         <para>Apache Tomcat 7.0 can be downloaded <link
                 xlink:href="http://tomcat.apache.org/download-70.cgi">here</link>. Configure Tomcat
-            with the following startup with the following JVM options: <code>-Xmx6g -Xms6g
+            with the following startup with the following JVM options: <code>-Xmx6g -Xms6g -XX:PermSize=256m -XX:MaxPermSize=512m
                 -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=&lt;location of the berkeley-db
                 folder></code>. This is how these parameters are set based upon your operating system:<orderedlist>
                 <listitem>
@@ -121,11 +125,9 @@
                             >link</link>.</para>
                 </listitem>
                 <listitem>
-                    <para>Linux/ Unix - add the given parameters as <code>CATALINA_OPTS</code> in
-                        the <code>setenv.sh</code> file, which is located in the <code>/bin</code>
-                        folder within Tomcat. If you haven't already created this file to use for
-                        other reasons, you will need to add it in the directory <code>/bine</code>
-                        within Tomcat.</para>
+                    <para>Linux/ Unix - add the given parameters as <code>JAVA_OPTS</code> in the
+                            <code>catalina.sh</code> file, which is located in the <code>/bin</code>
+                        folder within Tomcat.</para>
                 </listitem>
             </orderedlist>If you want to run Tomcat within Netbeans, this <link
                 xlink:href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/"

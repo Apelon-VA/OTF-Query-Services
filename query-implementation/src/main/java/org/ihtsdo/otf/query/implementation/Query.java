@@ -44,6 +44,7 @@ import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
+import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsString;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
@@ -112,6 +113,15 @@ public abstract class Query {
     }
 
     /**
+     * No argument constructor, which creates a
+     * <code>Query</code> with the Snomed inferred latest as the input
+     * <code>ViewCoordinate</code>.
+     */
+    public Query() {
+        this(null);
+    }
+
+    /**
      * Constructor for
      * <code>Query</code>. If a
      * <code>ViewCoordinate</code> is not specified, the default is the Snomed
@@ -120,7 +130,7 @@ public abstract class Query {
      * @param viewCoordinate
      */
     public Query(ViewCoordinate viewCoordinate) {
-        if (this.viewCoordinate == null) {
+        if (viewCoordinate == null) {
             try {
                 this.viewCoordinate = StandardViewCoordinates.getSnomedInferredLatest();
             } catch (IOException ex) {
@@ -235,8 +245,8 @@ public abstract class Query {
      * <code>Query</code>.
      *
      * @param q input <code>Query</code>
-     * @return The result set of the <code>Query</code> in * *      * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code>
-     * objects
+     * @return The result set of the <code>Query</code> in * * *
+     * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects
      * @throws IOException
      * @throws ContradictionException
      * @throws Exception
@@ -416,6 +426,14 @@ public abstract class Query {
 
     protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey, String viewCoordinateKey) {
         return new RefsetContainsKindOfConcept(this, conceptSpecKey, viewCoordinateKey);
+    }
+
+    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText) {
+        return new RefsetContainsString(this, refsetSpec, queryText, this.currentViewCoordinateKey);
+    }
+
+    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText, String viewCoordinateKey) {
+        return new RefsetContainsString(this, refsetSpec, queryText, viewCoordinateKey);
     }
 
     protected PreferredNameForConcept PreferredNameForConcept(Clause clause) {
