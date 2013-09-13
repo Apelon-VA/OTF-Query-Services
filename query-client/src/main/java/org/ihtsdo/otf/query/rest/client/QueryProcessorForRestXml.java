@@ -61,7 +61,7 @@ public class QueryProcessorForRestXml {
         // create the client
         Client client = ClientBuilder.newClient();
         // specify the host and the path. 
-        WebTarget target = client.target(host).path("query-service/query");
+        WebTarget target = client.target(host).path("otf/query-service/query");
 
 
         return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
