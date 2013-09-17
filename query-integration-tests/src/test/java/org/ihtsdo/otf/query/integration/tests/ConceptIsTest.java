@@ -1,5 +1,3 @@
-package org.ihtsdo.otf.query.integration.tests;
-
 /*
  * Copyright 2013 International Health Terminology Standards Development Organisation.
  *
@@ -15,24 +13,26 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.ihtsdo.otf.query.integration.tests;
+
 import java.io.IOException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  * Creates a test for the
- * <code>Or</code> clause.
+ * <code>ConceptIs</code> clause.
  *
  * @author dylangrald
  */
-public class OrTest extends QueryClauseTest {
+public class ConceptIsTest extends QueryClauseTest {
 
-    public OrTest() throws IOException {
-        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+    public ConceptIsTest() throws IOException {
+        final SetViewCoordinate vc = new SetViewCoordinate(2001, 1, 31, 0, 0);
+        this.q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -40,15 +40,13 @@ public class OrTest extends QueryClauseTest {
 
             @Override
             public void Let() throws IOException {
-                let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
-                let("respiratory disorder", Snomed.RESPIRATORY_DISORDER);
-                let("person", Snomed.PERSON);
+                let("motion", Snomed.MOTION);
+                let("v2", vc.getViewCoordinate());
             }
 
             @Override
             public Clause Where() {
-                return Or(ConceptIsKindOf("person"), ConceptIsKindOf("allergic-asthma"));
-                //return Or(ConceptIsKindOf("allergic-asthma"), ConceptIsKindOf("respiratory disorder"));
+                return ConceptIs("motion", "v2");
             }
         };
     }

@@ -3,18 +3,8 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Query service repository structure</title>
     <para>The query service top-level project is the query-parent project that defines the root of
-        the repository structure. The query service repository holds a maven multi-module project
-        manages the sources and documents for the project. Understanding Maven is a prerequisite to
-        understanding how to build and work with the query service. More information on Maven is
-        available at the <link xlink:href="http://maven.apache.org">Maven</link> web site.</para>
-    <para>Maven supports project aggregation in addition to project inheritance through its module
-        structure. See <link
-            xlink:href="http://maven.apache.org/guides/mini/guide-multiple-modules.html">Maven's
-            Guide to Working with Multiple Modules</link> and <link
-            xlink:href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html"
-            >Maven's Introduction to the POM</link> for more information about Maven modules,
-        project inheritance, and project aggregation. </para>
-
+        the repository structure. The query service repository holds a maven multi-module project,
+        which manages the sources and documents for the project.</para>
     <section>
         <title>Maven Modules</title>
         <para>Within the top level project are six maven modules (subprojects), some of which are
@@ -88,7 +78,7 @@
                     <para><link linkend="org.ihtsdo.otf.query_data-display-objects_jaxb">JAXB
                             objects</link><itemizedlist>
                             <listitem>
-                                <para>generates java data display objects derived from running the
+                                <para>generates Java data display objects derived from running the
                                     JAXB xjc against the the underlying implementation</para>
                             </listitem>
                             <listitem>
@@ -148,73 +138,5 @@
                         </itemizedlist></para>
                 </listitem>
             </orderedlist></para>
-    </section>
-    <section xmlns="http://docbook.org/ns/docbook">
-        <title>Query service build profiles</title>
-        <para>The query service defines five build profiles described in the following sections. For
-            more information on build profiles, see Maven's <link
-                xlink:href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html"
-                >Introduction to build profiles</link>. The default build is the only build profile
-            that can be conducted without acquiring IHTSDO Maestro credentials.</para>
-        <para>A developer can execute the builds from the command line, using the appropriate
-            command described below, or from an IDE that supports Maven by selecting the desired
-            build profile.</para>
-        <section>
-            <title>Default build profile</title>
-            <para>The default build profile consists of the modules that build when no profile is
-                specifically specified. By default the following modules are built:<orderedlist>
-                    <listitem>
-                        <para>Client</para>
-                    </listitem>
-                    <listitem>
-                        <para>JAXB objects</para>
-                    </listitem>
-                </orderedlist></para>
-            <para>This profile will provide a sufficient build to test the query client with the
-                provided settings.xml file. </para>
-            <para>These artifacts are located in the IHTSDO public Maven repository, and a user can
-                perform the default build without IHTSDO Maestro credentials.</para>
-            <para>The default build can be conducted from the console with the command <code>$mvn
-                    clean install</code>.</para>
-        </section>
-        <section>
-            <title>Query Service build profile</title>
-            <para>This profile will build the query service and dependent modules. This project has
-                more dependencies, including dependencies in the IHTSDO Maven repository, which
-                required a user account. </para>
-            <para>The command for this build is <code>$mvn clean install -P
-                query-service</code>.</para>
-        </section>
-        <section>
-            <title>Integration tests build profile</title>
-            <para>The integration tests build profile adds the integration tests module to the build
-                when the build profile id <emphasis role="italic">integration-tests</emphasis> is
-                activated. The integration tests are not part of the default build profile because
-                they have an external dependency on a Berkeley SNOMED database that is rather large,
-                and downloading and opening this database may not be necessary for all types of
-                development. Omitting this module from the default build profile makes the default
-                build rapid. </para>
-            <para>Assuming all of the required dependencies are installed, the build time for the
-                integration tests module takes about 1 min 20 sec on a high-spec developers laptop,
-                while the other modules in this project take between 0.5 and 5 seconds. To build
-                this from the console, use the command <code>$mvn clean install -P
-                    integration-tests</code>.</para>
-        </section>
-        <section>
-            <title>Documentation build profile</title>
-            <para>The documentation build profile adds the integration tests module and the
-                documentation module to the build when the build profile id <emphasis role="italic"
-                    >documentation</emphasis> is activated. Generation of documentation depends of
-                proper execution of the integration tests module, and therefore is removed from the
-                default build profile secondary to the resource requirements and build time of the
-                integration tests module. </para>
-            <para>Execute the documentation profile build with the command <code>$mvn clean install
-                    -P documentation</code>.</para>
-        </section>
-        <section>
-            <title>All build profile</title>
-            <para>Perform all of the goals listed in the above build profiles with the command
-                    <code>$mvn clean install -P all</code>.</para>
-        </section>
     </section>
 </section>

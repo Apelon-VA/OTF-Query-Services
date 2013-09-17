@@ -31,7 +31,7 @@ import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
- * Obtains the concept from the input
+ * An identity function that obtains the concept from the input
  * <code>ConceptSpec</code>.
  *
  * @author dylangrald

@@ -193,10 +193,6 @@ public abstract class Query {
         return viewCoordinate;
     }
 
-    protected RefsetLuceneMatch RefsetLuceneMatch(String luceneMatch) {
-        return new RefsetLuceneMatch(this, luceneMatch);
-    }
-
     private class Iterator implements ProcessUnfetchedConceptDataBI {
 
         NativeIdSetBI conceptsToIterate;
@@ -244,7 +240,7 @@ public abstract class Query {
      * <code>Query</code>.
      *
      * @param q input <code>Query</code>
-     * @return The result set of the <code>Query</code> in * * *
+     * @return The result set of the <code>Query</code> in * * * * *
      * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects
      * @throws IOException
      * @throws ContradictionException
@@ -323,10 +319,27 @@ public abstract class Query {
         this.resultSetLimit = limit;
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsKindOf</code> clause with default
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @return
+     */
     protected ConceptIsKindOf ConceptIsKindOf(String conceptSpecKey) {
         return new ConceptIsKindOf(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsKindOf</code> with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected ConceptIsKindOf ConceptIsKindOf(String conceptSpecKey, String viewCoordinateKey) {
         return new ConceptIsKindOf(this, conceptSpecKey, viewCoordinateKey);
     }
@@ -347,6 +360,15 @@ public abstract class Query {
         return new ConceptIs(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptIs</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected ConceptIs ConceptIs(String conceptSpecKey, String viewCoordinateKey) {
         return new ConceptIs(this, conceptSpecKey, viewCoordinateKey);
     }
@@ -355,6 +377,15 @@ public abstract class Query {
         return new ConceptIsDescendentOf(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsDescendentOf</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected ConceptIsDescendentOf ConceptIsDescendentOf(String conceptSpecKey, String viewCoordinateKey) {
         return new ConceptIsDescendentOf(this, conceptSpecKey, viewCoordinateKey);
     }
@@ -363,6 +394,15 @@ public abstract class Query {
         return new ConceptIsChildOf(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsChildOf</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected ConceptIsChildOf ConceptIsChildOf(String conceptSpecKey, String viewCoordinateKey) {
         return new ConceptIsChildOf(this, conceptSpecKey, viewCoordinateKey);
     }
@@ -383,6 +423,16 @@ public abstract class Query {
         return new RelType(this, relTypeKey, conceptSpecKey, this.currentViewCoordinateKey, true);
     }
 
+    /**
+     * Creates
+     * <code>RelType</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param relTypeKey
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected RelType RelType(String relTypeKey, String conceptSpecKey, String viewCoordinateKey) {
         return new RelType(this, relTypeKey, conceptSpecKey, viewCoordinateKey, true);
     }

@@ -15,8 +15,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
@@ -26,16 +24,15 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for ConceptIsKindOf clause.
+ * Creates a test for
+ * <code>ConceptIsKindOf</code> clause.
  *
  * @author dylangrald
  */
-public class IsKindOfTest {
-
-    Query q;
+public class IsKindOfTest extends QueryClauseTest {
 
     public IsKindOfTest() throws IOException {
-        q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -48,12 +45,8 @@ public class IsKindOfTest {
 
             @Override
             public Clause Where() {
-                    return And(ConceptIsKindOf("Physical force"));
+                return And(ConceptIsKindOf("Physical force"));
             }
         };
-    }
-
-    public Query getQuery() {
-        return q;
     }
 }

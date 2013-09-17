@@ -25,16 +25,12 @@ import javax.xml.transform.stream.StreamSource;
 import org.ihtsdo.otf.jaxb.object.display.ConceptChronicleDdo;
 import org.ihtsdo.otf.jaxb.object.display.ResultList;
 import org.ihtsdo.otf.jaxb.query.ClauseSemantic;
-import org.ihtsdo.otf.jaxb.query.ForCollection;
-import org.ihtsdo.otf.jaxb.query.ForCollectionContents;
 import org.ihtsdo.otf.jaxb.query.LetMap;
-import org.ihtsdo.otf.jaxb.query.ReturnTypes;
 import org.ihtsdo.otf.jaxb.query.Where;
 import org.ihtsdo.otf.jaxb.query.WhereClause;
 import org.ihtsdo.otf.query.rest.client.JaxbForClient;
 import org.ihtsdo.otf.query.rest.client.QueryProcessorForRestXml;
 import org.ihtsdo.otf.query.rest.client.Snomed;
-import org.ihtsdo.otf.query.rest.client.ViewCoordinateExample;
 
 /**
  *

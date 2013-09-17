@@ -15,8 +15,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
@@ -26,16 +24,16 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for ConceptIsChildOf clause.
- * @author dylangrald 
+ * Creates a test for the
+ * <code>ConceptIsChildOf</code> clause.
+ *
+ * @author dylangrald
  *
  */
-public class IsChildOfTest {
-
-    Query q;
+public class IsChildOfTest extends QueryClauseTest {
 
     public IsChildOfTest() throws IOException {
-        q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -51,9 +49,5 @@ public class IsChildOfTest {
                 return And(ConceptIsChildOf("Physical force"));
             }
         };
-    }
-
-    public Query getQuery() {
-        return q;
     }
 }

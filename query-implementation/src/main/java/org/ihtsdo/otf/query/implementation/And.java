@@ -19,8 +19,6 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
-import org.ihtsdo.otf.query.implementation.ClauseSemantic;
-import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**

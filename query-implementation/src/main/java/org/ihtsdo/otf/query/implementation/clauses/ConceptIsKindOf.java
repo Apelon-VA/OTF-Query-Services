@@ -27,7 +27,6 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
@@ -35,9 +34,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 /**
  * Calculates the set of concepts that are a kind of the specified concept. The
  * calculated set is the union of the input concept and all concepts that lie
- * lie beneath the input concept in the terminology hierarchy. This
- * <code>Clause</code> has an optional parameter for a previous
- * <code>ViewCoordinate</code>, which allows for queries of previous versions.
+ * lie beneath the input concept in the terminology hierarchy.
  *
  * @author kec
  */
@@ -60,7 +57,6 @@ public class ConceptIsKindOf extends LeafClause {
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents)
             throws ValidationException, IOException, ContradictionException {
-        //ViewCoordinate viewCoordinate = getEnclosingQuery().getViewCoordinate();
         if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
             this.viewCoordinate = (ViewCoordinate) enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {

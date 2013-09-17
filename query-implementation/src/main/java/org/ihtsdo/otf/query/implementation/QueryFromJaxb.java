@@ -186,10 +186,10 @@ public class QueryFromJaxb extends Query {
                 assert clause.letKeys.isEmpty() : "Let keys should be empty: " + clause.letKeys;
                 assert childClauses.length == 1;
                 return q.PreferredNameForConcept(childClauses[0]);
-            case REFSET_LUCENE_MATCH:
-                assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.RefsetLuceneMatch(clause.letKeys.get(0));
+//            case REFSET_LUCENE_MATCH:
+//                assert childClauses.length == 0 : childClauses;
+//                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
+//                return q.RefsetLuceneMatch(clause.letKeys.get(0));
             case REFSET_CONTAINS_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;

@@ -24,14 +24,16 @@
     </section>
     <section>
         <title>KindOfQueryExample</title>
-        <para>The <code>KindOfQueryExample</code> program, located in package,
-                <code>org.ihtsdo.otf.query.rest.client.examples</code> performs a simple kind of
-            query using the rest server, and returns data display objects with the results.</para>
+        <para>The <code>KindOfQueryExample</code> program, located in package
+                <code>org.ihtsdo.otf.query.rest.client.examples</code>, performs a simple "kind of"
+            query using the rest server and returns data display objects with the results. This
+            example demonstrates the parameters required for a query and how to run queries using
+            the REST service.</para>
         <para>The structure of a query is defined by:<itemizedlist>
                 <listitem>
                     <para>a <code>ViewCoordinate</code> that defines what version of the terminology
-                        to query against, as well as other information like the preferred language
-                        for results.</para>
+                        to query against, as well as other information such as the preferred
+                        language for results.</para>
                 </listitem>
                 <listitem>
                     <para>a FOR that defines the set of components to iterate over</para>
@@ -41,10 +43,10 @@
                         coordinates used by where clauses. </para>
                 </listitem>
                 <listitem>
-                    <para>a WHERE that defined the where clauses for the query</para>
+                    <para>a WHERE that defines the where clauses for the query</para>
                 </listitem>
                 <listitem>
-                    <para>a RETURN that defines that type of components to return (Concepts,
+                    <para>a RETURN that defines that type of components to return (concepts,
                         descriptions, etc). </para>
                 </listitem>
             </itemizedlist>The following parameters are required for a query: <orderedlist>
@@ -58,7 +60,7 @@
             be used. The default FOR set is all concepts. And the default RETURN value is the fully
             specified description version of the components in the result set.</para>
         <para>This KindOfQueryExample's main method will setup a kind-of query that will return
-            concepts that are a kind-of SNOMED "allergic asthma" concepts. If a server is not
+            concepts that are a kind-of SNOMED concept "allergic asthma." If a server is not
             specified, a default server is chosen from the QueryProcessorForRestXml class, located
             in the package: <code>org.ihtsdo.otf.query.rest.client</code>.</para>
         <para>Run this example with the following command:</para>
