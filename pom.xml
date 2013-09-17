@@ -86,6 +86,8 @@
         <jersey-version>2.2</jersey-version>
         <junit.version>4.11</junit.version>
         <terminology-component-chronicle.version>1.1-SNAPSHOT</terminology-component-chronicle.version>
+        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+        <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -148,6 +150,19 @@
                 <artifactId>zip-bundle-maven-plugin</artifactId>
                 <version>1.0</version>
                 <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.6.3.201306030806</version>
+                <executions>
+                    <execution>
+                        <id>agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
