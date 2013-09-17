@@ -8,19 +8,6 @@
     <para>There are two example programs: <code>HelloExample</code> and
             <code>KindOfQueryExample</code>. </para>
     <section>
-        <title>Setup</title>
-        <para>Apache Tomcat 7.0 can be downloaded <link
-                xlink:href="http://tomcat.apache.org/download-70.cgi">here</link>. Configure Tomcat
-            with the following startup parameters: <code>-Xmx6g -Xms6g
-            -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=/usr/NetBeansProjects/berkeley-db</code>. Replace
-            the location "/usr/NetBeansProjects/berkeley-db" with the local directory of the
-            berkeley database on your machine.</para>
-        <para>This <link
-                xlink:href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/"
-                >link</link> gives directions on how to download Apache 7.0 and configure it to run
-            within Netbeans. Include the startup parameters stated above in the VM Options.</para>
-    </section>
-    <section>
         <title>HelloExample</title>
         <para>The <code>HelloExample</code> program, located in package,
                 <code>org.ihtsdo.otf.query.rest.client.examples</code> is a simple program that
@@ -60,8 +47,18 @@
                     <para>a RETURN that defines that type of components to return (Concepts,
                         descriptions, etc). </para>
                 </listitem>
-            </itemizedlist> This example's main method will setup a kind-of query that will return
-            concepts that are kind-of SNOMED "allergic asthma" concepts. If a server is not
+            </itemizedlist>The following parameters are required for a query: <orderedlist>
+                <listitem>
+                    <para>Let declarations</para>
+                </listitem>
+                <listitem>
+                    <para>Where clauses</para>
+                </listitem>
+            </orderedlist>If a ViewCoordinate is not specified, then the Snomed inferred latest will
+            be used. The default FOR set is all concepts. And the default RETURN value is the fully
+            specified description version of the components in the result set.</para>
+        <para>This KindOfQueryExample's main method will setup a kind-of query that will return
+            concepts that are a kind-of SNOMED "allergic asthma" concepts. If a server is not
             specified, a default server is chosen from the QueryProcessorForRestXml class, located
             in the package: <code>org.ihtsdo.otf.query.rest.client</code>.</para>
         <para>Run this example with the following command:</para>

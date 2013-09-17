@@ -67,6 +67,12 @@
             <version>1.0-alpha-4</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-rest-server</artifactId>
+            <version>${terminology-component-chronicle.version}</version>
+            <type>war</type>
+        </dependency>
     </dependencies>
 
     <build>

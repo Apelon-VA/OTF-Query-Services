@@ -25,6 +25,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.jaxb.chronicle.api.SimpleViewCoordinate;
 import org.ihtsdo.otf.jaxb.query.ForCollection;
+import org.ihtsdo.otf.jaxb.query.ForCollectionContents;
 import org.ihtsdo.otf.jaxb.query.LetMap;
 import org.ihtsdo.otf.jaxb.query.ReturnTypes;
 import org.ihtsdo.otf.jaxb.query.Where;
@@ -37,11 +38,10 @@ public class QueryProcessorForRestXml {
 
     //private static final String DEFAULT_HOST = "http://api.snomedtools.com";
     private static final String DEFAULT_HOST = "http://localhost:8080";
-    
     // Get JAXBContext for converting objects to XML. 
-    private static final  JAXBContext ctx = JaxbForClient.get();
+    private static final JAXBContext ctx = JaxbForClient.get();
 
-    public static String process(SimpleViewCoordinate viewpoint, 
+    public static String process(SimpleViewCoordinate viewpoint,
             ForCollection forObject,
             LetMap letMap,
             Where where,
@@ -49,33 +49,42 @@ public class QueryProcessorForRestXml {
         return process(viewpoint, forObject, letMap, where, returnType, DEFAULT_HOST);
     }
 
-    public static String process(SimpleViewCoordinate viewpoint, 
+    public static String process(SimpleViewCoordinate viewpoint,
             ForCollection forObject,
             LetMap letMap,
             Where where,
             ReturnTypes returnType,
             String host) throws JAXBException, IOException {
 
-        
-        
+        if (viewpoint == null) {
+            viewpoint = ViewCoordinateExample.getSnomedInferredLatest();
+        }
+        if (forObject == null) {
+            forObject = new ForCollection();
+            forObject.setForCollectionString(ForCollectionContents.CONCEPT.name());
+        }
+        if (returnType == null) {
+            returnType = ReturnTypes.DESCRIPTION_VERSION_FSN;
+        }
+
         // create the client
         Client client = ClientBuilder.newClient();
         // specify the host and the path. 
-        WebTarget target = client.target(host).path("query-service/query");
-        
-        
+        WebTarget target = client.target(host).path("otf/query-service/query");
+
+
         return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
-                      queryParam("FOR", getXmlString(forObject)).
-                      queryParam("LET", getXmlString(letMap)).
-                      queryParam("WHERE", getXmlString(where)).
-                      queryParam("RETURN", getXmlString(returnType)).
+                queryParam("FOR", getXmlString(forObject)).
+                queryParam("LET", getXmlString(letMap)).
+                queryParam("WHERE", getXmlString(where)).
+                queryParam("RETURN", getXmlString(returnType)).
                 request(MediaType.TEXT_PLAIN).get(String.class);
 
     }
 
     private static String getXmlString(Object obj) throws JAXBException {
         if (obj instanceof SimpleViewCoordinate) {
-             org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory factory = new org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory();
+            org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory factory = new org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory();
             obj =  factory.createSimpleViewCoordinate((SimpleViewCoordinate) obj);
 
         } else if (obj instanceof ForCollection) {
@@ -95,6 +104,4 @@ public class QueryProcessorForRestXml {
         ctx.createMarshaller().marshal(obj, writer);
         return writer.toString();
     }
-    
-    
 }

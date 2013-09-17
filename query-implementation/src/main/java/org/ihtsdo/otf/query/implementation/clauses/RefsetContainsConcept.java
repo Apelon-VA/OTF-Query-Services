@@ -16,7 +16,6 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.EnumSet;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
@@ -34,7 +33,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Retrieves the refsets that have a member matching the specified
+ * TODO: not implemented yet. <code>LeafClause</code> that computes refsets that contain the specified
  * input
  * <code>ConceptSpec</code>.
  *
@@ -80,15 +79,15 @@ public class RefsetContainsConcept extends LeafClause {
             this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {
             this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }     
+        int conceptNid = this.conceptSpec.getNid();
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, conceptNid);
+        for(RefexChronicleBI refex: conceptVersion.getRefexes()){
+            this.getResultsCache().add(refex.getNid());
         }
-        int nid = this.conceptSpec.getNid();
-        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, nid);
-        Collection<? extends RefexChronicleBI<?>> refexes = conceptVersion.getRefexes();
-        for (RefexChronicleBI r : refexes) {
-            this.getResultsCache().add(r.getNid());
-        }
-
+        
         return getResultsCache();
+
     }
 
     @Override

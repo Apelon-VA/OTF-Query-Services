@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
 import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
@@ -31,6 +33,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.query.implementation.clauses.ChangedFromPreviousVersion;
 import org.ihtsdo.otf.query.implementation.clauses.ConceptForComponent;
+import org.ihtsdo.otf.query.implementation.clauses.ConceptIs;
 import org.ihtsdo.otf.query.implementation.clauses.ConceptIsChildOf;
 import org.ihtsdo.otf.query.implementation.clauses.ConceptIsDescendentOf;
 import org.ihtsdo.otf.query.implementation.clauses.DescriptionActiveLuceneMatch;
@@ -64,6 +67,10 @@ public abstract class Query {
     public String currentViewCoordinateKey = "Current view coordinate";
     private final HashMap<String, Object> letDeclarations =
             new HashMap<>();
+
+    public ViewCoordinate getStandardVC() throws IOException {
+        return (ViewCoordinate) getVCLetDeclarations().get(currentViewCoordinateKey);
+    }
 
     public HashMap<String, Object> getLetDeclarations() {
         return letDeclarations;
@@ -104,8 +111,33 @@ public abstract class Query {
         return computeTypes;
     }
 
+    /**
+     * No argument constructor, which creates a
+     * <code>Query</code> with the Snomed inferred latest as the input
+     * <code>ViewCoordinate</code>.
+     */
+    public Query() {
+        this(null);
+    }
+
+    /**
+     * Constructor for
+     * <code>Query</code>. If a
+     * <code>ViewCoordinate</code> is not specified, the default is the Snomed
+     * inferred latest.
+     *
+     * @param viewCoordinate
+     */
     public Query(ViewCoordinate viewCoordinate) {
-        this.viewCoordinate = viewCoordinate;
+        if (viewCoordinate == null) {
+            try {
+                this.viewCoordinate = StandardViewCoordinates.getSnomedInferredLatest();
+            } catch (IOException ex) {
+                Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            this.viewCoordinate = viewCoordinate;
+        }
     }
 
     /**
@@ -207,6 +239,23 @@ public abstract class Query {
     }
 
     /**
+     * The default method for computing query results, which returns the fully
+     * specified description version of the components from the
+     * <code>Query</code>.
+     *
+     * @param q input <code>Query</code>
+     * @return The result set of the <code>Query</code> in * * *
+     * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects
+     * @throws IOException
+     * @throws ContradictionException
+     * @throws Exception
+     */
+    public ArrayList<Object> returnResults() throws IOException, ContradictionException, Exception {
+        NativeIdSetBI resultSet = compute();
+        return returnDisplayObjects(resultSet, ReturnTypes.DESCRIPTION_VERSION_FSN);
+    }
+
+    /**
      * Return the desired Display Objects, which are specified by
      * <code>ReturnTypes</code>.
      *
@@ -294,6 +343,14 @@ public abstract class Query {
         return new ConceptForComponent(this, child);
     }
 
+    protected ConceptIs ConceptIs(String conceptSpecKey) {
+        return new ConceptIs(this, conceptSpecKey, this.currentViewCoordinateKey);
+    }
+
+    protected ConceptIs ConceptIs(String conceptSpecKey, String viewCoordinateKey) {
+        return new ConceptIs(this, conceptSpecKey, viewCoordinateKey);
+    }
+
     protected ConceptIsDescendentOf ConceptIsDescendentOf(String conceptSpecKey) {
         return new ConceptIsDescendentOf(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
@@ -369,15 +426,6 @@ public abstract class Query {
     protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey, String viewCoordinateKey) {
         return new RefsetContainsKindOfConcept(this, conceptSpecKey, viewCoordinateKey);
     }
-      
-/*    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText) {
-        return new RefsetContainsString(this, refsetSpec, queryText, this.currentViewCoordinateKey);
-    }
-
-    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText, String viewCoordinateKey) {
-        return new RefsetContainsString(this, refsetSpec, queryText, viewCoordinateKey);
-    }*/
-
 
     protected PreferredNameForConcept PreferredNameForConcept(Clause clause) {
         return new PreferredNameForConcept(this, clause);

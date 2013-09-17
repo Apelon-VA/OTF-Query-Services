@@ -17,7 +17,6 @@ package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import org.apache.lucene.index.CorruptIndexException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
@@ -29,7 +28,8 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 
 /**
- * Calculates the descriptions that match the results from a specified Lucene
+ * TODO: not supported yet. Must move Lucene to Query Services project.
+ * Calculates the descriptions that match the results from an input Lucene
  * search.
  *
  *
@@ -54,8 +54,8 @@ public class DescriptionLuceneMatch extends LeafClause {
     }
 
     @Override
-    public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws CorruptIndexException, IOException {
-        
+    public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
+
         throw new UnsupportedOperationException("Not supported yet");
 //        
 //       Collection<Integer> nids = new HashSet<>();

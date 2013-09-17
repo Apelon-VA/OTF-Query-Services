@@ -105,7 +105,7 @@ public class RestQueryTest extends JerseyTest {
             String whereXml = getXmlString(ctx, where);
 
             
-            final String resultString = target("query").
+            final String resultString = target("query-service/query").
                     queryParam("VIEWPOINT", viewCoordinateXml).
                     queryParam("FOR", forXml).
                     queryParam("LET", letMapXml).

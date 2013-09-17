@@ -16,7 +16,6 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.EnumSet;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
@@ -28,32 +27,28 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
-import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
-import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * TODO: not implemented yet. <code>LeafClause</code> that computes refsets that contain concepts that are
- * a kind of concept specified by the input
+ * Obtains the concept from the input
  * <code>ConceptSpec</code>.
  *
  * @author dylangrald
  */
-public class RefsetContainsKindOfConcept extends LeafClause {
+public class ConceptIs extends LeafClause {
 
     Query enclosingQuery;
-    String conceptSpecKey;
+    String conceptSpecString;
     ConceptSpec conceptSpec;
     String viewCoordinateKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
 
-    public RefsetContainsKindOfConcept(Query enclosingQuery, String conceptSpecKey, String viewCoordinateKey) {
+    public ConceptIs(Query enclosingQuery, String conceptSpec, String viewCoordinateKey) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
-        this.conceptSpecKey = conceptSpecKey;
-        this.conceptSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(conceptSpecKey);
+        this.conceptSpecString = conceptSpec;
+        this.conceptSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(conceptSpecString);
         this.viewCoordinateKey = viewCoordinateKey;
 
     }
@@ -61,13 +56,11 @@ public class RefsetContainsKindOfConcept extends LeafClause {
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
-        whereClause.setSemantic(ClauseSemantic.REFSET_CONTAINS_KIND_OF_CONCEPT);
+        whereClause.setSemantic(ClauseSemantic.CONCEPT_IS);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
-        whereClause.getLetKeys().add(conceptSpecKey);
         return whereClause;
-
     }
 
     @Override
@@ -77,27 +70,17 @@ public class RefsetContainsKindOfConcept extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
-        int parentNid = this.conceptSpec.getNid();
-        NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
-        NativeIdSetItrBI iter = kindOfSet.getIterator();
-        while (iter.next()) {
-            ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, iter.nid());
-            Collection<? extends RefexChronicleBI<?>> refexes = conceptVersion.getRefexes();
-            for (RefexChronicleBI r : refexes) {
-                this.getResultsCache().add(r.getNid());
-            }
-
-        }
+        getResultsCache().add(this.conceptSpec.getNid());
         return getResultsCache();
     }
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-        //Nothing to do here
+        //Nothing to do here...
     }
 }

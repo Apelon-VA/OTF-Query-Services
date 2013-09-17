@@ -17,8 +17,6 @@ package org.ihtsdo.otf.query.integration.tests;
  */
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
@@ -26,10 +24,7 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
-import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
-import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.store.Ts;
-import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.junit.After;
@@ -66,6 +61,32 @@ public class QueryTest {
 
     @After
     public void tearDown() {
+    }
+
+    @Test
+    public void testSimpleQuery() throws IOException, Exception {
+        System.out.println("Simple query: ");
+        Query q = new Query() {
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return null;
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("motion", Snomed.MOTION);
+            }
+
+            @Override
+            public Clause Where() {
+                return ConceptIs("motion");
+            }
+        };
+        System.out.println(q.returnResults().size());
+        for (Object o : q.returnResults()) {
+            System.out.println(o);
+        };
+        Assert.assertEquals(1, q.returnResults().size());
     }
 
     @Test
@@ -165,33 +186,32 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
     }
 
-    @Ignore
-    @Test
-    public void testLuceneMatch() throws IOException, Exception {
-        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
-            @Override
-            protected NativeIdSetBI For() throws IOException {
-                return Ts.get().getAllConceptNids();
-
-            }
-
-            @Override
-            public void Let() throws IOException {
-                let("Centrifugal", "Centrifugal");
-            }
-
-            @Override
-            public Clause Where() {
-                return Or(DescriptionLuceneMatch("Centrifugal"));
-
-            }
-        };
-
-        NativeIdSetBI results = q.compute();
-        System.out.println("Description lucene search test: " + results.size());
-        Assert.assertEquals(18, results.size());
-    }
-
+//    @Ignore
+//    @Test
+//    public void testLuceneMatch() throws IOException, Exception {
+//        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+//            @Override
+//            protected NativeIdSetBI For() throws IOException {
+//                return Ts.get().getAllConceptNids();
+//
+//            }
+//
+//            @Override
+//            public void Let() throws IOException {
+//                let("Centrifugal", "Centrifugal");
+//            }
+//
+//            @Override
+//            public Clause Where() {
+//                return Or(DescriptionLuceneMatch("Centrifugal"));
+//
+//            }
+//        };
+//
+//        NativeIdSetBI results = q.compute();
+//        System.out.println("Description lucene search test: " + results.size());
+//        Assert.assertEquals(18, results.size());
+//    }
     @Test
     public void testRelType() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
@@ -328,6 +348,15 @@ public class QueryTest {
         for (Object o : q.returnDisplayObjects(results, ReturnTypes.UUIDS)) {
             System.out.println(o);
         }
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_FSN)) {
+            System.out.println(o);
+        }
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.NIDS)) {
+            System.out.println(o);
+        }
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.CONCEPT_VERSION)) {
+            System.out.println(o);
+        }
         Assert.assertEquals(1, results.size());
 
     }
@@ -394,7 +423,6 @@ public class QueryTest {
 //        Assert.assertEquals(2, results.size());
 //
 //    }
-
     @Test
     public void testFullySpecifiedName() throws IOException, Exception {
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
