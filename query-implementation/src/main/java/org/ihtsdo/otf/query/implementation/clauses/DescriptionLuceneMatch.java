@@ -16,11 +16,7 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
@@ -30,14 +26,10 @@ import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
-import org.ihtsdo.otf.tcc.api.store.Ts;
-import org.ihtsdo.otf.tcc.model.cc.termstore.SearchType;
 
 /**
- * Calculates the descriptions that match the results from an input Lucene
+ * Calculates the descriptions that match the results from a specified Lucene
  * search.
  *
  *

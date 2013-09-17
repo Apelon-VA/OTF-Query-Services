@@ -26,8 +26,7 @@ import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 
 /**
- * Computes components that have undergone change since a specified previous
- * version, which is specified by a <code>ViewCoordinate</code>.
+ * Creates a test for ChangedFromPreviousVersion clause.
  *
  * @author dylangrald
  */

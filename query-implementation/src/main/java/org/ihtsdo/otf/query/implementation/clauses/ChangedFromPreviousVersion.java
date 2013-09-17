@@ -26,18 +26,15 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
-import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
-import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 
 /**
- * Computes the components that have been modified since the version from the
- * specified ViewCoordinate. Currently only retrieves descriptions that were
- * modified since the specified ViewCoordinate.
+ * Computes the components that have been modified since the version specified 
+ * by the <code>ViewCoordinate</code>. Currently only retrieves descriptions that were
+ * modified since the specified <code>ViewCoordinate</code>.
  *
  * @author dylangrald
  */

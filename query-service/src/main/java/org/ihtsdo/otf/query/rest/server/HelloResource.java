@@ -21,7 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- * This resource is deliberately simple, to demonstrate proper
+ * This resource is deliberately simple in order to demonstrate proper
  * connectivity and service availability. When
  * a path of "hello/frank" is provided, it will return "hello
  * frank." Similarly, if "hello/bob" is provided, it will return

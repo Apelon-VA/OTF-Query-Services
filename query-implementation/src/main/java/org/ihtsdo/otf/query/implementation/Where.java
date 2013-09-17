@@ -20,8 +20,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The WHERE clause is used to extract only those components that fulfill
- * specified criterion.
+ * The <code>Where</code> statement is used to extract only those components that fulfill
+ * specified criterion by the <code>WhereClauses</code>.
  *
  * @author kec
  */

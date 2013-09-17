@@ -59,7 +59,8 @@ public class DescriptionRegexMatchTest {
 
             @Override
             public Clause Where() {
-                return Or(ConceptForComponent(DescriptionRegexMatch("regex1")), ConceptForComponent(DescriptionRegexMatch("regex2")));
+                return Or(ConceptForComponent(DescriptionRegexMatch("regex1")), 
+                          ConceptForComponent(DescriptionRegexMatch("regex2")));
             }
         };
 

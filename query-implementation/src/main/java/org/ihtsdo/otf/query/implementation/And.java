@@ -25,7 +25,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
  * <code>ParentClause</code> that computes the intersection of the set results
- * from given child clauses.
+ * from the enclosed <code>Clauses</code>.
  *
  * @author kec
  */

@@ -30,7 +30,7 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  * The <code>ForCollection</code> enables the specification of a 
- * set of object over which the query should iterate. 
+ * set of objects over which the query should iterate. 
  * The <code>ForCollection</code> can either be specified by an enumeration 
  * that identifies a standard set, or by an enumerated list. 
  * @author kec

@@ -85,7 +85,7 @@ public abstract class Query {
      */
     private NativeIdSetBI forSet;
     /**
-     * The steps requires to compute the query clause.
+     * The steps required to compute the query clause.
      */
     private EnumSet<ClauseComputeType> computeTypes =
             EnumSet.noneOf(ClauseComputeType.class);
