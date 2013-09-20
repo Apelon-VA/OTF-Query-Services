@@ -48,7 +48,6 @@ public class OrTest extends QueryClauseTest {
             @Override
             public Clause Where() {
                 return Or(ConceptIsKindOf("person"), ConceptIsKindOf("allergic-asthma"));
-                //return Or(ConceptIsKindOf("allergic-asthma"), ConceptIsKindOf("respiratory disorder"));
             }
         };
     }

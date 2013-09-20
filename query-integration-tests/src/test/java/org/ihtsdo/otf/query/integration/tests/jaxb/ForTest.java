@@ -24,12 +24,19 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -40,6 +47,8 @@ import org.junit.runner.RunWith;
 @RunWith(BdbTestRunner.class)
 @BdbTestRunnerConfig()
 public class ForTest {
+
+    static final TerminologyStoreDI ts = Ts.get();
 
     public ForTest() {
     }
@@ -82,5 +91,46 @@ public class ForTest {
 
 
 
+    }
+
+    @Test
+    public void getAllComponentsTest() throws IOException {
+        ForCollection forCollection = new ForCollection();
+        forCollection.setForCollection(ForCollection.ForCollectionContents.COMPONENT);
+        NativeIdSetBI forSet = forCollection.getCollection();
+        System.out.println(forSet.size());
+        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() - Integer.MIN_VALUE, forSet.size());
+    }
+
+    @Test
+    public void getAllConceptstest() throws IOException {
+        ForCollection forCollection = new ForCollection();
+        forCollection.setForCollection(ForCollection.ForCollectionContents.CONCEPT);
+        NativeIdSetBI forSet = forCollection.getCollection();
+        Assert.assertEquals(ts.getConceptCount(), forSet.size());
+    }
+
+    /**
+     * TODO: this is a check for the getAllComponentNids() method. The newly
+     * implemented getAllComponents() method returns 15 nids that are not in the
+     * set returned by Ts.get().getComponentNidsForConceptNids(allConcepts):
+     * [Integer.MIN_VALUE, Integer.MIN_VALUE + 13] and the nid -2137096776
+     *
+     * @throws IOException
+     */
+    @Ignore
+    @Test
+    public void getAllComponents() throws IOException {
+        System.out.println("All components test");
+        NativeIdSetBI allConcepts = ts.getAllConceptNids();
+        NativeIdSetBI allComponents = ts.getComponentNidsForConceptNids(allConcepts);
+        allComponents.xor(ts.getAllComponentNids());
+        NativeIdSetItrBI iter = allComponents.getIterator();
+        while (iter.next()) {
+            System.out.println(iter.nid());
+            System.out.println(iter.nid() - Integer.MIN_VALUE);
+            System.out.println(ts.getComponent(iter.nid()));
+        }
+        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() - Integer.MIN_VALUE, allComponents.size());
     }
 }

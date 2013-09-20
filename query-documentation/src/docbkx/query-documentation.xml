@@ -29,12 +29,12 @@
         <para>A working knowledge of Maven is a preqrequisite to understanding how to build and work
             with the query service. More information on Maven is available at the <link
                 xlink:href="http://maven.apache.org">Apache Maven</link> site. Maven supports
-            project aggregation in addition to preoject inheritance through its module structure.
-            See <link xlink:href="http://maven.apache.org/guides/mini/guide-multiple-modules.html"
+            project aggregation in addition to project inheritance through its module structure. See
+                <link xlink:href="http://maven.apache.org/guides/mini/guide-multiple-modules.html"
                 >Maven's Guide to Working with Multiple Modules</link> and <link
                 xlink:href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html"
                 >Maven's Introduction to the POM</link> for more information about Maven modules,
-                project inheritance, and project aggregation. </para>
+            project inheritance, and project aggregation. </para>
         <para>The minimum software requirements for the project are as follows: <orderedlist>
                 <listitem>
                     <para><link xlink:href="http://maven.apache.org/download.cgi">Apache Maven
@@ -132,7 +132,7 @@
                 the <code>netbeans_default_options</code> in the <code>netbeans.conf</code>
                 file.</para>
         </section>
-        <section>
+        <section label="tomcatsetup">
             <title>Tomcat setup</title>
             <para>Apache Tomcat 7.0 can be downloaded <link
                     xlink:href="http://tomcat.apache.org/download-70.cgi">here</link>. Configure
@@ -161,13 +161,35 @@
                     >link</link> gives directions on how to download Apache 7.0 and configure it to
                 run within Netbeans. Include the startup parameters stated above in the VM Options
                 box.</para>
+            <para> Here is a sample <code>tomcat-users.xml</code> file that will setup a user
+                "admin" with a password "password" and privileges to access the Tomcat Web
+                Application Manager:<programlistingco>
+                    <areaspec>
+                        <area xml:id="ex.tu.l" coords="12,12" units="linecolumn"/>
+                        <area xml:id="ex.tu.w" coords="13,13" units="linecolumn"/>
+                    </areaspec>
+                    <programlisting>                    
+&lt;?xml version='1.0' encoding='utf-8'?>
+&lt;tomcat-users>
+  &lt;role rolename="tomcat"/>
+  &lt;role rolename="role1"/>
+  
+  &lt;role rolename="manager"/>
+  &lt;user username="admin" password="password" roles="tomcat,manager,manager-gui,manager-script,manager-jmx,manger-status"/>
+  
+  &lt;user username="tomcat" password="tomcat" roles="tomcat"/>
+  &lt;user username="role1" password="tomcat" roles="role1"/>
+  &lt;user username="both" password="tomcat" roles="tomcat,role1"/>
+&lt;/tomcat-users>
+                    </programlisting>
+                </programlistingco></para>
         </section>
     </section>
     <section>
         <title>Project checkout</title>
         <para>The Query service project can be checked out anonymously from GIT by entering the
-            prompt <code>$git clone https://github.com/IHTSDO/OTF-Query-Services.git</code> in
-            an empty directory folder. </para>
+            prompt <code>$git clone https://github.com/IHTSDO/OTF-Query-Services.git</code> in an
+            empty directory folder. </para>
     </section>
     <section>
         <title>Query service build profiles</title>
@@ -249,55 +271,95 @@
                 >file releases section</link> of the <link
                 xlink:href="https://csfe.aceworkspace.net/sf/projects/the_ihtsdo_terminology_open_tool/"
                 >Open Tooling Framework</link> website.</para>
-        <para>If the database source is set correctly, you should see the following in the output
-            when you start the Tomcat server:</para>
-        <para>
-            <programlisting> 
-Starting BdbTerminologyStore for ChronicleServletContainer in background thread. 
-Aquired startup permit. 
-setup dbRoot: /Users/dylangrald/NetBeansProjects/berkeley-db
-absolute dbRoot: /Users/dylangrald/NetBeansProjects/berkeley-db
-Sep 13, 2013 2:09:39 PM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore
+        <para>Please see the Tomcat Setup section for instructions on how to configure your Tomcat
+            server. Here are the instructions for deploying the .war file to your Tomcat server
+            based upon how you're launching Tomcat: <orderedlist>
+                <listitem>
+                    <para>From the command line: save the following xml file in
+                        CATALINA_HOME/conf/Catalina/localhost as otf.xml: <programlistingco>
+                            <areaspec>
+                                <area xml:id="ex.otf.l" coords="12,12" units="linecolumn"/>
+                                <area xml:id="ex.otf.w" coords="13,13" units="linecolumn"/>
+                            </areaspec>
+                            <programlisting>                    
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;Context
+antiJARLocking="true" docBase="/Users/dylangrald/tcc-sprint2/OTF-Query-Service/query-service/target/query-service-1.1-SNAPSHOT"
+path="/otf"/>
+                            </programlisting>
+                        </programlistingco> execute the <code>startup</code> bat or sh file,
+                        depending on your operating system. In OS X, in order to execute <code>bash
+                            startup.sh</code>, you must first enter the command <code>chmod +x
+                            /bin/*.sh</code> from CATALINA_HOME to make all of the <code>.sh</code>
+                        files executable. Test the deployment of the war with the following command
+                        with the following command from the query-client folder <code>mvn exec:java
+                            -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.HelloExample"
+                            package</code></para>
+                </listitem>
+                <listitem>
+                    <para>From Netbeans, right-click the query-service project, click "Run," and
+                        select the Tomcat 7 server.</para>
+                </listitem>
+            </orderedlist>
+        </para>
+        <para> You should see the following in the Apache Tomcat log when the data
+            <programlisting>Sep 20, 2013 2:58:19 PM org.apache.catalina.core.AprLifecycleListener init
+INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/jprofiler7/bin/macos::/Users/dylangrald/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+Sep 20, 2013 2:58:19 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 473 ms
+Sep 20, 2013 2:58:19 PM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service Catalina
+Sep 20, 2013 2:58:19 PM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.42
+Sep 20, 2013 2:58:19 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Library/Tomcat/apache-tomcat-7.0.42/conf/Catalina/localhost/otf.xml
+Sep 20, 2013 2:58:22 PM org.apache.catalina.util.SessionIdGenerator createSecureRandom
+INFO: Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [186] milliseconds.
+Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init>
 INFO: org.ihtsdo.otf.tcc.datastore.bdb-location set. Starting from location: /Users/dylangrald/NetBeansProjects/berkeley-db
-                </programlisting>
-        </para>
-        <para>When you run the REST server, it opens the Berkeley database located in the folder
-            berkeley-db, wherever that relative path is on your server and writes diagnostic output
-            as follows: </para>
-        <para>
-            <programlisting>Aquired startup permit. 
-setup dbRoot: /Users/dylangrald/NetBeansProjects/berkeley-db
-absolute dbRoot: /Users/dylangrald/NetBeansProjects/berkeley-db
-Sep 13, 2013 2:13:43 PM org.glassfish.jersey.server.ApplicationHandler initialize
+Sep 20, 2013 2:58:22 PM org.glassfish.jersey.server.ApplicationHandler initialize
 INFO: Initiating Jersey application, version Jersey: 2.2 2013-08-14 08:51:58...
-Sep 13, 2013 2:13:43 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: NidCidMap readOnlyRecords: 812
-Sep 13, 2013 2:13:43 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: NidCidMap mutableRecords: 0
-Sep 13, 2013 2:13:44 PM org.apache.catalina.util.LifecycleBase start</programlisting>
-        </para>
-        <para>
-            <programlisting> 
-INFO: QS_sprint2:_Query_rest_service was successfully deployed in 3,637 milliseconds. 
-INFO: org.ihtsdo.otf.tcc.datastore.bdb-location not set. Using default location of: berkeley-db 
-INFO: setup dbRoot: berkeley-db 
-INFO: absolute dbRoot: //Users/dylangrald/NetBeansProjects/berkeley-db
-INFO: NidCidMap readOnlyRecords: 812 
-INFO: NidCidMap mutableRecords: 0 
-                </programlisting>
-        </para>
-        <para>And takes a few minutes to open. Inside the test data is an old format view
-            coordinate. So, it throws a serialization exception: </para>
-        <para>
-            <programlisting> 
-SEVERE: java.io.StreamCorruptedException: unexpected block data at
-        java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1362) at
-        java.io.ObjectInputStream.defaultReadFields(ObjectInputStream.java:1989) at
-        java.io.ObjectInputStream.readSerialData(ObjectInputStream.java:1913) at
-        java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1796)
-                </programlisting>
-        </para>
-        <para>Just ignore that… It will self heal.</para>
+Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/docs
+Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/examples
+Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/host-manager
+Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/manager
+Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/ROOT
+Sep 20, 2013 2:58:23 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Sep 20, 2013 2:58:23 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 3860 ms</programlisting>
+            Then, it will open the berkeley database at the configured location. Please see the
+            Tomcat Setup section for more information on how to set this location. It takes a couple
+            minutes to open the database, then you will see the following output in the log
+            file:<programlisting>
+Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: mutable maxMem: 224000
+Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: mutable shared cache: true
+Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: readOnly maxMem: 224000
+Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: readOnly shared cache: true
+Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init>
+INFO: Database setup complete</programlisting>
+            Test the deployment of the war by running the HelloExample in a web browser. Please see
+            the Query Client section below for instructions on how to run the HelloExample and
+            KindOfQueryExample.</para>
     </section>
     <section>
         <title>Module overview</title>
@@ -321,5 +383,63 @@ SEVERE: java.io.StreamCorruptedException: unexpected block data at
             xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
         <xi:include href="documentation-strategy.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    </section>
+    <section>
+        <title>Troubleshooting Tomcat</title>
+        <para>You may receive an ENV_LOCKED error when trying to start the Tomcat server. This
+            occurs if you try to redeploy the war when the database has not yet been initialized.
+            The best fix for this is to shutdown Tomcat, ensure that <code>Released shutdown
+                permit</code> prints to the console, and restart Tomcat. If restarting Tomcat
+            doesn't solve the issue, the issue may be resolved by restarting your computer.</para>
+    </section>
+    <section>
+        <title>Tomcat Shutdown</title>
+        <para>When you shutdown your Tomcat server, you should see the following
+            output:<programlisting>Sep 20, 2013 4:27:29 PM org.apache.catalina.core.StandardServer await
+INFO: A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+Sep 20, 2013 4:27:29 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["http-bio-8080"]
+Sep 20, 2013 4:27:29 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["ajp-bio-8009"]
+Sep 20, 2013 4:27:29 PM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service Catalina
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Database sync to disk...
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Database sync complete.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Shutting down dbWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Awaiting termination of dbWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Shutting down changeSetWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Awaiting termination of changeSetWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: BdbCommitManager is shutdown.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager close
+INFO: Shutting down luceneWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager close
+INFO: Awaiting termination of luceneWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager closeRefset
+INFO: Shutting down luceneWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager closeRefset
+INFO: Awaiting termination of luceneWriterService.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Shutting down NidDataFromBdb executor pool.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Awaiting termination of NidDataFromBdb executor pool.
+Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: Termination NidDataFromBdb executor pool.
+Sep 20, 2013 4:27:30 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: bdb close finished.
+Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-bio-8080"]
+Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["ajp-bio-8009"]
+Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["http-bio-8080"]
+Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["ajp-bio-8009"]</programlisting></para>
     </section>
 </article>

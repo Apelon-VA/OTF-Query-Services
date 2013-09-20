@@ -27,6 +27,7 @@ import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.datastore.Bdb;
 
 /**
  * The <code>ForCollection</code> enables the specification of a 
@@ -71,12 +72,8 @@ public class ForCollection {
         TerminologyStoreDI ts = Ts.get();
         switch (forCollection) {
             case COMPONENT:
-                //TODO Dylan to check this, and replace with a real operation from
-                // the database directly to ensure all components are included 
-                // (set everything up to current maxid)
-                ConcurrentBitSet componentBitSet = new ConcurrentBitSet(ts.getAllConceptNids());
-                componentBitSet.andNot(new ConcurrentBitSet());
-                return componentBitSet;
+                ConcurrentBitSet componentBitSet = new ConcurrentBitSet();
+                return ts.getAllComponentNids();
             case CONCEPT:
                 return ts.getAllConceptNids();
             case CUSTOM:
