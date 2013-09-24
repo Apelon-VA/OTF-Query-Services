@@ -44,6 +44,13 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>query-lucene</artifactId>
+            <version>${project.version}</version>
+            <classifier>docbook</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>query-integration-tests</artifactId>
             <version>${project.version}</version>
             <classifier>docbook</classifier>

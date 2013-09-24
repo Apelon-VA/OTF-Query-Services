@@ -86,6 +86,8 @@
         <jersey-version>2.2</jersey-version>
         <junit.version>4.11</junit.version>
         <terminology-component-chronicle.version>1.1-SNAPSHOT</terminology-component-chronicle.version>
+        <org.apache.lucene.version>4.3.1</org.apache.lucene.version>
+        <hk2.version>2.2.0-b14</hk2.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -102,6 +104,11 @@
                 <classifier>resources</classifier>
                 <type>zip</type>
                 <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.hk2</groupId>
+                <artifactId>hk2</artifactId>
+                <version>${hk2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -149,6 +156,11 @@
                 <version>1.0</version>
                 <extensions>true</extensions>
             </plugin>
+            <plugin>
+                <groupId>org.glassfish.hk2</groupId>
+                <artifactId>hk2-inhabitant-generator</artifactId>
+                <version>${hk2.version}</version>
+            </plugin>
         </plugins>
     </build>
     <modules>
@@ -163,6 +175,7 @@
                 <module>query-implementation</module>
                 <module>query-integration-tests</module>
                 <module>query-documentation</module>
+                <module>query-lucene</module>
             </modules>
         </profile>
         <profile>
@@ -170,6 +183,7 @@
             <modules>
                 <module>query-service</module>
                 <module>query-implementation</module>
+                <module>query-lucene</module>
             </modules>
         </profile>
         <profile>
