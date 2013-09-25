@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -30,6 +31,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.ihtsdo.otf.tcc.model.cc.description.Description;
 import static org.ihtsdo.otf.query.lucene.LuceneManager.logger;
+import static org.ihtsdo.otf.query.lucene.LuceneManager.root;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
@@ -49,8 +51,8 @@ import org.jvnet.hk2.annotations.Service;
 @Service
 public class DescriptionLuceneManager extends LuceneManager implements DescriptionIndexer {
 
-    protected static File descLuceneMutableDirFile = new File("target/berkeley-db/mutable/lucene");
-    protected static File descLuceneReadOnlyDirFile = new File("target/berkeley-db/read-only/lucene");
+    protected static File descLuceneMutableDirFile = new File(root.getPath() + "/mutable/lucene");
+    protected static File descLuceneReadOnlyDirFile = new File(root.getPath() + "/read-only/lucene");
     protected static String descMutableDirectorySuffix = "mutable/lucene";
     protected static String descReadOnlyDirectorySuffix = "read-only/lucene";
     public static Directory descLuceneMutableDir;
@@ -63,8 +65,13 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
     protected static IndexReader descReadOnlyReader;
     public static IndexWriter descWriter;
     protected static DirectoryReader mutableSearcher;
+    private static CountDownLatch writerLatch;
 
     public DescriptionLuceneManager() {
+        setupLuceneDir();
+    }
+    
+    public static void setupLuceneDir(){
         IndexWriter writer;
 
         descLuceneMutableDirFile = new File(root,
@@ -333,6 +340,11 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
         public DescLuceneWriter(NativeIdSetBI descNidsToCommit) {
             super();
             this.descNidsToWrite = descNidsToCommit;
+            writerLatch = new CountDownLatch(1);
+        }
+
+        public CountDownLatch getWriterLatch() {
+            return writerLatch;
         }
 
         @Override
@@ -362,9 +374,12 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
             }
 
             luceneWriterPermit.release();
+            writerLatch.countDown();
         }
     }
-
+    public static CountDownLatch getWriterLatch(){
+        return writerLatch;
+    }
     public static void addUncommittedDescNid(int dNid) {
         uncommittedDescNids.setMember(dNid);
     }

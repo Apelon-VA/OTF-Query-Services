@@ -15,6 +15,7 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -23,8 +24,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.glassfish.hk2.api.ServiceLocator;
-import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
 import org.ihtsdo.otf.query.lucene.DescriptionLuceneManager;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.query.lucene.LuceneManager;
@@ -44,10 +43,6 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
-import org.ihtsdo.otf.tcc.model.cc.concept.ConceptDataManager;
-import org.ihtsdo.otf.tcc.model.cc.concept.ConceptDataSimpleReference;
-import org.ihtsdo.otf.tcc.model.cc.termstore.SearchType;
-import org.ihtsdo.tcc.model.index.service.DescriptionIndexer;
 import org.ihtsdo.tcc.model.index.service.IdIndexer;
 import org.ihtsdo.tcc.model.index.service.RefsetIndexer;
 import org.junit.After;
@@ -60,9 +55,9 @@ import org.junit.runner.RunWith;
 
 /**
  * Class that handles integration tests for
- * <code>Query</code> clauses.
+ * <code>Lucene</code> index generation.
  *
- * @author kec
+ * @author aimeefurber
  */
 @RunWith(BdbTestRunner.class)
 @BdbTestRunnerConfig()
@@ -84,6 +79,8 @@ public class LuceneTest {
     @Before
     public void setUp() {
         try {
+            LuceneManager.setRoot(new File("target/test-resources/berkeley-db"));
+            DescriptionLuceneManager.setupLuceneDir();
             int authorNid = TermAux.USER.getLenient().getConceptNid();
                 int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
                 ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
@@ -113,10 +110,12 @@ public class LuceneTest {
         TerminologyBuilderBI builder = Ts.get().getTerminologyBuilder(ec, vc);
         DescriptionChronicleBI newDesc = builder.construct(descBp);
         Ts.get().commit();
+        
+        DescriptionLuceneManager.getWriterLatch().await();
 
         //search for test description in lucene index
         String[] parts = testDescription.split(" ");
-        HashSet<String> wordSet = new HashSet<String>();
+        HashSet<String> wordSet = new HashSet<>();
         for (String word : parts) {
             if (!wordSet.contains(word) && word.length() > 1
                     && !word.startsWith("(") && !word.endsWith(")")) {

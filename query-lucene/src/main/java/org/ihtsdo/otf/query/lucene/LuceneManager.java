@@ -25,6 +25,10 @@ public abstract class LuceneManager {
     protected static ExecutorService luceneWriterService =
             Executors.newFixedThreadPool(1, new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
 
+    public static void setRoot(File root) {
+        LuceneManager.root = root;
+    }
+    
     protected static class ShortTextSimilarity extends DefaultSimilarity {
 
         public ShortTextSimilarity() {
