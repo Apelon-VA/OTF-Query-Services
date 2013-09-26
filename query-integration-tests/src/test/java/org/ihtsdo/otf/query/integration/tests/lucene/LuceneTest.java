@@ -1,4 +1,4 @@
-package org.ihtsdo.otf.query.integration.tests;
+package org.ihtsdo.otf.query.integration.tests.lucene;
 
 /*
  * Copyright 2013 International Health Terminology Standards Development Organisation.
@@ -43,8 +43,8 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
-import org.ihtsdo.tcc.model.index.service.IdIndexer;
-import org.ihtsdo.tcc.model.index.service.RefsetIndexer;
+import org.ihtsdo.otf.tcc.model.index.service.IdIndexer;
+import org.ihtsdo.otf.tcc.model.index.service.RefsetIndexer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -62,6 +62,8 @@ import org.junit.runner.RunWith;
 @RunWith(BdbTestRunner.class)
 @BdbTestRunnerConfig()
 public class LuceneTest {
+    static File buildDirFile = null;
+
     EditCoordinate ec;
     ViewCoordinate vc;
 
@@ -70,6 +72,8 @@ public class LuceneTest {
 
     @BeforeClass
     public static void setUpClass() {
+      buildDirFile = BdbTestRunner.getBuildDirectory();
+      System.setProperty(LuceneManager.LUCENE_ROOT_LOCATION_PROPERTY, buildDirFile.getAbsolutePath());
     }
 
     @AfterClass

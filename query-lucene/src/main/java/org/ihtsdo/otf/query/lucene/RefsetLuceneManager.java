@@ -53,7 +53,7 @@ import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.model.cc.P;
 import org.ihtsdo.otf.tcc.model.cc.refex.RefexMember;
-import org.ihtsdo.tcc.model.index.service.RefsetIndexer;
+import org.ihtsdo.otf.tcc.model.index.service.RefsetIndexer;
 import org.jvnet.hk2.annotations.Service;
 
 /**

@@ -17,7 +17,7 @@ package org.ihtsdo.otf.query.lucene;
 
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
-import org.ihtsdo.tcc.model.index.service.IdIndexer;
+import org.ihtsdo.otf.tcc.model.index.service.IdIndexer;
 import org.jvnet.hk2.annotations.Service;
 
 /**

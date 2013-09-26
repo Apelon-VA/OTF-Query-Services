@@ -26,6 +26,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.SimpleFSDirectory;
@@ -40,12 +41,13 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.model.cc.P;
-import org.ihtsdo.tcc.model.index.service.DescriptionIndexer;
+import org.ihtsdo.otf.tcc.model.index.service.DescriptionIndexer;
 import org.jvnet.hk2.annotations.Service;
 
 /**
- * Lucene Manager for a Description index. Provides the description indexing service.
- * May need to surface more of these methods in the Indexer interface. 
+ * Lucene Manager for a Description index. Provides the description indexing
+ * service. May need to surface more of these methods in the Indexer interface.
+ *
  * @author aimeefurber
  */
 @Service
@@ -70,8 +72,8 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
     public DescriptionLuceneManager() {
         setupLuceneDir();
     }
-    
-    public static void setupLuceneDir(){
+
+    public static void setupLuceneDir() {
         IndexWriter writer;
 
         descLuceneMutableDirFile = new File(root,
@@ -136,7 +138,11 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
     @Override
     public void commitWriter() throws IOException {
         if (descWriter != null) {
-            descWriter.commit();
+            try {
+                descWriter.commit();
+            } catch (AlreadyClosedException ex) {
+                System.out.println("Cannot commit description index, Index is currently closed. ");
+            }
         }
     }
 
@@ -377,9 +383,11 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
             writerLatch.countDown();
         }
     }
-    public static CountDownLatch getWriterLatch(){
+
+    public static CountDownLatch getWriterLatch() {
         return writerLatch;
     }
+
     public static void addUncommittedDescNid(int dNid) {
         uncommittedDescNids.setMember(dNid);
     }
@@ -409,7 +417,7 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
 
         return luceneDir;
     }
-    
+
     protected static Directory initDirectory(File luceneDirFile, boolean mutable)
             throws IOException, CorruptIndexException, LockObtainFailedException {
         Directory luceneDir;
@@ -431,7 +439,7 @@ public class DescriptionLuceneManager extends LuceneManager implements Descripti
 
         return luceneDir;
     }
-    
+
     public static boolean indexExists() {
         return descLuceneMutableDirFile.exists();
     }
