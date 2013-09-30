@@ -38,4 +38,33 @@
                 <jpda.listen>true</jpda.listen>
             </properties>
         </action>
+        <action>
+            <actionName>build</actionName>
+            <goals>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-ea -d64 -XX:+UseCompressedOops -Xmx4g -Xms4g</Env.MAVEN_OPTS>
+            </properties>
+        </action>
+        <action>
+            <actionName>rebuild</actionName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-ea -d64 -XX:+UseCompressedOops -Xmx4g -Xms4g</Env.MAVEN_OPTS>
+            </properties>
+        </action>
+        <action>
+            <actionName>build-with-dependencies</actionName>
+            <reactor>also-make</reactor>
+            <goals>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-ea -d64 -XX:+UseCompressedOops -Xmx4g -Xms4g</Env.MAVEN_OPTS>
+            </properties>
+        </action>
     </actions>
