@@ -17,6 +17,8 @@ package org.ihtsdo.otf.query.rest.client;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -24,11 +26,13 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.jaxb.chronicle.api.SimpleViewCoordinate;
+import org.ihtsdo.otf.jaxb.query.ClauseSemantic;
 import org.ihtsdo.otf.jaxb.query.ForCollection;
 import org.ihtsdo.otf.jaxb.query.ForCollectionContents;
 import org.ihtsdo.otf.jaxb.query.LetMap;
 import org.ihtsdo.otf.jaxb.query.ReturnTypes;
 import org.ihtsdo.otf.jaxb.query.Where;
+import org.ihtsdo.otf.jaxb.query.WhereClause;
 
 /**
  *
@@ -82,10 +86,94 @@ public class QueryProcessorForRestXml {
 
     }
 
+    public static String lucene(String queryText) throws UnsupportedEncodingException, JAXBException {
+        return lucene(queryText, DEFAULT_HOST);
+    }
+
+    public static String lucene(String queryText, String host) throws UnsupportedEncodingException, JAXBException {
+        Client client = ClientBuilder.newClient();
+
+        WebTarget target = client.target(host).path("otf/query-service/Lucene/query");
+
+        String encodedUrl = URLEncoder.encode(queryText, "UTF-8");
+
+        //Set return type
+        ReturnTypes returnType = ReturnTypes.DESCRIPTION_VERSION_FSN;
+
+        ForCollection forObject = new ForCollection();
+        forObject.setForCollectionString(ForCollectionContents.CONCEPT.name());
+
+        SimpleViewCoordinate viewpoint = ViewCoordinateExample.getSnomedInferredLatest();
+
+        LetMap letMap = new LetMap();
+        LetMap.Map.Entry entry = new LetMap.Map.Entry();
+        entry.setKey(encodedUrl);
+        entry.setValue(queryText);
+
+        Where where = new Where();
+        WhereClause descLuceneMatch = new WhereClause();
+        descLuceneMatch.setSemanticString(ClauseSemantic.DESCRIPTION_LUCENE_MATCH.name());
+        descLuceneMatch.getLetKeys().add(queryText);
+        where.setRootClause(descLuceneMatch);
+        WhereClause conceptForComponent = new WhereClause();
+        conceptForComponent.setSemanticString(ClauseSemantic.CONCEPT_FOR_COMPONENT.name());
+        where.setRootClause(conceptForComponent);
+
+        return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
+                queryParam("FOR", getXmlString(forObject)).
+                queryParam("LET", getXmlString(letMap)).
+                queryParam("WHERE", getXmlString(where)).
+                queryParam("RETURN", getXmlString(returnType)).
+                request(MediaType.TEXT_PLAIN).get(String.class);
+    }
+
+    public static String regex(String queryText) throws UnsupportedEncodingException, JAXBException {
+        return regex(queryText, DEFAULT_HOST);
+    }
+
+    public static String regex(String queryText, String host) throws UnsupportedEncodingException, JAXBException {
+        Client client = ClientBuilder.newClient();
+
+        WebTarget target = client.target(host).path("otf/query-service/Regex/query");
+
+        String encodedUrl = URLEncoder.encode(queryText, "UTF-8");
+
+        //Set return type
+        ReturnTypes returnType = ReturnTypes.DESCRIPTION_VERSION_FSN;
+
+        //Set ViewCoordinate
+        ForCollection forObject = new ForCollection();
+        forObject.setForCollectionString(ForCollectionContents.CONCEPT.name());
+
+        //Set ViewCoordinate
+        SimpleViewCoordinate viewpoint = ViewCoordinateExample.getSnomedInferredLatest();
+
+        //Set let map
+        LetMap letMap = new LetMap();
+        LetMap.Map.Entry entry = new LetMap.Map.Entry();
+        entry.setKey(encodedUrl);
+        entry.setValue(queryText);
+
+        //Set the Where clause
+        Where where = new Where();
+        WhereClause descRegexMatch = new WhereClause();
+        descRegexMatch.setSemanticString(ClauseSemantic.DESCRIPTION_REGEX_MATCH.name());
+        descRegexMatch.getLetKeys().add(queryText);
+        where.setRootClause(descRegexMatch);
+
+
+        return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
+                queryParam("FOR", getXmlString(forObject)).
+                queryParam("LET", getXmlString(letMap)).
+                queryParam("WHERE", getXmlString(where)).
+                queryParam("RETURN", getXmlString(returnType)).
+                request(MediaType.TEXT_PLAIN).get(String.class);
+    }
+
     private static String getXmlString(Object obj) throws JAXBException {
         if (obj instanceof SimpleViewCoordinate) {
             org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory factory = new org.ihtsdo.otf.jaxb.chronicle.api.ObjectFactory();
-            obj =  factory.createSimpleViewCoordinate((SimpleViewCoordinate) obj);
+            obj = factory.createSimpleViewCoordinate((SimpleViewCoordinate) obj);
 
         } else if (obj instanceof ForCollection) {
             org.ihtsdo.otf.jaxb.query.ObjectFactory factory = new org.ihtsdo.otf.jaxb.query.ObjectFactory();

@@ -114,6 +114,17 @@ public class QueryTest {
     }
 
     @Test
+    public void testDescriptionLuceneMatch() throws IOException, Exception {
+        DescriptionLuceneMatchTest descLuceneMatch = new DescriptionLuceneMatchTest();
+        NativeIdSetBI results = descLuceneMatch.computeQuery();
+        System.out.println("Description Lucene match test.");
+        for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_FSN)) {
+            System.out.println(o);
+        }
+        Assert.assertEquals(4, results.size());
+    }
+
+    @Test
     public void testXor() throws IOException, Exception {
 
         Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
