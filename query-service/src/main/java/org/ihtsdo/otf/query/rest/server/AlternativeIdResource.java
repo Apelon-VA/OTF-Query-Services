@@ -29,6 +29,8 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -36,27 +38,32 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import javax.xml.bind.JAXBException;
+import org.ihtsdo.otf.query.lucene.LuceneRefexIndexer;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongVersionBI;
+import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 /**
  * This resource accepts SNOMED IDs, and returns the associated UUID for that
- * SNOMED ID. 
+ * SNOMED ID, or it accepts UUIDs and returns the associated SNOMED ID for that UUID.
+ * 
  * @author kec
  */
-@Path("query-service/uuid")
+@Path("query-service")
 public class AlternativeIdResource {
     private static IndexerBI  sctIdIndexer;
+    private static int snomedAssemblageNid = Integer.MIN_VALUE;
     
     static {
         List<IndexerBI> lookers            = Hk2Looker.get().getAllServices(IndexerBI.class);
 
         for (IndexerBI li : lookers) {
             System.out.println("AlternativeIdResource found indexer: " + li.getIndexerName());
-
             if (li.getIndexerName().equals("refex")) {
                 sctIdIndexer = li;
             }
@@ -64,7 +71,7 @@ public class AlternativeIdResource {
     }
 
     @GET
-    @Path("{id}")
+    @Path("uuid/{id}")
     @Produces("text/plain")
     public String getUuidFromSctid(@PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting UUID for: " + id);
@@ -87,10 +94,46 @@ public class AlternativeIdResource {
     }
     
     @GET
+    @Path("uuid")
     @Produces("text/plain")
     public String getUuidInfo() throws IOException, JAXBException, Exception {
         return "Add the SNOMED ID to the end of the URL";
     }
     
+    @GET
+    @Path("sctid")
+    @Produces("text/plain")
+    public String getSctidInfo() throws IOException, JAXBException, Exception {
+        return "Add the UUID to the end of the URL";
+    }
+
+    @GET
+    @Path("sctid/{id}")
+    @Produces("text/plain")
+    public String getSctidFromUuid(@PathParam("id") String id) throws IOException, JAXBException, Exception {
+        System.out.println("Getting sctid for: " + id);
+            if (snomedAssemblageNid == Integer.MIN_VALUE) {
+                try {
+                    snomedAssemblageNid = TermAux.SNOMED_IDENTIFIER.getNid();
+                } catch (ValidationException ex) {
+                    Logger.getLogger(LuceneRefexIndexer.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(LuceneRefexIndexer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+       
+        ComponentChronicleBI<?> component = Ts.get().getComponent(UUID.fromString(id));
+        
+        for (RefexChronicleBI<?> annotation: component.getAnnotations()) {
+            if (annotation.getAssemblageNid() == snomedAssemblageNid) {
+                RefexLongVersionBI sctid = (RefexLongVersionBI) annotation.getPrimordialVersion();
+                return Long.toString(sctid.getLong1());
+            }
+        
+        }
+
+        return "no entry found";
+    }
+       
    
 }
