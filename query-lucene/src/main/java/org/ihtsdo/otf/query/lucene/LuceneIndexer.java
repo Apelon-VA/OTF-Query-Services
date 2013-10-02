@@ -2,7 +2,6 @@ package org.ihtsdo.otf.query.lucene;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -18,6 +17,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.NRTManager;
 import org.apache.lucene.search.NRTManagerReopenThread;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -30,7 +30,9 @@ import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.thread.NamedThreadFactory;
 import org.ihtsdo.otf.tcc.model.cc.termstore.TermstoreLogger;
+import org.ihtsdo.otf.tcc.model.index.service.IndexedGenerationCallable;
 import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
+import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -49,25 +51,25 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.otf.tcc.model.index.service.IndexedGenerationCallable;
 
 public abstract class LuceneIndexer implements IndexerBI {
-    public static final String       LUCENE_ROOT_LOCATION_PROPERTY = "org.ihtsdo.otf.tcc.query.lucene-root-location";
-    public static final String       DEFAULT_LUCENE_LOCATION       = "lucene";
-    protected static final Logger    logger                        = Logger.getLogger(LuceneIndexer.class.getName());
-    public static final Version      luceneVersion                 = Version.LUCENE_43;
+    public static final String             LUCENE_ROOT_LOCATION_PROPERTY =
+        "org.ihtsdo.otf.tcc.query.lucene-root-location";
+    public static final String             DEFAULT_LUCENE_LOCATION       = "lucene";
+    protected static final Logger          logger                        =
+        Logger.getLogger(LuceneIndexer.class.getName());
+    public static final Version            luceneVersion                 = Version.LUCENE_43;
     protected static final ExecutorService luceneWriterService           =
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2,
-            new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
+                                     new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
     protected static ExecutorService luceneWriterFutureCheckerService =
         Executors.newFixedThreadPool(1, new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
     private static final UnindexedFuture unindexedFuture = new UnindexedFuture();
-    public static File             root;
+    public static File                   root;
     private static final FieldType       indexedComponentNidType;
     private static final FieldType       referencedComponentNidType;
 
     static {
-
         indexedComponentNidType = new FieldType();
         indexedComponentNidType.setNumericType(FieldType.NumericType.INT);
         indexedComponentNidType.setIndexed(false);
@@ -82,23 +84,15 @@ public abstract class LuceneIndexer implements IndexerBI {
         referencedComponentNidType.freeze();
     }
 
-    private static void setupRoot() {
-        String rootLocation = System.getProperty(LUCENE_ROOT_LOCATION_PROPERTY);
-        if (rootLocation != null) {
-            root = new File(rootLocation, DEFAULT_LUCENE_LOCATION);
-        } else {
-            root = new File(DEFAULT_LUCENE_LOCATION);
-        }
-    }
-
     private ConcurrentHashMap<Integer, IndexedGenerationCallable> componentNidLatch = new ConcurrentHashMap<>();
-    private NRTManager.TrackingIndexWriter                       trackingIndexWriter;
-    private NRTManager                                           searcherManager;
-    private String                                               indexName;
+    private NRTManager.TrackingIndexWriter                        trackingIndexWriter;
+    private NRTManager                                            searcherManager;
+    private String                                                indexName;
 
     public LuceneIndexer(String indexName) throws IOException {
         this.indexName = indexName;
         setupRoot();
+
         File      indexDirectoryFile = new File(root.getPath() + "/" + indexName);
         Directory indexDirectory     = initDirectory(indexDirectoryFile);
 
@@ -126,6 +120,22 @@ public abstract class LuceneIndexer implements IndexerBI {
         reopenThread.setPriority(Math.min(Thread.currentThread().getPriority() + 2, Thread.MAX_PRIORITY));
         reopenThread.setDaemon(true);
         reopenThread.start();
+    }
+
+    private static void setupRoot() {
+        String rootLocation = System.getProperty(LUCENE_ROOT_LOCATION_PROPERTY);
+
+        if (rootLocation != null) {
+            root = new File(rootLocation, DEFAULT_LUCENE_LOCATION);
+        } else {
+            rootLocation = System.getProperty("org.ihtsdo.otf.tcc.datastore.bdb-location");
+
+            if (rootLocation != null) {
+                root = new File(rootLocation, DEFAULT_LUCENE_LOCATION);
+            } else {
+                root = new File(DEFAULT_LUCENE_LOCATION);
+            }
+        }
     }
 
     @Override
@@ -176,27 +186,46 @@ public abstract class LuceneIndexer implements IndexerBI {
      * @throws IOException
      * @throws ParseException
      */
-    public final List<SearchResult> query(String query, ComponentProperty field, int sizeLimit,
-            long targetGeneration)
+    public final List<SearchResult> query(String query, ComponentProperty field, int sizeLimit, long targetGeneration)
             throws IOException, ParseException {
         try {
-            Query q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
-                                      new StandardAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
-            List<SearchResult> result = search(q, sizeLimit, targetGeneration);
+            List<SearchResult> result;
 
-            if (result.size() > 0) {
-                if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                    TermstoreLogger.logger.log(Level.FINE, "StandardAnalyzer query returned {0} hits", result.size());
-                }
-            } else {
-                if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                    TermstoreLogger.logger.fine("StandardAnalyzer query returned no results. "
-                                                + "Now trying WhitespaceAnalyzer query");
-                    q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
-                                        new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
-                }
+            switch (field) {
+            case LONG_EXTENSION_1 :
+                long  long1      = Long.parseLong(query);
+                Query long1query = NumericRangeQuery.newLongRange(field.name(), long1, long1, true, true);
+
+                result = search(long1query, sizeLimit, targetGeneration);
+
+                break;
+
+            case DESCRIPTION_TEXT :
+                Query q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
+                                          new StandardAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
 
                 result = search(q, sizeLimit, targetGeneration);
+
+                if (result.size() > 0) {
+                    if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
+                        TermstoreLogger.logger.log(Level.FINE, "StandardAnalyzer query returned {0} hits",
+                                                   result.size());
+                    }
+                } else {
+                    if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
+                        TermstoreLogger.logger.fine("StandardAnalyzer query returned no results. "
+                                                    + "Now trying WhitespaceAnalyzer query");
+                        q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
+                                            new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
+                    }
+
+                    result = search(q, sizeLimit, targetGeneration);
+                }
+
+                break;
+
+            default :
+                throw new IOException("Can't handle: " + field.name());
             }
 
             return result;
@@ -308,7 +337,7 @@ public abstract class LuceneIndexer implements IndexerBI {
         @Override
         public Long call() throws Exception {
             IndexedGenerationCallable latch = componentNidLatch.remove(chronicle.getNid());
-            Document                 doc   = new Document();
+            Document                  doc   = new Document();
 
             doc.add(new IntField(ComponentProperty.COMPONENT_ID.name(), chronicle.getNid(),
                                  LuceneIndexer.indexedComponentNidType));
@@ -333,6 +362,7 @@ public abstract class LuceneIndexer implements IndexerBI {
             return indexGeneration;
         }
     }
+
 
     /**
      * Class to ensure that any exceptions associated with indexingFutures are
