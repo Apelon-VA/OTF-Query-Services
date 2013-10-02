@@ -315,10 +315,7 @@ public abstract class Query {
      * @throws ContradictionException
      */
     public ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType) throws IOException, ContradictionException {
-        ViewCoordinate vc = viewCoordinate;
-
-
-        return returnDisplayObjects(resultSet, returnType, vc);
+        return returnDisplayObjects(resultSet, returnType, viewCoordinate);
 
     }
 

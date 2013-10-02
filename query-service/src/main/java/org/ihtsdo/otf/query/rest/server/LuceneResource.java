@@ -26,9 +26,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
-import org.ihtsdo.otf.query.implementation.LuceneQueryFromJaxb;
+import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.nid.HybridNidSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
@@ -85,7 +86,6 @@ public class LuceneResource {
         
         List<SearchResult> results = descriptionIndexer.query(queryText, ComponentProperty.DESCRIPTION_TEXT, 500);
 
-        LuceneQueryFromJaxb query = new LuceneQueryFromJaxb(queryText);
         NativeIdSetBI resultSet = new HybridNidSet();
         
         System.out.println("result: " + results);
@@ -95,7 +95,9 @@ public class LuceneResource {
         for (SearchResult r: results) {
             resultSet.add(r.nid);
         }
-        ArrayList<Object> objectList = query.returnDisplayObjects(resultSet, ReturnTypes.DESCRIPTION_VERSION_FSN);
+        ArrayList<Object> objectList = Query.returnDisplayObjects(resultSet, 
+                ReturnTypes.UUIDS, 
+                StandardViewCoordinates.getSnomedInferredLatest());
 
         ResultList resultList = new ResultList();
         resultList.setTheResults(objectList);
