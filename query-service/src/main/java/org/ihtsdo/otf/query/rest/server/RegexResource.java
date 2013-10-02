@@ -21,8 +21,8 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.RegexQueryFromJaxb;
@@ -35,13 +35,22 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
  *
  * @author dylangrald
  */
+@Path("query-service/regex")
 public class RegexResource {
 
-    @Path("query-service/Regex")
     @GET
     @Produces("text/plain")
-    public String doQuery(@QueryParam("TEXT") String regex) throws IOException, JAXBException, Exception {
-        String queryString = "TEXT: " + regex;
+    public String doQuery() throws IOException, JAXBException, Exception {
+        return "Put url encoded regex query at the end of the url";
+    }    
+    
+    
+    
+    @GET
+    @Path("{regex}")
+    @Produces("text/plain")
+    public String doQuery(@PathParam("regex") String regex) throws IOException, JAXBException, Exception {
+        String queryString = "regex: " + regex;
         System.out.println("Received: \n   " + queryString);
         if (regex == null) {
             return "Malformed query. Lucene query must have input regular expression. \n"

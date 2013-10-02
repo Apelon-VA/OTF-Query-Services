@@ -193,6 +193,58 @@ public abstract class Query {
         return viewCoordinate;
     }
 
+    public static ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType, ViewCoordinate vc) throws ContradictionException, UnsupportedOperationException, IOException {
+        ArrayList<Object> results = new ArrayList<>();
+
+        NativeIdSetItrBI iter = resultSet.getIterator();
+        switch (returnType) {
+            case UUIDS:
+                while (iter.next()) {
+                    results.add(Ts.get().getComponent(iter.nid()).getVersion(vc).getPrimordialUuid());
+                }
+                break;
+            case NIDS:
+                while (iter.next()) {
+                    results.add(iter.nid());
+                }
+                break;
+            case CONCEPT_VERSION:
+                while (iter.next()) {
+                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                    results.add(cc);
+                }
+                break;
+            case DESCRIPTION_VERSION_FSN:
+                while (iter.next()) {
+                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
+                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
+                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                    results.add(descVersion);
+                }
+                break;
+            case DESCRIPTION_VERSION_PREFERRED:
+                while (iter.next()) {
+                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getPreferredDescription();
+                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
+                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                    results.add(descVersion);
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("Return type not supported.");
+        }
+
+
+        return results;
+    }
+
     private class Iterator implements ProcessUnfetchedConceptDataBI {
 
         NativeIdSetBI conceptsToIterate;
@@ -263,55 +315,10 @@ public abstract class Query {
      * @throws ContradictionException
      */
     public ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType) throws IOException, ContradictionException {
-        ArrayList<Object> results = new ArrayList<>();
-
-        NativeIdSetItrBI iter = resultSet.getIterator();
-        switch (returnType) {
-            case UUIDS:
-                while (iter.next()) {
-                    results.add(Ts.get().getComponent(iter.nid()).getVersion(viewCoordinate).getPrimordialUuid());
-                }
-                break;
-            case NIDS:
-                while (iter.next()) {
-                    results.add(iter.nid());
-                }
-                break;
-            case CONCEPT_VERSION:
-                while (iter.next()) {
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    results.add(cc);
-                }
-                break;
-            case DESCRIPTION_VERSION_FSN:
-                while (iter.next()) {
-                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getFullySpecifiedDescription();
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
-                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(viewCoordinate), descVersionBI);
-                    results.add(descVersion);
-                }
-                break;
-            case DESCRIPTION_VERSION_PREFERRED:
-                while (iter.next()) {
-                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getPreferredDescription();
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
-                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(viewCoordinate), descVersionBI);
-                    results.add(descVersion);
-                }
-                break;
-            default:
-                throw new UnsupportedOperationException("Return type not supported.");
-        }
+        ViewCoordinate vc = viewCoordinate;
 
 
-        return results;
+        return returnDisplayObjects(resultSet, returnType, vc);
 
     }
 
