@@ -117,13 +117,13 @@ public class QueryTest {
     public void testDescriptionLuceneMatch() throws IOException, Exception {
         DescriptionLuceneMatchTest descLuceneMatch = new DescriptionLuceneMatchTest();
         NativeIdSetBI results = descLuceneMatch.computeQuery();
-        System.out.println("Description Lucene match test.");
+        System.out.println("Description Lucene match test size: " + results.size());
         for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_FSN)) {
             System.out.println(o);
         }
         Assert.assertEquals(4, results.size());
     }
-
+    
     @Test
     public void testXor() throws IOException, Exception {
 
@@ -173,7 +173,7 @@ public class QueryTest {
         Assert.assertEquals(210, results.size());
 
     }
-
+    
     @Ignore
     @Test
     public void testRelRestrictionSubsumptionTrue() throws IOException, Exception {
