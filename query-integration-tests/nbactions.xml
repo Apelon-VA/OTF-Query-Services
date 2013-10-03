@@ -62,9 +62,22 @@
             <reactor>also-make</reactor>
             <goals>
                 <goal>install</goal>
+                <goal>-e</goal>
             </goals>
             <properties>
                 <Env.MAVEN_OPTS>-ea -d64 -XX:+UseCompressedOops -Xmx4g -Xms4g</Env.MAVEN_OPTS>
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-jprofiler</actionName>
+            <displayName>jprofiler</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+                <goal>-e</goal>
+            </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-ea -d64 -XX:+UseCompressedOops -Xmx4g -Xms4g -Xbootclasspath/a:/Applications/jprofiler6/bin/agent.jar -agentpath:/Applications/jprofiler6/bin/macos/libjprofilerti.jnilib</Env.MAVEN_OPTS>
             </properties>
         </action>
     </actions>
