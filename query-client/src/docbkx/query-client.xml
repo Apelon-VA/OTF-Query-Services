@@ -1371,4 +1371,13 @@ INFO: Returned concept: Saw dust asthma
             </example>
         </para>
     </section>
+    <section>
+        <title>Lucene Resource</title>
+        <para>Once the client has been deployed, you can conduct a Lucene serach at
+                <code>DEFAULT_HOST/otf/query-service/lucene/{desired Lucene query text}</code>. If
+            the desired Lucene query text includes spaces or other characters not permitted in URLs,
+            you can encode the text <link xlink:href="http://www.url-encode-decode.com">here</link>
+            by entering the text, selecting UTF-8 from the drop-down menu, and clicking the "Url
+            encode" button.</para>
+    </section>
 </section>

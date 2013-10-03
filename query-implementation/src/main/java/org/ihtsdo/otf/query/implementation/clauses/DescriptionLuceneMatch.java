@@ -31,7 +31,10 @@ import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
 import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
@@ -45,13 +48,16 @@ public class DescriptionLuceneMatch extends LeafClause {
 
     String luceneMatch;
     String luceneMatchKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
+    String viewCoordinateKey;
+    Query enclosingQuery;
 
-    public DescriptionLuceneMatch(Query enclosingQuery, String luceneMatchKey) {
+    public DescriptionLuceneMatch(Query enclosingQuery, String luceneMatchKey, String viewCoordinateKey) {
         super(enclosingQuery);
+        this.enclosingQuery = enclosingQuery;
         this.luceneMatchKey = luceneMatchKey;
         this.luceneMatch = (String) enclosingQuery.getLetDeclarations().get(luceneMatchKey);
-        vc = enclosingQuery.getViewCoordinate();
+        this.viewCoordinateKey = viewCoordinateKey;
     }
 
     @Override
@@ -61,6 +67,11 @@ public class DescriptionLuceneMatch extends LeafClause {
 
     @Override
     public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        } else if (this.viewCoordinateKey != null) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }
         NativeIdSetBI nids = new ConcurrentBitSet();
         try {
             List<IndexerBI> lookers = Hk2Looker.get().getAllServices(IndexerBI.class);
@@ -76,6 +87,17 @@ public class DescriptionLuceneMatch extends LeafClause {
             }
         } catch (ParseException ex) {
             Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Filter the results, based upon the input ViewCoordinate
+        NativeIdSetItrBI iter = nids.getIterator();
+        while (iter.next()) {
+            try {
+                if (Ts.get().getComponentVersion(viewCoordinate, iter.nid()) == null) {
+                    nids.remove(iter.nid());
+                }
+            } catch (ContradictionException ex) {
+                Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         getResultsCache().or(nids);
         return nids;

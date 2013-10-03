@@ -43,7 +43,7 @@ public class DescriptionLuceneMatchTest extends QueryClauseTest {
 
             @Override
             public Clause Where() {
-                return ConceptForComponent(DescriptionLuceneMatch("oligophrenia"));
+                return DescriptionLuceneMatch("oligophrenia");
             }
         };
     }

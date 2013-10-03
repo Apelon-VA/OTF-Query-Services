@@ -22,6 +22,7 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
@@ -118,12 +119,41 @@ public class QueryTest {
         DescriptionLuceneMatchTest descLuceneMatch = new DescriptionLuceneMatchTest();
         NativeIdSetBI results = descLuceneMatch.computeQuery();
         System.out.println("Description Lucene match test size: " + results.size());
-        for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_FSN)) {
+        for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.COMPONENT)) {
             System.out.println(o);
         }
-        Assert.assertEquals(4, results.size());
+        for(Object o: descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)){
+            System.out.println(o);
+        }
+        Assert.assertEquals(6, results.size());
     }
-    
+
+    @Test
+    public void testDescriptionLuceneMatch2() throws IOException, ContradictionException, Exception {
+        Query q = new Query() {
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("leg", "leg");
+            }
+
+            @Override
+            public Clause Where() {
+                return DescriptionLuceneMatch("leg");
+            }
+        };
+        NativeIdSetBI results = q.compute();
+        System.out.println("Description lucene match (leg) size: " + results.size());
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)) {
+            Assert.assertTrue(o != null);
+        }
+        Assert.assertEquals(836, results.size());
+    }
+
     @Test
     public void testXor() throws IOException, Exception {
 
@@ -173,7 +203,7 @@ public class QueryTest {
         Assert.assertEquals(210, results.size());
 
     }
-    
+
     @Ignore
     @Test
     public void testRelRestrictionSubsumptionTrue() throws IOException, Exception {
@@ -312,11 +342,11 @@ public class QueryTest {
             @Override
             public Clause Where() {
                 return And(ConceptForComponent(DescriptionRegexMatch("deceleration")),
-                            And(Or(RelType("is a", "motion"),
-                                    ConceptForComponent(DescriptionRegexMatch("centrifugal"))),
-                                ConceptIsKindOf("motion"),
-                                Not(Or(ConceptIsChildOf("acceleration"),
-                                        ConceptIs("continued movement")))));
+                        And(Or(RelType("is a", "motion"),
+                        ConceptForComponent(DescriptionRegexMatch("centrifugal"))),
+                        ConceptIsKindOf("motion"),
+                        Not(Or(ConceptIsChildOf("acceleration"),
+                        ConceptIs("continued movement")))));
             }
         };
 

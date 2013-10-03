@@ -96,7 +96,7 @@ public class LuceneResource {
             resultSet.add(r.nid);
         }
         ArrayList<Object> objectList = Query.returnDisplayObjects(resultSet, 
-                ReturnTypes.UUIDS, 
+                ReturnTypes.DESCRIPTION, 
                 StandardViewCoordinates.getSnomedInferredLatest());
 
         ResultList resultList = new ResultList();

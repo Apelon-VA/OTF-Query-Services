@@ -44,11 +44,12 @@ import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
-import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.ddo.ComponentReference;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
@@ -200,7 +201,10 @@ public abstract class Query {
         switch (returnType) {
             case UUIDS:
                 while (iter.next()) {
-                    results.add(Ts.get().getComponent(iter.nid()).getVersion(vc).getPrimordialUuid());
+                    ComponentReference cf = new ComponentReference(Ts.get().getSnapshot(vc), iter.nid());
+                    if (!cf.componentVersionIsNull()) {
+                        results.add(cf.getUuid());
+                    }
                 }
                 break;
             case NIDS:
@@ -215,32 +219,72 @@ public abstract class Query {
                     results.add(cc);
                 }
                 break;
-            case DESCRIPTION_VERSION_FSN:
+            case COMPONENT:
                 while (iter.next()) {
-                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
-                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
-                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
-                    results.add(descVersion);
+                    ComponentReference cf = new ComponentReference(Ts.get().getSnapshot(vc), iter.nid());
+                    if (!cf.componentVersionIsNull()) {
+                        results.add(cf);
+                    }
                 }
                 break;
+            case DESCRIPTION_VERSION_FSN:
+                while (iter.next()) {
+                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                    if (cv != null) {
+                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                        DescriptionVersionBI descVersionBI = desc.getVersion(vc);
+                        DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                        results.add(descVersion);
+                    }
+                }
+                break;
+
             case DESCRIPTION_VERSION_PREFERRED:
                 while (iter.next()) {
-                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getPreferredDescription();
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
-                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
-                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
-                    results.add(descVersion);
+                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                    if (cv != null) {
+                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getPreferredDescription();
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                        DescriptionVersionBI descVersionBI = desc.getVersion(vc);
+                        DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                        results.add(descVersion);
+                    }
+                }
+                break;
+            case DESCRIPTION:
+                while (iter.next()) {
+                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                    if (cv != null) {
+                        DescriptionChronicleBI desc = null;
+                        ConceptChronicleDdo cc = null;
+                        DescriptionVersionBI descVersionBI = null;
+                        if (cv instanceof ConceptVersionBI) {
+                            desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
+                            descVersionBI = desc.getVersion(vc);
+                            cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                    RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        } else if (cv instanceof DescriptionVersionBI) {
+                            desc = (DescriptionChronicleBI) Ts.get().getComponent(iter.nid());
+                            descVersionBI = (DescriptionVersionBI) cv;
+                            cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getComponent(iter.nid()).getEnclosingConcept(), VersionPolicy.ACTIVE_VERSIONS,
+                                    RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        } else {
+                            throw new UnsupportedOperationException("This component type is not yet supported");
+                        }
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                        DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                        results.add(descVersion);
+                    }
                 }
                 break;
             default:
                 throw new UnsupportedOperationException("Return type not supported.");
         }
-
 
         return results;
     }
@@ -292,7 +336,7 @@ public abstract class Query {
      * <code>Query</code>.
      *
      * @param q input <code>Query</code>
-     * @return The result set of the <code>Query</code> in * * * * *
+     * @return The result set of the <code>Query</code> in * * * * * * * * *
      * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects
      * @throws IOException
      * @throws ContradictionException
@@ -412,11 +456,15 @@ public abstract class Query {
     }
 
     protected DescriptionActiveLuceneMatch DescriptionActiveLuceneMatch(String queryTextKey) {
-        return new DescriptionActiveLuceneMatch(this, queryTextKey);
+        return new DescriptionActiveLuceneMatch(this, queryTextKey, this.currentViewCoordinateKey);
     }
 
     protected DescriptionLuceneMatch DescriptionLuceneMatch(String queryTextKey) {
-        return new DescriptionLuceneMatch(this, queryTextKey);
+        return new DescriptionLuceneMatch(this, queryTextKey, this.currentViewCoordinateKey);
+    }
+
+    protected DescriptionLuceneMatch DescriptionActiveLuceneMatch(String queryTextKey, String viewCoordinateKey) {
+        return new DescriptionLuceneMatch(this, queryTextKey, viewCoordinateKey);
     }
 
     protected And And(Clause... clauses) {
