@@ -26,18 +26,16 @@ import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 
 /**
- * Computes components that have undergone change since a specified previous
- * version, which is specified by a <code>ViewCoordinate</code>.
+ * Creates a test for ChangedFromPreviousVersion clause.
  *
  * @author dylangrald
  */
-public class ChangedFromPreviousVersionTest {
+public class ChangedFromPreviousVersionTest extends QueryClauseTest {
 
-    Query q;
-    SettingViewCoordinate setViewCoordinate = new SettingViewCoordinate(2002, 1, 31, 0, 0);
+    SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
 
     public ChangedFromPreviousVersionTest() throws IOException {
-        q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 NativeIdSetBI forSet = new ConcurrentBitSet();
@@ -58,9 +56,5 @@ public class ChangedFromPreviousVersionTest {
             }
         };
 
-    }
-
-    public Query getQuery() {
-        return q;
     }
 }

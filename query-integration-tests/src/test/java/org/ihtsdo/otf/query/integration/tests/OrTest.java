@@ -15,8 +15,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import java.io.IOException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
@@ -26,15 +24,15 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
+ * Creates a test for the
+ * <code>Or</code> clause.
  *
  * @author dylangrald
  */
-public class OrTest {
-
-    public Query q;
+public class OrTest extends QueryClauseTest {
 
     public OrTest() throws IOException {
-        q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -49,13 +47,8 @@ public class OrTest {
 
             @Override
             public Clause Where() {
-                    return Or(ConceptIsKindOf("person"), ConceptIsKindOf("allergic-asthma"));
-                    //return Or(ConceptIsKindOf("allergic-asthma"), ConceptIsKindOf("respiratory disorder"));
+                return Or(ConceptIsKindOf("person"), ConceptIsKindOf("allergic-asthma"));
             }
         };
-    }
-
-    public Query getOrTest() {
-        return q;
     }
 }

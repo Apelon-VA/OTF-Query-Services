@@ -56,7 +56,8 @@ public class RelRestriction extends LeafClause {
     Boolean destinationSubsumption;
     Boolean relTypeSubsumption;
 
-    public RelRestriction(Query enclosingQuery, String relRestrictionSpecKey, String relTypeKey, String sourceSpecKey, String viewCoordinateKey, Boolean destinationSubsumption, boolean relTypeSubsumption) {
+    public RelRestriction(Query enclosingQuery, String relRestrictionSpecKey, String relTypeKey, String sourceSpecKey,
+            String viewCoordinateKey, Boolean destinationSubsumption, boolean relTypeSubsumption) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
         this.sourceSpecKey = sourceSpecKey;

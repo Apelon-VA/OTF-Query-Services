@@ -15,8 +15,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import java.io.IOException;
 import java.util.GregorianCalendar;
 import org.ihtsdo.otf.tcc.api.coordinate.Position;
@@ -24,16 +22,17 @@ import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 /**
- * Class to adjust time in ViewCoordinate.
+ * Class to adjust the
+ * <code>ViewCoordinate</code>, which can be used in difference queries.
  *
  * @author dylangrald
  */
-public final class SettingViewCoordinate {
+public final class SetViewCoordinate {
 
     ViewCoordinate v1;
     Position position;
 
-    public SettingViewCoordinate(int year, int month, int day, int hour, int minute) throws IOException {
+    public SetViewCoordinate(int year, int month, int day, int hour, int minute) throws IOException {
         this.position = new Position();
         this.v1 = StandardViewCoordinates.getSnomedInferredLatest();
         position = v1.getViewPosition();

@@ -43,7 +43,7 @@ public abstract class LeafClause extends Clause {
     /**
      *
      * @return <code>NativeIdSetBI</code> of components in the resultsCache,
-     * the <code>NativeIdSetBI</code> of components that match the criterion
+     * which is the components that match the criterion
      * specified in the LeafClause.
      */
     public NativeIdSetBI getResultsCache() {

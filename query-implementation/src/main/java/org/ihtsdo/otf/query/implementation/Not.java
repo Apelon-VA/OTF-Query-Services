@@ -22,27 +22,30 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
- * Clause that computes the relative complement of the result of the child
- * clause with respect to the For set.
+ * Returns components that are in the incoming For set and not in the set
+ * returned from the computation of the clauses that are descendents of the
+ * <code>Not</code> clause.
  *
  * @author kec
  */
 public class Not extends ParentClause {
 
     NativeIdSetBI forSet;
+    NativeIdSetBI notSet;
 
     public Not(Query enclosingQuery, Clause child) {
         super(enclosingQuery, child);
         forSet = enclosingQuery.getForSet();
+        assert forSet != null;
     }
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        NativeIdSetBI notSet = new ConcurrentBitSet();
+        this.notSet = new ConcurrentBitSet();
         for (Clause c : getChildren()) {
             notSet.or(c.computePossibleComponents(incomingPossibleComponents));
         }
-        return notSet;
+        return incomingPossibleComponents;
     }
 
     @Override
@@ -58,7 +61,6 @@ public class Not extends ParentClause {
     @Override
     public NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException, ValidationException, ContradictionException {
         NativeIdSetBI forSetCopy = new ConcurrentBitSet(forSet);
-        NativeIdSetBI notSet = new ConcurrentBitSet();
         for (Clause c : getChildren()) {
             notSet.or(c.computeComponents(incomingComponents));
         }

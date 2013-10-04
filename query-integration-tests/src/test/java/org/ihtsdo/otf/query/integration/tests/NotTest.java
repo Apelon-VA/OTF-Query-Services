@@ -15,7 +15,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
@@ -25,19 +24,17 @@ import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 
 /**
- * Creates a test for the Not
- * <code>Clause</code>.
+ * Creates a test for the
+ * <code>Not</code> clause.
  *
  * @author dylangrald
  *
  */
-public class NotTest {
-
-    private Query q;
+public class NotTest extends QueryClauseTest {
 
     public NotTest() throws IOException {
 
-        q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 NativeIdSetBI forSet = new ConcurrentBitSet();
@@ -67,9 +64,5 @@ public class NotTest {
             }
         };
 
-    }
-
-    public Query getQuery() {
-        return q;
     }
 }

@@ -40,11 +40,13 @@ import static org.ihtsdo.otf.query.implementation.ClauseSemantic.REFSET_LUCENE_M
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.REL_TYPE;
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.XOR;
 import org.ihtsdo.otf.tcc.api.coordinate.SimpleViewCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.SimpleConceptSpecification;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
 
 /**
@@ -52,7 +54,7 @@ import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
  * @author kec
  */
 public class QueryFromJaxb extends Query {
-    
+
     private static ViewCoordinate getViewCoordinate(Object obj) throws ValidationException {
         if (obj instanceof ViewCoordinate) {
             return (ViewCoordinate) obj;
@@ -64,15 +66,19 @@ public class QueryFromJaxb extends Query {
     }
     private Clause rootClause;
     private NativeIdSetBI forCollection;
-    
+
     public QueryFromJaxb(String viewCoordinateXml, String forXml,
             String letXml, String whereXml) throws JAXBException, IOException {
         super(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
                 .unmarshal(new StringReader(viewCoordinateXml))));
         Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
         BdbTerminologyStore.waitForSetup();
-        ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
-        this.forCollection = _for.getCollection();
+        if (forXml != null) {
+            ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
+            this.forCollection = _for.getCollection();
+        } else{
+            this.forCollection = Ts.get().getAllConceptNids();
+        }
         LetMap letMap = (LetMap) unmarshaller.unmarshal(new StringReader(letXml));
         Map<String, Object> convertedMap = new HashMap<>(letMap.getMap().size());
         for (Entry entry : letMap.getMap().entrySet()) {
@@ -84,7 +90,7 @@ public class QueryFromJaxb extends Query {
             }
         }
         getLetDeclarations().putAll(convertedMap);
-        
+
         Object obj = unmarshaller.unmarshal(new StringReader(whereXml));
         if (obj instanceof Where) {
             rootClause = getWhereClause(this, ((Where) obj).getRootClause());
@@ -92,22 +98,22 @@ public class QueryFromJaxb extends Query {
             rootClause = getWhereClause(this, (WhereClause) obj);
         }
     }
-    
+
     @Override
     protected NativeIdSetBI For() throws IOException {
         return this.forCollection;
     }
-    
+
     @Override
     public void Let() throws IOException {
         // lets are set in the constructor. 
     }
-    
+
     @Override
     public Clause Where() {
         return rootClause;
     }
-    
+
     public static Clause getWhereClause(Query q, WhereClause clause) throws IOException {
         Clause[] childClauses = new Clause[clause.children.size()];
         for (int i = 0; i < childClauses.length; i++) {
@@ -132,6 +138,14 @@ public class QueryFromJaxb extends Query {
                 assert clause.letKeys.isEmpty() : "Let keys should be empty: " + clause.letKeys;
                 assert childClauses.length == 1;
                 return q.ConceptForComponent(childClauses[0]);
+            case CONCEPT_IS:
+                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should be empty: " + clause.letKeys;
+                assert childClauses.length == 0 : childClauses;
+                if (clause.letKeys.size() == 1) {
+                    return q.ConceptIs(clause.letKeys.get(0));
+                } else {
+                    return q.ConceptIs(clause.letKeys.get(0), clause.letKeys.get(1));
+                }
             case CONCEPT_IS_CHILD_OF:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
@@ -172,10 +186,10 @@ public class QueryFromJaxb extends Query {
                 assert clause.letKeys.isEmpty() : "Let keys should be empty: " + clause.letKeys;
                 assert childClauses.length == 1;
                 return q.PreferredNameForConcept(childClauses[0]);
-            case REFSET_LUCENE_MATCH:
-                assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.RefsetLuceneMatch(clause.letKeys.get(0));
+//            case REFSET_LUCENE_MATCH:
+//                assert childClauses.length == 0 : childClauses;
+//                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
+//                return q.RefsetLuceneMatch(clause.letKeys.get(0));
             case REFSET_CONTAINS_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
@@ -196,7 +210,7 @@ public class QueryFromJaxb extends Query {
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 2 || clause.letKeys.size() == 3 : "Let keys should have two or three values: " + clause.letKeys;
                 if (clause.letKeys.size() == 2) {
-                    return q.RelType(clause.letKeys.get(0), clause.letKeys.get(1));                    
+                    return q.RelType(clause.letKeys.get(0), clause.letKeys.get(1));
                 } else {
                     return q.RelType(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
                 }

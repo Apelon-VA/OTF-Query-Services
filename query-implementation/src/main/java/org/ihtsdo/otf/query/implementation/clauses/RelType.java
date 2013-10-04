@@ -27,7 +27,6 @@ import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
@@ -35,18 +34,19 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.datastore.Bdb;
 
 /**
- * Allows the user to specify a
- * <code>Relationship</code> source and a
- * <code>Relationship</code> type. Queries that specify a
- * <code>Relationship</code> source restriction can be constructed using the
+ * Computes all concepts that have a source relationship matching the input
+ * target concept and relationship type. If the relationship type subsumption is
+ * true, then the clause computes the matching concepts using all relationship
+ * types that are a kind of the input relationship type. Queries that specify a
+ * relationship target restriction can be constructed using the
  * <code>RelRestriction</code> clause.
  *
  * @author dylangrald
  */
 public class RelType extends LeafClause {
 
-    ConceptSpec sourceSpec;
-    String sourceSpecKey;
+    ConceptSpec targetSpec;
+    String targetSpecKey;
     String viewCoordinateKey;
     ViewCoordinate vc;
     Query enclosingQuery;
@@ -55,10 +55,10 @@ public class RelType extends LeafClause {
     NativeIdSetBI cache;
     Boolean relTypeSubsumption;
 
-    public RelType(Query enclosingQuery, String relTypeKey, String sourceSpecKey, String viewCoordinateKey, Boolean relTypeSubsumption) {
+    public RelType(Query enclosingQuery, String relTypeKey, String targetSpecKey, String viewCoordinateKey, Boolean relTypeSubsumption) {
         super(enclosingQuery);
-        this.sourceSpecKey = sourceSpecKey;
-        this.sourceSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(sourceSpecKey);
+        this.targetSpecKey = targetSpecKey;
+        this.targetSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(targetSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
         this.enclosingQuery = enclosingQuery;
         this.relTypeKey = relTypeKey;
@@ -74,7 +74,8 @@ public class RelType extends LeafClause {
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
-        whereClause.getLetKeys().add(sourceSpecKey);
+        whereClause.getLetKeys().add(targetSpecKey);
+        whereClause.getLetKeys().add(relTypeKey);
         return whereClause;
     }
 
@@ -95,12 +96,12 @@ public class RelType extends LeafClause {
         if (this.relTypeSubsumption) {
             relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), vc));
         }
-        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.vc);
+        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.targetSpec.getNid(), relTypeSet, this.vc);
         getResultsCache().or(relationshipSet);
         int relTypetNid = this.relType.getNid();
         if (this.relTypeSubsumption) {
             NativeIdSetBI relTypeSubsumptionSet = Ts.get().isKindOfSet(relTypetNid, vc);
-            getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(this.sourceSpec.getNid(), relTypeSubsumptionSet, vc));
+            getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(this.targetSpec.getNid(), relTypeSubsumptionSet, vc));
         }
 
         return getResultsCache();

@@ -18,7 +18,7 @@ package org.ihtsdo.otf.query.implementation;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The Display Objects to be returned from the result set of a query. 
+ * The types of objects to be returned in the result set of a query.
  *
  * @author dylangrald
  */
@@ -34,11 +34,21 @@ public enum ReturnTypes {
      */
     UUIDS,
     /**
+     * The component version of the results.
+     */
+    COMPONENT,
+    /**
      * The Concept version specified by the
      * <code>ViewCoordinate</code> from the
      * <code>Query</code>.
      */
     CONCEPT_VERSION,
+    /**
+     * The Description version of the component. If the returned component is a
+     * concept, then the description of the fully specified name will be
+     * returned.
+     */
+    DESCRIPTION,
     /**
      * Description version of the fully specified name.
      */

@@ -15,8 +15,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
@@ -26,14 +24,13 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for ConceptIsDescendentOf <code>Clause</code>.
+ * Creates a test for ConceptIsDescendentOf
+ * <code>Clause</code>.
  *
  * @author dylangrald
  *
  */
-public class IsDescendentOfTest {
-
-    Query q;
+public class IsDescendentOfTest extends QueryClauseTest {
 
     public IsDescendentOfTest() throws IOException {
         q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
@@ -52,9 +49,5 @@ public class IsDescendentOfTest {
                 return And(ConceptIsDescendentOf("motion"));
             }
         };
-    }
-
-    public Query getQuery() {
-        return q;
     }
 }

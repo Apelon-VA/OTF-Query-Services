@@ -15,8 +15,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
@@ -26,15 +24,16 @@ import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 
 /**
- * 
+ * Creates a test for the
+ * <code>ConceptForComponent</code> clause.
+ *
  * @author dylangrald
  */
-public class ConceptForComponentTest {
+public class ConceptForComponentTest extends QueryClauseTest {
 
-    Query q;
 
     public ConceptForComponentTest() throws IOException {
-        q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 NativeIdSetBI forSet = new ConcurrentBitSet();
@@ -55,12 +54,9 @@ public class ConceptForComponentTest {
 
             @Override
             public Clause Where() {
-                return And(ConceptIsChildOf("motion"), ConceptForComponent(DescriptionRegexMatch("[Dd]eceleration")));
+                return And(ConceptIsChildOf("motion"),
+                            ConceptForComponent(DescriptionRegexMatch("[Dd]eceleration")));
             }
         };
-    }
-    
-    public Query getQuery(){
-        return q;
     }
 }

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -30,14 +29,14 @@ import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
 
 /**
- * Perform a query and return results. 
+ * Perform a query and return results.
+ *
  * @author kec
  */
-@Path("/query")
+@Path("query-service/query")
 public class QueryResource {
 
     @GET
@@ -53,14 +52,13 @@ public class QueryResource {
                 + "WHERE: " + whereValue + "\n   "
                 + "RETURN: " + returnValue;
         System.out.println("Received: \n   " + queryString);
-        if (viewValue == null || forValue == null || letValue == null
-                || whereValue == null || returnValue == null) {
-            return "Malformed query. Query must have VIEWPOINT, FOR, LET, WHERE, and RETURN values. \n"
-                    + "Found: " + queryString +
-                    "\n See: the section on Query Client in the query documentation: \n" +
-                    "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html";
+        if (letValue == null || whereValue == null) {
+            return "Malformed query. Query must have LET and WHERE values. \n"
+                    + "Found: " + queryString
+                    + "\n See: the section on Query Client in the query documentation: \n"
+                    + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html";
         }
-        
+
         QueryFromJaxb query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
         NativeIdSetBI resultSet = query.compute();
 
@@ -81,17 +79,17 @@ public class QueryResource {
 
             JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
             return writer.toString();
-        }
-        
-        NativeIdSetItrBI iterator = resultSet.getIterator();
-        List<Integer> results = new ArrayList<>(resultSet.size());
-        while (iterator.next()) {
-            results.add(iterator.nid());
-        }
-        
-        
-        return results.toString();
+        } else {
+            //The default result type is DESCRIPTION_VERSION_FSN
+            ArrayList<Object> objectList = query.returnResults();
 
+            ResultList resultList = new ResultList();
+            resultList.setTheResults(objectList);
+            StringWriter writer = new StringWriter();
+
+            JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
+            return writer.toString();
+        }
 
     }
 }

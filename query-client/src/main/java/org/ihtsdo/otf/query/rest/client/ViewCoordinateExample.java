@@ -31,7 +31,7 @@ import org.ihtsdo.otf.jaxb.chronicle.api.Status;
  * @author kec
  */
 public class ViewCoordinateExample {
-
+    
     public static SimpleViewCoordinate getSnomedInferredLatest() throws JAXBException {
         
         

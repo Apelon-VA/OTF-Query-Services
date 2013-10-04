@@ -17,6 +17,10 @@ package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
@@ -26,12 +30,17 @@ import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
+import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
+import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 /**
- * TODO: not supported yet. Must move Lucene to Query Services project.
- * Calculates the descriptions that match the results from an input Lucene
- * search.
- *
+ * Returns descriptions matching the input string using Lucene.
  *
  * @author kec
  */
@@ -39,13 +48,16 @@ public class DescriptionLuceneMatch extends LeafClause {
 
     String luceneMatch;
     String luceneMatchKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
+    String viewCoordinateKey;
+    Query enclosingQuery;
 
-    public DescriptionLuceneMatch(Query enclosingQuery, String luceneMatchKey) {
+    public DescriptionLuceneMatch(Query enclosingQuery, String luceneMatchKey, String viewCoordinateKey) {
         super(enclosingQuery);
+        this.enclosingQuery = enclosingQuery;
         this.luceneMatchKey = luceneMatchKey;
         this.luceneMatch = (String) enclosingQuery.getLetDeclarations().get(luceneMatchKey);
-        vc = enclosingQuery.getViewCoordinate();
+        this.viewCoordinateKey = viewCoordinateKey;
     }
 
     @Override
@@ -55,25 +67,40 @@ public class DescriptionLuceneMatch extends LeafClause {
 
     @Override
     public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
-
-        throw new UnsupportedOperationException("Not supported yet");
-//        
-//       Collection<Integer> nids = new HashSet<>();
-//       try {
-//           nids = Ts.get().searchLucene(luceneMatch, SearchType.DESCRIPTION);
-//       } catch (org.apache.lucene.queryparser.classic.ParseException ex) {
-//           Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
-//       }
-//
-//        NativeIdSetBI outgoingNids = new ConcurrentBitSet();
-//        for (Integer nid : nids) {
-//            outgoingNids.add(nid);
-//
-//        }
-//
-//        getResultsCache().or(outgoingNids);
-//
-//        return outgoingNids;
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        } else if (this.viewCoordinateKey != null) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }
+        NativeIdSetBI nids = new ConcurrentBitSet();
+        try {
+            List<IndexerBI> lookers = Hk2Looker.get().getAllServices(IndexerBI.class);
+            IndexerBI descriptionIndexer = null;
+            for (IndexerBI li : lookers) {
+                if (li.getIndexerName().equals("descriptions")) {
+                    descriptionIndexer = li;
+                }
+            }
+            List<SearchResult> queryResults = descriptionIndexer.query(luceneMatch, ComponentProperty.DESCRIPTION_TEXT, 1000);
+            for (SearchResult s : queryResults) {
+                nids.add(s.nid);
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Filter the results, based upon the input ViewCoordinate
+        NativeIdSetItrBI iter = nids.getIterator();
+        while (iter.next()) {
+            try {
+                if (Ts.get().getComponentVersion(viewCoordinate, iter.nid()) == null) {
+                    nids.remove(iter.nid());
+                }
+            } catch (ContradictionException ex) {
+                Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        getResultsCache().or(nids);
+        return nids;
 
     }
 

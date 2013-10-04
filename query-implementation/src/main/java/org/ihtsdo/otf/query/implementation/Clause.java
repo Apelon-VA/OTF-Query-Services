@@ -26,7 +26,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 /**
  * Statements that are used to retrieve desired components in a
  * <code>Query</code>. Clauses in a Query are organized into a tree and computed
- * using a breadth-first search. The root node in a Query must be an instance of
+ * using a depth-first search. The root node in a Query must be an instance of
  * a
  * <code>ParentClause</code>.
  *

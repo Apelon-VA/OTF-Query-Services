@@ -31,12 +31,11 @@ import org.ihtsdo.otf.query.implementation.Query;
  *
  * @author dylangrald
  */
-public class DescriptionRegexMatchTest {
+public class DescriptionRegexMatchTest extends QueryClauseTest {
 
-    Query q;
 
     public DescriptionRegexMatchTest() throws IOException {
-        q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 NativeIdSetBI forSet = new ConcurrentBitSet();
@@ -53,19 +52,17 @@ public class DescriptionRegexMatchTest {
             @Override
             public void Let() throws IOException {
                 let("motion", Snomed.MOTION);
-                let("regex1", "[Dd]eceleration");
-                let("regex2", "[Vv]ibration");
+                let("deceleration", "[Dd]eceleration.*");
+                let("vibration", "[Vv]ibration.*");
             }
 
             @Override
             public Clause Where() {
-                return Or(ConceptForComponent(DescriptionRegexMatch("regex1")), ConceptForComponent(DescriptionRegexMatch("regex2")));
+                return Or(ConceptForComponent(DescriptionRegexMatch("deceleration")), 
+                          ConceptForComponent(DescriptionRegexMatch("vibration")));
             }
         };
 
     }
 
-    public Query getQuery() {
-        return q;
-    }
 }

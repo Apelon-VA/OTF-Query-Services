@@ -23,14 +23,13 @@ import org.ihtsdo.otf.query.implementation.ParentClause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
- * Computes the set of concepts that are enclosed in the set of components that
- * is returned from the child clause.
+ * Computes the set of enclosing concepts for the set of components that
+ * are returned from the child clause.
  *
  * @author kec
  */

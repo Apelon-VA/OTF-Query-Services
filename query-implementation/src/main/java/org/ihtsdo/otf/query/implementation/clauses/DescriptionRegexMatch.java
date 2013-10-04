@@ -28,11 +28,10 @@ import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 
 /**
- * Calculates descriptions that contain the input Java Regular Expression. Very
+ * Calculates descriptions that match the specified Java Regular Expression. Very
  * slow when iterating over a large
  * <code>For</code> set.
  *

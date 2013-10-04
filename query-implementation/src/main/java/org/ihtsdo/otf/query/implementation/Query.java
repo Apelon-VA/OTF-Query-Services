@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
 import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
@@ -31,6 +33,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.query.implementation.clauses.ChangedFromPreviousVersion;
 import org.ihtsdo.otf.query.implementation.clauses.ConceptForComponent;
+import org.ihtsdo.otf.query.implementation.clauses.ConceptIs;
 import org.ihtsdo.otf.query.implementation.clauses.ConceptIsChildOf;
 import org.ihtsdo.otf.query.implementation.clauses.ConceptIsDescendentOf;
 import org.ihtsdo.otf.query.implementation.clauses.DescriptionActiveLuceneMatch;
@@ -41,11 +44,12 @@ import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
-import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.ddo.ComponentReference;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
@@ -64,6 +68,10 @@ public abstract class Query {
     public String currentViewCoordinateKey = "Current view coordinate";
     private final HashMap<String, Object> letDeclarations =
             new HashMap<>();
+
+    public ViewCoordinate getStandardVC() throws IOException {
+        return (ViewCoordinate) getVCLetDeclarations().get(currentViewCoordinateKey);
+    }
 
     public HashMap<String, Object> getLetDeclarations() {
         return letDeclarations;
@@ -85,7 +93,7 @@ public abstract class Query {
      */
     private NativeIdSetBI forSet;
     /**
-     * The steps requires to compute the query clause.
+     * The steps required to compute the query clause.
      */
     private EnumSet<ClauseComputeType> computeTypes =
             EnumSet.noneOf(ClauseComputeType.class);
@@ -104,8 +112,33 @@ public abstract class Query {
         return computeTypes;
     }
 
+    /**
+     * No argument constructor, which creates a
+     * <code>Query</code> with the Snomed inferred latest as the input
+     * <code>ViewCoordinate</code>.
+     */
+    public Query() {
+        this(null);
+    }
+
+    /**
+     * Constructor for
+     * <code>Query</code>. If a
+     * <code>ViewCoordinate</code> is not specified, the default is the Snomed
+     * inferred latest.
+     *
+     * @param viewCoordinate
+     */
     public Query(ViewCoordinate viewCoordinate) {
-        this.viewCoordinate = viewCoordinate;
+        if (viewCoordinate == null) {
+            try {
+                this.viewCoordinate = StandardViewCoordinates.getSnomedInferredLatest();
+            } catch (IOException ex) {
+                Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            this.viewCoordinate = viewCoordinate;
+        }
     }
 
     /**
@@ -161,8 +194,99 @@ public abstract class Query {
         return viewCoordinate;
     }
 
-    protected RefsetLuceneMatch RefsetLuceneMatch(String luceneMatch) {
-        return new RefsetLuceneMatch(this, luceneMatch);
+    public static ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType, ViewCoordinate vc) throws ContradictionException, UnsupportedOperationException, IOException {
+        ArrayList<Object> results = new ArrayList<>();
+
+        NativeIdSetItrBI iter = resultSet.getIterator();
+        switch (returnType) {
+            case UUIDS:
+                while (iter.next()) {
+                    ComponentReference cf = new ComponentReference(Ts.get().getSnapshot(vc), iter.nid());
+                    if (!cf.componentVersionIsNull()) {
+                        results.add(cf.getUuid());
+                    }
+                }
+                break;
+            case NIDS:
+                while (iter.next()) {
+                    results.add(iter.nid());
+                }
+                break;
+            case CONCEPT_VERSION:
+                while (iter.next()) {
+                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                    results.add(cc);
+                }
+                break;
+            case COMPONENT:
+                while (iter.next()) {
+                    ComponentReference cf = new ComponentReference(Ts.get().getSnapshot(vc), iter.nid());
+                    if (!cf.componentVersionIsNull()) {
+                        results.add(cf);
+                    }
+                }
+                break;
+            case DESCRIPTION_VERSION_FSN:
+                while (iter.next()) {
+                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                    if (cv != null) {
+                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                        DescriptionVersionBI descVersionBI = desc.getVersion(vc);
+                        DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                        results.add(descVersion);
+                    }
+                }
+                break;
+
+            case DESCRIPTION_VERSION_PREFERRED:
+                while (iter.next()) {
+                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                    if (cv != null) {
+                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getPreferredDescription();
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                        DescriptionVersionBI descVersionBI = desc.getVersion(vc);
+                        DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                        results.add(descVersion);
+                    }
+                }
+                break;
+            case DESCRIPTION:
+                while (iter.next()) {
+                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                    if (cv != null) {
+                        DescriptionChronicleBI desc = null;
+                        ConceptChronicleDdo cc = null;
+                        DescriptionVersionBI descVersionBI = null;
+                        if (cv instanceof ConceptVersionBI) {
+                            desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
+                            descVersionBI = desc.getVersion(vc);
+                            cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                    RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        } else if (cv instanceof DescriptionVersionBI) {
+                            desc = (DescriptionChronicleBI) Ts.get().getComponent(iter.nid());
+                            descVersionBI = (DescriptionVersionBI) cv;
+                            cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getComponent(iter.nid()).getEnclosingConcept(), VersionPolicy.ACTIVE_VERSIONS,
+                                    RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                        } else {
+                            throw new UnsupportedOperationException("This component type is not yet supported");
+                        }
+                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                        DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                        results.add(descVersion);
+                    }
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("Return type not supported.");
+        }
+
+        return results;
     }
 
     private class Iterator implements ProcessUnfetchedConceptDataBI {
@@ -207,6 +331,23 @@ public abstract class Query {
     }
 
     /**
+     * The default method for computing query results, which returns the fully
+     * specified description version of the components from the
+     * <code>Query</code>.
+     *
+     * @param q input <code>Query</code>
+     * @return The result set of the <code>Query</code> in * * * * * * * * *
+     * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects
+     * @throws IOException
+     * @throws ContradictionException
+     * @throws Exception
+     */
+    public ArrayList<Object> returnResults() throws IOException, ContradictionException, Exception {
+        NativeIdSetBI resultSet = compute();
+        return returnDisplayObjects(resultSet, ReturnTypes.DESCRIPTION_VERSION_FSN);
+    }
+
+    /**
      * Return the desired Display Objects, which are specified by
      * <code>ReturnTypes</code>.
      *
@@ -218,55 +359,7 @@ public abstract class Query {
      * @throws ContradictionException
      */
     public ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType) throws IOException, ContradictionException {
-        ArrayList<Object> results = new ArrayList<>();
-
-        NativeIdSetItrBI iter = resultSet.getIterator();
-        switch (returnType) {
-            case UUIDS:
-                while (iter.next()) {
-                    results.add(Ts.get().getComponent(iter.nid()).getVersion(viewCoordinate).getPrimordialUuid());
-                }
-                break;
-            case NIDS:
-                while (iter.next()) {
-                    results.add(iter.nid());
-                }
-                break;
-            case CONCEPT_VERSION:
-                while (iter.next()) {
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    results.add(cc);
-                }
-                break;
-            case DESCRIPTION_VERSION_FSN:
-                while (iter.next()) {
-                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getFullySpecifiedDescription();
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
-                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(viewCoordinate), descVersionBI);
-                    results.add(descVersion);
-                }
-                break;
-            case DESCRIPTION_VERSION_PREFERRED:
-                while (iter.next()) {
-                    DescriptionChronicleBI desc = Ts.get().getConceptVersion(viewCoordinate, iter.nid()).getPreferredDescription();
-                    ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(viewCoordinate), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                            RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                    DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(viewCoordinate), cc, desc);
-                    DescriptionVersionBI descVersionBI = desc.getPrimordialVersion();
-                    DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(viewCoordinate), descVersionBI);
-                    results.add(descVersion);
-                }
-                break;
-            default:
-                throw new UnsupportedOperationException("Return type not supported.");
-        }
-
-
-        return results;
+        return returnDisplayObjects(resultSet, returnType, viewCoordinate);
 
     }
 
@@ -274,10 +367,27 @@ public abstract class Query {
         this.resultSetLimit = limit;
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsKindOf</code> clause with default
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @return
+     */
     protected ConceptIsKindOf ConceptIsKindOf(String conceptSpecKey) {
         return new ConceptIsKindOf(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsKindOf</code> with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected ConceptIsKindOf ConceptIsKindOf(String conceptSpecKey, String viewCoordinateKey) {
         return new ConceptIsKindOf(this, conceptSpecKey, viewCoordinateKey);
     }
@@ -294,10 +404,36 @@ public abstract class Query {
         return new ConceptForComponent(this, child);
     }
 
+    protected ConceptIs ConceptIs(String conceptSpecKey) {
+        return new ConceptIs(this, conceptSpecKey, this.currentViewCoordinateKey);
+    }
+
+    /**
+     * Creates
+     * <code>ConceptIs</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
+    protected ConceptIs ConceptIs(String conceptSpecKey, String viewCoordinateKey) {
+        return new ConceptIs(this, conceptSpecKey, viewCoordinateKey);
+    }
+
     protected ConceptIsDescendentOf ConceptIsDescendentOf(String conceptSpecKey) {
         return new ConceptIsDescendentOf(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsDescendentOf</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected ConceptIsDescendentOf ConceptIsDescendentOf(String conceptSpecKey, String viewCoordinateKey) {
         return new ConceptIsDescendentOf(this, conceptSpecKey, viewCoordinateKey);
     }
@@ -306,16 +442,29 @@ public abstract class Query {
         return new ConceptIsChildOf(this, conceptSpecKey, this.currentViewCoordinateKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptIsChildOf</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected ConceptIsChildOf ConceptIsChildOf(String conceptSpecKey, String viewCoordinateKey) {
         return new ConceptIsChildOf(this, conceptSpecKey, viewCoordinateKey);
     }
 
     protected DescriptionActiveLuceneMatch DescriptionActiveLuceneMatch(String queryTextKey) {
-        return new DescriptionActiveLuceneMatch(this, queryTextKey);
+        return new DescriptionActiveLuceneMatch(this, queryTextKey, this.currentViewCoordinateKey);
     }
 
     protected DescriptionLuceneMatch DescriptionLuceneMatch(String queryTextKey) {
-        return new DescriptionLuceneMatch(this, queryTextKey);
+        return new DescriptionLuceneMatch(this, queryTextKey, this.currentViewCoordinateKey);
+    }
+
+    protected DescriptionLuceneMatch DescriptionActiveLuceneMatch(String queryTextKey, String viewCoordinateKey) {
+        return new DescriptionLuceneMatch(this, queryTextKey, viewCoordinateKey);
     }
 
     protected And And(Clause... clauses) {
@@ -326,6 +475,16 @@ public abstract class Query {
         return new RelType(this, relTypeKey, conceptSpecKey, this.currentViewCoordinateKey, true);
     }
 
+    /**
+     * Creates
+     * <code>RelType</code> clause with input
+     * <code>ViewCoordinate</code>.
+     *
+     * @param relTypeKey
+     * @param conceptSpecKey
+     * @param viewCoordinateKey
+     * @return
+     */
     protected RelType RelType(String relTypeKey, String conceptSpecKey, String viewCoordinateKey) {
         return new RelType(this, relTypeKey, conceptSpecKey, viewCoordinateKey, true);
     }
@@ -369,15 +528,6 @@ public abstract class Query {
     protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey, String viewCoordinateKey) {
         return new RefsetContainsKindOfConcept(this, conceptSpecKey, viewCoordinateKey);
     }
-      
-/*    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText) {
-        return new RefsetContainsString(this, refsetSpec, queryText, this.currentViewCoordinateKey);
-    }
-
-    protected RefsetContainsString RefsetContainsString(String refsetSpec, String queryText, String viewCoordinateKey) {
-        return new RefsetContainsString(this, refsetSpec, queryText, viewCoordinateKey);
-    }*/
-
 
     protected PreferredNameForConcept PreferredNameForConcept(Clause clause) {
         return new PreferredNameForConcept(this, clause);

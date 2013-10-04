@@ -22,7 +22,7 @@ import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
- * Clause that computes the union of the results of the child clauses.
+ * Clause that computes the union of the results of the enclosed <code>Clauses</code>.
  *
  * @author dylangrald
  */

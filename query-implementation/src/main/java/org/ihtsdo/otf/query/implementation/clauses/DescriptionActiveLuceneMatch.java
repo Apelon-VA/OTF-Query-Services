@@ -21,7 +21,6 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 
 /**
@@ -32,8 +31,8 @@ import org.ihtsdo.otf.query.implementation.WhereClause;
 public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
 
     
-    public DescriptionActiveLuceneMatch(Query enclosingQuery, String luceneMatchKey) {
-        super(enclosingQuery, luceneMatchKey);
+    public DescriptionActiveLuceneMatch(Query enclosingQuery, String luceneMatchKey, String viewCoordinateKey) {
+        super(enclosingQuery, luceneMatchKey, viewCoordinateKey);
     }
 
     @Override
