@@ -36,6 +36,7 @@ public class Not extends ParentClause {
     public Not(Query enclosingQuery, Clause child) {
         super(enclosingQuery, child);
         forSet = enclosingQuery.getForSet();
+        assert forSet != null;
     }
 
     @Override
