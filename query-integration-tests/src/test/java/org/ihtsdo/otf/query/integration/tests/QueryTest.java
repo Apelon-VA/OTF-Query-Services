@@ -151,7 +151,7 @@ public class QueryTest {
         for (Object o : q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)) {
             Assert.assertTrue(o != null);
         }
-        Assert.assertEquals(836, results.size());
+        Assert.assertTrue(results.size() > 830);
     }
 
     @Test
@@ -358,5 +358,31 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
 
 
+    }
+    
+    @Test
+    public void notTest() throws IOException, Exception{
+        Query q = new Query() {
+
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("acceleration", Snomed.ACCELERATION);
+                        
+            }
+
+            @Override
+            public Clause Where() {
+                return Not(ConceptIs("acceleration"));
+            }
+        };
+        
+        NativeIdSetBI results = q.compute();
+        System.out.println("Not test result size: " + results.size());
+        Assert.assertEquals(Ts.get().getAllConceptNids().size() - 1, results.size());
     }
 }

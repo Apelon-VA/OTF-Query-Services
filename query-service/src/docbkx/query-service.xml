@@ -1,7 +1,224 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<section xml:id="org.ihtsdo.otf.query_query-service" xmlns="http://docbook.org/ns/docbook"
-    version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Query Service</title>
-    <para>This module implements a <link xlink:href="http://tomcat.apache.org">Tomcat 7.0</link>
-        REST service for querying.</para>
+<section version="5.0" xml:id="org.ihtsdo.otf.query_query-service"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Query Service</title>
+
+  <para>This module implements a <link
+  xlink:href="http://tomcat.apache.org">Tomcat 7.0</link> REST service for
+  querying. Once you have deployed the Query Service to Tomcat, you can
+  utilize the following resources to create queries using the REST service.</para>
+
+  <section>
+    <title>Lucene Resource</title>
+
+    <para>Once the client has been deployed, you can conduct a Lucene search
+    at <code>DEFAULT_HOST/otf/query-service/lucene/{desired Lucene query
+    text}</code>. If the desired Lucene query text includes spaces or other
+    characters not permitted in URLs, encode the text <link
+    xlink:href="http://www.url-encode-decode.com">here</link> by entering the
+    text, selecting UTF-8 from the drop-down menu, and clicking the "Url
+    encode" button.</para>
+
+    <para>Once you have deployed the war file, search for descriptions
+    matching the string "extrasystole" by entering the URL
+    <code>localhost:8080/otf/query-service/lucene/extrasystole</code> The
+    search outputs the following results, which were formatted:</para>
+        <para><example>
+        <title>LuceneResource example output</title>
+
+        <para>
+
+    <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ns4:result-list xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org" xmlns:ns2="http://query.jaxb.otf.ihtsdo.org" xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1217487600000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142320111&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;7891de6b-8dd5-3e07-b20f-555ebd869dec&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483625&lt;/nid&gt;
+         &lt;text&gt;Fully specified name&lt;/text&gt;
+         &lt;uuid&gt;00791270-77c9-32b6-b34f-d932569bd2bf&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;true&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;ECG: extrasystole (finding)&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1012464000000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142320119&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;b4836b5d-da3e-3dbf-b937-48b414b43950&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483620&lt;/nid&gt;
+         &lt;text&gt;Synonym&lt;/text&gt;
+         &lt;uuid&gt;8bfba944-3965-3946-9bcb-1e80a5da63a2&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;true&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;ECG: extrasystole&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1154329200000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142319952&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;3b413fc4-6bd8-38be-a69b-8be034e1595e&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483620&lt;/nid&gt;
+         &lt;text&gt;Synonym&lt;/text&gt;
+         &lt;uuid&gt;8bfba944-3965-3946-9bcb-1e80a5da63a2&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;false&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;Electrocardiogram: extrasystole&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1154329200000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142319960&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;d2c81732-2561-37a1-ba39-67e3cc2b986f&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483625&lt;/nid&gt;
+         &lt;text&gt;Fully specified name&lt;/text&gt;
+         &lt;uuid&gt;00791270-77c9-32b6-b34f-d932569bd2bf&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;false&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;Electrocardiogram: extrasystole (finding)&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1012464000000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142319964&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;c58822fc-ebe3-3c70-9d4a-9d5b3a18dbe9&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483620&lt;/nid&gt;
+         &lt;text&gt;Synonym&lt;/text&gt;
+         &lt;uuid&gt;8bfba944-3965-3946-9bcb-1e80a5da63a2&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;true&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;ECG: extrasystole&lt;/text&gt;
+   &lt;/theResults&gt;
+&lt;/ns4:result-list&gt;
+            </programlisting>
+
+    <para>If this URL doesn't display the results listed above, please see the
+    Troubleshooting Tomcat section.</para>
+  </section>
 </section>
