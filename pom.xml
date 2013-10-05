@@ -88,6 +88,7 @@
         <terminology-component-chronicle.version>1.1-SNAPSHOT</terminology-component-chronicle.version>
         <org.apache.lucene.version>4.3.1</org.apache.lucene.version>
         <hk2.version>2.2.0-b14</hk2.version>
+        <maven-plugin-plugin.version>2.6</maven-plugin-plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -119,6 +120,11 @@
                     <groupId>com.agilejava.docbkx</groupId>
                     <artifactId>docbkx-maven-plugin</artifactId>
                     <version>2.0.14</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>${maven-plugin-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -176,6 +182,7 @@
                 <module>query-integration-tests</module>
                 <module>query-documentation</module>
                 <module>query-lucene</module>
+                <module>query-maven</module>
             </modules>
         </profile>
         <profile>
@@ -184,6 +191,7 @@
                 <module>query-service</module>
                 <module>query-implementation</module>
                 <module>query-lucene</module>
+                <module>query-maven</module>
             </modules>
         </profile>
         <profile>
