@@ -78,7 +78,7 @@
 <td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/And.html" title="class in org.ihtsdo.otf.query.implementation">And</a></td>
 <td class="colLast">
 <div class="block"><code>ParentClause</code> that computes the intersection of the set results
- from given child clauses.</div>
+ from the enclosed <code>Clauses</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -99,7 +99,7 @@
 <td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/ForCollection.html" title="class in org.ihtsdo.otf.query.implementation">ForCollection</a></td>
 <td class="colLast">
 <div class="block">The <code>ForCollection</code> enables the specification of a 
- set of object over which the query should iterate.</div>
+ set of objects over which the query should iterate.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -117,40 +117,51 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/Not.html" title="class in org.ihtsdo.otf.query.implementation">Not</a></td>
+<td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/LuceneQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation">LuceneQueryFromJaxb</a></td>
 <td class="colLast">
-<div class="block">Clause that computes the relative complement of the result of the child
- clause with respect to the For set.</div>
+<div class="block">Finds concepts with descriptions that match the input string using Lucene.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/Or.html" title="class in org.ihtsdo.otf.query.implementation">Or</a></td>
+<td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/Not.html" title="class in org.ihtsdo.otf.query.implementation">Not</a></td>
 <td class="colLast">
-<div class="block">Clause that computes the union of the results of the child clauses.</div>
+<div class="block">Returns components that are in the incoming For set and not in the set
+ returned from the computation of the clauses that are descendents of the
+ <code>Not</code> clause.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/Or.html" title="class in org.ihtsdo.otf.query.implementation">Or</a></td>
+<td class="colLast">
+<div class="block">Clause that computes the union of the results of the enclosed <code>Clauses</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html" title="class in org.ihtsdo.otf.query.implementation">ParentClause</a></td>
 <td class="colLast">
 <div class="block">Acts as root node for the construction of queries.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a></td>
 <td class="colLast">
 <div class="block">Executes queries within the terminology hierarchy and returns the nids of the
  components that match the criterion of query.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation">QueryFromJaxb</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation">RegexQueryFromJaxb</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/Where.html" title="class in org.ihtsdo.otf.query.implementation">Where</a></td>
 <td class="colLast">
-<div class="block">The WHERE clause is used to extract only those components that fulfill
- specified criterion.</div>
+<div class="block">The <code>Where</code> statement is used to extract only those components that fulfill
+ specified criterion by the <code>WhereClauses</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -204,7 +215,7 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html" title="enum in org.ihtsdo.otf.query.implementation">ReturnTypes</a></td>
 <td class="colLast">
-<div class="block">The Display Objects to be returned from the result set of a query.</div>
+<div class="block">The types of objects to be returned in the result set of a query.</div>
 </td>
 </tr>
 </tbody>

@@ -102,20 +102,21 @@
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/And.html" title="class in org.ihtsdo.otf.query.implementation">And</a></strong></code>
 <div class="block"><code>ParentClause</code> that computes the intersection of the set results
- from given child clauses.</div>
+ from the enclosed <code>Clauses</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/Not.html" title="class in org.ihtsdo.otf.query.implementation">Not</a></strong></code>
-<div class="block">Clause that computes the relative complement of the result of the child
- clause with respect to the For set.</div>
+<div class="block">Returns components that are in the incoming For set and not in the set
+ returned from the computation of the clauses that are descendents of the
+ <code>Not</code> clause.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/Or.html" title="class in org.ihtsdo.otf.query.implementation">Or</a></strong></code>
-<div class="block">Clause that computes the union of the results of the child clauses.</div>
+<div class="block">Clause that computes the union of the results of the enclosed <code>Clauses</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -142,20 +143,20 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptForComponent</a></strong></code>
-<div class="block">Computes the set of concepts that are enclosed in the set of components that
- is returned from the child clause.</div>
+<div class="block">Computes the set of enclosing concepts for the set of components that
+ are returned from the child clause.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/FullySpecifiedNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">FullySpecifiedNameForConcept</a></strong></code>
-<div class="block">Retrieves the fully specified names from a result set of concepts.</div>
+<div class="block">Retrieves the fully specified names for a result set of concepts.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/PreferredNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">PreferredNameForConcept</a></strong></code>
-<div class="block">Retrieves the preferred name for a result set of concepts.</div>
+<div class="block">Retrieves the preferred names for a result set of concepts.</div>
 </td>
 </tr>
 </tbody>

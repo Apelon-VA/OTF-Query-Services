@@ -70,6 +70,7 @@
 <li><a href="org/ihtsdo/otf/jaxb/query/package-tree.html">org.ihtsdo.otf.jaxb.query</a>, </li>
 <li><a href="org/ihtsdo/otf/query/implementation/package-tree.html">org.ihtsdo.otf.query.implementation</a>, </li>
 <li><a href="org/ihtsdo/otf/query/implementation/clauses/package-tree.html">org.ihtsdo.otf.query.implementation.clauses</a>, </li>
+<li><a href="org/ihtsdo/otf/query/lucene/package-tree.html">org.ihtsdo.otf.query.lucene</a>, </li>
 <li><a href="org/ihtsdo/otf/query/rest/client/package-tree.html">org.ihtsdo.otf.query.rest.client</a>, </li>
 <li><a href="org/ihtsdo/otf/query/rest/client/examples/package-tree.html">org.ihtsdo.otf.query.rest.client.examples</a>, </li>
 <li><a href="org/ihtsdo/otf/query/rest/server/package-tree.html">org.ihtsdo.otf.query.rest.server</a></li>
@@ -80,12 +81,14 @@
 <ul>
 <li type="circle">java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang"><span class="strong">Object</span></a>
 <ul>
+<li type="circle">org.ihtsdo.otf.query.rest.server.<a href="org/ihtsdo/otf/query/rest/server/AlternativeIdResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">AlternativeIdResource</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Clause</span></a>
 <ul>
 <li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">LeafClause</span></a>
 <ul>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/ChangedFromPreviousVersion.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">ChangedFromPreviousVersion</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/ComponentIsMemberOfRefset.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">ComponentIsMemberOfRefset</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/ConceptIs.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">ConceptIs</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/ConceptIsChildOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">ConceptIsChildOf</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/ConceptIsDescendentOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">ConceptIsDescendentOf</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">ConceptIsKindOf</span></a></li>
@@ -98,6 +101,7 @@
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">DescriptionRegexMatch</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">RefsetContainsConcept</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">RefsetContainsKindOfConcept</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">RefsetContainsString</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/RefsetLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">RefsetLuceneMatch</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">RelRestriction</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.clauses.<a href="org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">RelType</span></a></li>
@@ -160,21 +164,25 @@
 <li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/ExampleQuery.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">ExampleQuery</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/ForCollection.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">ForCollection</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/ForCollection.html" title="class in org.ihtsdo.otf.jaxb.query"><span class="strong">ForCollection</span></a></li>
-<li type="circle">javax.servlet.GenericServlet (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, javax.servlet.Servlet, javax.servlet.ServletConfig)
-<ul>
-<li type="circle">javax.servlet.http.HttpServlet (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)
-<ul>
-<li type="circle">org.glassfish.jersey.servlet.ServletContainer (implements org.glassfish.jersey.server.spi.Container, javax.servlet.Filter)
-<ul>
-<li type="circle">org.ihtsdo.otf.query.rest.server.<a href="org/ihtsdo/otf/query/rest/server/QueryServletContainer.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">QueryServletContainer</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
 <li type="circle">org.ihtsdo.otf.query.rest.client.examples.<a href="org/ihtsdo/otf/query/rest/client/examples/HelloExample.html" title="class in org.ihtsdo.otf.query.rest.client.examples"><span class="strong">HelloExample</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.rest.server.<a href="org/ihtsdo/otf/query/rest/server/HelloResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">HelloResource</span></a></li>
+<li type="circle">org.apache.lucene.index.IndexReader (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>)
+<ul>
+<li type="circle">org.apache.lucene.index.CompositeReader
+<ul>
+<li type="circle">org.apache.lucene.index.BaseCompositeReader&lt;R&gt;
+<ul>
+<li type="circle">org.apache.lucene.index.MultiReader
+<ul>
+<li type="circle">org.ihtsdo.otf.query.lucene.<a href="org/ihtsdo/otf/query/lucene/TtkMultiReader.html" title="class in org.ihtsdo.otf.query.lucene"><span class="strong">TtkMultiReader</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li type="circle">org.ihtsdo.otf.query.rest.client.<a href="org/ihtsdo/otf/query/rest/client/JaxbForClient.html" title="class in org.ihtsdo.otf.query.rest.client"><span class="strong">JaxbForClient</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/JaxbForQuery.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">JaxbForQuery</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.rest.client.examples.<a href="org/ihtsdo/otf/query/rest/client/examples/KindOfQueryExample.html" title="class in org.ihtsdo.otf.query.rest.client.examples"><span class="strong">KindOfQueryExample</span></a></li>
@@ -182,21 +190,34 @@
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/LetMap.html" title="class in org.ihtsdo.otf.jaxb.query"><span class="strong">LetMap</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/LetMap.Map.html" title="class in org.ihtsdo.otf.jaxb.query"><span class="strong">LetMap.Map</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/LetMap.Map.Entry.html" title="class in org.ihtsdo.otf.jaxb.query"><span class="strong">LetMap.Map.Entry</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.rest.client.examples.<a href="org/ihtsdo/otf/query/rest/client/examples/LuceneExample.html" title="class in org.ihtsdo.otf.query.rest.client.examples"><span class="strong">LuceneExample</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.lucene.<a href="org/ihtsdo/otf/query/lucene/LuceneIndexer.html" title="class in org.ihtsdo.otf.query.lucene"><span class="strong">LuceneIndexer</span></a> (implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI)
+<ul>
+<li type="circle">org.ihtsdo.otf.query.lucene.<a href="org/ihtsdo/otf/query/lucene/LuceneDescriptionIndexer.html" title="class in org.ihtsdo.otf.query.lucene"><span class="strong">LuceneDescriptionIndexer</span></a> (implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI)</li>
+<li type="circle">org.ihtsdo.otf.query.lucene.<a href="org/ihtsdo/otf/query/lucene/LuceneRefexIndexer.html" title="class in org.ihtsdo.otf.query.lucene"><span class="strong">LuceneRefexIndexer</span></a></li>
+</ul>
+</li>
+<li type="circle">org.ihtsdo.otf.query.rest.server.<a href="org/ihtsdo/otf/query/rest/server/LuceneResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">LuceneResource</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/ObjectFactory.html" title="class in org.ihtsdo.otf.jaxb.object.display"><span class="strong">ObjectFactory</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/ObjectFactory.html" title="class in org.ihtsdo.otf.jaxb.query"><span class="strong">ObjectFactory</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.chronicle.api.<a href="org/ihtsdo/otf/jaxb/chronicle/api/ObjectFactory.html" title="class in org.ihtsdo.otf.jaxb.chronicle.api"><span class="strong">ObjectFactory</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Query</span></a>
 <ul>
+<li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/LuceneQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">LuceneQueryFromJaxb</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">QueryFromJaxb</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.implementation.<a href="org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">RegexQueryFromJaxb</span></a></li>
 </ul>
 </li>
 <li type="circle">org.ihtsdo.otf.query.rest.client.<a href="org/ihtsdo/otf/query/rest/client/QueryProcessorForRestXml.html" title="class in org.ihtsdo.otf.query.rest.client"><span class="strong">QueryProcessorForRestXml</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.rest.server.<a href="org/ihtsdo/otf/query/rest/server/QueryResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">QueryResource</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/RefexFactoryDdo.html" title="class in org.ihtsdo.otf.jaxb.object.display"><span class="strong">RefexFactoryDdo</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.rest.client.examples.<a href="org/ihtsdo/otf/query/rest/client/examples/RegexExample.html" title="class in org.ihtsdo.otf.query.rest.client.examples"><span class="strong">RegexExample</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.rest.server.<a href="org/ihtsdo/otf/query/rest/server/RegexResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">RegexResource</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/ResultList.html" title="class in org.ihtsdo.otf.jaxb.object.display"><span class="strong">ResultList</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.chronicle.api.<a href="org/ihtsdo/otf/jaxb/chronicle/api/SimpleConceptSpecification.html" title="class in org.ihtsdo.otf.jaxb.chronicle.api"><span class="strong">SimpleConceptSpecification</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.chronicle.api.<a href="org/ihtsdo/otf/jaxb/chronicle/api/SimplePath.html" title="class in org.ihtsdo.otf.jaxb.chronicle.api"><span class="strong">SimplePath</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.chronicle.api.<a href="org/ihtsdo/otf/jaxb/chronicle/api/SimplePosition.html" title="class in org.ihtsdo.otf.jaxb.chronicle.api"><span class="strong">SimplePosition</span></a></li>
+<li type="circle">org.ihtsdo.otf.query.rest.client.examples.<a href="org/ihtsdo/otf/query/rest/client/examples/SimpleQueryExample.html" title="class in org.ihtsdo.otf.query.rest.client.examples"><span class="strong">SimpleQueryExample</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.chronicle.api.<a href="org/ihtsdo/otf/jaxb/chronicle/api/SimpleViewCoordinate.html" title="class in org.ihtsdo.otf.jaxb.chronicle.api"><span class="strong">SimpleViewCoordinate</span></a></li>
 <li type="circle">org.ihtsdo.otf.query.rest.client.<a href="org/ihtsdo/otf/query/rest/client/Snomed.html" title="class in org.ihtsdo.otf.query.rest.client"><span class="strong">Snomed</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/TaxonomyReferenceWithConcept.html" title="class in org.ihtsdo.otf.jaxb.object.display"><span class="strong">TaxonomyReferenceWithConcept</span></a></li>
@@ -282,6 +303,7 @@
 <li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/RefexTYPEDDO.html" title="enum in org.ihtsdo.otf.jaxb.object.display"><span class="strong">RefexTYPEDDO</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/RefexPolicy.html" title="enum in org.ihtsdo.otf.jaxb.object.display"><span class="strong">RefexPolicy</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/IdentifierPARTTYPES.html" title="enum in org.ihtsdo.otf.jaxb.object.display"><span class="strong">IdentifierPARTTYPES</span></a></li>
+<li type="circle">org.ihtsdo.otf.jaxb.object.display.<a href="org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display"><span class="strong">DefinitionalState</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/ReturnTypes.html" title="enum in org.ihtsdo.otf.jaxb.query"><span class="strong">ReturnTypes</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/ForCollectionContents.html" title="enum in org.ihtsdo.otf.jaxb.query"><span class="strong">ForCollectionContents</span></a></li>
 <li type="circle">org.ihtsdo.otf.jaxb.query.<a href="org/ihtsdo/otf/jaxb/query/ClauseSemantic.html" title="enum in org.ihtsdo.otf.jaxb.query"><span class="strong">ClauseSemantic</span></a></li>

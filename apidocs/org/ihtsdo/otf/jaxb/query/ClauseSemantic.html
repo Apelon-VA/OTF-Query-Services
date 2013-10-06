@@ -120,6 +120,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is
      &lt;enumeration value="CHANGED_FROM_PREVIOUS_VERSION"/>
      &lt;enumeration value="CONCEPT_FOR_COMPONENT"/>
      &lt;enumeration value="CONCEPT_IS_CHILD_OF"/>
+     &lt;enumeration value="CONCEPT_IS"/>
      &lt;enumeration value="CONCEPT_IS_DESCENDENT_OF"/>
      &lt;enumeration value="CONCEPT_IS_KIND_OF"/>
      &lt;enumeration value="COMPONENT_IS_MEMBER_OF_REFSET"/>
@@ -167,54 +168,57 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#CONCEPT_FOR_COMPONENT">CONCEPT_FOR_COMPONENT</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#CONCEPT_IS">CONCEPT_IS</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#CONCEPT_IS_CHILD_OF">CONCEPT_IS_CHILD_OF</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#CONCEPT_IS_DESCENDENT_OF">CONCEPT_IS_DESCENDENT_OF</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#CONCEPT_IS_KIND_OF">CONCEPT_IS_KIND_OF</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#DESCRIPTION_ACTIVE_LUCENE_MATCH">DESCRIPTION_ACTIVE_LUCENE_MATCH</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#DESCRIPTION_ACTIVE_REGEX_MATCH">DESCRIPTION_ACTIVE_REGEX_MATCH</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#DESCRIPTION_LUCENE_MATCH">DESCRIPTION_LUCENE_MATCH</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#DESCRIPTION_REGEX_MATCH">DESCRIPTION_REGEX_MATCH</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#FULLY_SPECIFIED_NAME_FOR_CONCEPT">FULLY_SPECIFIED_NAME_FOR_CONCEPT</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#NOT">NOT</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#OR">OR</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#PREFERRED_NAME_FOR_CONCEPT">PREFERRED_NAME_FOR_CONCEPT</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REFSET_CONTAINS_CONCEPT">REFSET_CONTAINS_CONCEPT</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REFSET_CONTAINS_KIND_OF_CONCEPT">REFSET_CONTAINS_KIND_OF_CONCEPT</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REFSET_LUCENE_MATCH">REFSET_LUCENE_MATCH</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REL_RESTRICTION">REL_RESTRICTION</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REL_TYPE">REL_TYPE</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#XOR">XOR</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -343,6 +347,15 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>CONCEPT_IS_CHILD_OF</h4>
 <pre>public static final&nbsp;<a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html" title="enum in org.ihtsdo.otf.jaxb.query">ClauseSemantic</a> CONCEPT_IS_CHILD_OF</pre>
+</li>
+</ul>
+<a name="CONCEPT_IS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CONCEPT_IS</h4>
+<pre>public static final&nbsp;<a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html" title="enum in org.ihtsdo.otf.jaxb.query">ClauseSemantic</a> CONCEPT_IS</pre>
 </li>
 </ul>
 <a name="CONCEPT_IS_DESCENDENT_OF">

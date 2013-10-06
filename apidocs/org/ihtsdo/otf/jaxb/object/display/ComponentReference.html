@@ -106,6 +106,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
    &lt;complexContent>
      &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
        &lt;sequence>
+         &lt;element name="definitionalState" type="{http://display.object.jaxb.otf.ihtsdo.org}definitionalState" minOccurs="0"/>
          &lt;element name="nid" type="{http://www.w3.org/2001/XMLSchema}int"/>
          &lt;element name="text" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          &lt;element name="uuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -133,14 +134,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display">DefinitionalState</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#definitionalState">definitionalState</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#nid">nid</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#text">text</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#uuid">uuid</a></strong></code>&nbsp;</td>
 </tr>
@@ -177,21 +182,33 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display">DefinitionalState</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#getDefinitionalState()">getDefinitionalState</a></strong>()</code>
+<div class="block">Gets the value of the definitionalState property.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#getNid()">getNid</a></strong>()</code>
 <div class="block">Gets the value of the nid property.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#getText()">getText</a></strong>()</code>
 <div class="block">Gets the value of the text property.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#getUuid()">getUuid</a></strong>()</code>
 <div class="block">Gets the value of the uuid property.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/ComponentReference.html#setDefinitionalState(org.ihtsdo.otf.jaxb.object.display.DefinitionalState)">setDefinitionalState</a></strong>(<a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display">DefinitionalState</a>&nbsp;value)</code>
+<div class="block">Sets the value of the definitionalState property.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -234,6 +251,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="definitionalState">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>definitionalState</h4>
+<pre>protected&nbsp;<a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display">DefinitionalState</a> definitionalState</pre>
+</li>
+</ul>
 <a name="nid">
 <!--   -->
 </a>
@@ -286,6 +312,30 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getDefinitionalState()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefinitionalState</h4>
+<pre>public&nbsp;<a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display">DefinitionalState</a>&nbsp;getDefinitionalState()</pre>
+<div class="block">Gets the value of the definitionalState property.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>possible object is
+     <a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display"><code>DefinitionalState</code></a></dd></dl>
+</li>
+</ul>
+<a name="setDefinitionalState(org.ihtsdo.otf.jaxb.object.display.DefinitionalState)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDefinitionalState</h4>
+<pre>public&nbsp;void&nbsp;setDefinitionalState(<a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display">DefinitionalState</a>&nbsp;value)</pre>
+<div class="block">Sets the value of the definitionalState property.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - allowed object is
+     <a href="../../../../../../org/ihtsdo/otf/jaxb/object/display/DefinitionalState.html" title="enum in org.ihtsdo.otf.jaxb.object.display"><code>DefinitionalState</code></a></dd></dl>
+</li>
+</ul>
 <a name="getNid()">
 <!--   -->
 </a>

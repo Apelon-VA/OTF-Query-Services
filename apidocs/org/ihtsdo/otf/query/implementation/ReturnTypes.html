@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../org/ihtsdo/otf/query/implementation/Where.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -106,7 +106,7 @@
 <br>
 <pre>public enum <span class="strong">ReturnTypes</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;<a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html" title="enum in org.ihtsdo.otf.query.implementation">ReturnTypes</a>&gt;</pre>
-<div class="block">The Display Objects to be returned from the result set of a query.</div>
+<div class="block">The types of objects to be returned in the result set of a query.</div>
 <dl><dt><span class="strong">Author:</span></dt>
   <dd>dylangrald</dd></dl>
 </li>
@@ -127,10 +127,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is
 <th class="colOne" scope="col">Enum Constant and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html#COMPONENT">COMPONENT</a></strong></code>
+<div class="block">The component version of the results.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html#CONCEPT_VERSION">CONCEPT_VERSION</a></strong></code>
 <div class="block">The Concept version specified by the
  <code>ViewCoordinate</code> from the
  <code>Query</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html#DESCRIPTION">DESCRIPTION</a></strong></code>
+<div class="block">The Description version of the component.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -230,6 +240,16 @@ the order they are declared.</div>
 <div class="block">The UUID of the component.</div>
 </li>
 </ul>
+<a name="COMPONENT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPONENT</h4>
+<pre>public static final&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html" title="enum in org.ihtsdo.otf.query.implementation">ReturnTypes</a> COMPONENT</pre>
+<div class="block">The component version of the results.</div>
+</li>
+</ul>
 <a name="CONCEPT_VERSION">
 <!--   -->
 </a>
@@ -240,6 +260,18 @@ the order they are declared.</div>
 <div class="block">The Concept version specified by the
  <code>ViewCoordinate</code> from the
  <code>Query</code>.</div>
+</li>
+</ul>
+<a name="DESCRIPTION">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DESCRIPTION</h4>
+<pre>public static final&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html" title="enum in org.ihtsdo.otf.query.implementation">ReturnTypes</a> DESCRIPTION</pre>
+<div class="block">The Description version of the component. If the returned component is a
+ concept, then the description of the fully specified name will be
+ returned.</div>
 </li>
 </ul>
 <a name="DESCRIPTION_VERSION_FSN">
@@ -333,7 +365,7 @@ with the specified name</dd>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../org/ihtsdo/otf/query/implementation/Where.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">

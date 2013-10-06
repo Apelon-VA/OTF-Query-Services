@@ -35,8 +35,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev Class</li>
-<li><a href="../../../../../../org/ihtsdo/otf/query/rest/server/QueryResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/rest/server/AlternativeIdResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/rest/server/LuceneResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/ihtsdo/otf/query/rest/server/HelloResource.html" target="_top">Frames</a></li>
@@ -95,9 +95,10 @@
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <span class="strong">HelloResource</span>
+<pre>@Path(value="query-service/hello")
+public class <span class="strong">HelloResource</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This resource is deliberately simple, to demonstrate proper
+<div class="block">This resource is deliberately simple in order to demonstrate proper
  connectivity and service availability. When
  a path of "hello/frank" is provided, it will return "hello
  frank." Similarly, if "hello/bob" is provided, it will return
@@ -190,7 +191,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>sayHello</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sayHello(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>@GET
+@Path(value="{name}")
+@Produces(value="text/plain")
+public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sayHello(@PathParam(value="name")
+                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
 <div class="block">Method that says hello to a person.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the name of the person to say hello to.</dd>
 <dt><span class="strong">Returns:</span></dt><dd>the hello string.</dd></dl>
@@ -222,8 +227,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev Class</li>
-<li><a href="../../../../../../org/ihtsdo/otf/query/rest/server/QueryResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/rest/server/AlternativeIdResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/rest/server/LuceneResource.html" title="class in org.ihtsdo.otf.query.rest.server"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/ihtsdo/otf/query/rest/server/HelloResource.html" target="_top">Frames</a></li>

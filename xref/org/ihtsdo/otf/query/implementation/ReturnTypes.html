@@ -28,7 +28,7 @@
 <a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlRootElement;
 <a class="jxr_linenumber" name="19" href="#19">19</a>  
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_javadoccomment"> * The Display Objects to be returned from the result set of a query. </em>
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_javadoccomment"> * The types of objects to be returned in the result set of a query.</em>
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment"> * @author dylangrald</em>
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment"> */</em>
@@ -44,20 +44,30 @@
 <a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="35" href="#35">35</a>      UUIDS,
 <a class="jxr_linenumber" name="36" href="#36">36</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment">     * The Concept version specified by the</em>
-<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">     * &lt;code&gt;ViewCoordinate&lt;/code&gt; from the</em>
-<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">     * &lt;code&gt;Query&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="41" href="#41">41</a>      CONCEPT_VERSION,
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment">     * Description version of the fully specified name.</em>
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment">     * The component version of the results.</em>
+<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>      COMPONENT,
+<a class="jxr_linenumber" name="40" href="#40">40</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">     * The Concept version specified by the</em>
+<a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_javadoccomment">     * &lt;code&gt;ViewCoordinate&lt;/code&gt; from the</em>
+<a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment">     * &lt;code&gt;Query&lt;/code&gt;.</em>
 <a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="45" href="#45">45</a>      DESCRIPTION_VERSION_FSN,
+<a class="jxr_linenumber" name="45" href="#45">45</a>      CONCEPT_VERSION,
 <a class="jxr_linenumber" name="46" href="#46">46</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">     * Description version of the preferred version.</em>
-<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="49" href="#49">49</a>      DESCRIPTION_VERSION_PREFERRED;
-<a class="jxr_linenumber" name="50" href="#50">50</a>  }
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">     * The Description version of the component. If the returned component is a</em>
+<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment">     * concept, then the description of the fully specified name will be</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>  <em class="jxr_javadoccomment">     * returned.</em>
+<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>      DESCRIPTION,
+<a class="jxr_linenumber" name="52" href="#52">52</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">     * Description version of the fully specified name.</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>      DESCRIPTION_VERSION_FSN,
+<a class="jxr_linenumber" name="56" href="#56">56</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">     * Description version of the preferred version.</em>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="59" href="#59">59</a>      DESCRIPTION_VERSION_PREFERRED;
+<a class="jxr_linenumber" name="60" href="#60">60</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

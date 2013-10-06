@@ -97,8 +97,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ChangedFromPreviousVersion.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ChangedFromPreviousVersion</a></strong></code>
-<div class="block">Computes the components that have been modified since the version from the
- specified ViewCoordinate.</div>
+<div class="block">Computes the components that have been modified since the version specified 
+ by the <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -109,62 +109,71 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIs.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIs</a></strong></code>
+<div class="block">An identity function that obtains the concept from the input
+ <code>ConceptSpec</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsChildOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsChildOf</a></strong></code>
 <div class="block">Computes the set of concepts that are a child of the input concept.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsDescendentOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsDescendentOf</a></strong></code>
 <div class="block">Computes the set of concepts that are descendents of the specified concept
  spec.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsKindOf</a></strong></code>
 <div class="block">Calculates the set of concepts that are a kind of the specified concept.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveLuceneMatch</a></strong></code>
 <div class="block">TODO: not implemented yet.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveRegexMatch</a></strong></code>
-<div class="block">Calculates the active descriptions that contain the input Java Regular
+<div class="block">Calculates the active descriptions that match the specified Java Regular
  Expression.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></strong></code>
-<div class="block">TODO: not supported yet.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></strong></code>
-<div class="block">Calculates descriptions that contain the input Java Regular Expression.</div>
+<div class="block">Returns descriptions matching the input string using Lucene.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a></strong></code>
-<div class="block"><code>LeafClause</code> that computes refsets that contain the specified
- input
- <code>ConceptSpec</code>.</div>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></strong></code>
+<div class="block">Calculates descriptions that match the specified Java Regular Expression.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a></strong></code>
+<div class="block">TODO: not implemented yet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a></strong></code>
-<div class="block"><code>LeafClause</code> that computes refsets that contain concepts that are
- a kind of concept specified by the input
- <code>ConceptSpec</code>.</div>
+<div class="block">TODO: not implemented yet.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a></strong></code>
+<div class="block">TODO: not implemented yet.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -183,9 +192,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></strong></code>
-<div class="block">Allows the user to specify a
- <code>Relationship</code> source and a
- <code>Relationship</code> type.</div>
+<div class="block">Computes all concepts that have a source relationship matching the input
+ target concept and relationship type.</div>
 </td>
 </tr>
 </tbody>

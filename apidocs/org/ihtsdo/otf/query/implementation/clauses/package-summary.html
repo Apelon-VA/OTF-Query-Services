@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/ihtsdo/otf/query/implementation/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../org/ihtsdo/otf/query/rest/client/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/lucene/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/ihtsdo/otf/query/implementation/clauses/package-summary.html" target="_top">Frames</a></li>
@@ -77,8 +77,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ChangedFromPreviousVersion.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ChangedFromPreviousVersion</a></td>
 <td class="colLast">
-<div class="block">Computes the components that have been modified since the version from the
- specified ViewCoordinate.</div>
+<div class="block">Computes the components that have been modified since the version specified 
+ by the <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -90,80 +90,89 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptForComponent</a></td>
 <td class="colLast">
-<div class="block">Computes the set of concepts that are enclosed in the set of components that
- is returned from the child clause.</div>
+<div class="block">Computes the set of enclosing concepts for the set of components that
+ are returned from the child clause.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIs.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIs</a></td>
+<td class="colLast">
+<div class="block">An identity function that obtains the concept from the input
+ <code>ConceptSpec</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsChildOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsChildOf</a></td>
 <td class="colLast">
 <div class="block">Computes the set of concepts that are a child of the input concept.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsDescendentOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsDescendentOf</a></td>
 <td class="colLast">
 <div class="block">Computes the set of concepts that are descendents of the specified concept
  spec.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsKindOf</a></td>
 <td class="colLast">
 <div class="block">Calculates the set of concepts that are a kind of the specified concept.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveLuceneMatch</a></td>
 <td class="colLast">
 <div class="block">TODO: not implemented yet.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveRegexMatch</a></td>
 <td class="colLast">
-<div class="block">Calculates the active descriptions that contain the input Java Regular
+<div class="block">Calculates the active descriptions that match the specified Java Regular
  Expression.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></td>
 <td class="colLast">
-<div class="block">TODO: not supported yet.</div>
+<div class="block">Returns descriptions matching the input string using Lucene.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></td>
 <td class="colLast">
-<div class="block">Calculates descriptions that contain the input Java Regular Expression.</div>
+<div class="block">Calculates descriptions that match the specified Java Regular Expression.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/FullySpecifiedNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">FullySpecifiedNameForConcept</a></td>
 <td class="colLast">
-<div class="block">Retrieves the fully specified names from a result set of concepts.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/PreferredNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">PreferredNameForConcept</a></td>
-<td class="colLast">
-<div class="block">Retrieves the preferred name for a result set of concepts.</div>
+<div class="block">Retrieves the fully specified names for a result set of concepts.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a></td>
+<td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/PreferredNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">PreferredNameForConcept</a></td>
 <td class="colLast">
-<div class="block"><code>LeafClause</code> that computes refsets that contain the specified
- input
- <code>ConceptSpec</code>.</div>
+<div class="block">Retrieves the preferred names for a result set of concepts.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a></td>
+<td class="colLast">
+<div class="block">TODO: not implemented yet.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a></td>
 <td class="colLast">
-<div class="block"><code>LeafClause</code> that computes refsets that contain concepts that are
- a kind of concept specified by the input
- <code>ConceptSpec</code>.</div>
+<div class="block">TODO: not implemented yet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a></td>
+<td class="colLast">
+<div class="block">TODO: not implemented yet.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -182,9 +191,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></td>
 <td class="colLast">
-<div class="block">Allows the user to specify a
- <code>Relationship</code> source and a
- <code>Relationship</code> type.</div>
+<div class="block">Computes all concepts that have a source relationship matching the input
+ target concept and relationship type.</div>
 </td>
 </tr>
 </tbody>
@@ -212,7 +220,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/ihtsdo/otf/query/implementation/package-summary.html">Prev Package</a></li>
-<li><a href="../../../../../../org/ihtsdo/otf/query/rest/client/package-summary.html">Next Package</a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/lucene/package-summary.html">Next Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/ihtsdo/otf/query/implementation/clauses/package-summary.html" target="_top">Frames</a></li>

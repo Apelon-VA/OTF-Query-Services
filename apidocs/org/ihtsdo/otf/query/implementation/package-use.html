@@ -97,7 +97,7 @@
 <tr class="altColor">
 <td class="colOne"><a href="../../../../../org/ihtsdo/otf/query/implementation/class-use/And.html#org.ihtsdo.otf.query.implementation">And</a>
 <div class="block"><code>ParentClause</code> that computes the intersection of the set results
- from given child clauses.</div>
+ from the enclosed <code>Clauses</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -130,13 +130,14 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../../../../org/ihtsdo/otf/query/implementation/class-use/Not.html#org.ihtsdo.otf.query.implementation">Not</a>
-<div class="block">Clause that computes the relative complement of the result of the child
- clause with respect to the For set.</div>
+<div class="block">Returns components that are in the incoming For set and not in the set
+ returned from the computation of the clauses that are descendents of the
+ <code>Not</code> clause.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../../../../org/ihtsdo/otf/query/implementation/class-use/Or.html#org.ihtsdo.otf.query.implementation">Or</a>
-<div class="block">Clause that computes the union of the results of the child clauses.</div>
+<div class="block">Clause that computes the union of the results of the enclosed <code>Clauses</code>.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -152,7 +153,7 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../../../../org/ihtsdo/otf/query/implementation/class-use/ReturnTypes.html#org.ihtsdo.otf.query.implementation">ReturnTypes</a>
-<div class="block">The Display Objects to be returned from the result set of a query.</div>
+<div class="block">The types of objects to be returned in the result set of a query.</div>
 </td>
 </tr>
 <tr class="rowColor">
