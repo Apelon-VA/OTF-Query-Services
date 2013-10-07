@@ -87,10 +87,6 @@ public class ForTest {
         } catch (JAXBException | IOException ex) {
             Logger.getLogger(ForTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
     }
 
     @Test
@@ -99,6 +95,7 @@ public class ForTest {
         forCollection.setForCollection(ForCollection.ForCollectionContents.COMPONENT);
         NativeIdSetBI forSet = forCollection.getCollection();
         System.out.println(forSet.size());
+        Assert.assertTrue(forSet.contiguous());
         Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() - Integer.MIN_VALUE, forSet.size());
     }
 
@@ -118,19 +115,24 @@ public class ForTest {
      *
      * @throws IOException
      */
-    @Ignore
     @Test
     public void getAllComponents() throws IOException {
         System.out.println("All components test");
         NativeIdSetBI allConcepts = ts.getAllConceptNids();
+        System.out.println("All concepts: " + allConcepts.size());
+        NativeIdSetBI allConceptsFromCache = ts.getAllConceptNidsFromCache();
+        System.out.println("All concepts from cache: " + allConceptsFromCache.size());
         NativeIdSetBI allComponents = ts.getComponentNidsForConceptNids(allConcepts);
-        allComponents.xor(ts.getAllComponentNids());
-        NativeIdSetItrBI iter = allComponents.getIterator();
-        while (iter.next()) {
-            System.out.println(iter.nid());
-            System.out.println(iter.nid() - Integer.MIN_VALUE);
-            System.out.println(ts.getComponent(iter.nid()));
-        }
-        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() - Integer.MIN_VALUE, allComponents.size());
+        System.out.println("All components: " + allComponents.size());
+        NativeIdSetBI orphanNids = ts.getOrphanNids(allConcepts);
+        System.out.println("orphanNids: " + orphanNids.size());
+        int maxNid = Bdb.getUuidsToNidMap().getCurrentMaxNid() + Integer.MIN_VALUE;
+        System.out.println("maxNid: " + maxNid);
+        Assert.assertTrue(allComponents.contains(maxNid) || orphanNids.contains(maxNid));
+//        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() + Integer.MIN_VALUE, 
+//                allComponents.size() + orphanNids.size());
+        allComponents.or(orphanNids);
+        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() + Integer.MIN_VALUE, 
+                allComponents.size());
     }
 }

@@ -96,12 +96,12 @@ public class RelType extends LeafClause {
         if (this.relTypeSubsumption) {
             relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), vc));
         }
-        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.targetSpec.getNid(), relTypeSet, this.vc);
+        NativeIdSetBI relationshipSet = Bdb.getMemoryCache().getDestRelNids(this.targetSpec.getNid(), relTypeSet, this.vc);
         getResultsCache().or(relationshipSet);
         int relTypetNid = this.relType.getNid();
         if (this.relTypeSubsumption) {
             NativeIdSetBI relTypeSubsumptionSet = Ts.get().isKindOfSet(relTypetNid, vc);
-            getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(this.targetSpec.getNid(), relTypeSubsumptionSet, vc));
+            getResultsCache().or(Bdb.getMemoryCache().getDestRelNids(this.targetSpec.getNid(), relTypeSubsumptionSet, vc));
         }
 
         return getResultsCache();

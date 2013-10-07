@@ -89,7 +89,7 @@ public class DescriptionLuceneMatch extends LeafClause {
             Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         //Filter the results, based upon the input ViewCoordinate
-        NativeIdSetItrBI iter = nids.getIterator();
+        NativeIdSetItrBI iter = nids.getSetBitIterator();
         while (iter.next()) {
             try {
                 if (Ts.get().getComponentVersion(viewCoordinate, iter.nid()) == null) {

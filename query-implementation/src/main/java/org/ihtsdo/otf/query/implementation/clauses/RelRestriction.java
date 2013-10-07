@@ -22,7 +22,6 @@ import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
@@ -101,7 +100,7 @@ public class RelRestriction extends LeafClause {
         if (this.relTypeSubsumption) {
             relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), vc));
         }
-        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.vc);
+        NativeIdSetBI relationshipSet = Bdb.getMemoryCache().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.vc);
         getResultsCache().or(relationshipSet);
         int parentNid = relRestrictionSpec.getNid();
         NativeIdSetBI restrictionSet = new ConcurrentBitSet();
@@ -113,9 +112,9 @@ public class RelRestriction extends LeafClause {
         } else {
             //Default is to compute using subsumption
             NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
-            NativeIdSetItrBI iter = kindOfSet.getIterator();
+            NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
             while (iter.next()) {
-                getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(iter.nid(), relTypeSet, vc));
+                getResultsCache().or(Bdb.getMemoryCache().getDestRelNids(iter.nid(), relTypeSet, vc));
             }
         }
         getResultsCache().and(restrictionSet);

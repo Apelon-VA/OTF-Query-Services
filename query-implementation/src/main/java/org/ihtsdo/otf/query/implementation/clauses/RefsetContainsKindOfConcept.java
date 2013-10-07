@@ -84,7 +84,7 @@ public class RefsetContainsKindOfConcept extends LeafClause {
         }
         int parentNid = this.conceptSpec.getNid();
         NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
-        NativeIdSetItrBI iter = kindOfSet.getIterator();
+        NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
         while (iter.next()) {
             ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, iter.nid());
             Collection<? extends RefexChronicleBI<?>> refexes = conceptVersion.getRefexes();

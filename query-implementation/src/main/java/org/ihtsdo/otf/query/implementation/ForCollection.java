@@ -72,7 +72,6 @@ public class ForCollection {
         TerminologyStoreDI ts = Ts.get();
         switch (forCollection) {
             case COMPONENT:
-                ConcurrentBitSet componentBitSet = new ConcurrentBitSet();
                 return ts.getAllComponentNids();
             case CONCEPT:
                 return ts.getAllConceptNids();

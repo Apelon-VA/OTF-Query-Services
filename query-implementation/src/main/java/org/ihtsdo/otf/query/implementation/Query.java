@@ -197,7 +197,7 @@ public abstract class Query {
     public static ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType, ViewCoordinate vc) throws ContradictionException, UnsupportedOperationException, IOException {
         ArrayList<Object> results = new ArrayList<>();
 
-        NativeIdSetItrBI iter = resultSet.getIterator();
+        NativeIdSetItrBI iter = resultSet.getSetBitIterator();
         switch (returnType) {
             case UUIDS:
                 while (iter.next()) {
