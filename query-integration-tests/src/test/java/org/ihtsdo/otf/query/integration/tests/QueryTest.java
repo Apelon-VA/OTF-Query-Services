@@ -95,7 +95,7 @@ public class QueryTest {
         System.out.println("Sequence: " + Ts.get().getSequence());
         DescriptionRegexMatchTest regexTest = new DescriptionRegexMatchTest();
         NativeIdSetBI results = regexTest.getQuery().compute();
-        Assert.assertEquals(results.size(), 2);
+        Assert.assertEquals(2, results.size());
     }
 
     @Test
@@ -126,6 +126,33 @@ public class QueryTest {
             System.out.println(o);
         }
         Assert.assertEquals(6, results.size());
+    }
+    
+    @Test
+    public void testOr() throws IOException, Exception{
+        Query q = new Query() {
+
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("motion", Snomed.MOTION);
+                let("acceleration", Snomed.ACCELERATION);
+            }
+
+            @Override
+            public Clause Where() {
+                return Or(ConceptIs("motion"),
+                            ConceptIs("acceleration"));
+            }
+            
+        };
+        
+        NativeIdSetBI results = q.compute();
+        Assert.assertEquals(2, results.size());
     }
 
     @Test
