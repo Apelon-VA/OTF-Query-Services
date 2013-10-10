@@ -106,33 +106,4 @@ public class ForTest {
         NativeIdSetBI forSet = forCollection.getCollection();
         Assert.assertEquals(ts.getConceptCount(), forSet.size());
     }
-
-    /**
-     * TODO: this is a check for the getAllComponentNids() method. The newly
-     * implemented getAllComponents() method returns 15 nids that are not in the
-     * set returned by Ts.get().getComponentNidsForConceptNids(allConcepts):
-     * [Integer.MIN_VALUE, Integer.MIN_VALUE + 13] and the nid -2137096776
-     *
-     * @throws IOException
-     */
-    @Test
-    public void getAllComponents() throws IOException {
-        System.out.println("All components test");
-        NativeIdSetBI allConcepts = ts.getAllConceptNids();
-        System.out.println("All concepts: " + allConcepts.size());
-        NativeIdSetBI allConceptsFromCache = ts.getAllConceptNidsFromCache();
-        System.out.println("All concepts from cache: " + allConceptsFromCache.size());
-        NativeIdSetBI allComponents = ts.getComponentNidsForConceptNids(allConcepts);
-        System.out.println("All components: " + allComponents.size());
-        NativeIdSetBI orphanNids = ts.getOrphanNids(allConcepts);
-        System.out.println("orphanNids: " + orphanNids.size());
-        int maxNid = Bdb.getUuidsToNidMap().getCurrentMaxNid() + Integer.MIN_VALUE;
-        System.out.println("maxNid: " + maxNid);
-        Assert.assertTrue(allComponents.contains(maxNid) || orphanNids.contains(maxNid));
-//        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() + Integer.MIN_VALUE, 
-//                allComponents.size() + orphanNids.size());
-        allComponents.or(orphanNids);
-        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() + Integer.MIN_VALUE, 
-                allComponents.size());
-    }
 }

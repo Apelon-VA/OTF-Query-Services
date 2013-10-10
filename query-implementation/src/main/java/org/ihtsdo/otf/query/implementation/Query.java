@@ -46,6 +46,7 @@ import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
@@ -258,27 +259,33 @@ public abstract class Query {
                 break;
             case DESCRIPTION:
                 while (iter.next()) {
-                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
-                    if (cv != null) {
-                        DescriptionChronicleBI desc = null;
-                        ConceptChronicleDdo cc = null;
-                        DescriptionVersionBI descVersionBI = null;
-                        if (cv instanceof ConceptVersionBI) {
-                            desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
-                            descVersionBI = desc.getVersion(vc);
-                            cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
-                                    RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                        } else if (cv instanceof DescriptionVersionBI) {
-                            desc = (DescriptionChronicleBI) Ts.get().getComponent(iter.nid());
-                            descVersionBI = (DescriptionVersionBI) cv;
-                            cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getComponent(iter.nid()).getEnclosingConcept(), VersionPolicy.ACTIVE_VERSIONS,
-                                    RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
-                        } else {
-                            throw new UnsupportedOperationException("This component type is not yet supported");
+                    ComponentChronicleBI component = Ts.get().getComponent(iter.nid());
+                    if (component == null) {
+                        System.out.println("No component for nid: " + iter.nid());
+                    }
+                    if (component != null) {
+                        ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                        if (cv != null) {
+                            DescriptionChronicleBI desc = null;
+                            ConceptChronicleDdo cc = null;
+                            DescriptionVersionBI descVersionBI = null;
+                            if (cv instanceof ConceptVersionBI) {
+                                desc = Ts.get().getConceptVersion(vc, iter.nid()).getFullySpecifiedDescription();
+                                descVersionBI = desc.getVersion(vc);
+                                cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                                        RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                            } else if (cv instanceof DescriptionVersionBI) {
+                                desc = (DescriptionChronicleBI) Ts.get().getComponent(iter.nid());
+                                descVersionBI = (DescriptionVersionBI) cv;
+                                cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getComponent(iter.nid()).getEnclosingConcept(), VersionPolicy.ACTIVE_VERSIONS,
+                                        RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
+                            } else {
+                                throw new UnsupportedOperationException("This component type is not yet supported");
+                            }
+                            DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
+                            DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
+                            results.add(descVersion);
                         }
-                        DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
-                        DescriptionVersionDdo descVersion = new DescriptionVersionDdo(descChronicle, Ts.get().getSnapshot(vc), descVersionBI);
-                        results.add(descVersion);
                     }
                 }
                 break;
@@ -336,8 +343,8 @@ public abstract class Query {
      * <code>Query</code>.
      *
      * @param q input <code>Query</code>
-     * @return The result set of the <code>Query</code> in * * * * * * * * *
-     * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects
+     * @return The result set of the <code>Query</code> in * * * * * * * * *      * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code>
+     * objects
      * @throws IOException
      * @throws ContradictionException
      * @throws Exception

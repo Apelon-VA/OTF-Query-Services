@@ -178,7 +178,7 @@ public class QueryTest {
         for (Object o : q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)) {
             Assert.assertTrue(o != null);
         }
-        Assert.assertTrue(results.size() > 830);
+        Assert.assertTrue(results.size() > 800);
     }
 
     @Test
