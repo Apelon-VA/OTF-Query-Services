@@ -28,10 +28,10 @@
     matching the string "extrasystole" by entering the URL
     <code>localhost:8080/otf/query-service/lucene/extrasystole</code> The
     search outputs the following results, which were formatted:</para>
-        <para><example>
+        <para>
         <title>LuceneResource example output</title>
 
-        <para>
+        </para>
 
     <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;ns4:result-list xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org" xmlns:ns2="http://query.jaxb.otf.ihtsdo.org" xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;
