@@ -82,12 +82,6 @@ public class LuceneTest {
     @Before
     public void setUp() {
         try {
-            Ts.get().index();
-        } catch (IOException ex) {
-            Logger.getLogger(LuceneTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
             int authorNid   = TermAux.USER.getLenient().getConceptNid();
             int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
 

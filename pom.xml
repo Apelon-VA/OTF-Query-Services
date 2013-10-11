@@ -182,7 +182,6 @@
                 <module>query-integration-tests</module>
                 <module>query-documentation</module>
                 <module>query-lucene</module>
-                <module>query-maven</module>
             </modules>
         </profile>
         <profile>
@@ -191,7 +190,6 @@
                 <module>query-service</module>
                 <module>query-implementation</module>
                 <module>query-lucene</module>
-                <module>query-maven</module>
             </modules>
         </profile>
         <profile>

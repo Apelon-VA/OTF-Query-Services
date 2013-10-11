@@ -16,6 +16,8 @@ package org.ihtsdo.otf.query.integration.tests;
  * limitations under the License.
  */
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
@@ -103,7 +105,7 @@ public class QueryTest {
         XorTest xorTest = new XorTest();
         NativeIdSetBI results = xorTest.computeQuery();
         System.out.println("Different query size: " + results.size());
-        Assert.assertEquals(25686, results.size());
+        Assert.assertEquals(55271, results.size());
 
     }
 
@@ -227,7 +229,7 @@ public class QueryTest {
         RelTypeTest relTest = new RelTypeTest();
         NativeIdSetBI results = relTest.getQuery().compute();
         System.out.println("Relationship test: " + results.size());
-        Assert.assertEquals(210, results.size());
+        Assert.assertEquals(228, results.size());
 
     }
 
