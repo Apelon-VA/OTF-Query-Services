@@ -97,8 +97,8 @@
       versions running on your machine. If the output displays a version
       earlier than 1.7, download it <link
       xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html">here</link>
-      and ensure that JAVA_HOME and PATH variables are set to point at a JDK
-      1.7 or higher.</para>
+      and ensure that JAVA_HOME and PATH variables are set to point at JDK 1.7
+      or higher.</para>
 
       <para>Once Maven is configured, you will need to download JavaFX
       artifacts to your local repository by running the command <code>mvn
@@ -117,9 +117,9 @@
       <para>For build profiles other than the default build, developers will
       need an account to download artifacts in the IHTSDO's repository, which
       can be requested from Rory Davidson. Below is a copy of a settings.xml
-      that allows a user to conduct the default build. In order to perform
-      other build profiles, enter IHTSDO Maestro credentials into the username
-      and password fields.</para>
+      file that allows a user to conduct the default build. In order to
+      perform build profiles other than the default build, enter IHTSDO
+      Maestro credentials into the username and password fields.</para>
 
       <example>
         <title>Example settings.xml file</title>
@@ -214,8 +214,7 @@
       <para>If you want to run Tomcat within Netbeans, this <link
       xlink:href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/">link</link>
       gives directions on how to download Apache 7.0 and configure it to run
-      within Netbeans. Include the startup parameters stated above in the VM
-      Options box.</para>
+      within Netbeans.</para>
 
       <para>Here is a sample <code>tomcat-users.xml</code> file that will
       setup a user "admin" with a password "password" and privileges to access
@@ -285,9 +284,9 @@
       <para>This profile will provide a sufficient build to test the query
       client with the provided settings.xml file.</para>
 
-      <para>These artifacts are located in the IHTSDO public Maven repository,
-      and a user can perform the default build without IHTSDO Maestro
-      credentials.</para>
+      <para>The artifacts required for the default build are located in the
+      IHTSDO public Maven repository, and a user can perform the default build
+      without IHTSDO Maestro credentials.</para>
 
       <para>The default build can be conducted from the console with the
       command <code>$mvn clean install</code></para>
@@ -298,7 +297,7 @@
 
       <para>This profile will build the query service and dependent modules.
       This project has more dependencies, including dependencies in the IHTSDO
-      Maven repository, which required a user account.</para>
+      Maven repository, which require a user account.</para>
 
       <para>The command for this build is <code>$mvn clean install -P
       query-service</code></para>
@@ -476,10 +475,11 @@ INFO: Database setup complete</programlisting> Test the deployment of the war
 
     <para>You may receive an ENV_LOCKED error when trying to start the Tomcat
     server. This occurs if you try to redeploy the war when the database has
-    not yet been initialized. The best fix for this is to shutdown Tomcat,
-    ensure that <code>Released shutdown permit</code> prints to the console,
-    and restart Tomcat. If restarting Tomcat doesn't solve the issue, the
-    issue may be resolved by restarting your computer.</para>
+    not yet been initialized. The best fix for this is to undeploy the "otf"
+    application, shutdown Tomcat, ensure that <code>Released shutdown
+    permit</code> prints to the console, and restart Tomcat. If restarting
+    Tomcat doesn't solve the issue, the issue may be resolved by restarting
+    your computer.</para>
   </section>
 
   <section>
