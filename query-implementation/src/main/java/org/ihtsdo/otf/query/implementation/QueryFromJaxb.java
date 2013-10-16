@@ -69,15 +69,19 @@ public class QueryFromJaxb extends Query {
 
     public QueryFromJaxb(String viewCoordinateXml, String forXml,
             String letXml, String whereXml) throws JAXBException, IOException {
-        super(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
-                .unmarshal(new StringReader(viewCoordinateXml))));
+        super(null);
+        if (viewCoordinateXml != null && !viewCoordinateXml.equals("null") && !viewCoordinateXml.equals("")) {
+            setViewCoordinate(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
+                    .unmarshal(new StringReader(viewCoordinateXml))));
+        }
         Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
         BdbTerminologyStore.waitForSetup();
-        if (forXml != null) {
+
+        if (forXml == null || forXml.equals("null") || forXml.equals("")) {
+            this.forCollection = Ts.get().getAllConceptNids();
+        } else {
             ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
             this.forCollection = _for.getCollection();
-        } else{
-            this.forCollection = Ts.get().getAllConceptNids();
         }
         LetMap letMap = (LetMap) unmarshaller.unmarshal(new StringReader(letXml));
         Map<String, Object> convertedMap = new HashMap<>(letMap.getMap().size());

@@ -392,61 +392,70 @@ path="/otf"/&gt;
     <para>Deploying the app creates a folder at
     <code>{user.home}/app-server</code> and ensures that you have the updated
     database. You should see the following in the Apache Tomcat log when the
-    database opens: <programlisting>Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
-INFO: Initializing ProtocolHandler ["http-bio-8080"]
-Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
+    database opens: <programlisting>INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Oct 16, 2013 11:15:49 AM org.apache.coyote.AbstractProtocol init
 INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
-Sep 20, 2013 2:58:19 PM org.apache.catalina.startup.Catalina load
-INFO: Initialization processed in 473 ms
-Sep 20, 2013 2:58:19 PM org.apache.catalina.core.StandardService startInternal
+Oct 16, 2013 11:15:49 AM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 502 ms
+Oct 16, 2013 11:15:49 AM org.apache.catalina.core.StandardService startInternal
 INFO: Starting service Catalina
-Sep 20, 2013 2:58:19 PM org.apache.catalina.core.StandardEngine startInternal
+Oct 16, 2013 11:15:49 AM org.apache.catalina.core.StandardEngine startInternal
 INFO: Starting Servlet Engine: Apache Tomcat/7.0.42
-Sep 20, 2013 2:58:19 PM org.apache.catalina.startup.HostConfig deployDescriptor
-INFO: Deploying configuration descriptor /Library/Tomcat/apache-tomcat-7.0.42/conf/Catalina/localhost/otf.xml
-Sep 20, 2013 2:58:22 PM org.apache.catalina.util.SessionIdGenerator createSecureRandom
-INFO: Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [186] milliseconds.
-Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
-INFO: org.ihtsdo.otf.tcc.datastore.bdb-location set. Starting from location: /Users/dylangrald/NetBeansProjects/berkeley-db
-Sep 20, 2013 2:58:22 PM org.glassfish.jersey.server.ApplicationHandler initialize
-INFO: Initiating Jersey application, version Jersey: 2.2 2013-08-14 08:51:58...
-Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
-INFO: NidCidMap readOnlyRecords: 812
-Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
-INFO: NidCidMap mutableRecords: 0
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+Oct 16, 2013 11:15:49 AM org.apache.catalina.startup.HostConfig deployDirectory
 INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/docs
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+Oct 16, 2013 11:15:49 AM org.apache.catalina.startup.HostConfig deployDirectory
 INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/examples
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+Oct 16, 2013 11:15:50 AM org.apache.catalina.startup.HostConfig deployDirectory
 INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/host-manager
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+Oct 16, 2013 11:15:50 AM org.apache.catalina.startup.HostConfig deployDirectory
 INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/manager
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+Oct 16, 2013 11:15:50 AM org.apache.catalina.startup.HostConfig deployDirectory
 INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/ROOT
-Sep 20, 2013 2:58:23 PM org.apache.coyote.AbstractProtocol start
+Oct 16, 2013 11:15:50 AM org.apache.coyote.AbstractProtocol start
 INFO: Starting ProtocolHandler ["http-bio-8080"]
-Sep 20, 2013 2:58:23 PM org.apache.coyote.AbstractProtocol start
+Oct 16, 2013 11:15:50 AM org.apache.coyote.AbstractProtocol start
 INFO: Starting ProtocolHandler ["ajp-bio-8009"]
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.Catalina start
-INFO: Server startup in 3860 ms</programlisting> Then, it will open the
-    berkeley database at the configured location. Please see the Tomcat Setup
-    section for more information on how to set this location. It can take up
-    to a couple minutes to open the database, then you will see the following
-    output in the log file:<programlisting>
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
-INFO: mutable maxMem: 224000
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 16, 2013 11:15:50 AM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 559 ms
+Oct 16, 2013 11:16:06 AM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Library/Tomcat/apache-tomcat-7.0.42/conf/Catalina/localhost/otf.xml
+Starting BdbTerminologyStore for ChronicleServletContainer in background thread. 
+App home: /Users/dylangrald/app-server
+The default user settings file /Users/dylangrald/.m2/settings.xml
+Oct 16, 2013 11:16:09 AM org.glassfish.jersey.server.ApplicationHandler initialize
+INFO: Initiating Jersey application, version Jersey: 2.2 2013-08-14 08:51:58...
+Oct 16, 2013 11:16:10 AM org.apache.catalina.util.LifecycleBase start</programlisting>
+    Then, it will open the berkeley database at the configured location.
+    Please see the Tomcat Setup section for more information on how to set
+    this location. It can take up to a couple minutes to open the database,
+    then you will see the following output in the log file:<programlisting>Embedded maven build succeeded: 0
+Aquired storeSemaphore for init. 
+Oct 16, 2013 11:16:12 AM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
+INFO: org.ihtsdo.otf.tcc.datastore.bdb-location set. Starting from location: /Users/dylangrald/app-server/berkeley-db
+Index: /Users/dylangrald/app-server/berkeley-db/lucene/descriptions
+Index: /Users/dylangrald/app-server/berkeley-db/lucene/refex
+!## maxMem: 6174015488 heapSize: HEAP_6000
+setup dbRoot: /Users/dylangrald/app-server/berkeley-db
+absolute dbRoot: /Users/dylangrald/app-server/berkeley-db
+Oct 16, 2013 11:16:13 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: NidCidMap readOnlyRecords: 952
+Oct 16, 2013 11:16:13 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: NidCidMap mutableRecords: 950
+Oct 16, 2013 11:16:19 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: mutable maxMem: 4224000
+Oct 16, 2013 11:16:19 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: mutable shared cache: true
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
-INFO: readOnly maxMem: 224000
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 16, 2013 11:16:19 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: readOnly maxMem: 4224000
+Oct 16, 2013 11:16:19 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: readOnly shared cache: true
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
-INFO: Database setup complete</programlisting> Test the deployment of the war
-    by running the HelloExample in a web browser. Please see the Query Client
-    section below for instructions on how to run the HelloExample and
-    KindOfQueryExample.</para>
+Oct 16, 2013 11:16:19 AM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
+INFO: Database setup complete
+Released storeSemaphore for init. </programlisting> Test the deployment of the
+    <code>.war</code> by running the <code>HelloExample</code> in a web
+    browser. Please see the Query Client section below for instructions on how
+    to run the <code>HelloExample</code> and
+    <code>KindOfQueryExample</code>.</para>
   </section>
 
   <section>
@@ -469,12 +478,12 @@ INFO: Database setup complete</programlisting> Test the deployment of the war
     <title>Troubleshooting Tomcat</title>
 
     <para>You may receive an ENV_LOCKED error when trying to start the Tomcat
-    server. This occurs if you try to redeploy the war when the database has
-    not yet been initialized. The best fix for this is to undeploy the "otf"
-    application, shutdown Tomcat, ensure that <code>Released shutdown
-    permit</code> prints to the console, and restart Tomcat. If restarting
-    Tomcat doesn't solve the issue, the issue may be resolved by restarting
-    your computer.</para>
+    server. This occurs if you try to redeploy the <code>.war</code> when the
+    database has not yet been initialized. The best fix for this is to
+    undeploy the "otf" application, shutdown Tomcat, ensure that
+    <code>Released shutdown permit</code> prints to the console, and restart
+    Tomcat. If restarting Tomcat doesn't solve the issue, the issue may be
+    resolved by restarting your computer.</para>
   </section>
 
   <section>

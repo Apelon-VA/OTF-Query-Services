@@ -194,6 +194,10 @@ public abstract class Query {
     public ViewCoordinate getViewCoordinate() {
         return viewCoordinate;
     }
+    
+    public void setViewCoordinate(ViewCoordinate vc){
+        this.viewCoordinate = vc;
+    }
 
     public static ArrayList<Object> returnDisplayObjects(NativeIdSetBI resultSet, ReturnTypes returnType, ViewCoordinate vc) throws ContradictionException, UnsupportedOperationException, IOException {
         ArrayList<Object> results = new ArrayList<>();
@@ -343,8 +347,8 @@ public abstract class Query {
      * <code>Query</code>.
      *
      * @param q input <code>Query</code>
-     * @return The result set of the <code>Query</code> in * * * * * * * * *      * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code>
-     * objects
+     * @return The result set of the <code>Query</code> in * * * * * * * * * *
+     * an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects
      * @throws IOException
      * @throws ContradictionException
      * @throws Exception
@@ -388,7 +392,7 @@ public abstract class Query {
 
     /**
      * Creates
-     * <code>ConceptIsKindOf</code> with input
+     * <code>ConceptIsKindOf</code> clause with input
      * <code>ViewCoordinate</code>.
      *
      * @param conceptSpecKey
@@ -407,6 +411,13 @@ public abstract class Query {
         return new DescriptionActiveRegexMatch(this, regexKey);
     }
 
+    /**
+     * Creates
+     * <code>ConceptForComponent</code> clause with input child clause.
+     *
+     * @param child
+     * @return
+     */
     protected ConceptForComponent ConceptForComponent(Clause child) {
         return new ConceptForComponent(this, child);
     }

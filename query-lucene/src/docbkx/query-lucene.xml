@@ -10,5 +10,5 @@
 
   <para>The Query Lucene module handles the indexing of descriptions to enable<link linkend="http://lucene.apache.org">Apache Lucene Core</link>
   searches of the descriptions within the berkeley database. Please see the query-client for more information
-  about how to perform Lucene queries using the REST client and the query integration tests for examples of pure Java queries that leverage Lucene.</para>
+  about how to perform Lucene queries using the REST client and the query integration tests for examples of pure Java queries that utilize Lucene.</para>
 </section>

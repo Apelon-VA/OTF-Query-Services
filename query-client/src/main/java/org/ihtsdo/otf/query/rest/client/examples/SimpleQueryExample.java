@@ -26,6 +26,7 @@ import org.ihtsdo.otf.jaxb.object.display.ConceptChronicleDdo;
 import org.ihtsdo.otf.jaxb.object.display.ResultList;
 import org.ihtsdo.otf.jaxb.query.ClauseSemantic;
 import org.ihtsdo.otf.jaxb.query.LetMap;
+import org.ihtsdo.otf.jaxb.query.ReturnTypes;
 import org.ihtsdo.otf.jaxb.query.Where;
 import org.ihtsdo.otf.jaxb.query.WhereClause;
 import org.ihtsdo.otf.query.rest.client.JaxbForClient;
@@ -41,10 +42,6 @@ public class SimpleQueryExample {
     public static void main(String[] args) throws JAXBException, IOException {
         try {
             // Construct an example query. 
-
-            // Setup the let map...
-            // Notice the JAXB representation of a map is pretty awkward. Any suggestions
-            // for improving the schema generation to make this work better are welcome. 
             LetMap letMap = new LetMap();
             LetMap.Map.Entry entry = new LetMap.Map.Entry();
             entry.setKey("allergic-asthma");
@@ -71,11 +68,11 @@ public class SimpleQueryExample {
             if (args.length > 0) {
                 results = QueryProcessorForRestXml.process(
                         null,
-                        null, letMap, where, null, args[0]);
+                        null, letMap, where, ReturnTypes.CONCEPT_VERSION, args[0]);
             } else {
                 results = QueryProcessorForRestXml.process(
                         null,
-                        null, letMap, where, null);
+                        null, letMap, where, ReturnTypes.CONCEPT_VERSION);
             }
 
             // print out the XML results as a string...
