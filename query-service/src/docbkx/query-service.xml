@@ -11,7 +11,8 @@
   <para>This module implements a <link
   xlink:href="http://tomcat.apache.org">Tomcat 7.0</link> REST service for
   querying. Once you have deployed the Query Service to Tomcat, you can
-  utilize the following resources to create queries using the REST service.</para>
+  utilize the following resources to create queries using the REST
+  service.</para>
 
   <section>
     <title>Lucene Resource</title>
@@ -26,12 +27,8 @@
 
     <para>Once you have deployed the war file, search for descriptions
     matching the string "extrasystole" by entering the URL
-    <code>localhost:8080/otf/query-service/lucene/extrasystole</code> The
+    <code>localhost:8080/otf/query-service/lucene/extrasystole</code> . The
     search outputs the following results, which were formatted:</para>
-        <para>
-        <title>LuceneResource example output</title>
-
-        </para>
 
     <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;ns4:result-list xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org" xmlns:ns2="http://query.jaxb.otf.ihtsdo.org" xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;

@@ -53,10 +53,8 @@
     <para>The minimum software requirements for the project are as follows:
     <orderedlist>
         <listitem>
-          <para>
-            <link xlink:href="http://maven.apache.org/download.cgi">Apache
-            Maven 3.1.0</link>
-          </para>
+          <para><link xlink:href="http://maven.apache.org/download.cgi">Apache
+          Maven 3.1.0</link></para>
         </listitem>
 
         <listitem>
@@ -112,7 +110,7 @@
       xlink:href="http://maven.apache.org/settings.html">Settings
       Reference</link> web page. As noted in the Settings Reference page,
       locate and edit the settings.xml in the directory
-      <code>${user.home}/.m2/</code>.</para>
+      <code>${user.home}/.m2/</code> .</para>
 
       <para>For build profiles other than the default build, developers will
       need an account to download artifacts in the IHTSDO's repository, which
@@ -124,8 +122,7 @@
       <example>
         <title>Example settings.xml file</title>
 
-        <para>
-          <programlistingco>
+        <para><programlistingco>
             <areaspec>
               <area coords="12,12" units="linecolumn" xml:id="ex.plco.ret"/>
 
@@ -155,8 +152,7 @@
      &lt;/mirrors&gt; 
 &lt;/settings&gt; 
                     </programlisting>
-          </programlistingco>
-        </para>
+          </programlistingco></para>
       </example>
     </section>
 
@@ -179,31 +175,25 @@
       <para>Apache Tomcat 7.0 can be downloaded <link
       xlink:href="http://tomcat.apache.org/download-70.cgi">here</link>.
       Configure Tomcat with the following startup with the following JVM
-      options: <code/>-Xmx6g -Xms6g -XX:PermSize=256m -XX:MaxPermSize=512m
-      -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=&lt;location here&gt;
-      -Dorg.ihtsdo.otf.tcc.repository.username=&lt;username here&gt;
-      -Dorg.ihtsdo.otf.tcc.repository.password=&lt;password here&gt;</para>
+      options: <code>-Xmx6g -Xms6g -XX:PermSize=256m
+      -XX:MaxPermSize=512m</code> .</para>
 
       <para>This is how these parameters are set based upon your operating
       system:<orderedlist>
           <listitem>
             <para>Windows - add the line: <code>JAVA_OPTS="-Xmx6g -Xms6g
-            -XX:PermSize=256m -XX:MaxPermSize=512m
-            -Dorg.ihtsdo.otf.tcc.repository.username=admin
-            -Dorg.ihtsdo.otf.tcc.repository.password=password"</code> to the
+            -XX:PermSize=256m -XX:MaxPermSize=512m"</code> to the
             <code>catalina.bat</code> file, located in
-            <code>CATALINA_HOME/bin</code></para>
+            <code>CATALINA_HOME/bin</code> .</para>
           </listitem>
 
           <listitem>
-            <para>Linux/ Unix - add the given parameters as
+            <para>OS X/ Linux - add the given parameters as
             <code>JAVA_OPTS</code> in the <code>catalina.sh</code> file, which
             is located in the <code>CATALINA_HOME/bin</code> folder within
             Tomcat, by adding the line:<code> export JAVA_OPTS="-Xmx6g -Xms6g
-            -XX:PermSize=256m -XX:MaxPermSize=512m
-            -Dorg.ihtsdo.otf.tcc.repository.username=admin
-            -Dorg.ihtsdo.otf.tcc.repository.password=password"</code> to the
-            top of the file.</para>
+            -XX:PermSize=256m -XX:MaxPermSize=512m"</code> to the top of the
+            file.</para>
           </listitem>
         </orderedlist>This <link
       xlink:href="http://wolfpaulus.com/jounal/mac/tomcat7">link</link> gives
@@ -214,7 +204,8 @@
       <para>If you want to run Tomcat within Netbeans, this <link
       xlink:href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/">link</link>
       gives directions on how to download Apache 7.0 and configure it to run
-      within Netbeans.</para>
+      within Netbeans. In the "Platform" tab, add the VM options: <code>-Xmx6g
+      -Xms6g -XX:PermSize=256m -XX:MaxPermSize=512m</code> .</para>
 
       <para>Here is a sample <code>tomcat-users.xml</code> file that will
       setup a user "admin" with a password "password" and privileges to access
@@ -289,7 +280,7 @@
       without IHTSDO Maestro credentials.</para>
 
       <para>The default build can be conducted from the console with the
-      command <code>$mvn clean install</code></para>
+      command <code>$mvn clean install</code> .</para>
     </section>
 
     <section>
@@ -300,7 +291,7 @@
       Maven repository, which require a user account.</para>
 
       <para>The command for this build is <code>$mvn clean install -P
-      query-service</code></para>
+      query-service</code> .</para>
     </section>
 
     <section>
@@ -318,7 +309,7 @@
       time for the integration tests module takes about 1 min 20 sec on a
       high-spec developers laptop, while the other modules in this project
       take between 0.5 and 5 seconds. To build this from the console, use the
-      command <code>$mvn clean install -P integration-tests</code></para>
+      command <code>$mvn clean install -P integration-tests</code> .</para>
     </section>
 
     <section>
@@ -333,14 +324,14 @@
       the integration tests module.</para>
 
       <para>Execute the documentation profile build with the command
-      <code>$mvn clean install -P documentation</code>.</para>
+      <code>$mvn clean install -P documentation</code> .</para>
     </section>
 
     <section>
       <title>All build profile</title>
 
       <para>Perform all of the goals listed in the above build profiles with
-      the command <code>$mvn clean install -P all</code>.</para>
+      the command <code>$mvn clean install -P all</code> .</para>
     </section>
   </section>
 
@@ -363,8 +354,9 @@
     .war file to your Tomcat server based upon how you're launching Tomcat:
     <orderedlist>
         <listitem>
-          <para>From the command line: save the following xml file in
-          CATALINA_HOME/conf/Catalina/localhost as otf.xml: <programlistingco>
+          <para>From the command line: save the following xml file in the
+          directory <code>CATALINA_HOME/conf/Catalina/localhost/</code> as
+          <code>otf.xml</code>: <programlistingco>
               <areaspec>
                 <area coords="12,12" units="linecolumn" xml:id="ex.otf.l"/>
 
@@ -377,15 +369,18 @@
 antiJARLocking="true" docBase="/Users/dylangrald/tcc-sprint2/OTF-Query-Service/query-service/target/query-service-1.1-SNAPSHOT"
 path="/otf"/&gt;
                             </programlisting>
-            </programlistingco> execute the <code>startup</code> bat or sh
-          file, depending on your operating system. In OS X, in order to
-          execute <code>bash startup.sh</code>, you must first enter the
-          command <code>chmod +x /bin/*.sh</code> from CATALINA_HOME to make
-          all of the <code>.sh</code> files executable. Test the deployment of
-          the war with the following command with the following command from
-          the query-client folder <code>mvn exec:java
+            </programlistingco>Then, execute the <code>startup.bat</code> or
+          <code>starup.sh</code> file, depending on your operating system. In
+          OS X, in order to execute <code>bash startup.sh</code>, you must
+          first enter the command <code>chmod +x /bin/*.sh</code> from the
+          CATALINA_HOME directory to make all of the <code>.sh</code> files
+          executable. Then, deploy the .war file by navigating to the
+          <code>query-service</code> folder and executing the command
+          <code>mvn tomcat:deploy</code>. Test the deployment of the war with
+          the following command with the following command from the
+          query-client folder <code>mvn exec:java
           -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.HelloExample"
-          package</code></para>
+          package</code> .</para>
         </listitem>
 
         <listitem>
@@ -394,10 +389,10 @@ path="/otf"/&gt;
         </listitem>
       </orderedlist></para>
 
-    <para>You should see the following in the Apache Tomcat log when the data
-    <programlisting>Sep 20, 2013 2:58:19 PM org.apache.catalina.core.AprLifecycleListener init
-INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/jprofiler7/bin/macos::/Users/dylangrald/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
-Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
+    <para>Deploying the app creates a folder at
+    <code>{user.home}/app-server</code> and ensures that you have the updated
+    database. You should see the following in the Apache Tomcat log when the
+    database opens: <programlisting>Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
 INFO: Initializing ProtocolHandler ["http-bio-8080"]
 Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
 INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
@@ -436,8 +431,8 @@ INFO: Starting ProtocolHandler ["ajp-bio-8009"]
 Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.Catalina start
 INFO: Server startup in 3860 ms</programlisting> Then, it will open the
     berkeley database at the configured location. Please see the Tomcat Setup
-    section for more information on how to set this location. It takes a
-    couple minutes to open the database, then you will see the following
+    section for more information on how to set this location. It can take up
+    to a couple minutes to open the database, then you will see the following
     output in the log file:<programlisting>
 Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: mutable maxMem: 224000
