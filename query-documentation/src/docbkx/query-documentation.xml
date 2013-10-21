@@ -39,7 +39,7 @@
   <section>
     <title>Project requirements</title>
 
-    <para>A working knowledge of Maven is a preqrequisite to understanding how
+    <para>A working knowledge of Maven is a prerequisite to understanding how
     to build and work with the query service. More information on Maven is
     available at the <link xlink:href="http://maven.apache.org">Apache
     Maven</link> site. Maven supports project aggregation in addition to
@@ -99,7 +99,7 @@
       or higher.</para>
 
       <para>Once Maven is configured, you will need to download JavaFX
-      artifacts to your local repository by running the command <code>mvn
+      artifacts to your local repository by running the command <code>$ mvn
       org.codeartisans.javafx:javafx-deployer-maven-plugin:1.2:install</code>
       from a directory that is not a Maven project.</para>
 
@@ -191,7 +191,7 @@
             <para>OS X/ Linux - add the given parameters as
             <code>JAVA_OPTS</code> in the <code>catalina.sh</code> file, which
             is located in the <code>CATALINA_HOME/bin</code> folder within
-            Tomcat, by adding the line:<code> export JAVA_OPTS="-Xmx6g -Xms6g
+            Tomcat, by adding the line<code> export JAVA_OPTS="-Xmx6g -Xms6g
             -XX:PermSize=256m -XX:MaxPermSize=512m"</code> to the top of the
             file.</para>
           </listitem>
@@ -238,7 +238,7 @@
     <title>Project checkout</title>
 
     <para>The Query service project can be checked out anonymously from GIT by
-    entering the prompt <code>$git clone
+    entering the prompt <code>$ git clone
     https://github.com/IHTSDO/OTF-Query-Services.git</code> in an empty
     directory folder.</para>
   </section>
@@ -280,7 +280,7 @@
       without IHTSDO Maestro credentials.</para>
 
       <para>The default build can be conducted from the console with the
-      command <code>$mvn clean install</code> .</para>
+      command <code>$ mvn clean install</code> .</para>
     </section>
 
     <section>
@@ -290,7 +290,7 @@
       This project has more dependencies, including dependencies in the IHTSDO
       Maven repository, which require a user account.</para>
 
-      <para>The command for this build is <code>$mvn clean install -P
+      <para>The command for this build is <code>$ mvn clean install -P
       query-service</code> .</para>
     </section>
 
@@ -309,7 +309,7 @@
       time for the integration tests module takes about 1 min 20 sec on a
       high-spec developers laptop, while the other modules in this project
       take between 0.5 and 5 seconds. To build this from the console, use the
-      command <code>$mvn clean install -P integration-tests</code> .</para>
+      command <code>$ mvn clean install -P integration-tests</code> .</para>
     </section>
 
     <section>
@@ -323,15 +323,15 @@
       build profile secondary to the resource requirements and build time of
       the integration tests module.</para>
 
-      <para>Execute the documentation profile build with the command
-      <code>$mvn clean install -P documentation</code> .</para>
+      <para>Execute the documentation profile build with the command <code>$
+      mvn clean install -P documentation</code> .</para>
     </section>
 
     <section>
       <title>All build profile</title>
 
       <para>Perform all of the goals listed in the above build profiles with
-      the command <code>$mvn clean install -P all</code> .</para>
+      the command <code>$ mvn clean install -P all</code> .</para>
     </section>
   </section>
 
@@ -350,13 +350,22 @@
     Tooling Framework</link> website.</para>
 
     <para>Please see the Tomcat Setup section for instructions on how to
-    configure your Tomcat server. Here are the instructions for deploying the
-    .war file to your Tomcat server based upon how you're launching Tomcat:
-    <orderedlist>
+    configure your Tomcat server. In order to avoid causing lock errors when
+    opening the berkeley database, undeploy the otf app before you
+    redeploying. In order to undeploy the app, choose "undeploy" from the
+    Mananger App (http://localhost:8080/manager/html) or from within the
+    Tomcat server in your IDE. Here is a <link
+    xlink:href="http://tomcat.apache.org/tomcat-7.0-doc/manager-howto.html">link</link>
+    to more information about the Tomcat 7 Manager App. Based upon how you're
+    using Tomcat, these are the instructions for deploying the
+    <code>.war</code> file to your Tomcat server: <orderedlist>
         <listitem>
-          <para>From the command line: save the following xml file in the
-          directory <code>CATALINA_HOME/conf/Catalina/localhost/</code> as
-          <code>otf.xml</code>: <programlistingco>
+          <para>Once you have built the project from the command line: save
+          the following xml file in the directory
+          <code>{CATALINA_HOME}/conf/Catalina/localhost/</code> as
+          <code>otf.xml</code> and replace the text {OTF Query Service Home}
+          with the directory where you saved the OTF-Query-Service project on
+          your machine.<programlistingco>
               <areaspec>
                 <area coords="12,12" units="linecolumn" xml:id="ex.otf.l"/>
 
@@ -366,21 +375,21 @@
               <programlisting>                    
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;Context
-antiJARLocking="true" docBase="/Users/dylangrald/tcc-sprint2/OTF-Query-Service/query-service/target/query-service-1.1-SNAPSHOT"
+antiJARLocking="true" docBase="{OTF Query Service Home}/query-service/target/query-service-1.1-SNAPSHOT"
 path="/otf"/&gt;
                             </programlisting>
             </programlistingco>Then, execute the <code>startup.bat</code> or
           <code>starup.sh</code> file, depending on your operating system. In
-          OS X, in order to execute <code>bash startup.sh</code>, you must
-          first enter the command <code>chmod +x /bin/*.sh</code> from the
+          OS X, in order to execute<code> $ bash startup.sh</code>, you must
+          first enter the command <code>$ chmod +x /bin/*.sh</code> from the
           CATALINA_HOME directory to make all of the <code>.sh</code> files
-          executable. Then, deploy the .war file by navigating to the
-          <code>query-service</code> folder and executing the command
-          <code>mvn tomcat:deploy</code>. Test the deployment of the war with
-          the following command with the following command from the
-          query-client folder <code>mvn exec:java
+          executable. Test the deployment of the war with the following
+          command with the following command from the query-client folder
+          <code>$ mvn exec:java
           -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.HelloExample"
-          package</code> .</para>
+          package</code> or type the url
+          http://localhost:8080/otf/query-service/hello/frank into a
+          browser.</para>
         </listitem>
 
         <listitem>
@@ -391,8 +400,8 @@ path="/otf"/&gt;
 
     <para>Deploying the app creates a folder at
     <code>{user.home}/app-server</code> and ensures that you have the updated
-    database. You should see the following in the Apache Tomcat log when the
-    database opens: <programlisting>INFO: Initializing ProtocolHandler ["http-bio-8080"]
+    version of the berkeley database. You should see the following in the
+    Apache Tomcat log when the database opens: <programlisting>INFO: Initializing ProtocolHandler ["http-bio-8080"]
 Oct 16, 2013 11:15:49 AM org.apache.coyote.AbstractProtocol init
 INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
 Oct 16, 2013 11:15:49 AM org.apache.catalina.startup.Catalina load
@@ -453,8 +462,8 @@ Oct 16, 2013 11:16:19 AM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;in
 INFO: Database setup complete
 Released storeSemaphore for init. </programlisting> Test the deployment of the
     <code>.war</code> by running the <code>HelloExample</code> in a web
-    browser. Please see the Query Client section below for instructions on how
-    to run the <code>HelloExample</code> and
+    browser at the URL localhost:8080/. Please see the Query Client section
+    below for instructions on how to run the <code>HelloExample</code> and
     <code>KindOfQueryExample</code>.</para>
   </section>
 
@@ -482,8 +491,8 @@ Released storeSemaphore for init. </programlisting> Test the deployment of the
     database has not yet been initialized. The best fix for this is to
     undeploy the "otf" application, shutdown Tomcat, ensure that
     <code>Released shutdown permit</code> prints to the console, and restart
-    Tomcat. If restarting Tomcat doesn't solve the issue, the issue may be
-    resolved by restarting your computer.</para>
+    Tomcat. If restarting Tomcat doesn't solve the issue, the ENV_LOCKED error
+    may be resolved by restarting your computer.</para>
   </section>
 
   <section>
