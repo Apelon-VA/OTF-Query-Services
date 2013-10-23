@@ -40,8 +40,8 @@ import org.ihtsdo.otf.jaxb.query.WhereClause;
  */
 public class QueryProcessorForRestXml {
 
-    //private static final String DEFAULT_HOST = "http://api.snomedtools.com";
-    private static final String DEFAULT_HOST = "http://localhost:8080";
+    //private static final String DEFAULT_HOST = //"http://api.snomedtools.com/otf";
+    private static final String DEFAULT_HOST = "http://localhost:8080/otf";
     // Get JAXBContext for converting objects to XML. 
     private static final JAXBContext ctx = JaxbForClient.get();
 
@@ -74,7 +74,7 @@ public class QueryProcessorForRestXml {
         // create the client
         Client client = ClientBuilder.newClient();
         // specify the host and the path. 
-        WebTarget target = client.target(host).path("otf/query-service/query");
+        WebTarget target = client.target(host).path("query-service/query");
 
 
         return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
@@ -93,7 +93,7 @@ public class QueryProcessorForRestXml {
     public static String lucene(String queryText, String host) throws UnsupportedEncodingException, JAXBException {
         Client client = ClientBuilder.newClient();
 
-        WebTarget target = client.target(host).path("otf/query-service/Lucene/query");
+        WebTarget target = client.target(host).path("query-service/Lucene/query");
 
         String encodedUrl = URLEncoder.encode(queryText, "UTF-8");
 
@@ -134,7 +134,7 @@ public class QueryProcessorForRestXml {
     public static String regex(String queryText, String host) throws UnsupportedEncodingException, JAXBException {
         Client client = ClientBuilder.newClient();
 
-        WebTarget target = client.target(host).path("otf/query-service/Regex/query");
+        WebTarget target = client.target(host).path("query-service/Regex/query");
 
         String encodedUrl = URLEncoder.encode(queryText, "UTF-8");
 
