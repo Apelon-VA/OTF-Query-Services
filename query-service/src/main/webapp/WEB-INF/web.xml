@@ -18,4 +18,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
     <display-name>OTF Query Service</display-name>
+    <listener>
+        <listener-class>org.ihtsdo.otf.query.rest.server.QueryServletRequestListener</listener-class>
+    </listener>
 </web-app>

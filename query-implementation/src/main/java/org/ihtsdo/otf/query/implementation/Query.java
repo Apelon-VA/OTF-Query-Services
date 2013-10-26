@@ -67,7 +67,7 @@ import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
 public abstract class Query {
 
     public String currentViewCoordinateKey = "Current view coordinate";
-    private final HashMap<String, Object> letDeclarations =
+    private HashMap<String, Object> letDeclarations =
             new HashMap<>();
 
     public ViewCoordinate getStandardVC() throws IOException {
@@ -76,6 +76,10 @@ public abstract class Query {
 
     public HashMap<String, Object> getLetDeclarations() {
         return letDeclarations;
+    }
+    
+    public void setLetDelclarations(HashMap<String, Object> letMap){
+        this.letDeclarations = letMap;
     }
     /**
      * Number of Components output in the returnResultSet method.

@@ -62,17 +62,34 @@ public class QueryFromJaxb extends Query {
         if (obj instanceof SimpleViewCoordinate) {
             return new ViewCoordinate((SimpleViewCoordinate) obj);
         }
-        throw new UnsupportedOperationException("Can't convert to ViewCoordinate: " + obj);
+        return null;
     }
     private Clause rootClause;
+    /**
+     * False if a ConceptSpec is declared in LetMap that is null.
+     */
+    public Boolean nullSpec = false;
+
+    public Clause getRootClause() {
+        return rootClause;
+    }
     private NativeIdSetBI forCollection;
+
+    public NativeIdSetBI getForCollection() {
+        return forCollection;
+    }
 
     public QueryFromJaxb(String viewCoordinateXml, String forXml,
             String letXml, String whereXml) throws JAXBException, IOException {
         super(null);
         if (viewCoordinateXml != null && !viewCoordinateXml.equals("null") && !viewCoordinateXml.equals("")) {
-            setViewCoordinate(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
-                    .unmarshal(new StringReader(viewCoordinateXml))));
+            try {
+                setViewCoordinate(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
+                        .unmarshal(new StringReader(viewCoordinateXml))));
+            } catch (JAXBException e) {
+                this.setViewCoordinate(null);
+            }
+
         }
         Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
         BdbTerminologyStore.waitForSetup();
@@ -80,10 +97,24 @@ public class QueryFromJaxb extends Query {
         if (forXml == null || forXml.equals("null") || forXml.equals("")) {
             this.forCollection = Ts.get().getAllConceptNids();
         } else {
-            ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
-            this.forCollection = _for.getCollection();
+            try {
+                ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
+                this.forCollection = _for.getCollection();
+            } catch (JAXBException e) {
+                this.forCollection = null;
+            }
         }
-        LetMap letMap = (LetMap) unmarshaller.unmarshal(new StringReader(letXml));
+
+        LetMap letMap = null;
+
+        try {
+            letMap = (LetMap) unmarshaller.unmarshal(new StringReader(letXml));
+
+        } catch (JAXBException | NullPointerException e) {
+            this.setLetDelclarations(null);
+        }
+
+        try{
         Map<String, Object> convertedMap = new HashMap<>(letMap.getMap().size());
         for (Entry entry : letMap.getMap().entrySet()) {
             if (entry.getValue() instanceof SimpleConceptSpecification) {
@@ -94,12 +125,21 @@ public class QueryFromJaxb extends Query {
             }
         }
         getLetDeclarations().putAll(convertedMap);
+        }catch(NullPointerException e){
+            this.setLetDelclarations(null);
+        }
 
-        Object obj = unmarshaller.unmarshal(new StringReader(whereXml));
-        if (obj instanceof Where) {
-            rootClause = getWhereClause(this, ((Where) obj).getRootClause());
-        } else {
-            rootClause = getWhereClause(this, (WhereClause) obj);
+        try {
+            Object obj = unmarshaller.unmarshal(new StringReader(whereXml));
+            if (obj instanceof Where) {
+                rootClause = getWhereClause(this, ((Where) obj).getRootClause());
+            } else {
+                rootClause = getWhereClause(this, (WhereClause) obj);
+            }
+        } catch (JAXBException e) {
+            this.rootClause = null;
+        } catch (NullPointerException n) {
+            this.nullSpec = true;
         }
     }
 

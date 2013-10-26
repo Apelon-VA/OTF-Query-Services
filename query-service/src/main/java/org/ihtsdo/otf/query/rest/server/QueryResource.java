@@ -15,10 +15,12 @@
  */
 package org.ihtsdo.otf.query.rest.server;
 
+import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -26,9 +28,9 @@ import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
-import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
 
 /**
@@ -41,7 +43,7 @@ public class QueryResource {
 
     @GET
     @Produces("text/plain")
-    public String doQuery(@QueryParam("VIEWPOINT") String viewValue,
+    public String doQuery(HttpServletRequest request, @QueryParam("VIEWPOINT") String viewValue,
             @QueryParam("FOR") String forValue,
             @QueryParam("LET") String letValue,
             @QueryParam("WHERE") String whereValue,
@@ -52,21 +54,47 @@ public class QueryResource {
                 + "WHERE: " + whereValue + "\n   "
                 + "RETURN: " + returnValue;
         System.out.println("Received: \n   " + queryString);
-        if (letValue == null || whereValue == null) {
-            return "Malformed query. Query must have LET and WHERE values. \n"
-                    + "Found: " + queryString
-                    + "\n See: the section on Query Client in the query documentation: \n"
-                    + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html";
+        
+        //TODO: check to make sure db is open.
+//        if(ChronicleServletContainer.status.equals("The project is building.")){
+//            throw new QueryApplicationException(HttpErrorType.ERROR422, "The project is building");
+//        }
+        
+        System.out.println(request.getRequestURL());
+        
+        QueryFromJaxb query;
+        try {
+            query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
+        } catch (NullPointerException e) {
+            throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
+        }
+        if (query.getViewCoordinate() == null) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed VIEWPOINT value.");
+        } else if (query.getForCollection() == null) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed FOR value.");
+        } else if (query.getLetDeclarations() == null) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed LET value.");
+        } else if (query.getRootClause() == null) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed WHERE value.");
+        } else if (query.nullSpec == true) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Null ConceptSpec.");
+        }
+        NativeIdSetBI resultSet = null;
+        try {
+            resultSet = query.compute();
+        } catch (ValidationException e) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed input concept in LET value. See below for ValidationException details.", e);
         }
 
-        QueryFromJaxb query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
-        NativeIdSetBI resultSet = query.compute();
-
-        if (!returnValue.equals("null")) {
+        if (!returnValue.equals("null") && !returnValue.equals("")) {
             ReturnTypes returnType;
             if (returnValue.startsWith("<?xml")) {
-                Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
-                returnType = (ReturnTypes) unmarshaller.unmarshal(new StringReader(returnValue));
+                try {
+                    Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
+                    returnType = (ReturnTypes) unmarshaller.unmarshal(new StringReader(returnValue));
+                } catch (JAXBException e) {
+                    throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed RETURN value.");
+                }
             } else {
                 returnType = ReturnTypes.valueOf(returnValue);
             }
@@ -90,6 +118,5 @@ public class QueryResource {
             JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
             return writer.toString();
         }
-
     }
 }
