@@ -60,7 +60,7 @@ public class QueryResource {
 //            throw new QueryApplicationException(HttpErrorType.ERROR422, "The project is building");
 //        }
         
-        System.out.println(request.getRequestURL());
+        //System.out.println(request.getRequestURL());
         
         QueryFromJaxb query;
         try {
