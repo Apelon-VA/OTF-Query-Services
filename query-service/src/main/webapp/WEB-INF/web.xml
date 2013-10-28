@@ -13,7 +13,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
         </init-param>
         <init-param>
             <param-name>httpMaxHeaderSize</param-name>
-            <param-value>900</param-value>
+            <param-value>9000</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
