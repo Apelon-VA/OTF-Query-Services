@@ -55,13 +55,6 @@ public class QueryResource {
                 + "RETURN: " + returnValue;
         System.out.println("Received: \n   " + queryString);
         
-        //TODO: check to make sure db is open.
-//        if(ChronicleServletContainer.status.equals("The project is building.")){
-//            throw new QueryApplicationException(HttpErrorType.ERROR422, "The project is building");
-//        }
-        
-        //System.out.println(request.getRequestURL());
-        
         QueryFromJaxb query;
         try {
             query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);

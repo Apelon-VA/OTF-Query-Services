@@ -53,8 +53,10 @@
     <para>The minimum software requirements for the project are as follows:
     <orderedlist>
         <listitem>
-          <para><link xlink:href="http://maven.apache.org/download.cgi">Apache
-          Maven 3.1.0</link></para>
+          <para>
+            <link xlink:href="http://maven.apache.org/download.cgi">Apache
+            Maven 3.1.0</link>
+          </para>
         </listitem>
 
         <listitem>
@@ -122,7 +124,8 @@
       <example>
         <title>Example settings.xml file</title>
 
-        <para><programlistingco>
+        <para>
+          <programlistingco>
             <areaspec>
               <area coords="12,12" units="linecolumn" xml:id="ex.plco.ret"/>
 
@@ -152,7 +155,8 @@
      &lt;/mirrors&gt; 
 &lt;/settings&gt; 
                     </programlisting>
-          </programlistingco></para>
+          </programlistingco>
+        </para>
       </example>
     </section>
 
@@ -462,9 +466,9 @@ Oct 16, 2013 11:16:19 AM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;in
 INFO: Database setup complete
 Released storeSemaphore for init. </programlisting> Test the deployment of the
     <code>.war</code> by running the <code>HelloExample</code> in a web
-    browser at the URL localhost:8080/. Please see the Query Client section
-    below for instructions on how to run the <code>HelloExample</code> and
-    <code>KindOfQueryExample</code>.</para>
+    browser at the URL {default host}/otf/query-service/hello/frank . Please
+    see the Query Client section below for instructions on how to run the
+    <code>HelloExample</code> and <code>KindOfQueryExample</code>.</para>
   </section>
 
   <section>
