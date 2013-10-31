@@ -43,12 +43,12 @@ public class XorTest extends QueryClauseTest {
             @Override
             public void Let() throws IOException {
                 let("disease", Snomed.DISEASE);
-                let("previousVC", setViewCoordinate.getViewCoordinate());
+                let("v2", setViewCoordinate.getViewCoordinate());
             }
 
             @Override
             public Clause Where() {
-                return Xor(ConceptIsKindOf("disease"), ConceptIsKindOf("disease", "previousVC"));
+                return Xor(ConceptIsKindOf("disease"), ConceptIsKindOf("disease", "v2"));
             }
         };
 

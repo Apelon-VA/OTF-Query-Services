@@ -174,36 +174,13 @@
 
       <para>Apache Tomcat 7.0 can be downloaded <link
       xlink:href="http://tomcat.apache.org/download-70.cgi">here</link>.
-      Configure Tomcat with the following startup with the following JVM
-      options: <code>-Xmx6g -Xms6g -XX:PermSize=256m -XX:MaxPermSize=512m
-      -Dorg.ihtsdo.otf.tcc.repository.username=&lt;MaestroDev username&gt;
-      -Dorg.ihtsdo.otf.tcc.repository.password=&lt;MaestroDev
-      password&gt;</code> .</para>
+      Configure the following properties in
+      <code>.bash_profile</code>:<programlisting>export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/
+export CATALINA_HOME="/Applications/apache-tomcat-7.0.42"
+export CATALINA_OPTS="-Xms4g -Xmx6g -XX:MaxPermSize=512m -Dorg.ihtsdo.otf.tcc.repository.username=&lt;IHTSDO MaestroDev Username&gt; -Dorg.ihtsdo.otf.tcc.repository.password=&lt;IHTSDO MaestroDev Password&gt;
+-Duser.home=${CATALINA_HOME}/temp/bdb"</programlisting></para>
 
-      <para>This is how these parameters are set based upon your operating
-      system:<orderedlist>
-          <listitem>
-            <para>Windows - add the line: <code>JAVA_OPTS="-Xmx6g -Xms6g
-            -XX:PermSize=256m -XX:MaxPermSize=512m
-            -Dorg.ihtsdo.otf.tcc.repository.username=&lt;MaestroDev
-            username&gt;
-            -Dorg.ihtsdo.otf.tcc.repository.password=&lt;MaestroDev
-            password&gt;"</code> to the <code>catalina.bat</code> file,
-            located in <code>CATALINA_HOME/bin</code> .</para>
-          </listitem>
-
-          <listitem>
-            <para>OS X/ Linux - add the given parameters as
-            <code>JAVA_OPTS</code> in the <code>catalina.sh</code> file, which
-            is located in the <code>CATALINA_HOME/bin</code> folder within
-            Tomcat, by adding the line<code> export JAVA_OPTS="-Xmx6g -Xms6g
-            -XX:PermSize=256m -XX:MaxPermSize=512m
-            -Dorg.ihtsdo.otf.tcc.repository.username=&lt;MaestroDev
-            username&gt;
-            -Dorg.ihtsdo.otf.tcc.repository.password=&lt;MaestroDev
-            password&gt;"</code> to the top of the file.</para>
-          </listitem>
-        </orderedlist>This <link
+      <para>This <link
       xlink:href="http://wolfpaulus.com/jounal/mac/tomcat7">link</link> gives
       explicit instructions on how to configure your machine to launch Tomcat
       from the command line with <code>startup.sh</code> and
@@ -212,8 +189,7 @@
       <para>If you want to run Tomcat within Netbeans, this <link
       xlink:href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/">link</link>
       gives directions on how to download Apache 7.0 and configure it to run
-      within Netbeans. In the "Platform" tab, add the VM options: <code>-Xmx6g
-      -Xms6g -XX:PermSize=256m -XX:MaxPermSize=512m</code> .</para>
+      within Netbeans.</para>
 
       <para>Here is a sample <code>tomcat-users.xml</code> file that will
       setup a user "admin" with a password "password" and privileges to access
@@ -262,13 +238,7 @@
             &lt;param-value&gt;15000&lt;/param-value&gt;
         &lt;/init-param&gt; </programlisting></para>
           </listitem>
-        </orderedlist>If you want to perform REST queries longer than 9000
-      characters and receive a HTTP Error 414, then edit the maxHttpHeaderSize
-      parameter in the server.xml file in CATALINA_HOME/conf/ by replacing the
-      text 15000 with your desired maxHttpHeaderSize: <programlisting>  &lt;Connector port="8080" protocol="HTTP/1.1"
-              connectionTimeout="20000"
-              redirectPort="8443"
-              maxHttpHeaderSize="15000"/&gt;</programlisting></para>
+        </orderedlist></para>
     </section>
   </section>
 

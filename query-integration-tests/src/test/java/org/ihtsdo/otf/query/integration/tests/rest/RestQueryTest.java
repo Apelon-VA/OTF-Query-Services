@@ -112,7 +112,7 @@ public class RestQueryTest extends JerseyTest {
                     queryParam("FOR", forXml).
                     queryParam("LET", letMapXml).
                     queryParam("WHERE", whereXml).
-                    queryParam("RETURN", ReturnTypes.DESCRIPTION_VERSION_FSN.name()).
+                    queryParam("RETURN", ReturnTypes.NIDS.name()).
                     request(MediaType.TEXT_PLAIN).get(String.class);
 
 

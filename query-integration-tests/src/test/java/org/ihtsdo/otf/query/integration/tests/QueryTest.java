@@ -16,8 +16,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * limitations under the License.
  */
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
@@ -64,6 +62,16 @@ public class QueryTest {
 
     @After
     public void tearDown() {
+    }
+    
+    @Ignore
+    @Test
+    public void testChangedFromPreviousVersion() throws IOException, Exception {
+        System.out.println("Changed from previous version");
+        ChangedFromPreviousVersionTest changeTest = new ChangedFromPreviousVersionTest();
+        NativeIdSetBI results = changeTest.computeQuery();
+        Assert.assertEquals(245, results.size());
+
     }
 
     @Test
@@ -124,16 +132,15 @@ public class QueryTest {
         for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.COMPONENT)) {
             System.out.println(o);
         }
-        for(Object o: descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)){
+        for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)) {
             System.out.println(o);
         }
         Assert.assertEquals(6, results.size());
     }
-    
-    @Test
-    public void testOr() throws IOException, Exception{
-        Query q = new Query() {
 
+    @Test
+    public void testOr() throws IOException, Exception {
+        Query q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -148,11 +155,10 @@ public class QueryTest {
             @Override
             public Clause Where() {
                 return Or(ConceptIs("motion"),
-                            ConceptIs("acceleration"));
+                        ConceptIs("acceleration"));
             }
-            
         };
-        
+
         NativeIdSetBI results = q.compute();
         Assert.assertEquals(2, results.size());
     }
@@ -210,10 +216,10 @@ public class QueryTest {
         Assert.assertEquals(6, results.size());
     }
 
+    @Ignore
     @Test
     public void testPreferredTerm() throws IOException, Exception {
         System.out.println("Sequence: " + Ts.get().getSequence());
-
         PreferredNameForConceptTest preferredNameTest = new PreferredNameForConceptTest();
         NativeIdSetBI results = preferredNameTest.computeQuery();
         System.out.println("Preferred query result count: " + results.size());
@@ -221,6 +227,7 @@ public class QueryTest {
             System.out.println(o);
         }
         Assert.assertEquals(1, results.size());
+        Assert.assertTrue(false);
     }
 
     @Test
@@ -233,10 +240,11 @@ public class QueryTest {
 
     }
 
-    @Ignore
     @Test
-    public void testRelRestrictionSubsumptionTrue() throws IOException, Exception {
-        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+    public void testRelTypeVersioning() throws IOException, Exception {
+        final SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
+
+        Query q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -244,20 +252,30 @@ public class QueryTest {
 
             @Override
             public void Let() throws IOException {
-                let("Finding site", Snomed.FINDING_SITE);
-                let("Disease", Snomed.DISEASE);
-                let("Eye structure", Snomed.EYE_STRUCTURE);
+                let("endocrine system", Snomed.STRUCTURE_OF_ENDOCRINE_SYSTEM);
+                let("finding site", Snomed.FINDING_SITE);
+                let("v2", setViewCoordinate.getViewCoordinate());
             }
 
             @Override
             public Clause Where() {
-                return Or(RelRestriction("Disease", "Finding site", "Eye structure", true));
+                return And(RelType("finding site", "endocrine system"), Not(RelType("finding site", "endocrine system", "v2")));
             }
         };
 
         NativeIdSetBI results = q.compute();
-        System.out.println("Rel restriction count: " + results.size());
-        Assert.assertEquals(290, results.size());
+        Assert.assertEquals(228 - 17, results.size());
+    }
+
+    @Test
+    public void testRelRestrictionSubsumptionTrue() throws IOException, Exception {
+        System.out.println("Rel restriction subsumption true");
+        RelRestrictionTest rrTest = new RelRestrictionTest();
+        NativeIdSetBI results = rrTest.computeQuery();
+        for (Object o : rrTest.q.returnDisplayObjects(results, ReturnTypes.COMPONENT)) {
+            System.out.println(o);
+        }
+        Assert.assertEquals(3, results.size());
 
     }
 
@@ -290,14 +308,36 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
     }
 
-    @Ignore
     @Test
     public void testRelRestrictionSubsumptionNull() throws IOException, Exception {
 
-        RelRestrictionTest relRestriction = new RelRestrictionTest();
-        NativeIdSetBI results = relRestriction.computeQuery();
+        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("physical force", Snomed.PHYSICAL_FORCE);
+                let("is a", Snomed.IS_A);
+                let("motion", Snomed.MOTION);
+            }
+
+            @Override
+            public Clause Where() {
+                return Or(RelRestriction("motion", "is a", "physical force"));
+            }
+        };
+        NativeIdSetBI results = q.compute();
+        int[] setValues = results.getSetValues();
+        int count = 0;
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.NIDS)) {
+            Assert.assertEquals(setValues[count], Integer.parseInt(o.toString()));
+            count++;
+        }
         System.out.println("Rel restriction subsumption null results: " + results.size());
-        Assert.assertEquals(84, results.size());
+        Assert.assertEquals(7, results.size());
 
     }
 
@@ -388,11 +428,10 @@ public class QueryTest {
 
 
     }
-    
-    @Test
-    public void notTest() throws IOException, Exception{
-        Query q = new Query() {
 
+    @Test
+    public void notTest() throws IOException, Exception {
+        Query q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -401,7 +440,7 @@ public class QueryTest {
             @Override
             public void Let() throws IOException {
                 let("acceleration", Snomed.ACCELERATION);
-                        
+
             }
 
             @Override
@@ -409,9 +448,29 @@ public class QueryTest {
                 return Not(ConceptIs("acceleration"));
             }
         };
-        
+
         NativeIdSetBI results = q.compute();
         System.out.println("Not test result size: " + results.size());
         Assert.assertEquals(Ts.get().getAllConceptNids().size() - 1, results.size());
+    }
+    
+    @Test
+    public void conceptForComponentTest() throws IOException, Exception{
+        System.out.println("ConceptForComponentTest");
+        ConceptForComponentTest cfcTest = new ConceptForComponentTest();
+        NativeIdSetBI results = cfcTest.computeQuery();
+        Assert.assertEquals(3, results.size());
+    }
+    
+    @Test
+    public void refsetLuceneMatchTest() throws IOException, Exception{
+        System.out.println("RefsetLuceneMatch test");
+        RefsetLuceneMatchTest rlmTest = new RefsetLuceneMatchTest();
+        NativeIdSetBI ids = rlmTest.computeQuery();
+        for(Object o: rlmTest.q.returnDisplayObjects(ids, ReturnTypes.COMPONENT)){
+            System.out.println(o);
+            Assert.assertTrue(o.toString().contains("Virtual medicinal product simple reference set"));
+        }
+        Assert.assertEquals(1, ids.size());        
     }
 }

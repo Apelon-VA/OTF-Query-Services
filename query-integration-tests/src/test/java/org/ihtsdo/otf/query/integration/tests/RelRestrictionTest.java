@@ -42,12 +42,12 @@ public class RelRestrictionTest extends QueryClauseTest {
             public void Let() throws IOException {
                 let("Procedure site", Snomed.PROCEDURE_SITE);
                 let("Eye structure", Snomed.EYE_STRUCTURE);
-                let("Surgical procedure", Snomed.SURGICAL_PROCEDURE);
+                let("Laser surgery", Snomed.LASER_SURGERY);
             }
 
             @Override
             public Clause Where() {
-                return Or(RelRestriction("Surgical procedure", "Procedure site", "Eye structure"));
+                return Or(RelRestriction("Laser surgery", "Procedure site", "Eye structure"));
             }
         };
     }

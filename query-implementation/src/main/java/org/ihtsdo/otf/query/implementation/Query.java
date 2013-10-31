@@ -44,6 +44,7 @@ import org.ihtsdo.otf.query.implementation.clauses.FullySpecifiedNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.PreferredNameForConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsConcept;
 import org.ihtsdo.otf.query.implementation.clauses.RefsetContainsKindOfConcept;
+import org.ihtsdo.otf.query.implementation.clauses.RefsetLuceneMatch;
 import org.ihtsdo.otf.query.implementation.clauses.RelRestriction;
 import org.ihtsdo.otf.query.implementation.clauses.RelType;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
@@ -549,6 +550,10 @@ public abstract class Query {
 
     protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String conceptSpecKey, String viewCoordinateKey) {
         return new RefsetContainsKindOfConcept(this, conceptSpecKey, viewCoordinateKey);
+    }
+    
+    protected RefsetLuceneMatch RefsetLuceneMatch(String queryString){
+        return new RefsetLuceneMatch(this, queryString, this.currentViewCoordinateKey);
     }
 
     protected PreferredNameForConcept PreferredNameForConcept(Clause clause) {

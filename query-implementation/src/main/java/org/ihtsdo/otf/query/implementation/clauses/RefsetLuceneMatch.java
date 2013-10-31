@@ -17,38 +17,54 @@ package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
+import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
+import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
+import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 /**
  * TODO: Not implemented yet.
+ *
  * @author dylangrald
  */
 public class RefsetLuceneMatch extends LeafClause {
 
+    Query enclosingQuery;
     String luceneMatch;
     String luceneMatchKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
+    String viewCoordinateKey;
 
-    public RefsetLuceneMatch(Query enclosingQuery, String luceneMatchKey) {
+    public RefsetLuceneMatch(Query enclosingQuery, String luceneMatchKey, String viewCoordinateKey) {
         super(enclosingQuery);
+        this.enclosingQuery = enclosingQuery;
         this.luceneMatchKey = luceneMatchKey;
         this.luceneMatch = (String) enclosingQuery.getLetDeclarations().get(luceneMatchKey);
-        vc = enclosingQuery.getViewCoordinate();
+        this.viewCoordinateKey = viewCoordinateKey;
     }
 
-/*    @Override
-    public Where.WhereClause getWhereClause() {
-        Where.WhereClause whereClause = new Where.WhereClause();
-        whereClause.setSemantic(Where.ClauseSemantic.REFSET_LUCENE_MATCH);
+    @Override
+    public WhereClause getWhereClause() {
+                WhereClause whereClause = new WhereClause();
+        whereClause.setSemantic(ClauseSemantic.REFSET_LUCENE_MATCH);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
@@ -63,49 +79,44 @@ public class RefsetLuceneMatch extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        Collection<Integer> nids = new HashSet<>();
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        } else if (this.viewCoordinateKey != null) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }
+        NativeIdSetBI nids = new ConcurrentBitSet();
         try {
-            nids = Ts.get().searchLuceneRefset(luceneMatch, SearchType.REFSET);
-            //nids = store.searchLucene(luceneMatch, SearchType.DESCRIPTION);
+            List<IndexerBI> lookers = Hk2Looker.get().getAllServices(IndexerBI.class);
+            IndexerBI refexIndexer = null;
+            for (IndexerBI li : lookers) {
+                if (li.getIndexerName().equals("refex")) {
+                    refexIndexer = li;
+                }
+            }
+            List<SearchResult> queryResults = refexIndexer.query(luceneMatch, ComponentProperty.LONG_EXTENSION_1, 1000);
+            for (SearchResult s : queryResults) {
+                nids.add(s.nid);
+            }
         } catch (ParseException ex) {
             Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        NativeIdSetBI outgoingNids = new ConcurrentBitSet();
-        for (Integer nid : nids) {
-            outgoingNids.add(nid);
-
+        //Filter the results, based upon the input ViewCoordinate
+        NativeIdSetItrBI iter = nids.getSetBitIterator();
+        while (iter.next()) {
+            try {
+                if (Ts.get().getComponentVersion(viewCoordinate, iter.nid()) == null) {
+                    nids.remove(iter.nid());
+                }
+            } catch (ContradictionException ex) {
+                Logger.getLogger(RefsetLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
-        getResultsCache().or(outgoingNids);
-
-        return outgoingNids;
-
-
+        getResultsCache().or(nids);
+        return nids;
     }
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
         getResultsCache();
-    }*/
-
-    @Override
-    public WhereClause getWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public EnumSet<ClauseComputeType> getComputePhases() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

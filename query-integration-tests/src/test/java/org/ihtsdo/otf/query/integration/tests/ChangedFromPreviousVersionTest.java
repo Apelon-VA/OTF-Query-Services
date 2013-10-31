@@ -20,10 +20,10 @@ package org.ihtsdo.otf.query.integration.tests;
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  * Creates a test for ChangedFromPreviousVersion clause.
@@ -34,15 +34,11 @@ public class ChangedFromPreviousVersionTest extends QueryClauseTest {
 
     SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
 
-    public ChangedFromPreviousVersionTest() throws IOException {
-        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+    public ChangedFromPreviousVersionTest() throws IOException{
+        this.q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
-                NativeIdSetBI forSet = new ConcurrentBitSet();
-                forSet.add(Snomed.BARANYS_SIGN.getNid());
-                forSet.add(Snomed.NEUROLOGICAL_SYMPTOM.getNid());
-                forSet.add(Snomed.ACCELERATION.getNid());
-                return forSet;
+                return Ts.get().isKindOfSet(Snomed.CLINICAL_FINDING.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
             }
 
             @Override
@@ -52,7 +48,7 @@ public class ChangedFromPreviousVersionTest extends QueryClauseTest {
 
             @Override
             public Clause Where() {
-                return And(ConceptForComponent(ChangedFromPreviousVersion("v2")));
+                return ChangedFromPreviousVersion("v2");
             }
         };
 

@@ -18,37 +18,32 @@ package org.ihtsdo.otf.query.integration.tests;
 import java.io.IOException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.query.integration.tests.rest.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for the
- * <code>PreferredNameForConcept</code> clause.
  *
  * @author dylangrald
  */
-public class PreferredNameForConceptTest extends QueryClauseTest {
+public class RefsetLuceneMatchTest extends QueryClauseTest {
+    
+    public RefsetLuceneMatchTest(){
+        q = new Query() {
 
-    public PreferredNameForConceptTest() throws IOException {
-        final SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
-        this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
-                return Ts.get().getAllComponentNids();
+                return Ts.get().getAllConceptNids();
             }
 
             @Override
             public void Let() throws IOException {
-                let("physical force", Snomed.STRUCTURE_OF_ENDOCRINE_SYSTEM);
-                let("v2", setViewCoordinate.getViewCoordinate());
+                let("long id", "447566000");
             }
 
             @Override
             public Clause Where() {
-                return And(ConceptIsKindOf("physical force"), Not(ConceptIsKindOf("physical force", "v2")));
+                return RefsetLuceneMatch("long id");
             }
         };
     }
