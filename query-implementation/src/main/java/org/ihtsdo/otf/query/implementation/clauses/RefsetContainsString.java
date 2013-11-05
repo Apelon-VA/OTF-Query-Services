@@ -81,46 +81,23 @@ public class RefsetContainsString extends LeafClause {
             this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
         int refsetNid = this.refsetSpec.getNid();
-        //ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
-        ComponentChronicleBI cc = Ts.get().getComponent(refsetNid);
-        for(RefexChronicleBI rc : cc.getRefexes()){
-            System.out.println(rc.toString());
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
+
+        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(vc)) {
+            switch (rm.getRefexType()) {
+                case CID_STR:
+                case CID_CID_CID_STRING:
+                case CID_CID_STR:
+                case STR:
+                    RefexStringVersionBI rsv = (RefexStringVersionBI) rm;
+                    if (rsv.getString1().toLowerCase().contains(queryText.toLowerCase())) {
+                        getResultsCache().add(refsetNid);
+                    }
+                default:
+                //do nothing
+
+            }
         }
-        
-        /*for(NidPairForRefex i:P.s.getRefexPairs(refsetNid)){
-         ConceptChronicleBI memberConcept = Ts.get().getConcept(i.getMemberNid());
-         if(memberConcept.g)
-         getResultsCache().add(memberConcept.getConceptNid());
-            
-//         }*/
-//        for (RefexChronicleBI rc : conceptVersion.getChronicle().getRefexes()) {
-//
-//            for (RefexVersionBI rv : rc.getRefexMembersActive(vc)) {
-//                switch (rc.getRefexType()) {
-//                    case CID_STR:
-//                    case CID_CID_CID_STRING:
-//                    case CID_CID_STR:
-//                    case STR:
-//                        RefexStringVersionBI rsv = (RefexStringVersionBI) rv;
-//                        if (rsv.getString1().matches(queryText)) {
-//                            getResultsCache().add(rv.getNid());
-//                        }
-//                    default:
-//                    // do nothing... 
-//
-//                }
-//            }
-//        }
-        /*for(RefexVersionBI r: conceptVersion.getRefsetMembersActive()){
-         if(r.toUserString().matches(queryText)){
-         getResultsCache().add(r.getConceptNid());
-         }
-         }*/
-        /*for(RefexChronicleBI r :conceptVersion.getEnclosingConcept().getRefsetMembers()){
-         if(r.toUserString().matches(queryText)){
-         getResultsCache().add(r.getConceptNid());
-         }
-         }*/
 
         return getResultsCache();
     }

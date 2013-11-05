@@ -30,13 +30,14 @@ import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * TODO: not implemented yet. <code>LeafClause</code> that computes refsets that contain concepts that are
- * a kind of concept specified by the input
+ * TODO: not implemented yet. <code>LeafClause</code> that computes refsets that
+ * contain concepts that are a kind of concept specified by the input
  * <code>ConceptSpec</code>.
  *
  * @author dylangrald
@@ -44,14 +45,18 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
 public class RefsetContainsKindOfConcept extends LeafClause {
 
     Query enclosingQuery;
+    String refsetSpecKey;
+    ConceptSpec refsetSpec;
     String conceptSpecKey;
     ConceptSpec conceptSpec;
     String viewCoordinateKey;
     ViewCoordinate vc;
 
-    public RefsetContainsKindOfConcept(Query enclosingQuery, String conceptSpecKey, String viewCoordinateKey) {
+    public RefsetContainsKindOfConcept(Query enclosingQuery, String refsetSpecKey, String conceptSpecKey, String viewCoordinateKey) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
+        this.refsetSpecKey = refsetSpecKey;
+        this.refsetSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(refsetSpecKey);
         this.conceptSpecKey = conceptSpecKey;
         this.conceptSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(conceptSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
@@ -82,17 +87,17 @@ public class RefsetContainsKindOfConcept extends LeafClause {
         } else {
             this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
+
         int parentNid = this.conceptSpec.getNid();
         NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
-        NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
-        while (iter.next()) {
-            ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, iter.nid());
-            Collection<? extends RefexChronicleBI<?>> refexes = conceptVersion.getRefexes();
-            for (RefexChronicleBI r : refexes) {
-                this.getResultsCache().add(r.getNid());
+        int refsetNid = this.refsetSpec.getNid();
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
+        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(vc)) {
+            if (kindOfSet.contains(rm.getReferencedComponentNid())) {
+                getResultsCache().add(refsetNid);
             }
-
         }
+
         return getResultsCache();
     }
 

@@ -16,16 +16,35 @@ package org.ihtsdo.otf.query.integration.tests;
  * limitations under the License.
  */
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
+import org.ihtsdo.otf.tcc.model.cc.NidPairForRefex;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -36,8 +55,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Class that handles integration tests for
- * <code>Query</code> clauses.
+ * Class that handles integration tests for <code>Query</code> clauses.
  *
  * @author kec
  */
@@ -57,13 +75,13 @@ public class QueryTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws ValidationException, IOException {
     }
 
     @After
     public void tearDown() {
     }
-    
+
     @Ignore
     @Test
     public void testChangedFromPreviousVersion() throws IOException, Exception {
@@ -412,10 +430,10 @@ public class QueryTest {
             public Clause Where() {
                 return And(ConceptForComponent(DescriptionRegexMatch("deceleration")),
                         And(Or(RelType("is a", "motion"),
-                        ConceptForComponent(DescriptionRegexMatch("centrifugal"))),
-                        ConceptIsKindOf("motion"),
-                        Not(Or(ConceptIsChildOf("acceleration"),
-                        ConceptIs("continued movement")))));
+                                        ConceptForComponent(DescriptionRegexMatch("centrifugal"))),
+                                ConceptIsKindOf("motion"),
+                                Not(Or(ConceptIsChildOf("acceleration"),
+                                                ConceptIs("continued movement")))));
             }
         };
 
@@ -425,7 +443,6 @@ public class QueryTest {
             System.out.println(o);
         }
         Assert.assertEquals(1, results.size());
-
 
     }
 
@@ -453,24 +470,65 @@ public class QueryTest {
         System.out.println("Not test result size: " + results.size());
         Assert.assertEquals(Ts.get().getAllConceptNids().size() - 1, results.size());
     }
-    
+
     @Test
-    public void conceptForComponentTest() throws IOException, Exception{
+    public void conceptForComponentTest() throws IOException, Exception {
         System.out.println("ConceptForComponentTest");
         ConceptForComponentTest cfcTest = new ConceptForComponentTest();
         NativeIdSetBI results = cfcTest.computeQuery();
         Assert.assertEquals(3, results.size());
     }
-    
+
     @Test
-    public void refsetLuceneMatchTest() throws IOException, Exception{
+    public void refsetLuceneMatchTest() throws IOException, Exception {
         System.out.println("RefsetLuceneMatch test");
         RefsetLuceneMatchTest rlmTest = new RefsetLuceneMatchTest();
         NativeIdSetBI ids = rlmTest.computeQuery();
-        for(Object o: rlmTest.q.returnDisplayObjects(ids, ReturnTypes.COMPONENT)){
+        for (Object o : rlmTest.q.returnDisplayObjects(ids, ReturnTypes.COMPONENT)) {
             System.out.println(o);
             Assert.assertTrue(o.toString().contains("Virtual medicinal product simple reference set"));
         }
-        Assert.assertEquals(1, ids.size());        
+        Assert.assertEquals(1, ids.size());
+    }
+
+    @Test
+    public void refsetContainsConceptTest() throws IOException, Exception {
+        try {
+            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
+            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
+            int authorNid = TermAux.USER.getLenient().getConceptNid();
+            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
+
+            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
+            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
+            RefexChronicleBI rc = tb.construct(refex);
+            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
+            Ts.get().commit();
+        } catch (InvalidCAB ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ContradictionException ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("RefsetContainsConcept test");
+        RefsetContainsConceptTest rccTest = new RefsetContainsConceptTest();
+        NativeIdSetBI ids = rccTest.computeQuery();
+        Assert.assertEquals(1, ids.size());
+
+    }
+
+    @Test
+    public void refsetContainsStringTest() throws Exception {
+        System.out.println("RefsetContainsString test");
+        RefsetContainsStringTest rcsTest = new RefsetContainsStringTest();
+        NativeIdSetBI ids = rcsTest.computeQuery();
+        Assert.assertEquals(1, ids.size());
+    }
+    
+    @Test
+    public void refsetContainsKindOfConceptTest() throws Exception{        
+        System.out.println("RefsetContainsKindOfConcept test");
+        RefsetContainsKindOfConceptTest rckocTest = new RefsetContainsKindOfConceptTest();
+        NativeIdSetBI nids = rckocTest.computeQuery();
+        Assert.assertEquals(1, nids.size());
     }
 }

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
@@ -49,7 +50,7 @@ public class SimpleQueryExample {
             LetMap.Map.Entry entry1 = new LetMap.Map.Entry();
             entry1.setKey("Is a");
             entry1.setValue(Snomed.IS_A);
-
+            
             LetMap.Map map = new LetMap.Map();
             map.getEntry().add(entry);
             map.getEntry().add(entry1);

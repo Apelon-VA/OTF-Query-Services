@@ -237,11 +237,11 @@ public class QueryFromJaxb extends Query {
             case REFSET_CONTAINS_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.RefsetContainsConcept(clause.letKeys.get(0));
+                return q.RefsetContainsConcept(clause.letKeys.get(0), clause.letKeys.get(1));
             case REFSET_CONTAINS_KIND_OF_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.RefsetContainsKindOfConcept(clause.letKeys.get(0));
+                return q.RefsetContainsKindOfConcept(clause.letKeys.get(0), clause.letKeys.get(1));
             case REL_RESTRICTION:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 : "Let keys should have three or four values: " + clause.letKeys;

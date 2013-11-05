@@ -27,7 +27,7 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
@@ -46,11 +46,15 @@ public class RefsetContainsConcept extends LeafClause {
     String conceptSpecKey;
     ConceptSpec conceptSpec;
     String viewCoordinateKey;
+    ConceptSpec refsetSpec;
+    String refsetSpecKey;
     ViewCoordinate vc;
 
-    public RefsetContainsConcept(Query enclosingQuery, String conceptSpecKey, String viewCoordinateKey) {
+    public RefsetContainsConcept(Query enclosingQuery, String refsetSpecKey, String conceptSpecKey, String viewCoordinateKey) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
+        this.refsetSpecKey = refsetSpecKey;
+        this.refsetSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(refsetSpecKey);
         this.conceptSpecKey = conceptSpecKey;
         this.conceptSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(conceptSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
@@ -81,9 +85,12 @@ public class RefsetContainsConcept extends LeafClause {
             this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }     
         int conceptNid = this.conceptSpec.getNid();
-        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, conceptNid);
-        for(RefexChronicleBI refex: conceptVersion.getRefexes()){
-            this.getResultsCache().add(refex.getNid());
+        int refsetNid = this.refsetSpec.getNid();
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
+        for(RefexVersionBI<?> rm :conceptVersion.getCurrentRefsetMembers(vc)){
+            if(rm.getReferencedComponentNid() == conceptNid){
+                getResultsCache().add(refsetNid);
+            }
         }
         
         return getResultsCache();
