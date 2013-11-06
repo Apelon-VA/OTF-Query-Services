@@ -518,14 +518,46 @@ public class QueryTest {
 
     @Test
     public void refsetContainsStringTest() throws Exception {
+        try {
+            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
+            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
+            int authorNid = TermAux.USER.getLenient().getConceptNid();
+            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
+
+            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
+            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
+            RefexChronicleBI rc = tb.construct(refex);
+            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
+            Ts.get().commit();
+        } catch (InvalidCAB ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ContradictionException ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("RefsetContainsString test");
         RefsetContainsStringTest rcsTest = new RefsetContainsStringTest();
         NativeIdSetBI ids = rcsTest.computeQuery();
         Assert.assertEquals(1, ids.size());
     }
-    
+
     @Test
-    public void refsetContainsKindOfConceptTest() throws Exception{        
+    public void refsetContainsKindOfConceptTest() throws Exception {
+        try {
+            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
+            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
+            int authorNid = TermAux.USER.getLenient().getConceptNid();
+            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
+
+            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
+            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
+            RefexChronicleBI rc = tb.construct(refex);
+            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
+            Ts.get().commit();
+        } catch (InvalidCAB ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ContradictionException ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("RefsetContainsKindOfConcept test");
         RefsetContainsKindOfConceptTest rckocTest = new RefsetContainsKindOfConceptTest();
         NativeIdSetBI nids = rckocTest.computeQuery();
