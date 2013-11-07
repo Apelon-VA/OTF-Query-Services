@@ -28,11 +28,11 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
  *
  * @author dylangrald
  */
-public class XorTest extends QueryClauseTest {
+public class XorVersionTest extends QueryClauseTest {
     
     SetViewCoordinate setViewCoordinate;
 
-    public XorTest() throws IOException {
+    public XorVersionTest() throws IOException {
         this.setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
         this.q = new Query() {
             @Override
