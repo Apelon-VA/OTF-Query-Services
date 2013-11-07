@@ -56,7 +56,7 @@ public class RelRestriction extends LeafClause {
     Boolean relTypeSubsumption;
 
     public RelRestriction(Query enclosingQuery, String relRestrictionSpecKey, String relTypeKey, String sourceSpecKey,
-            String viewCoordinateKey, Boolean destinationSubsumption, boolean relTypeSubsumption) {
+            String viewCoordinateKey, Boolean destinationSubsumption, Boolean relTypeSubsumption) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
         this.sourceSpecKey = sourceSpecKey;
@@ -78,7 +78,10 @@ public class RelRestriction extends LeafClause {
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
+        whereClause.getLetKeys().add(relRestrictionSpecKey);
+        whereClause.getLetKeys().add(relTypeKey);
         whereClause.getLetKeys().add(sourceSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
 
     }
@@ -90,11 +93,7 @@ public class RelRestriction extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }
+        this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         NativeIdSetBI relTypeSet = new ConcurrentBitSet();
         relTypeSet.add(this.relType.getNid());
         if (this.relTypeSubsumption) {

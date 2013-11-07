@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ihtsdo.otf.query.integration.tests;
 
 import java.io.IOException;
@@ -23,18 +24,14 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for the
- * <code>Xor</code> clause. Demonstrates the ability to do difference queries.
  *
  * @author dylangrald
  */
 public class XorTest extends QueryClauseTest {
     
-    SetViewCoordinate setViewCoordinate;
-
-    public XorTest() throws IOException {
-        this.setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
+    public XorTest(){
         this.q = new Query() {
+
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().getAllConceptNids();
@@ -42,15 +39,14 @@ public class XorTest extends QueryClauseTest {
 
             @Override
             public void Let() throws IOException {
-                let("disease", Snomed.DISEASE);
-                let("v2", setViewCoordinate.getViewCoordinate());
+                let("motion", Snomed.MOTION);
             }
 
             @Override
             public Clause Where() {
-                return Xor(ConceptIsKindOf("disease"), ConceptIsKindOf("disease", "v2"));
+                return Xor(ConceptIsKindOf("motion"), ConceptIsChildOf("motion"));
             }
         };
-
     }
+    
 }

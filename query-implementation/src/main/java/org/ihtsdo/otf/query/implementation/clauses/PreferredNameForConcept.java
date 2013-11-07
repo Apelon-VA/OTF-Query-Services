@@ -16,6 +16,7 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Map;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
@@ -23,6 +24,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
+import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.ParentClause;
 import org.ihtsdo.otf.query.implementation.Query;
@@ -55,6 +57,11 @@ public class PreferredNameForConcept extends ParentClause {
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleConcepts) throws IOException, ValidationException, ContradictionException {
         return incomingPossibleConcepts;
+    }
+    
+    @Override
+    public EnumSet<ClauseComputeType> getComputePhases(){
+        return POST_ITERATION;
     }
 
     @Override

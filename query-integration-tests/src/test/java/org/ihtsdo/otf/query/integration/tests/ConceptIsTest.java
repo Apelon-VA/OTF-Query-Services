@@ -41,12 +41,12 @@ public class ConceptIsTest extends QueryClauseTest {
             @Override
             public void Let() throws IOException {
                 let("motion", Snomed.MOTION);
-                let("v2", vc.getViewCoordinate());
+//                let("v2", vc.getViewCoordinate());
             }
 
             @Override
             public Clause Where() {
-                return ConceptIs("motion", "v2");
+                return Or(ConceptIs("motion"));
             }
         };
     }

@@ -60,6 +60,8 @@ public class ConceptIs extends LeafClause {
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
+        whereClause.getLetKeys().add(conceptSpecString);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 
@@ -70,11 +72,7 @@ public class ConceptIs extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
-            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else {
-            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }
+        this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         getResultsCache().add(this.conceptSpec.getNid());
         return getResultsCache();
     }

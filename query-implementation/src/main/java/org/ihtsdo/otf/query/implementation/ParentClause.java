@@ -58,7 +58,7 @@ public abstract class ParentClause extends Clause {
     }
 
     @Override
-    public final EnumSet<ClauseComputeType> getComputePhases() {
+    public EnumSet<ClauseComputeType> getComputePhases() {
         return PRE_AND_POST_ITERATION;
     }
 

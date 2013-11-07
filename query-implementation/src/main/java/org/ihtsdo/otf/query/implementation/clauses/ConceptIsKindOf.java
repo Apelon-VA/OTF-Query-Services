@@ -57,11 +57,7 @@ public class ConceptIsKindOf extends LeafClause {
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents)
             throws ValidationException, IOException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.viewCoordinate = (ViewCoordinate) enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else {
-            this.viewCoordinate = (ViewCoordinate) enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }
+        this.viewCoordinate = (ViewCoordinate) enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         int parentNid = kindOfSpec.getNid(this.viewCoordinate);
         getResultsCache().or(Ts.get().isKindOfSet(parentNid, this.viewCoordinate));
 
@@ -81,11 +77,12 @@ public class ConceptIsKindOf extends LeafClause {
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
-        whereClause.setSemantic(ClauseSemantic.CONCEPT_IS_CHILD_OF);
+        whereClause.setSemantic(ClauseSemantic.CONCEPT_IS_KIND_OF);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
         whereClause.getLetKeys().add(kindOfSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

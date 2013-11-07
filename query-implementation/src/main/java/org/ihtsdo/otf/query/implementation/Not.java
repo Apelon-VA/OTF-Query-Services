@@ -24,7 +24,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 /**
  * Returns components that are in the incoming For set and not in the set
  * returned from the computation of the clauses that are descendents of the
- * <code>Not</code> clause. 
+ * <code>Not</code> clause.
  *
  * @author kec
  */
@@ -41,7 +41,19 @@ public class Not extends ParentClause {
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
         this.notSet = new ConcurrentBitSet();
         for (Clause c : getChildren()) {
-            notSet.or(c.computePossibleComponents(incomingPossibleComponents));
+            for (ClauseComputeType cp : c.getComputePhases()) {
+                switch (cp) {
+                    case PRE_ITERATION:
+                        notSet.or(c.computePossibleComponents(incomingPossibleComponents));
+                        break;
+                    case ITERATION:
+                        c.computePossibleComponents(incomingPossibleComponents);
+                        break;
+                    case POST_ITERATION:
+                        c.computePossibleComponents(incomingPossibleComponents);
+                        break;
+                }
+            }
         }
         return incomingPossibleComponents;
     }

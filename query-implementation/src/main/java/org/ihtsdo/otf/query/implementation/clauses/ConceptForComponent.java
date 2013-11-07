@@ -16,7 +16,9 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
+import java.util.EnumSet;
 import org.ihtsdo.otf.query.implementation.Clause;
+import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.ParentClause;
@@ -49,6 +51,11 @@ public class ConceptForComponent extends ParentClause {
             outgoingPossibleConceptNids.or(Ts.get().getConceptNidsForComponentNids(childPossibleComponentNids));
         }
         return outgoingPossibleConceptNids;
+    }
+    
+    @Override
+    public EnumSet<ClauseComputeType> getComputePhases(){
+        return POST_ITERATION;
     }
 
     @Override

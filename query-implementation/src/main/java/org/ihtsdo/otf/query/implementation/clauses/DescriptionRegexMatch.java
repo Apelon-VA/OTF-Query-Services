@@ -29,6 +29,7 @@ import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 /**
  * Calculates descriptions that match the specified Java Regular Expression. Very
@@ -42,9 +43,14 @@ public class DescriptionRegexMatch extends LeafClause {
     String regex;
     NativeIdSetBI cache = new ConcurrentBitSet();
     String regexKey;
+    String viewCoordinateKey;
+    ViewCoordinate viewCoordinate;
+    Query enclosingQuery;
 
-    public DescriptionRegexMatch(Query enclosingQuery, String regexKey) {
+    public DescriptionRegexMatch(Query enclosingQuery, String regexKey, String viewCoordinateKey) {
         super(enclosingQuery);
+        this.enclosingQuery = enclosingQuery;
+        this.viewCoordinateKey = viewCoordinateKey;
         this.regexKey = regexKey;
         this.regex = (String) enclosingQuery.getLetDeclarations().get(regexKey);
     }
@@ -56,6 +62,7 @@ public class DescriptionRegexMatch extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
+        this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         this.cache = incomingPossibleComponents;
         return incomingPossibleComponents;
     }
@@ -82,6 +89,7 @@ public class DescriptionRegexMatch extends LeafClause {
             whereClause.getChildren().add(clause.getWhereClause());
         }
         whereClause.getLetKeys().add(regexKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

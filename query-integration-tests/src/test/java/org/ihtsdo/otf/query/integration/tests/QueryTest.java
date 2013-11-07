@@ -16,9 +16,6 @@ package org.ihtsdo.otf.query.integration.tests;
  * limitations under the License.
  */
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
@@ -38,13 +35,10 @@ import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexType;
-import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
-import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
-import org.ihtsdo.otf.tcc.model.cc.NidPairForRefex;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -82,15 +76,14 @@ public class QueryTest {
     public void tearDown() {
     }
 
-    @Ignore
-    @Test
-    public void testChangedFromPreviousVersion() throws IOException, Exception {
-        System.out.println("Changed from previous version");
-        ChangedFromPreviousVersionTest changeTest = new ChangedFromPreviousVersionTest();
-        NativeIdSetBI results = changeTest.computeQuery();
-        Assert.assertEquals(245, results.size());
-
-    }
+//    @Test
+//    public void testChangedFromPreviousVersion() throws IOException, Exception {
+//        System.out.println("Changed from previous version");
+//        ChangedFromPreviousVersionTest changeTest = new ChangedFromPreviousVersionTest();
+//        NativeIdSetBI results = changeTest.computeQuery();
+//        Assert.assertEquals(1, results.size());
+//
+//    }
 
     @Test
     public void testSimpleQuery() throws IOException, Exception {
@@ -128,7 +121,7 @@ public class QueryTest {
 
     @Test
     public void testDifferenceQuery() throws IOException, Exception {
-        XorTest xorTest = new XorTest();
+        XorVersionTest xorTest = new XorVersionTest();
         NativeIdSetBI results = xorTest.computeQuery();
         System.out.println("Different query size: " + results.size());
         Assert.assertEquals(55271, results.size());
@@ -234,7 +227,6 @@ public class QueryTest {
         Assert.assertEquals(6, results.size());
     }
 
-    @Ignore
     @Test
     public void testPreferredTerm() throws IOException, Exception {
         System.out.println("Sequence: " + Ts.get().getSequence());
@@ -244,8 +236,7 @@ public class QueryTest {
         for (Object o : preferredNameTest.getQuery().returnDisplayObjects(results, ReturnTypes.UUIDS)) {
             System.out.println(o);
         }
-        Assert.assertEquals(1, results.size());
-        Assert.assertTrue(false);
+        Assert.assertEquals(4, results.size());
     }
 
     @Test
@@ -299,30 +290,9 @@ public class QueryTest {
 
     @Test
     public void testRelRestrictionSubsumptionFalse() throws IOException, Exception {
-        Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
-            @Override
-            protected NativeIdSetBI For() throws IOException {
-                return Ts.get().getAllConceptNids();
-            }
-
-            @Override
-            public void Let() throws IOException {
-                let("Is a", Snomed.IS_A);
-                let("Motion", Snomed.MOTION);
-                let("Acceleration", Snomed.ACCELERATION);
-            }
-
-            @Override
-            public Clause Where() {
-                return Or(RelRestriction("Acceleration", "Is a", "Motion", false));
-            }
-        };
-
-        NativeIdSetBI results = q.compute();
-        System.out.println("Rel restriction subsumption false count " + results.size());
-        for (Object o : q.returnDisplayObjects(results, ReturnTypes.CONCEPT_VERSION)) {
-            System.out.println(o);
-        }
+        System.out.println("RelRestriction subsumption false test");
+        RelRestriction2Test test = new RelRestriction2Test();
+        NativeIdSetBI results = test.computeQuery();
         Assert.assertEquals(1, results.size());
     }
 
@@ -369,6 +339,7 @@ public class QueryTest {
             System.out.println(o);
         }
         Assert.assertEquals(7, results.size());
+        Assert.assertEquals(7, fsnTest.getQuery().returnDisplayObjects(results, ReturnTypes.NIDS).size());
 
     }
 
@@ -493,22 +464,7 @@ public class QueryTest {
 
     @Test
     public void refsetContainsConceptTest() throws IOException, Exception {
-        try {
-            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
-            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
-            int authorNid = TermAux.USER.getLenient().getConceptNid();
-            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
-
-            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
-            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
-            RefexChronicleBI rc = tb.construct(refex);
-            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
-            Ts.get().commit();
-        } catch (InvalidCAB ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ContradictionException ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.addRefsetMember();
         System.out.println("RefsetContainsConcept test");
         RefsetContainsConceptTest rccTest = new RefsetContainsConceptTest();
         NativeIdSetBI ids = rccTest.computeQuery();
@@ -518,23 +474,8 @@ public class QueryTest {
 
     @Test
     public void refsetContainsStringTest() throws Exception {
-        try {
-            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
-            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
-            int authorNid = TermAux.USER.getLenient().getConceptNid();
-            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
-
-            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
-            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
-            RefexChronicleBI rc = tb.construct(refex);
-            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
-            Ts.get().commit();
-        } catch (InvalidCAB ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ContradictionException ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
         System.out.println("RefsetContainsString test");
+        this.addRefsetMember();
         RefsetContainsStringTest rcsTest = new RefsetContainsStringTest();
         NativeIdSetBI ids = rcsTest.computeQuery();
         Assert.assertEquals(1, ids.size());
@@ -542,6 +483,30 @@ public class QueryTest {
 
     @Test
     public void refsetContainsKindOfConceptTest() throws Exception {
+        System.out.println("RefsetContainsKindOfConcept test");
+        this.addRefsetMember();
+        RefsetContainsKindOfConceptTest rckocTest = new RefsetContainsKindOfConceptTest();
+        NativeIdSetBI nids = rckocTest.computeQuery();
+        Assert.assertEquals(1, nids.size());
+    }
+
+    @Test
+    public void orTest() throws IOException, Exception{
+        System.out.println("Or test");
+        OrTest orTest = new OrTest();
+        NativeIdSetBI results = orTest.computeQuery();
+        Assert.assertEquals(3, results.size());
+    }
+    
+    @Test
+    public void notTest2() throws IOException, Exception{
+        System.out.println("Not test2");
+        NotTest notTest = new NotTest();
+        NativeIdSetBI results = notTest.computeQuery();
+        Assert.assertEquals(6, results.size());
+    }
+    
+    public void addRefsetMember() throws IOException {
         try {
             RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
             refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
@@ -558,9 +523,35 @@ public class QueryTest {
         } catch (ContradictionException ex) {
             Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("RefsetContainsKindOfConcept test");
-        RefsetContainsKindOfConceptTest rckocTest = new RefsetContainsKindOfConceptTest();
-        NativeIdSetBI nids = rckocTest.computeQuery();
-        Assert.assertEquals(1, nids.size());
     }
+
+//    @Test
+//    public void changeDescription() throws IOException, ContradictionException {
+//        System.out.println("Versioning test........");
+//        ViewCoordinate v1 = StandardViewCoordinates.getSnomedInferredLatest();
+//        SetViewCoordinate v2s = new SetViewCoordinate(2011, 1, 31, 0, 0);
+//        ViewCoordinate v2 = v2s.getViewCoordinate();
+//        ConceptVersionBI c1;
+//        ConceptVersionBI c2;
+//        DescriptionVersionBI d1 = null;
+//        DescriptionVersionBI d2 = null;
+//        
+//        Ts.get().getConceptVersion(v1, -2139170763);
+//
+//        NativeIdSetItrBI iter = Ts.get().isKindOfSet(Snomed.CLINICAL_FINDING.getNid(), v1).getSetBitIterator();
+//
+//        while (iter.next()) {
+//            c1 = Ts.get().getConcept(iter.nid()).getVersion(v1);
+//            c2 = Ts.get().getConcept(iter.nid()).getVersion(v2);
+//            if (c1 != null && c2 != null) {
+//                d1 = c1.getFullySpecifiedDescription();
+//                d2 = c2.getFullySpecifiedDescription();
+//
+//            }
+//            if (d2 != null && d1 != null) {
+//                if (!d2.equals(d1)) {
+//                    System.out.println(iter.nid());
+//                }
+//            }
+//        }
 }

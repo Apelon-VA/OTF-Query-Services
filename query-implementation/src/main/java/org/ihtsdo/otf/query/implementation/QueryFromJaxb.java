@@ -17,9 +17,11 @@ package org.ihtsdo.otf.query.implementation;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.AND;
@@ -40,7 +42,6 @@ import static org.ihtsdo.otf.query.implementation.ClauseSemantic.REFSET_LUCENE_M
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.REL_TYPE;
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.XOR;
 import org.ihtsdo.otf.tcc.api.coordinate.SimpleViewCoordinate;
-import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
@@ -94,17 +95,6 @@ public class QueryFromJaxb extends Query {
         Unmarshaller unmarshaller = JaxbForQuery.get().createUnmarshaller();
         BdbTerminologyStore.waitForSetup();
 
-        if (forXml == null || forXml.equals("null") || forXml.equals("")) {
-            this.forCollection = Ts.get().getAllConceptNids();
-        } else {
-            try {
-                ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
-                this.forCollection = _for.getCollection();
-            } catch (JAXBException e) {
-                this.forCollection = null;
-            }
-        }
-
         LetMap letMap = null;
 
         try {
@@ -114,19 +104,37 @@ public class QueryFromJaxb extends Query {
             this.setLetDelclarations(null);
         }
 
-        try{
-        Map<String, Object> convertedMap = new HashMap<>(letMap.getMap().size());
-        for (Entry entry : letMap.getMap().entrySet()) {
-            if (entry.getValue() instanceof SimpleConceptSpecification) {
-                ConceptSpec newValue = new ConceptSpec((SimpleConceptSpecification) entry.getValue());
-                convertedMap.put((String) entry.getKey(), newValue);
-            } else {
-                convertedMap.put((String) entry.getKey(), entry.getValue());
+        Map<String, Object> convertedMap = null;
+
+        try {
+            convertedMap = new HashMap<>(letMap.getMap().size());
+            for (Entry entry : letMap.getMap().entrySet()) {
+                if (entry.getValue() instanceof SimpleConceptSpecification) {
+                    ConceptSpec newValue = new ConceptSpec((SimpleConceptSpecification) entry.getValue());
+                    convertedMap.put((String) entry.getKey(), newValue);
+                } else {
+                    convertedMap.put((String) entry.getKey(), entry.getValue());
+                }
             }
-        }
-        getLetDeclarations().putAll(convertedMap);
-        }catch(NullPointerException e){
+            getLetDeclarations().putAll(convertedMap);
+        } catch (NullPointerException e) {
             this.setLetDelclarations(null);
+        }
+
+        if (forXml == null || forXml.equals("null") || forXml.equals("")) {
+            this.forCollection = Ts.get().getAllConceptNids();
+        } else if (convertedMap.containsKey("Custom FOR set")) {            
+            ArrayList<UUID> uuids = (ArrayList<UUID>) convertedMap.get("Custom FOR set");
+            for(UUID u : uuids){
+                this.forCollection.add(Ts.get().getNidForUuids(u));
+            }
+        } else {
+            try {
+                ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
+                this.forCollection = _for.getCollection();
+            } catch (JAXBException e) {
+                this.forCollection = null;
+            }
         }
 
         try {
@@ -183,25 +191,21 @@ public class QueryFromJaxb extends Query {
                 assert childClauses.length == 1;
                 return q.ConceptForComponent(childClauses[0]);
             case CONCEPT_IS:
-                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should be empty: " + clause.letKeys;
+                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
                 assert childClauses.length == 0 : childClauses;
-                if (clause.letKeys.size() == 1) {
-                    return q.ConceptIs(clause.letKeys.get(0));
-                } else {
-                    return q.ConceptIs(clause.letKeys.get(0), clause.letKeys.get(1));
-                }
+                return q.ConceptIs(clause.letKeys.get(0), clause.letKeys.get(1));
             case CONCEPT_IS_CHILD_OF:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.ConceptIsChildOf(clause.letKeys.get(0));
+                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
+                return q.ConceptIsChildOf(clause.letKeys.get(0), clause.letKeys.get(1));
             case CONCEPT_IS_DESCENDENT_OF:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.ConceptIsDescendentOf(clause.letKeys.get(0));
+                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
+                return q.ConceptIsDescendentOf(clause.letKeys.get(0), clause.letKeys.get(1));
             case CONCEPT_IS_KIND_OF:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.ConceptIsKindOf(clause.letKeys.get(0));
+                assert clause.letKeys.size() == 2 : "Let keys should have one and only one value: " + clause.letKeys;
+                return q.ConceptIsKindOf(clause.letKeys.get(0), clause.letKeys.get(1));
             case CHANGED_FROM_PREVIOUS_VERSION:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
@@ -220,28 +224,32 @@ public class QueryFromJaxb extends Query {
                 return q.DescriptionActiveRegexMatch(clause.letKeys.get(0));
             case DESCRIPTION_REGEX_MATCH:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.DescriptionRegexMatch(clause.letKeys.get(0));
+                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
+                return q.DescriptionRegexMatch(clause.letKeys.get(0), clause.letKeys.get(1));
             case FULLY_SPECIFIED_NAME_FOR_CONCEPT:
                 assert clause.letKeys.isEmpty() : "Let keys should be empty: " + clause.letKeys;
                 assert childClauses.length == 1;
-                return q.PreferredNameForConcept(childClauses[0]);
+                return q.FullySpecifiedNameForConcept(childClauses[0]);
             case PREFERRED_NAME_FOR_CONCEPT:
                 assert clause.letKeys.isEmpty() : "Let keys should be empty: " + clause.letKeys;
                 assert childClauses.length == 1;
                 return q.PreferredNameForConcept(childClauses[0]);
             case REFSET_LUCENE_MATCH:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
+                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value " + clause.letKeys;
                 return q.RefsetLuceneMatch(clause.letKeys.get(0));
             case REFSET_CONTAINS_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.RefsetContainsConcept(clause.letKeys.get(0), clause.letKeys.get(1));
+                assert clause.letKeys.size() == 3 : "Let keys should have two values: " + clause.letKeys;
+                return q.RefsetContainsConcept(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
             case REFSET_CONTAINS_KIND_OF_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.RefsetContainsKindOfConcept(clause.letKeys.get(0), clause.letKeys.get(1));
+                assert clause.letKeys.size() == 3 : "Let keys should have two values: " + clause.letKeys;
+                return q.RefsetContainsKindOfConcept(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+            case REFSET_CONTAINS_STRING:
+                assert childClauses.length == 0 : childClauses;
+                assert clause.letKeys.size() == 3 : "Let keys should have two values: " + clause.letKeys;
+                return q.RefsetContainsString(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
             case REL_RESTRICTION:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 : "Let keys should have three or four values: " + clause.letKeys;
@@ -252,7 +260,7 @@ public class QueryFromJaxb extends Query {
                 }
             case REL_TYPE:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 2 || clause.letKeys.size() == 3 : "Let keys should have two or three values: " + clause.letKeys;
+                assert (clause.letKeys.size() == 2) || (clause.letKeys.size() == 3) : "Let keys should have two or three values: " + clause.letKeys;
                 if (clause.letKeys.size() == 2) {
                     return q.RelType(clause.letKeys.get(0), clause.letKeys.get(1));
                 } else {

@@ -19,8 +19,6 @@ import java.io.IOException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
@@ -42,13 +40,12 @@ public class PreferredNameForConceptTest extends QueryClauseTest {
 
             @Override
             public void Let() throws IOException {
-                let("physical force", Snomed.STRUCTURE_OF_ENDOCRINE_SYSTEM);
-                let("v2", setViewCoordinate.getViewCoordinate());
+                let("oligophrenia", "oligophrenia");
             }
 
             @Override
             public Clause Where() {
-                return And(ConceptIsKindOf("physical force"), Not(ConceptIsKindOf("physical force", "v2")));
+                return PreferredNameForConcept(ConceptForComponent(DescriptionLuceneMatch("oligophrenia")));
             }
         };
     }

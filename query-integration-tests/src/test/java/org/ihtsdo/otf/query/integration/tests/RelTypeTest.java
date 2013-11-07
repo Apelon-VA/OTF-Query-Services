@@ -31,7 +31,7 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
  */
 public class RelTypeTest extends QueryClauseTest {
 
-    public RelTypeTest() throws IOException, Exception {
+    public RelTypeTest() throws IOException {
         this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {

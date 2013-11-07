@@ -33,9 +33,9 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * TODO: not implemented yet. <code>LeafClause</code> that computes refsets that contain the specified
- * input
- * <code>ConceptSpec</code>.
+ * <code>LeafClause</code> that returns the nid of the input refset if the input
+ * concept is a member of the refset and returns an empty set if the input
+ * concept is not a member of the refset.
  *
  * @author dylangrald
  */
@@ -67,7 +67,9 @@ public class RefsetContainsConcept extends LeafClause {
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
+        whereClause.getLetKeys().add(refsetSpecKey);
         whereClause.getLetKeys().add(conceptSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
 
     }
@@ -79,20 +81,16 @@ public class RefsetContainsConcept extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }     
+        this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         int conceptNid = this.conceptSpec.getNid();
         int refsetNid = this.refsetSpec.getNid();
         ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
-        for(RefexVersionBI<?> rm :conceptVersion.getCurrentRefsetMembers(vc)){
-            if(rm.getReferencedComponentNid() == conceptNid){
+        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(vc)) {
+            if (rm.getReferencedComponentNid() == conceptNid) {
                 getResultsCache().add(refsetNid);
             }
         }
-        
+
         return getResultsCache();
 
     }

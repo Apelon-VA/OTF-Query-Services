@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
-import org.ihtsdo.otf.tcc.datastore.Bdb;
 
 /**
  * The <code>ForCollection</code> enables the specification of a 
@@ -58,17 +58,33 @@ public class ForCollection {
         /**
          * The query should iterate over a provided custom collection. 
          */
-        CUSTOM;
+        CUSTOM,
+        
+        /**
+         * The query should iterate over a provided set of nids.
+         */
+        CUSTOM_NIDS;
     }
     ForCollectionContents forCollection = ForCollectionContents.CONCEPT;
     List<UUID> customCollection = new ArrayList<>();
+    public NativeIdSetBI customCollectionOfNids;
+    
+    public ForCollection(NativeIdSetBI customNids){
+        this.customCollectionOfNids = customNids;
+        this.forCollection = ForCollectionContents.CUSTOM_NIDS;
+    }
+    
+    public ForCollection(){
+        
+    }
 
     /**
      * 
+     * @param forCollectionSet
      * @return a collection of native identifiers that a query should iterate over. 
      * @throws IOException 
      */
-    public NativeIdSetBI getCollection() throws IOException {
+    public NativeIdSetBI getCollection(NativeIdSetBI... forCollectionSet) throws IOException {
         TerminologyStoreDI ts = Ts.get();
         switch (forCollection) {
             case COMPONENT:
@@ -81,7 +97,12 @@ public class ForCollection {
                     cbs.add(ts.getNidForUuids(uuid));
                 }
                 return cbs;
-
+            case CUSTOM_NIDS:
+                ConcurrentBitSet forSet = new ConcurrentBitSet();
+                for(NativeIdSetBI set : forCollectionSet){
+                    forSet.or(set);
+                }
+                return forSet;
             default:
                 throw new UnsupportedOperationException("Can't handle: " + forCollection);
         }
@@ -116,6 +137,7 @@ public class ForCollection {
      * 
      * @return a custom collection of UUIDs over which the query should iterate.  
      */
+    @XmlAttribute
     public List<UUID> getCustomCollection() {
         return customCollection;
     }
@@ -127,5 +149,9 @@ public class ForCollection {
      */
     public void setCustomCollection(List<UUID> customCollection) {
         this.customCollection = customCollection;
+    }
+    
+    public void setCustomCollectionOfNids(NativeIdSetBI customCollection){
+        this.customCollectionOfNids = customCollection;
     }
 }

@@ -52,6 +52,7 @@ public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
             whereClause.getChildren().add(clause.getWhereClause());
         }
         whereClause.getLetKeys().add(luceneMatchKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

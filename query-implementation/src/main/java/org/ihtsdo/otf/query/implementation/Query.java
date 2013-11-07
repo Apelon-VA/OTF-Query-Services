@@ -69,18 +69,23 @@ import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
 public abstract class Query {
 
     public String currentViewCoordinateKey = "Current view coordinate";
-    private HashMap<String, Object> letDeclarations =
-            new HashMap<>();
+    private HashMap<String, Object> letDeclarations
+            = new HashMap<>();
 
     public ViewCoordinate getStandardVC() throws IOException {
-        return (ViewCoordinate) getVCLetDeclarations().get(currentViewCoordinateKey);
+        return (ViewCoordinate) getLetDeclarations().get(currentViewCoordinateKey);
     }
 
     public HashMap<String, Object> getLetDeclarations() {
+        try {
+            letDeclarations.put(currentViewCoordinateKey, StandardViewCoordinates.getSnomedInferredLatest());
+        } catch (IOException ex) {
+            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return letDeclarations;
     }
-    
-    public void setLetDelclarations(HashMap<String, Object> letMap){
+
+    public void setLetDelclarations(HashMap<String, Object> letMap) {
         this.letDeclarations = letMap;
     }
     /**
@@ -88,25 +93,18 @@ public abstract class Query {
      */
     int resultSetLimit = 50;
 
-    public HashMap<String, Object> getVCLetDeclarations() throws IOException {
-        HashMap<String, Object> letVCDeclarations =
-                new HashMap<>();
-        letVCDeclarations.put(currentViewCoordinateKey, StandardViewCoordinates.getSnomedInferredLatest());
-        return letVCDeclarations;
-    }
     /**
-     * The concepts, stored as nids in a
-     * <code>NativeIdSetBI</code>, that are considered in the query.
+     * The concepts, stored as nids in a <code>NativeIdSetBI</code>, that are
+     * considered in the query.
      */
     private NativeIdSetBI forSet;
     /**
      * The steps required to compute the query clause.
      */
-    private EnumSet<ClauseComputeType> computeTypes =
-            EnumSet.noneOf(ClauseComputeType.class);
+    private EnumSet<ClauseComputeType> computeTypes
+            = EnumSet.noneOf(ClauseComputeType.class);
     /**
-     * The
-     * <code>ViewCoordinate</code> used in the query.
+     * The <code>ViewCoordinate</code> used in the query.
      */
     private ViewCoordinate viewCoordinate;
 
@@ -120,19 +118,16 @@ public abstract class Query {
     }
 
     /**
-     * No argument constructor, which creates a
-     * <code>Query</code> with the Snomed inferred latest as the input
-     * <code>ViewCoordinate</code>.
+     * No argument constructor, which creates a <code>Query</code> with the
+     * Snomed inferred latest as the input <code>ViewCoordinate</code>.
      */
     public Query() {
         this(null);
     }
 
     /**
-     * Constructor for
-     * <code>Query</code>. If a
-     * <code>ViewCoordinate</code> is not specified, the default is the Snomed
-     * inferred latest.
+     * Constructor for <code>Query</code>. If a <code>ViewCoordinate</code> is
+     * not specified, the default is the Snomed inferred latest.
      *
      * @param viewCoordinate
      */
@@ -182,11 +177,11 @@ public abstract class Query {
         forSet = For();
         Let();
         Clause rootClause = Where();
-        NativeIdSetBI possibleComponents =
-                rootClause.computePossibleComponents(forSet);
+        NativeIdSetBI possibleComponents
+                = rootClause.computePossibleComponents(forSet);
         if (computeTypes.contains(ClauseComputeType.ITERATION)) {
-            NativeIdSetBI conceptsToIterateOver =
-                    Ts.get().getConceptNidsForComponentNids(possibleComponents);
+            NativeIdSetBI conceptsToIterateOver
+                    = Ts.get().getConceptNidsForComponentNids(possibleComponents);
             Iterator itr = new Iterator(rootClause, conceptsToIterateOver);
             Ts.get().iterateConceptDataInParallel(itr);
         }
@@ -200,8 +195,8 @@ public abstract class Query {
     public ViewCoordinate getViewCoordinate() {
         return viewCoordinate;
     }
-    
-    public void setViewCoordinate(ViewCoordinate vc){
+
+    public void setViewCoordinate(ViewCoordinate vc) {
         this.viewCoordinate = vc;
     }
 
@@ -385,8 +380,7 @@ public abstract class Query {
     }
 
     /**
-     * Creates
-     * <code>ConceptIsKindOf</code> clause with default
+     * Creates <code>ConceptIsKindOf</code> clause with default
      * <code>ViewCoordinate</code>.
      *
      * @param conceptSpecKey
@@ -397,8 +391,7 @@ public abstract class Query {
     }
 
     /**
-     * Creates
-     * <code>ConceptIsKindOf</code> clause with input
+     * Creates <code>ConceptIsKindOf</code> clause with input
      * <code>ViewCoordinate</code>.
      *
      * @param conceptSpecKey
@@ -410,7 +403,11 @@ public abstract class Query {
     }
 
     protected DescriptionRegexMatch DescriptionRegexMatch(String regexKey) {
-        return new DescriptionRegexMatch(this, regexKey);
+        return new DescriptionRegexMatch(this, regexKey, this.currentViewCoordinateKey);
+    }
+
+    protected DescriptionRegexMatch DescriptionRegexMatch(String regexKey, String viewCoordinateKey) {
+        return new DescriptionRegexMatch(this, regexKey, viewCoordinateKey);
     }
 
     protected DescriptionActiveRegexMatch DescriptionActiveRegexMatch(String regexKey) {
@@ -418,8 +415,7 @@ public abstract class Query {
     }
 
     /**
-     * Creates
-     * <code>ConceptForComponent</code> clause with input child clause.
+     * Creates <code>ConceptForComponent</code> clause with input child clause.
      *
      * @param child
      * @return
@@ -433,8 +429,7 @@ public abstract class Query {
     }
 
     /**
-     * Creates
-     * <code>ConceptIs</code> clause with input
+     * Creates <code>ConceptIs</code> clause with input
      * <code>ViewCoordinate</code>.
      *
      * @param conceptSpecKey
@@ -450,8 +445,7 @@ public abstract class Query {
     }
 
     /**
-     * Creates
-     * <code>ConceptIsDescendentOf</code> clause with input
+     * Creates <code>ConceptIsDescendentOf</code> clause with input
      * <code>ViewCoordinate</code>.
      *
      * @param conceptSpecKey
@@ -467,8 +461,7 @@ public abstract class Query {
     }
 
     /**
-     * Creates
-     * <code>ConceptIsChildOf</code> clause with input
+     * Creates <code>ConceptIsChildOf</code> clause with input
      * <code>ViewCoordinate</code>.
      *
      * @param conceptSpecKey
@@ -500,8 +493,7 @@ public abstract class Query {
     }
 
     /**
-     * Creates
-     * <code>RelType</code> clause with input
+     * Creates <code>RelType</code> clause with input
      * <code>ViewCoordinate</code>.
      *
      * @param relTypeKey
@@ -552,12 +544,16 @@ public abstract class Query {
     protected RefsetContainsKindOfConcept RefsetContainsKindOfConcept(String refsetSpecKey, String conceptSpecKey, String viewCoordinateKey) {
         return new RefsetContainsKindOfConcept(this, refsetSpecKey, conceptSpecKey, viewCoordinateKey);
     }
-    
-    protected RefsetContainsString RefsetContainsString(String refsetSpec, String stringMatch){
-        return new RefsetContainsString(this, refsetSpec, stringMatch, this.currentViewCoordinateKey);
+
+    protected RefsetContainsString RefsetContainsString(String refsetSpecKey, String stringMatchKey) {
+        return new RefsetContainsString(this, refsetSpecKey, stringMatchKey, this.currentViewCoordinateKey);
     }
     
-    protected RefsetLuceneMatch RefsetLuceneMatch(String queryString){
+    protected RefsetContainsString RefsetContainsString(String refsetSpecKey, String stringMatchKey, String viewCoordinateKey){
+        return new RefsetContainsString(this, refsetSpecKey, stringMatchKey, viewCoordinateKey);
+    }
+
+    protected RefsetLuceneMatch RefsetLuceneMatch(String queryString) {
         return new RefsetLuceneMatch(this, queryString, this.currentViewCoordinateKey);
     }
 

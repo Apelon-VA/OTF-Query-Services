@@ -27,12 +27,10 @@ import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.WhereClause;
-import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_STRING;
 import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_STR;
 import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_STR;
@@ -44,7 +42,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * TODO: not implemented yet.
+ * .
  *
  * @author dylangrald
  */
@@ -75,11 +73,7 @@ public class RefsetContainsString extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }
+        this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         int refsetNid = this.refsetSpec.getNid();
         ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
 
@@ -110,12 +104,13 @@ public class RefsetContainsString extends LeafClause {
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
-        whereClause.setSemantic(ClauseSemantic.REFSET_CONTAINS_KIND_OF_CONCEPT);
+        whereClause.setSemantic(ClauseSemantic.REFSET_CONTAINS_STRING);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
         whereClause.getLetKeys().add(refsetSpecKey);
         whereClause.getLetKeys().add(queryText);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

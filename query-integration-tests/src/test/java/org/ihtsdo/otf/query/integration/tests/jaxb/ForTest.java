@@ -24,8 +24,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.datastore.Bdb;
@@ -105,5 +106,18 @@ public class ForTest {
         forCollection.setForCollection(ForCollection.ForCollectionContents.CONCEPT);
         NativeIdSetBI forSet = forCollection.getCollection();
         Assert.assertEquals(ts.getConceptCount(), forSet.size());
+    }
+
+    /**
+     * TODO: enable ability write custom FOR sets
+     * @throws IOException 
+     */
+    @Ignore
+    @Test
+    public void getCustomForSetTest() throws IOException {
+        ForCollection forCollection = new ForCollection(Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest()));
+        NativeIdSetBI forSet = forCollection.getCollection();
+        Assert.assertEquals(7, forSet.size());
+
     }
 }

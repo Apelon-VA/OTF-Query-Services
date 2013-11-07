@@ -41,7 +41,7 @@ import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 /**
- * TODO: Not implemented yet.
+ *
  *
  * @author dylangrald
  */
@@ -63,7 +63,7 @@ public class RefsetLuceneMatch extends LeafClause {
 
     @Override
     public WhereClause getWhereClause() {
-                WhereClause whereClause = new WhereClause();
+        WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REFSET_LUCENE_MATCH);
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
@@ -79,11 +79,7 @@ public class RefsetLuceneMatch extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
-            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else if (this.viewCoordinateKey != null) {
-            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }
+        this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         NativeIdSetBI nids = new ConcurrentBitSet();
         try {
             List<IndexerBI> lookers = Hk2Looker.get().getAllServices(IndexerBI.class);

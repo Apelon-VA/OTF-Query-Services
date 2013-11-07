@@ -26,19 +26,19 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for ChangedFromPreviousVersion clause.
+ * Creates a test for <code>ChangedFromPreviousVersion</code> clause.
  *
  * @author dylangrald
  */
 public class ChangedFromPreviousVersionTest extends QueryClauseTest {
 
-    SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
+    SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2010, 1, 31, 0, 0);
 
     public ChangedFromPreviousVersionTest() throws IOException{
         this.q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
-                return Ts.get().isKindOfSet(Snomed.CLINICAL_FINDING.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+                return Ts.get().isKindOfSet(Snomed.EVENT.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
             }
 
             @Override
@@ -48,7 +48,7 @@ public class ChangedFromPreviousVersionTest extends QueryClauseTest {
 
             @Override
             public Clause Where() {
-                return ChangedFromPreviousVersion("v2");
+                return Or(ChangedFromPreviousVersion("v2"));
             }
         };
 

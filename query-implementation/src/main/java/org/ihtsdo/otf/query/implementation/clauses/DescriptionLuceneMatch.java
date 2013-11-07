@@ -67,11 +67,8 @@ public class DescriptionLuceneMatch extends LeafClause {
 
     @Override
     public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
-        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
-            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else if (this.viewCoordinateKey != null) {
-            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }
+        this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+
         NativeIdSetBI nids = new ConcurrentBitSet();
         try {
             List<IndexerBI> lookers = Hk2Looker.get().getAllServices(IndexerBI.class);

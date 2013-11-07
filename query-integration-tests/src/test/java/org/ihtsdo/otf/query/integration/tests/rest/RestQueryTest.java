@@ -18,6 +18,7 @@ package org.ihtsdo.otf.query.integration.tests.rest;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Application;
@@ -32,16 +33,38 @@ import org.ihtsdo.otf.query.rest.server.QueryResource;
 import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.LetMap;
+import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.query.integration.tests.ConceptForComponentTest;
+import org.ihtsdo.otf.query.integration.tests.ConceptIsTest;
+import org.ihtsdo.otf.query.integration.tests.FullySpecifiedNameForConceptTest;
+import org.ihtsdo.otf.query.integration.tests.IsChildOfTest;
+import org.ihtsdo.otf.query.integration.tests.IsDescendentOfTest;
+import org.ihtsdo.otf.query.integration.tests.IsKindOfTest;
+import org.ihtsdo.otf.query.integration.tests.NotTest;
+import org.ihtsdo.otf.query.integration.tests.OrTest;
+import org.ihtsdo.otf.query.integration.tests.PreferredNameForConceptTest;
+import org.ihtsdo.otf.query.integration.tests.QueryClauseTest;
+import org.ihtsdo.otf.query.integration.tests.RefsetContainsConceptTest;
+import org.ihtsdo.otf.query.integration.tests.RefsetContainsKindOfConceptTest;
+import org.ihtsdo.otf.query.integration.tests.RefsetContainsStringTest;
+import org.ihtsdo.otf.query.integration.tests.RefsetLuceneMatchTest;
+import org.ihtsdo.otf.query.integration.tests.RelRestriction2Test;
+import org.ihtsdo.otf.query.integration.tests.RelRestrictionTest;
+import org.ihtsdo.otf.query.integration.tests.RelTypeTest;
+import org.ihtsdo.otf.query.integration.tests.XorTest;
 import org.ihtsdo.otf.query.rest.server.LuceneResource;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -79,10 +102,6 @@ public class RestQueryTest extends JerseyTest {
         return new ResourceConfig(QueryResource.class);
     }
 
-//    @Override
-//    protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
-//        return super.getTestContainerFactory(); 
-//    }
     @Test
     public void testQuery() {
         try {
@@ -93,7 +112,6 @@ public class RestQueryTest extends JerseyTest {
             String viewCoordinateXml = getXmlString(ctx,
                     StandardViewCoordinates.getSnomedInferredLatest());
 
-
             String forXml = getXmlString(ctx, new ForCollection());
 
             q.Let();
@@ -101,20 +119,17 @@ public class RestQueryTest extends JerseyTest {
             LetMap wrappedMap = new LetMap(map);
             String letMapXml = getXmlString(ctx, wrappedMap);
 
-
             WhereClause where = q.Where().getWhereClause();
 
             String whereXml = getXmlString(ctx, where);
-
 
             final String resultString = target("query-service/query").
                     queryParam("VIEWPOINT", viewCoordinateXml).
                     queryParam("FOR", forXml).
                     queryParam("LET", letMapXml).
                     queryParam("WHERE", whereXml).
-                    queryParam("RETURN", ReturnTypes.NIDS.name()).
+                    queryParam("RETURN", ReturnTypes.UUIDS.name()).
                     request(MediaType.TEXT_PLAIN).get(String.class);
-
 
             Logger.getLogger(RestQueryTest.class.getName()).log(Level.INFO,
                     "Result: {0}", resultString);
@@ -136,6 +151,190 @@ public class RestQueryTest extends JerseyTest {
         }
         Assert.assertTrue(luceneResource != null);
         System.out.println(luceneResource);
+    }
+
+    @Test
+    public void conceptForComponentTest() throws IOException, JAXBException {
+        System.out.println("ConceptForComponentTest");
+        ConceptForComponentTest test = new ConceptForComponentTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(3, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void conceptIsTest() throws IOException, JAXBException {
+        System.out.println("ConceptIsTest");
+        ConceptIsTest test = new ConceptIsTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(1, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void fsnTest() throws JAXBException, IOException, Exception {
+        System.out.println("FSN test");
+        FullySpecifiedNameForConceptTest fsnTest = new FullySpecifiedNameForConceptTest();
+        String resultString = returnResultString(fsnTest);
+        System.out.println(resultString);
+        Assert.assertEquals(7, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void isChildOfTest() throws IOException, JAXBException {
+        System.out.println("IsChildOf test");
+        IsChildOfTest icoTest = new IsChildOfTest();
+        String resultString = returnResultString(icoTest);
+        Assert.assertEquals(21, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void IsDescendentOfTest() throws IOException, JAXBException {
+        System.out.println("IsDescendentOf test");
+        IsDescendentOfTest idoTest = new IsDescendentOfTest();
+        String resultString = returnResultString(idoTest);
+        Assert.assertEquals(6, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void IsKindOfTest() throws IOException, JAXBException {
+        System.out.println("IsKindOf test");
+        IsKindOfTest ikoTest = new IsKindOfTest();
+        String resultString = returnResultString(ikoTest);
+        Assert.assertEquals(171, getNidSet(resultString).size());
+    }
+
+    @Ignore
+    @Test
+    public void NotTest() throws IOException, JAXBException {
+        System.out.println("Not test");
+        NotTest notTest = new NotTest();
+        String resultString = returnResultString(notTest);
+        Assert.assertEquals(5, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void OrTest() throws IOException, JAXBException {
+        System.out.println("Or test");
+        OrTest orTest = new OrTest();
+        String resultString = returnResultString(orTest);
+        Assert.assertEquals(3, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void PreferredNameForConceptTest() throws IOException, JAXBException {
+        System.out.println("PreferredNameForConcept test");
+        PreferredNameForConceptTest pnfcTest = new PreferredNameForConceptTest();
+        String resultString = returnResultString(pnfcTest);
+        Assert.assertEquals(4, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void RefsetContainsConceptTest() throws IOException, JAXBException {
+        System.out.println("RefsetContainsConcept test");
+        RefsetContainsConceptTest rccTest = new RefsetContainsConceptTest();
+        String resultString = returnResultString(rccTest);
+        Assert.assertEquals(1, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void RefsetContainsKindOfConceptTest() throws JAXBException, IOException {
+        System.out.println("RefsetContainsKindOfConcept test");
+        RefsetContainsKindOfConceptTest test = new RefsetContainsKindOfConceptTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(1, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void RefsetContainsStringTest() throws JAXBException, IOException {
+        System.out.println("RefsetContainsString test");
+        RefsetContainsStringTest test = new RefsetContainsStringTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(1, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void RefsetLuceneMatchTest() throws JAXBException, IOException {
+        System.out.println("RefsetLuceneMatch test");
+        RefsetLuceneMatchTest test = new RefsetLuceneMatchTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(1, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void RelRestrictionTest() throws IOException, JAXBException {
+        System.out.println("RelRestriction test");
+        RelRestrictionTest test = new RelRestrictionTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(3, getNidSet(resultString).size());
+    }
+    
+    /**
+     * TODO
+     * @throws Exception 
+     */
+    @Ignore
+    @Test
+    public void RelRestrictionSubFalseTest() throws Exception{
+        System.out.println("RelRestriction subsumption false test");
+        RelRestriction2Test test = new RelRestriction2Test();
+        String resultsString = returnResultString(test);
+        Assert.assertEquals(1, getNidSet(resultsString).size());
+    }
+
+    @Test
+    public void RelTypeTest() throws JAXBException, IOException {
+        System.out.println("RelType test");
+        RelTypeTest test = new RelTypeTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(228, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void XorTest() throws IOException, JAXBException {
+        System.out.println("Xor test");
+        XorTest test = new XorTest();
+        String resultString = returnResultString(test);
+        Assert.assertEquals(2, getNidSet(resultString).size());
+    }
+
+    public String returnResultString(QueryClauseTest test) throws JAXBException, IOException {
+        JAXBContext ctx = JaxbForQuery.get();
+        String viewCoordinateXml = getXmlString(ctx,
+                StandardViewCoordinates.getSnomedInferredLatest());
+
+        String forXml = getXmlString(ctx, new ForCollection());
+
+        Query q = test.getQuery();
+
+        q.Let();
+        Map<String, Object> map = q.getLetDeclarations();
+        LetMap wrappedMap = new LetMap(map);
+        String letMapXml = getXmlString(ctx, wrappedMap);
+
+        WhereClause where = q.Where().getWhereClause();
+
+        String whereXml = getXmlString(ctx, where);
+
+        final String resultString = target("query-service/query").
+                queryParam("VIEWPOINT", viewCoordinateXml).
+                queryParam("FOR", forXml).
+                queryParam("LET", letMapXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", ReturnTypes.NIDS.name()).
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        return resultString;
+    }
+
+    private NativeIdSetBI getNidSet(String resultString) {
+        StringTokenizer st = new StringTokenizer(resultString, "<>");
+        NativeIdSetBI results = new ConcurrentBitSet();
+        while (st.hasMoreElements()) {
+            String nextToken = st.nextToken();
+            if (nextToken.matches("-[0-9]*")) {
+                results.add(Integer.parseInt(nextToken));
+            }
+        }
+        return results;
     }
 
     private static String getXmlString(JAXBContext ctx, Object obj) throws JAXBException {

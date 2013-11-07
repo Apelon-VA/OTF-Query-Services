@@ -51,18 +51,18 @@ public class RelType extends LeafClause {
     ViewCoordinate vc;
     Query enclosingQuery;
     ConceptSpec relType;
-    String relTypeKey;
+    String relTypeSpecKey;
     NativeIdSetBI cache;
     Boolean relTypeSubsumption;
 
-    public RelType(Query enclosingQuery, String relTypeKey, String targetSpecKey, String viewCoordinateKey, Boolean relTypeSubsumption) {
+    public RelType(Query enclosingQuery, String relTypeSpecKey, String targetSpecKey, String viewCoordinateKey, Boolean relTypeSubsumption) {
         super(enclosingQuery);
         this.targetSpecKey = targetSpecKey;
         this.targetSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(targetSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
         this.enclosingQuery = enclosingQuery;
-        this.relTypeKey = relTypeKey;
-        this.relType = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relTypeKey);
+        this.relTypeSpecKey = relTypeSpecKey;
+        this.relType = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relTypeSpecKey);
         this.relTypeSubsumption = relTypeSubsumption;
 
     }
@@ -74,8 +74,9 @@ public class RelType extends LeafClause {
         for (Clause clause : getChildren()) {
             whereClause.getChildren().add(clause.getWhereClause());
         }
+        whereClause.getLetKeys().add(relTypeSpecKey);
         whereClause.getLetKeys().add(targetSpecKey);
-        whereClause.getLetKeys().add(relTypeKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 
@@ -86,11 +87,7 @@ public class RelType extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
-        }
+        this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         NativeIdSetBI relTypeSet = new ConcurrentBitSet();
         relTypeSet.add(this.relType.getNid());
         if (this.relTypeSubsumption) {
