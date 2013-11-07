@@ -46,6 +46,7 @@ import org.ihtsdo.otf.query.integration.tests.NotTest;
 import org.ihtsdo.otf.query.integration.tests.OrTest;
 import org.ihtsdo.otf.query.integration.tests.PreferredNameForConceptTest;
 import org.ihtsdo.otf.query.integration.tests.QueryClauseTest;
+import org.ihtsdo.otf.query.integration.tests.QueryTest;
 import org.ihtsdo.otf.query.integration.tests.RefsetContainsConceptTest;
 import org.ihtsdo.otf.query.integration.tests.RefsetContainsKindOfConceptTest;
 import org.ihtsdo.otf.query.integration.tests.RefsetContainsStringTest;
@@ -55,9 +56,21 @@ import org.ihtsdo.otf.query.integration.tests.RelRestrictionTest;
 import org.ihtsdo.otf.query.integration.tests.RelTypeTest;
 import org.ihtsdo.otf.query.integration.tests.XorTest;
 import org.ihtsdo.otf.query.rest.server.LuceneResource;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.junit.After;
@@ -230,6 +243,7 @@ public class RestQueryTest extends JerseyTest {
     @Test
     public void RefsetContainsConceptTest() throws IOException, JAXBException {
         System.out.println("RefsetContainsConcept test");
+        addRefsetMember();
         RefsetContainsConceptTest rccTest = new RefsetContainsConceptTest();
         String resultString = returnResultString(rccTest);
         Assert.assertEquals(1, getNidSet(resultString).size());
@@ -238,6 +252,7 @@ public class RestQueryTest extends JerseyTest {
     @Test
     public void RefsetContainsKindOfConceptTest() throws JAXBException, IOException {
         System.out.println("RefsetContainsKindOfConcept test");
+        addRefsetMember();
         RefsetContainsKindOfConceptTest test = new RefsetContainsKindOfConceptTest();
         String resultString = returnResultString(test);
         Assert.assertEquals(1, getNidSet(resultString).size());
@@ -246,6 +261,7 @@ public class RestQueryTest extends JerseyTest {
     @Test
     public void RefsetContainsStringTest() throws JAXBException, IOException {
         System.out.println("RefsetContainsString test");
+        addRefsetMember();
         RefsetContainsStringTest test = new RefsetContainsStringTest();
         String resultString = returnResultString(test);
         Assert.assertEquals(1, getNidSet(resultString).size());
@@ -343,5 +359,25 @@ public class RestQueryTest extends JerseyTest {
         ctx.createMarshaller().marshal(obj, writer);
         String letMapXml = writer.toString();
         return letMapXml;
+    }
+    
+        
+    public void addRefsetMember() throws IOException {
+        try {
+            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
+            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
+            int authorNid = TermAux.USER.getLenient().getConceptNid();
+            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
+
+            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
+            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
+            RefexChronicleBI rc = tb.construct(refex);
+            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
+            Ts.get().commit();
+        } catch (InvalidCAB ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ContradictionException ex) {
+            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

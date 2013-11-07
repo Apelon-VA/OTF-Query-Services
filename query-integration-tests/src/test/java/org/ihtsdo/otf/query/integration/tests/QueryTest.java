@@ -524,34 +524,4 @@ public class QueryTest {
             Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-//    @Test
-//    public void changeDescription() throws IOException, ContradictionException {
-//        System.out.println("Versioning test........");
-//        ViewCoordinate v1 = StandardViewCoordinates.getSnomedInferredLatest();
-//        SetViewCoordinate v2s = new SetViewCoordinate(2011, 1, 31, 0, 0);
-//        ViewCoordinate v2 = v2s.getViewCoordinate();
-//        ConceptVersionBI c1;
-//        ConceptVersionBI c2;
-//        DescriptionVersionBI d1 = null;
-//        DescriptionVersionBI d2 = null;
-//        
-//        Ts.get().getConceptVersion(v1, -2139170763);
-//
-//        NativeIdSetItrBI iter = Ts.get().isKindOfSet(Snomed.CLINICAL_FINDING.getNid(), v1).getSetBitIterator();
-//
-//        while (iter.next()) {
-//            c1 = Ts.get().getConcept(iter.nid()).getVersion(v1);
-//            c2 = Ts.get().getConcept(iter.nid()).getVersion(v2);
-//            if (c1 != null && c2 != null) {
-//                d1 = c1.getFullySpecifiedDescription();
-//                d2 = c2.getFullySpecifiedDescription();
-//
-//            }
-//            if (d2 != null && d1 != null) {
-//                if (!d2.equals(d1)) {
-//                    System.out.println(iter.nid());
-//                }
-//            }
-//        }
 }
