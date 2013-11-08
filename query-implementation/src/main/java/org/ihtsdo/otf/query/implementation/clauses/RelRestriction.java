@@ -75,9 +75,6 @@ public class RelRestriction extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REL_RESTRICTION);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(relRestrictionSpecKey);
         whereClause.getLetKeys().add(relTypeKey);
         whereClause.getLetKeys().add(sourceSpecKey);

@@ -52,14 +52,6 @@ public abstract class LeafClause extends Clause {
     }
 
     /**
-     * Setter for the results cache.
-     * @param cache
-     */
-    public void setResultsCache(ConcurrentBitSet cache) {
-        this.resultsCache = cache;
-    }
-
-    /**
      * Sets the specified nid as a member of the results cache set.
      *
      * @param nid

@@ -71,9 +71,6 @@ public class RelType extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REL_TYPE);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(relTypeSpecKey);
         whereClause.getLetKeys().add(targetSpecKey);
         whereClause.getLetKeys().add(viewCoordinateKey);

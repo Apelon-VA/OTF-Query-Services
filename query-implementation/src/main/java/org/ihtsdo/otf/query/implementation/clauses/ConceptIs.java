@@ -57,9 +57,6 @@ public class ConceptIs extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.CONCEPT_IS);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(conceptSpecString);
         whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;

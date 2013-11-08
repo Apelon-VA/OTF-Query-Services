@@ -312,7 +312,7 @@ public class RestQueryTest extends JerseyTest {
         Assert.assertEquals(2, getNidSet(resultString).size());
     }
 
-    public String returnResultString(QueryClauseTest test) throws JAXBException, IOException {
+    public String returnResultString(QueryClauseTest test, ReturnTypes returnType) throws JAXBException, IOException {
         JAXBContext ctx = JaxbForQuery.get();
         String viewCoordinateXml = getXmlString(ctx,
                 StandardViewCoordinates.getSnomedInferredLatest());
@@ -335,10 +335,14 @@ public class RestQueryTest extends JerseyTest {
                 queryParam("FOR", forXml).
                 queryParam("LET", letMapXml).
                 queryParam("WHERE", whereXml).
-                queryParam("RETURN", ReturnTypes.NIDS.name()).
+                queryParam("RETURN", returnType.name()).
                 request(MediaType.TEXT_PLAIN).get(String.class);
 
         return resultString;
+    }
+    
+    public String returnResultString(QueryClauseTest test) throws JAXBException, IOException{
+        return returnResultString(test, ReturnTypes.NIDS);
     }
 
     private NativeIdSetBI getNidSet(String resultString) {

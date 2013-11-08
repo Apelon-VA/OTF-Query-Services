@@ -15,16 +15,21 @@
  */
 package org.ihtsdo.otf.query.implementation.clauses;
 
+import java.io.IOException;
 import java.util.EnumSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * TODO: not implemented yet.
+ * 
  * 
  * @author dylangrald
  */
@@ -37,20 +42,28 @@ public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
 
     @Override
     public EnumSet<ClauseComputeType> getComputePhases() {
-        return PRE_ITERATION_AND_ITERATION;
+        return PRE_AND_POST_ITERATION;
     }
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) {
-        //TODO
+        NativeIdSetItrBI iter = getResultsCache().getSetBitIterator();
+        try {
+            while(iter.next()){
+                if(!Ts.get().getComponentVersion(viewCoordinate, iter.nid()).isActive()){
+                    getResultsCache().remove(iter.nid());
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(DescriptionActiveLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ContradictionException ex) {
+            Logger.getLogger(DescriptionActiveLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.DESCRIPTION_ACTIVE_LUCENE_MATCH);
-        for(Clause clause : getChildren()){
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(luceneMatchKey);
         whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;

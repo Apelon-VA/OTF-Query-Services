@@ -41,7 +41,7 @@ import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 /**
- *
+ * Retrieves the refset matching the input SNOMED id.
  *
  * @author dylangrald
  */
@@ -65,9 +65,6 @@ public class RefsetLuceneMatch extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REFSET_LUCENE_MATCH);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(luceneMatchKey);
         return whereClause;
     }

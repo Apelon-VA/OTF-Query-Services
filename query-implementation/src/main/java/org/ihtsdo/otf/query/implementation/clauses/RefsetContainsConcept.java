@@ -64,9 +64,6 @@ public class RefsetContainsConcept extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REFSET_CONTAINS_CONCEPT);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(refsetSpecKey);
         whereClause.getLetKeys().add(conceptSpecKey);
         whereClause.getLetKeys().add(viewCoordinateKey);

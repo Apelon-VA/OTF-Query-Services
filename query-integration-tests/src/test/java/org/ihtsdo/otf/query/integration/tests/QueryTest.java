@@ -23,8 +23,10 @@ import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
+import org.ihtsdo.otf.query.implementation.QueryExample;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
@@ -32,6 +34,8 @@ import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexType;
@@ -84,7 +88,6 @@ public class QueryTest {
 //        Assert.assertEquals(1, results.size());
 //
 //    }
-
     @Test
     public void testSimpleQuery() throws IOException, Exception {
         System.out.println("Simple query: ");
@@ -491,37 +494,78 @@ public class QueryTest {
     }
 
     @Test
-    public void orTest() throws IOException, Exception{
+    public void orTest() throws IOException, Exception {
         System.out.println("Or test");
         OrTest orTest = new OrTest();
         NativeIdSetBI results = orTest.computeQuery();
         Assert.assertEquals(3, results.size());
     }
-    
+
     @Test
-    public void notTest2() throws IOException, Exception{
+    public void notTest2() throws IOException, Exception {
         System.out.println("Not test2");
         NotTest notTest = new NotTest();
         NativeIdSetBI results = notTest.computeQuery();
         Assert.assertEquals(6, results.size());
     }
-    
+
+    @Test
+    public void ExampleTest() throws Exception {
+        System.out.println("Example test");
+        QueryExample test = new QueryExample();
+
+        Assert.assertEquals(1, test.getResults().size());
+    }
+
+    @Ignore
+    @Test
+    public void DescriptionActiveRegexMatchTest() throws IOException, ContradictionException, InvalidCAB, Exception {
+        System.out.println("Description active regex match test");
+//        setInactive(Snomed.ACCELERATION.getNid());
+        for (DescriptionVersionBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.ACCELERATION.getNid()).getDescriptionsActive()) {
+            this.setInactive(desc.getNid());
+            System.out.println(Ts.get().getComponentVersion(StandardViewCoordinates.getSnomedInferredLatest(), desc.getNid()));
+        }
+        DescriptionActiveRegexMatchTest test = new DescriptionActiveRegexMatchTest();
+        for (Object o : test.q.returnDisplayObjects(test.computeQuery(), ReturnTypes.COMPONENT)) {
+            System.out.println(o);
+        }
+        Assert.assertEquals(3, test.computeQuery().size());
+
+    }
+
+    public void setInactive(int nid) throws IOException, ContradictionException, InvalidCAB {
+        DescriptionVersionBI desc = (DescriptionVersionBI) Ts.get().getComponentVersion(StandardViewCoordinates.getSnomedInferredLatest(), nid);
+        DescriptionCAB descCAB = desc.makeBlueprint(StandardViewCoordinates.getSnomedInferredLatest(), IdDirective.PRESERVE, RefexDirective.EXCLUDE);
+        descCAB.setRetired();
+        int authorNid = TermAux.USER.getLenient().getConceptNid();
+        int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
+        EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
+        TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
+        DescriptionChronicleBI descChronicle = tb.construct(descCAB);
+        System.out.println(descChronicle);
+        Ts.get().addUncommitted(desc.getEnclosingConcept());
+        Ts.get().commit();
+    }
+
     public void addRefsetMember() throws IOException {
         try {
             RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
             refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
             int authorNid = TermAux.USER.getLenient().getConceptNid();
             int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
-
             EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
             TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
             RefexChronicleBI rc = tb.construct(refex);
             Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
             Ts.get().commit();
+
         } catch (InvalidCAB ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QueryTest.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ContradictionException ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QueryTest.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

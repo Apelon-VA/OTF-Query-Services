@@ -110,9 +110,6 @@ public class DescriptionLuceneMatch extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.DESCRIPTION_LUCENE_MATCH);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(luceneMatchKey);
         return whereClause;
     }

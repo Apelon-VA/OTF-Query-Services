@@ -85,9 +85,6 @@ public class DescriptionRegexMatch extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.DESCRIPTION_REGEX_MATCH);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(regexKey);
         whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;

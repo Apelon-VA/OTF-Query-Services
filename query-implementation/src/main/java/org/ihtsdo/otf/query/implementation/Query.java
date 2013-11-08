@@ -72,10 +72,6 @@ public abstract class Query {
     private HashMap<String, Object> letDeclarations
             = new HashMap<>();
 
-    public ViewCoordinate getStandardVC() throws IOException {
-        return (ViewCoordinate) getLetDeclarations().get(currentViewCoordinateKey);
-    }
-
     public HashMap<String, Object> getLetDeclarations() {
         try {
             letDeclarations.put(currentViewCoordinateKey, StandardViewCoordinates.getSnomedInferredLatest());
@@ -411,7 +407,11 @@ public abstract class Query {
     }
 
     protected DescriptionActiveRegexMatch DescriptionActiveRegexMatch(String regexKey) {
-        return new DescriptionActiveRegexMatch(this, regexKey);
+        return new DescriptionActiveRegexMatch(this, regexKey, this.currentViewCoordinateKey);
+    }
+    
+    protected DescriptionActiveRegexMatch DescriptionActiveRegexMatch(String regexKey, String viewCoordinateKey) {
+        return new DescriptionActiveRegexMatch(this, regexKey, viewCoordinateKey);
     }
 
     /**
