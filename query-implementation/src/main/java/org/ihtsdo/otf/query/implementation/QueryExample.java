@@ -29,11 +29,13 @@ import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
  *
  * @author kec
  */
-public class ExampleQuery {
+public class QueryExample {
 
-    public void main(String[] args) {
+    Query q;
+    
+    public QueryExample(){
         try {
-            Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+            this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
                 @Override
                 protected NativeIdSetBI For() throws IOException {
                     return Ts.get().getAllConceptNids();
@@ -42,23 +44,26 @@ public class ExampleQuery {
                 @Override
                 public void Let() throws IOException {
                     let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
+                    let("asthma", Snomed.ASTHMA);
+                    let("mild asthma", Snomed.MILD_ASTHMA);
                 }
 
                 @Override
                 public Clause Where() {
-                        return And(ConceptIsKindOf("allergic-asthma"),
-                                Not(ConceptIsKindOf("another-let")),
-                                Intersection(ConceptIsKindOf(""),
-                                ConceptIsKindOf("")));
+                        return And(ConceptIsKindOf("asthma"),
+                                Not(ConceptIsChildOf("allergic-asthma")),
+                                ConceptIs("allergic-asthma"));
+//                                Union(ConceptIsKindOf("allergic-asthma"),
+//                                ConceptIsKindOf("mild asthma")));
                 }
             };
-
-            NativeIdSetBI results = q.compute();
         } catch (IOException ex) {
-            Logger.getLogger(ExampleQuery.class.getName()).log(
+            Logger.getLogger(QueryExample.class.getName()).log(
                     Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(ExampleQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public NativeIdSetBI getResults() throws IOException, Exception{
+        return this.q.compute();
     }
 }
