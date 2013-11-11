@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<title>LuceneIndexer (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)</title>
+<title>LuceneIndexer (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <script type="text/javascript"><!--
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="LuceneIndexer (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)";
+        parent.document.title="LuceneIndexer (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)";
     }
 //-->
 </script>
@@ -141,11 +141,11 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#luceneVersion">luceneVersion</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a></code></td>
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#luceneWriterFutureCheckerService">luceneWriterFutureCheckerService</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a></code></td>
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#luceneWriterService">luceneWriterService</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -218,10 +218,6 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#indexChronicle(org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI)">indexChronicle</a></strong>(org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI&nbsp;chronicle)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#isEnabled()">isEnabled</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.ihtsdo.otf.tcc.model.index.service.SearchResult&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#query(java.lang.String, org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty, int)">query</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;query,
      org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty&nbsp;field,
@@ -229,16 +225,12 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
 <div class="block">Query index with no specified target generation of the index.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.ihtsdo.otf.tcc.model.index.service.SearchResult&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#query(java.lang.String, org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty, int, long)">query</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;query,
      org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty&nbsp;field,
      int&nbsp;sizeLimit,
      long&nbsp;targetGeneration)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/lucene/LuceneIndexer.html#setEnabled(boolean)">setEnabled</a></strong>(boolean&nbsp;enabled)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -300,31 +292,31 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
 <pre>public static final&nbsp;org.apache.lucene.util.Version luceneVersion</pre>
 </li>
 </ul>
-<a name="root">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>root</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> root</pre>
-</li>
-</ul>
 <a name="luceneWriterService">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>luceneWriterService</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a> luceneWriterService</pre>
+<pre>protected static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a> luceneWriterService</pre>
 </li>
 </ul>
 <a name="luceneWriterFutureCheckerService">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>luceneWriterFutureCheckerService</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a> luceneWriterFutureCheckerService</pre>
+<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent">ExecutorService</a> luceneWriterFutureCheckerService</pre>
+</li>
+</ul>
+<a name="root">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>root</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a> root</pre>
 </li>
 </ul>
 </li>
@@ -491,7 +483,7 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
 <a name="getIndexedGenerationCallable(int)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getIndexedGenerationCallable</h4>
 <pre>public&nbsp;org.ihtsdo.otf.tcc.model.index.service.IndexedGenerationCallable&nbsp;getIndexedGenerationCallable(int&nbsp;nid)</pre>
@@ -505,32 +497,6 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
  on the object will return the index generation that contains the document,
  which can be used in search calls to make sure the generation is available
  to the searcher.</dd></dl>
-</li>
-</ul>
-<a name="setEnabled(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setEnabled</h4>
-<pre>public&nbsp;void&nbsp;setEnabled(boolean&nbsp;enabled)</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>setEnabled</code>&nbsp;in interface&nbsp;<code>org.ihtsdo.otf.tcc.model.index.service.IndexerBI</code></dd>
-</dl>
-</li>
-</ul>
-<a name="isEnabled()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>isEnabled</h4>
-<pre>public&nbsp;boolean&nbsp;isEnabled()</pre>
-<dl>
-<dt><strong>Specified by:</strong></dt>
-<dd><code>isEnabled</code>&nbsp;in interface&nbsp;<code>org.ihtsdo.otf.tcc.model.index.service.IndexerBI</code></dd>
-</dl>
 </li>
 </ul>
 </li>
