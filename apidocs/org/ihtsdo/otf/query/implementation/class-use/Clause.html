@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<title>Uses of Class org.ihtsdo.otf.query.implementation.Clause (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)</title>
+<title>Uses of Class org.ihtsdo.otf.query.implementation.Clause (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <script type="text/javascript"><!--
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="Uses of Class org.ihtsdo.otf.query.implementation.Clause (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)";
+        parent.document.title="Uses of Class org.ihtsdo.otf.query.implementation.Clause (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)";
     }
 //-->
 </script>
@@ -164,25 +164,29 @@
 <td class="colLast"><span class="strong">Clause.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#getParent()">getParent</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
+<td class="colLast"><span class="strong">QueryFromJaxb.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html#getRootClause()">getRootClause</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
 <td class="colLast"><span class="strong">QueryFromJaxb.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html#getWhereClause(org.ihtsdo.otf.query.implementation.Query, org.ihtsdo.otf.query.implementation.WhereClause)">getWhereClause</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;q,
               <a href="../../../../../../org/ihtsdo/otf/query/implementation/WhereClause.html" title="class in org.ihtsdo.otf.query.implementation">WhereClause</a>&nbsp;clause)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
 <td class="colLast"><span class="strong">RegexQueryFromJaxb.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html#Where()">Where</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
 <td class="colLast"><span class="strong">QueryFromJaxb.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html#Where()">Where</a></strong>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>abstract <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
 <td class="colLast"><span class="strong">Query.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html#Where()">Where</a></strong>()</code>
 <div class="block">Retrieves the root clause of the query.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
 <td class="colLast"><span class="strong">LuceneQueryFromJaxb.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/LuceneQueryFromJaxb.html#Where()">Where</a></strong>()</code>&nbsp;</td>
 </tr>
@@ -201,7 +205,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptForComponent</a></code></td>
-<td class="colLast"><span class="strong">Query.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptForComponent(org.ihtsdo.otf.query.implementation.Clause)">ConceptForComponent</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>&nbsp;child)</code>&nbsp;</td>
+<td class="colLast"><span class="strong">Query.</span><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptForComponent(org.ihtsdo.otf.query.implementation.Clause)">ConceptForComponent</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>&nbsp;child)</code>
+<div class="block">Creates <code>ConceptForComponent</code> clause with input child clause.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/FullySpecifiedNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">FullySpecifiedNameForConcept</a></code></td>
@@ -282,118 +288,114 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ChangedFromPreviousVersion.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ChangedFromPreviousVersion</a></strong></code>
-<div class="block">Computes the components that have been modified since the version specified 
+<div class="block">Computes the components that have been modified since the version specified
  by the <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ComponentIsMemberOfRefset.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ComponentIsMemberOfRefset</a></strong></code>
-<div class="block">TODO: Not supported yet.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptForComponent</a></strong></code>
 <div class="block">Computes the set of enclosing concepts for the set of components that
  are returned from the child clause.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIs.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIs</a></strong></code>
 <div class="block">An identity function that obtains the concept from the input
  <code>ConceptSpec</code>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsChildOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsChildOf</a></strong></code>
 <div class="block">Computes the set of concepts that are a child of the input concept.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsDescendentOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsDescendentOf</a></strong></code>
 <div class="block">Computes the set of concepts that are descendents of the specified concept
  spec.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsKindOf</a></strong></code>
 <div class="block">Calculates the set of concepts that are a kind of the specified concept.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveLuceneMatch</a></strong></code>
-<div class="block">TODO: not implemented yet.</div>
-</td>
-</tr>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveLuceneMatch</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveRegexMatch</a></strong></code>
 <div class="block">Calculates the active descriptions that match the specified Java Regular
  Expression.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></strong></code>
 <div class="block">Returns descriptions matching the input string using Lucene.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></strong></code>
 <div class="block">Calculates descriptions that match the specified Java Regular Expression.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/FullySpecifiedNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">FullySpecifiedNameForConcept</a></strong></code>
 <div class="block">Retrieves the fully specified names for a result set of concepts.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/PreferredNameForConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">PreferredNameForConcept</a></strong></code>
 <div class="block">Retrieves the preferred names for a result set of concepts.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a></strong></code>
-<div class="block">TODO: not implemented yet.</div>
+<div class="block"><code>LeafClause</code> that returns the nid of the input refset if the input
+ concept is a member of the refset and returns an empty set if the input
+ concept is not a member of the refset.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a></strong></code>
-<div class="block">TODO: not implemented yet.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a></strong></code>
-<div class="block">TODO: not implemented yet.</div>
+<div class="block"><code>LeafClause</code> that returns the nid of the input refset if a kind of
+ the input concept is a member of the refset and returns an empty set if a
+ kind of the input concept is not a member of the refset.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetLuceneMatch</a></strong></code>
-<div class="block">TODO: Not implemented yet.</div>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a></strong></code>
+<div class="block">.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetLuceneMatch</a></strong></code>
+<div class="block">Retrieves the refset matching the input SNOMED id.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></strong></code>
 <div class="block">Allows the user to define a restriction on the destination set of a
  relationship query.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></strong></code>
 <div class="block">Computes all concepts that have a source relationship matching the input

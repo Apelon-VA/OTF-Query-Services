@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<title>QueryFromJaxb (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)</title>
+<title>QueryFromJaxb (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <script type="text/javascript"><!--
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="QueryFromJaxb (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)";
+        parent.document.title="QueryFromJaxb (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)";
     }
 //-->
 </script>
@@ -35,7 +35,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryExample.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -61,13 +61,13 @@
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_org.ihtsdo.otf.query.implementation.Query">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>
@@ -116,6 +116,19 @@ extends <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" 
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html#nullSpec">nullSpec</a></strong></code>
+<div class="block">False if a ConceptSpec is declared in LetMap that is null.</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="fields_inherited_from_class_org.ihtsdo.otf.query.implementation.Query">
 <!--   -->
@@ -164,6 +177,14 @@ extends <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" 
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html#getForCollection()">getForCollection</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html#getRootClause()">getRootClause</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html#getWhereClause(org.ihtsdo.otf.query.implementation.Query, org.ihtsdo.otf.query.implementation.WhereClause)">getWhereClause</a></strong>(<a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;q,
               <a href="../../../../../org/ihtsdo/otf/query/implementation/WhereClause.html" title="class in org.ihtsdo.otf.query.implementation">WhereClause</a>&nbsp;clause)</code>&nbsp;</td>
@@ -184,7 +205,7 @@ extends <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" 
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a></h3>
-<code><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#And(org.ihtsdo.otf.query.implementation.Clause...)">And</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ChangedFromPreviousVersion(java.lang.String)">ChangedFromPreviousVersion</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#compute()">compute</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptForComponent(org.ihtsdo.otf.query.implementation.Clause)">ConceptForComponent</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIs(java.lang.String)">ConceptIs</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIs(java.lang.String, java.lang.String)">ConceptIs</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsChildOf(java.lang.String)">ConceptIsChildOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsChildOf(java.lang.String, java.lang.String)">ConceptIsChildOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsDescendentOf(java.lang.String)">ConceptIsDescendentOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsDescendentOf(java.lang.String, java.lang.String)">ConceptIsDescendentOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsKindOf(java.lang.String)">ConceptIsKindOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsKindOf(java.lang.String, java.lang.String)">ConceptIsKindOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveLuceneMatch(java.lang.String)">DescriptionActiveLuceneMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveLuceneMatch(java.lang.String, java.lang.String)">DescriptionActiveLuceneMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveRegexMatch(java.lang.String)">DescriptionActiveRegexMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionLuceneMatch(java.lang.String)">DescriptionLuceneMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionRegexMatch(java.lang.String)">DescriptionRegexMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#FullySpecifiedNameForConcept(org.ihtsdo.otf.query.implementation.Clause)">FullySpecifiedNameForConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getComputePhases()">getComputePhases</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getForSet()">getForSet</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getLetDeclarations()">getLetDeclarations</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getStandardVC()">getStandardVC</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getVCLetDeclarations()">getVCLetDeclarations</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getViewCoordinate()">getViewCoordinate</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Intersection(org.ihtsdo.otf.query.implementation.Clause...)">Intersection</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#let(java.lang.String, java.lang.Object)">let</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Not(org.ihtsdo.otf.query.implementation.Clause)">Not</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Or(org.ihtsdo.otf.query.implementation.Clause...)">Or</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#PreferredNameForConcept(org.ihtsdo.otf.query.implementation.Clause)">PreferredNameForConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String)">RefsetContainsConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String, java.lang.String)">RefsetContainsConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String)">RefsetContainsKindOfConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String, java.lang.String)">RefsetContainsKindOfConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Boolean)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.Boolean)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.String)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnDisplayObjects(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI, org.ihtsdo.otf.query.implementation.ReturnTypes)">returnDisplayObjects</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnDisplayObjects(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI, org.ihtsdo.otf.query.implementation.ReturnTypes, org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">returnDisplayObjects</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnResults()">returnResults</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#setResultSetLimit(int)">setResultSetLimit</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Union(org.ihtsdo.otf.query.implementation.Clause...)">Union</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Xor(org.ihtsdo.otf.query.implementation.Clause...)">Xor</a></code></li>
+<code><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#And(org.ihtsdo.otf.query.implementation.Clause...)">And</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ChangedFromPreviousVersion(java.lang.String)">ChangedFromPreviousVersion</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#compute()">compute</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptForComponent(org.ihtsdo.otf.query.implementation.Clause)">ConceptForComponent</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIs(java.lang.String)">ConceptIs</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIs(java.lang.String, java.lang.String)">ConceptIs</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsChildOf(java.lang.String)">ConceptIsChildOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsChildOf(java.lang.String, java.lang.String)">ConceptIsChildOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsDescendentOf(java.lang.String)">ConceptIsDescendentOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsDescendentOf(java.lang.String, java.lang.String)">ConceptIsDescendentOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsKindOf(java.lang.String)">ConceptIsKindOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsKindOf(java.lang.String, java.lang.String)">ConceptIsKindOf</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveLuceneMatch(java.lang.String)">DescriptionActiveLuceneMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveLuceneMatch(java.lang.String, java.lang.String)">DescriptionActiveLuceneMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveRegexMatch(java.lang.String)">DescriptionActiveRegexMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveRegexMatch(java.lang.String, java.lang.String)">DescriptionActiveRegexMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionLuceneMatch(java.lang.String)">DescriptionLuceneMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionRegexMatch(java.lang.String)">DescriptionRegexMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionRegexMatch(java.lang.String, java.lang.String)">DescriptionRegexMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#FullySpecifiedNameForConcept(org.ihtsdo.otf.query.implementation.Clause)">FullySpecifiedNameForConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getComputePhases()">getComputePhases</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getForSet()">getForSet</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getLetDeclarations()">getLetDeclarations</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getViewCoordinate()">getViewCoordinate</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Intersection(org.ihtsdo.otf.query.implementation.Clause...)">Intersection</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#let(java.lang.String, java.lang.Object)">let</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Not(org.ihtsdo.otf.query.implementation.Clause)">Not</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Or(org.ihtsdo.otf.query.implementation.Clause...)">Or</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#PreferredNameForConcept(org.ihtsdo.otf.query.implementation.Clause)">PreferredNameForConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String, java.lang.String)">RefsetContainsConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String, java.lang.String, java.lang.String)">RefsetContainsConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String, java.lang.String)">RefsetContainsKindOfConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String, java.lang.String, java.lang.String)">RefsetContainsKindOfConcept</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsString(java.lang.String, java.lang.String)">RefsetContainsString</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsString(java.lang.String, java.lang.String, java.lang.String)">RefsetContainsString</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetLuceneMatch(java.lang.String)">RefsetLuceneMatch</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Boolean)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.Boolean)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.String)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">RelType</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnDisplayObjects(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI, org.ihtsdo.otf.query.implementation.ReturnTypes)">returnDisplayObjects</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnDisplayObjects(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI, org.ihtsdo.otf.query.implementation.ReturnTypes, org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">returnDisplayObjects</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnResults()">returnResults</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#setLetDelclarations(java.util.HashMap)">setLetDelclarations</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#setResultSetLimit(int)">setResultSetLimit</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#setViewCoordinate(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">setViewCoordinate</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Union(org.ihtsdo.otf.query.implementation.Clause...)">Union</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Xor(org.ihtsdo.otf.query.implementation.Clause...)">Xor</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
@@ -201,6 +222,24 @@ extends <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" 
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="nullSpec">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>nullSpec</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a> nullSpec</pre>
+<div class="block">False if a ConceptSpec is declared in LetMap that is null.</div>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor_detail">
@@ -232,6 +271,24 @@ extends <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" 
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getRootClause()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRootClause</h4>
+<pre>public&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>&nbsp;getRootClause()</pre>
+</li>
+</ul>
+<a name="getForCollection()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getForCollection</h4>
+<pre>public&nbsp;org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;getForCollection()</pre>
+</li>
+</ul>
 <a name="For()">
 <!--   -->
 </a>
@@ -319,7 +376,7 @@ extends <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" 
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryExample.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
 <li><a href="../../../../../org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -345,13 +402,13 @@ extends <a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html" 
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields_inherited_from_class_org.ihtsdo.otf.query.implementation.Query">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method_detail">Method</a></li>
 </ul>

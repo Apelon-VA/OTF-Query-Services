@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<title>ClauseSemantic (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)</title>
+<title>ClauseSemantic (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <script type="text/javascript"><!--
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="ClauseSemantic (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)";
+        parent.document.title="ClauseSemantic (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)";
     }
 //-->
 </script>
@@ -135,6 +135,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is
      &lt;enumeration value="REL_RESTRICTION"/>
      &lt;enumeration value="REFSET_CONTAINS_CONCEPT"/>
      &lt;enumeration value="REFSET_CONTAINS_KIND_OF_CONCEPT"/>
+     &lt;enumeration value="REFSET_CONTAINS_STRING"/>
    &lt;/restriction>
  &lt;/simpleType>
  </pre></div>
@@ -210,15 +211,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REFSET_CONTAINS_KIND_OF_CONCEPT">REFSET_CONTAINS_KIND_OF_CONCEPT</a></strong></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REFSET_CONTAINS_STRING">REFSET_CONTAINS_STRING</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REFSET_LUCENE_MATCH">REFSET_LUCENE_MATCH</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REL_RESTRICTION">REL_RESTRICTION</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#REL_TYPE">REL_TYPE</a></strong></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html#XOR">XOR</a></strong></code>&nbsp;</td>
 </tr>
 </table>
@@ -478,10 +482,19 @@ the order they are declared.</div>
 <a name="REFSET_CONTAINS_KIND_OF_CONCEPT">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>REFSET_CONTAINS_KIND_OF_CONCEPT</h4>
 <pre>public static final&nbsp;<a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html" title="enum in org.ihtsdo.otf.jaxb.query">ClauseSemantic</a> REFSET_CONTAINS_KIND_OF_CONCEPT</pre>
+</li>
+</ul>
+<a name="REFSET_CONTAINS_STRING">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>REFSET_CONTAINS_STRING</h4>
+<pre>public static final&nbsp;<a href="../../../../../org/ihtsdo/otf/jaxb/query/ClauseSemantic.html" title="enum in org.ihtsdo.otf.jaxb.query">ClauseSemantic</a> REFSET_CONTAINS_STRING</pre>
 </li>
 </ul>
 </li>

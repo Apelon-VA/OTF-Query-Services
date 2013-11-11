@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<title>PreferredNameForConcept (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)</title>
+<title>PreferredNameForConcept (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <script type="text/javascript"><!--
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="PreferredNameForConcept (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)";
+        parent.document.title="PreferredNameForConcept (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)";
     }
 //-->
 </script>
@@ -127,7 +127,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentCla
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#POST_ITERATION">POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
 </ul>
 </li>
 </ul>
@@ -176,6 +176,12 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentCla
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/ihtsdo/otf/query/implementation/ClauseComputeType.html" title="enum in org.ihtsdo.otf.query.implementation">ClauseComputeType</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/PreferredNameForConcept.html#getComputePhases()">getComputePhases</a></strong>()</code>
+<div class="block">Getter for the iteration types required to compute the clause.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/WhereClause.html" title="class in org.ihtsdo.otf.query.implementation">WhereClause</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/PreferredNameForConcept.html#getWhereClause()">getWhereClause</a></strong>()</code>
 <div class="block">Getter for the
@@ -188,7 +194,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentCla
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html" title="class in org.ihtsdo.otf.query.implementation">ParentClause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html#getChildren()">getChildren</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html#getComputePhases()">getComputePhases</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html#getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">getQueryMatches</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html#getChildren()">getChildren</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html#getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">getQueryMatches</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.ihtsdo.otf.query.implementation.Clause">
@@ -274,6 +280,22 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentCla
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code>org.ihtsdo.otf.tcc.api.spec.ValidationException</code></dd>
 <dd><code>org.ihtsdo.otf.tcc.api.contradiction.ContradictionException</code></dd></dl>
+</li>
+</ul>
+<a name="getComputePhases()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getComputePhases</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/ihtsdo/otf/query/implementation/ClauseComputeType.html" title="enum in org.ihtsdo.otf.query.implementation">ClauseComputeType</a>&gt;&nbsp;getComputePhases()</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#getComputePhases()">Clause</a></code></strong></div>
+<div class="block">Getter for the iteration types required to compute the clause.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html#getComputePhases()">getComputePhases</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html" title="class in org.ihtsdo.otf.query.implementation">ParentClause</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>an <code>EnumSet</code> of <code>ClauseComputeType</code>
+ elements for the clause.</dd></dl>
 </li>
 </ul>
 <a name="computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">

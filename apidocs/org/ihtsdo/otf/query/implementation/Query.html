@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-<title>Query (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)</title>
+<title>Query (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <script type="text/javascript"><!--
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="Query (QS sprint2: (MMP) Query service parent 1.1-SNAPSHOT API)";
+        parent.document.title="Query (QS sprint2: (MMP) Query service parent 1.1-SPRINT2-SNAPSHOT API)";
     }
 //-->
 </script>
@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryExample.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?org/ihtsdo/otf/query/implementation/Query.html" target="_top">Frames</a></li>
@@ -143,15 +143,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Query()">Query</a></strong>()</code>
-<div class="block">No argument constructor, which creates a
- <code>Query</code> with the Snomed inferred latest as the input
- <code>ViewCoordinate</code>.</div>
+<div class="block">No argument constructor, which creates a <code>Query</code> with the
+ Snomed inferred latest as the input <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Query(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">Query</a></strong>(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate&nbsp;viewCoordinate)</code>
-<div class="block">Constructor for
- <code>Query</code>.</div>
+<div class="block">Constructor for <code>Query</code>.</div>
 </td>
 </tr>
 </table>
@@ -186,7 +184,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptForComponent</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptForComponent(org.ihtsdo.otf.query.implementation.Clause)">ConceptForComponent</a></strong>(<a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>&nbsp;child)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptForComponent(org.ihtsdo.otf.query.implementation.Clause)">ConceptForComponent</a></strong>(<a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>&nbsp;child)</code>
+<div class="block">Creates <code>ConceptForComponent</code> clause with input child clause.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIs.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIs</a></code></td>
@@ -196,8 +196,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIs.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIs</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIs(java.lang.String, java.lang.String)">ConceptIs</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>
-<div class="block">Creates
- <code>ConceptIs</code> clause with input
+<div class="block">Creates <code>ConceptIs</code> clause with input
  <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
@@ -209,8 +208,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsChildOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsChildOf</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsChildOf(java.lang.String, java.lang.String)">ConceptIsChildOf</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>
-<div class="block">Creates
- <code>ConceptIsChildOf</code> clause with input
+<div class="block">Creates <code>ConceptIsChildOf</code> clause with input
  <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
@@ -222,16 +220,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsDescendentOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsDescendentOf</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsDescendentOf(java.lang.String, java.lang.String)">ConceptIsDescendentOf</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>
-<div class="block">Creates
- <code>ConceptIsDescendentOf</code> clause with input
+<div class="block">Creates <code>ConceptIsDescendentOf</code> clause with input
  <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsKindOf</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsKindOf(java.lang.String)">ConceptIsKindOf</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</code>
-<div class="block">Creates
- <code>ConceptIsKindOf</code> clause with default
+<div class="block">Creates <code>ConceptIsKindOf</code> clause with default
  <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
@@ -239,8 +235,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsKindOf</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#ConceptIsKindOf(java.lang.String, java.lang.String)">ConceptIsKindOf</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>
-<div class="block">Creates
- <code>ConceptIsKindOf</code> with input
+<div class="block">Creates <code>ConceptIsKindOf</code> clause with input
  <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
@@ -258,12 +253,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveRegexMatch(java.lang.String)">DescriptionActiveRegexMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveRegexMatch</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveRegexMatch(java.lang.String, java.lang.String)">DescriptionActiveRegexMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionLuceneMatch(java.lang.String)">DescriptionLuceneMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryTextKey)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionRegexMatch(java.lang.String)">DescriptionRegexMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionRegexMatch(java.lang.String, java.lang.String)">DescriptionRegexMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected abstract org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI</code></td>
@@ -290,14 +295,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getLetDeclarations()">getLetDeclarations</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate</code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getStandardVC()">getStandardVC</a></strong>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#getVCLetDeclarations()">getVCLetDeclarations</a></strong>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate</code></td>
@@ -330,36 +327,55 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String)">RefsetContainsConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String, java.lang.String)">RefsetContainsConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String, java.lang.String)">RefsetContainsConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsConcept(java.lang.String, java.lang.String, java.lang.String)">RefsetContainsConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String)">RefsetContainsKindOfConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</code>&nbsp;</td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String, java.lang.String)">RefsetContainsKindOfConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String, java.lang.String)">RefsetContainsKindOfConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsKindOfConcept(java.lang.String, java.lang.String, java.lang.String)">RefsetContainsKindOfConcept</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsString(java.lang.String, java.lang.String)">RefsetContainsString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;stringMatchKey)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetContainsString(java.lang.String, java.lang.String, java.lang.String)">RefsetContainsString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;stringMatchKey,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetLuceneMatch</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RefsetLuceneMatch(java.lang.String)">RefsetLuceneMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryString)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Boolean)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
@@ -367,42 +383,41 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;relTypeSubsumption)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String)">RelType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.Boolean)">RelType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;subsumption)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.String)">RelType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>
-<div class="block">Creates
- <code>RelType</code> clause with input
+<div class="block">Creates <code>RelType</code> clause with input
  <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelType(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">RelType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;subsumption)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnDisplayObjects(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI, org.ihtsdo.otf.query.implementation.ReturnTypes)">returnDisplayObjects</a></strong>(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;resultSet,
                     <a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html" title="enum in org.ihtsdo.otf.query.implementation">ReturnTypes</a>&nbsp;returnType)</code>
@@ -410,13 +425,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  <code>ReturnTypes</code>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnDisplayObjects(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI, org.ihtsdo.otf.query.implementation.ReturnTypes, org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">returnDisplayObjects</a></strong>(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;resultSet,
                     <a href="../../../../../org/ihtsdo/otf/query/implementation/ReturnTypes.html" title="enum in org.ihtsdo.otf.query.implementation">ReturnTypes</a>&nbsp;returnType,
                     org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate&nbsp;vc)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#returnResults()">returnResults</a></strong>()</code>
 <div class="block">The default method for computing query results, which returns the fully
@@ -424,21 +439,29 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  <code>Query</code>.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#setLetDelclarations(java.util.HashMap)">setLetDelclarations</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;letMap)</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#setResultSetLimit(int)">setResultSetLimit</a></strong>(int&nbsp;limit)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#setViewCoordinate(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">setViewCoordinate</a></strong>(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate&nbsp;vc)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/Or.html" title="class in org.ihtsdo.otf.query.implementation">Or</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Union(org.ihtsdo.otf.query.implementation.Clause...)">Union</a></strong>(<a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>...&nbsp;clauses)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>abstract <a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Where()">Where</a></strong>()</code>
 <div class="block">Retrieves the root clause of the query.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/Xor.html" title="class in org.ihtsdo.otf.query.implementation">Xor</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#Xor(org.ihtsdo.otf.query.implementation.Clause...)">Xor</a></strong>(<a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>...&nbsp;clauses)</code>&nbsp;</td>
 </tr>
@@ -488,9 +511,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>Query</h4>
 <pre>public&nbsp;Query()</pre>
-<div class="block">No argument constructor, which creates a
- <code>Query</code> with the Snomed inferred latest as the input
- <code>ViewCoordinate</code>.</div>
+<div class="block">No argument constructor, which creates a <code>Query</code> with the
+ Snomed inferred latest as the input <code>ViewCoordinate</code>.</div>
 </li>
 </ul>
 <a name="Query(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">
@@ -500,10 +522,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>Query</h4>
 <pre>public&nbsp;Query(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate&nbsp;viewCoordinate)</pre>
-<div class="block">Constructor for
- <code>Query</code>. If a
- <code>ViewCoordinate</code> is not specified, the default is the Snomed
- inferred latest.</div>
+<div class="block">Constructor for <code>Query</code>. If a <code>ViewCoordinate</code> is
+ not specified, the default is the Snomed inferred latest.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>viewCoordinate</code> - </dd></dl>
 </li>
 </ul>
@@ -515,18 +535,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getStandardVC()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getStandardVC</h4>
-<pre>public&nbsp;org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate&nbsp;getStandardVC()
-                                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
-</li>
-</ul>
 <a name="getLetDeclarations()">
 <!--   -->
 </a>
@@ -536,16 +544,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getLetDeclarations()</pre>
 </li>
 </ul>
-<a name="getVCLetDeclarations()">
+<a name="setLetDelclarations(java.util.HashMap)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getVCLetDeclarations</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getVCLetDeclarations()
-                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl><dt><span class="strong">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+<h4>setLetDelclarations</h4>
+<pre>public&nbsp;void&nbsp;setLetDelclarations(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;letMap)</pre>
 </li>
 </ul>
 <a name="getComputePhases()">
@@ -637,6 +642,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dl><dt><span class="strong">Returns:</span></dt><dd>the <code>ViewCoordinate</code> in the query</dd></dl>
 </li>
 </ul>
+<a name="setViewCoordinate(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setViewCoordinate</h4>
+<pre>public&nbsp;void&nbsp;setViewCoordinate(org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate&nbsp;vc)</pre>
+</li>
+</ul>
 <a name="returnDisplayObjects(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI, org.ihtsdo.otf.query.implementation.ReturnTypes, org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate)">
 <!--   -->
 </a>
@@ -669,7 +683,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  specified description version of the components from the
  <code>Query</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>q</code> - input <code>Query</code></dd>
-<dt><span class="strong">Returns:</span></dt><dd>The result set of the <code>Query</code> in * * * * * * * * *
+<dt><span class="strong">Returns:</span></dt><dd>The result set of the <code>Query</code> in * * * * * * * * * *
  an <code>ArrayList</code> of <code>DescriptionVersionDdo</code> objects</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
@@ -713,8 +727,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>ConceptIsKindOf</h4>
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsKindOf</a>&nbsp;ConceptIsKindOf(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</pre>
-<div class="block">Creates
- <code>ConceptIsKindOf</code> clause with default
+<div class="block">Creates <code>ConceptIsKindOf</code> clause with default
  <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>conceptSpecKey</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -728,8 +741,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>ConceptIsKindOf</h4>
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsKindOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsKindOf</a>&nbsp;ConceptIsKindOf(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
-<div class="block">Creates
- <code>ConceptIsKindOf</code> with input
+<div class="block">Creates <code>ConceptIsKindOf</code> clause with input
  <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>conceptSpecKey</code> - </dd><dd><code>viewCoordinateKey</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -744,6 +756,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a>&nbsp;DescriptionRegexMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey)</pre>
 </li>
 </ul>
+<a name="DescriptionRegexMatch(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DescriptionRegexMatch</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a>&nbsp;DescriptionRegexMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
+</li>
+</ul>
 <a name="DescriptionActiveRegexMatch(java.lang.String)">
 <!--   -->
 </a>
@@ -753,6 +775,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveRegexMatch</a>&nbsp;DescriptionActiveRegexMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey)</pre>
 </li>
 </ul>
+<a name="DescriptionActiveRegexMatch(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DescriptionActiveRegexMatch</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveRegexMatch</a>&nbsp;DescriptionActiveRegexMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey,
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
+</li>
+</ul>
 <a name="ConceptForComponent(org.ihtsdo.otf.query.implementation.Clause)">
 <!--   -->
 </a>
@@ -760,6 +792,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>ConceptForComponent</h4>
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptForComponent</a>&nbsp;ConceptForComponent(<a href="../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a>&nbsp;child)</pre>
+<div class="block">Creates <code>ConceptForComponent</code> clause with input child clause.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>child</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
 </li>
 </ul>
 <a name="ConceptIs(java.lang.String)">
@@ -779,8 +814,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>ConceptIs</h4>
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIs.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIs</a>&nbsp;ConceptIs(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
-<div class="block">Creates
- <code>ConceptIs</code> clause with input
+<div class="block">Creates <code>ConceptIs</code> clause with input
  <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>conceptSpecKey</code> - </dd><dd><code>viewCoordinateKey</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -803,8 +837,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>ConceptIsDescendentOf</h4>
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsDescendentOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsDescendentOf</a>&nbsp;ConceptIsDescendentOf(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
-<div class="block">Creates
- <code>ConceptIsDescendentOf</code> clause with input
+<div class="block">Creates <code>ConceptIsDescendentOf</code> clause with input
  <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>conceptSpecKey</code> - </dd><dd><code>viewCoordinateKey</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -827,8 +860,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>ConceptIsChildOf</h4>
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptIsChildOf.html" title="class in org.ihtsdo.otf.query.implementation.clauses">ConceptIsChildOf</a>&nbsp;ConceptIsChildOf(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
-<div class="block">Creates
- <code>ConceptIsChildOf</code> clause with input
+<div class="block">Creates <code>ConceptIsChildOf</code> clause with input
  <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>conceptSpecKey</code> - </dd><dd><code>viewCoordinateKey</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -890,8 +922,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a>&nbsp;RelType(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
-<div class="block">Creates
- <code>RelType</code> clause with input
+<div class="block">Creates <code>RelType</code> clause with input
  <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>relTypeKey</code> - </dd><dd><code>conceptSpecKey</code> - </dd><dd><code>viewCoordinateKey</code> - </dd>
 <dt><span class="strong">Returns:</span></dt><dd></dd></dl>
@@ -968,32 +999,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;relTypeSubsumption)</pre>
 </li>
 </ul>
-<a name="RefsetContainsConcept(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>RefsetContainsConcept</h4>
-<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a>&nbsp;RefsetContainsConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</pre>
-</li>
-</ul>
 <a name="RefsetContainsConcept(java.lang.String, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>RefsetContainsConcept</h4>
-<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a>&nbsp;RefsetContainsConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a>&nbsp;RefsetContainsConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</pre>
 </li>
 </ul>
-<a name="RefsetContainsKindOfConcept(java.lang.String)">
+<a name="RefsetContainsConcept(java.lang.String, java.lang.String, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>RefsetContainsKindOfConcept</h4>
-<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a>&nbsp;RefsetContainsKindOfConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</pre>
+<h4>RefsetContainsConcept</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsConcept</a>&nbsp;RefsetContainsConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
 </li>
 </ul>
 <a name="RefsetContainsKindOfConcept(java.lang.String, java.lang.String)">
@@ -1002,8 +1026,49 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>RefsetContainsKindOfConcept</h4>
-<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a>&nbsp;RefsetContainsKindOfConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a>&nbsp;RefsetContainsKindOfConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey)</pre>
+</li>
+</ul>
+<a name="RefsetContainsKindOfConcept(java.lang.String, java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RefsetContainsKindOfConcept</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsKindOfConcept.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsKindOfConcept</a>&nbsp;RefsetContainsKindOfConcept(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
+</li>
+</ul>
+<a name="RefsetContainsString(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RefsetContainsString</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a>&nbsp;RefsetContainsString(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;stringMatchKey)</pre>
+</li>
+</ul>
+<a name="RefsetContainsString(java.lang.String, java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RefsetContainsString</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetContainsString.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetContainsString</a>&nbsp;RefsetContainsString(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refsetSpecKey,
+                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;stringMatchKey,
+                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
+</li>
+</ul>
+<a name="RefsetLuceneMatch(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RefsetLuceneMatch</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RefsetLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RefsetLuceneMatch</a>&nbsp;RefsetLuceneMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryString)</pre>
 </li>
 </ul>
 <a name="PreferredNameForConcept(org.ihtsdo.otf.query.implementation.Clause)">
@@ -1117,7 +1182,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../org/ihtsdo/otf/query/implementation/ParentClause.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Prev Class</span></a></li>
-<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryExample.html" title="class in org.ihtsdo.otf.query.implementation"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?org/ihtsdo/otf/query/implementation/Query.html" target="_top">Frames</a></li>
