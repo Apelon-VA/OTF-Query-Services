@@ -16,12 +16,8 @@ package org.ihtsdo.otf.query.integration.tests;
  * limitations under the License.
  */
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
@@ -53,11 +49,11 @@ public class NotTest extends QueryClauseTest {
                 let("regex", "[Vv]ibration.*");
                 NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
                 NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
-                ArrayList<UUID> uuids = new ArrayList<>();
+                StringBuilder forSet = new StringBuilder("");
                 while(iter.next()){
-                    uuids.add(Ts.get().getComponent(iter.nid()).getPrimordialUuid());
+                    forSet.append(Ts.get().getComponent(iter.nid()).getPrimordialUuid().toString()).append(",");
                 }
-                let("Custom FOR set", uuids);
+                let("Custom FOR set", forSet.toString());
             }
 
             @Override

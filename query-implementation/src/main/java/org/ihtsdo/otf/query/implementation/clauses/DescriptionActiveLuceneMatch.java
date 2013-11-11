@@ -25,17 +25,17 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * 
- * 
+ *
+ *
  * @author dylangrald
  */
 public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
 
-    
     public DescriptionActiveLuceneMatch(Query enclosingQuery, String luceneMatchKey, String viewCoordinateKey) {
         super(enclosingQuery, luceneMatchKey, viewCoordinateKey);
     }
@@ -46,11 +46,13 @@ public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
     }
 
     @Override
-    public void getQueryMatches(ConceptVersionBI conceptVersion) {
+    public final NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException {
+        getResultsCache().and(incomingComponents);
         NativeIdSetItrBI iter = getResultsCache().getSetBitIterator();
+
         try {
-            while(iter.next()){
-                if(!Ts.get().getComponentVersion(viewCoordinate, iter.nid()).isActive()){
+            while (iter.next()) {
+                if (!Ts.get().getComponentVersion(viewCoordinate, iter.nid()).isActive()) {
                     getResultsCache().remove(iter.nid());
                 }
             }
@@ -59,7 +61,9 @@ public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
         } catch (ContradictionException ex) {
             Logger.getLogger(DescriptionActiveLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return getResultsCache();
     }
+
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();

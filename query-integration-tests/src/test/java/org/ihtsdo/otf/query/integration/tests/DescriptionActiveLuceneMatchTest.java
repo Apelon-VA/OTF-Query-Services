@@ -1,5 +1,3 @@
-package org.ihtsdo.otf.query.integration.tests;
-
 /*
  * Copyright 2013 International Health Terminology Standards Development Organisation.
  *
@@ -16,41 +14,37 @@ package org.ihtsdo.otf.query.integration.tests;
  * limitations under the License.
  */
 
+package org.ihtsdo.otf.query.integration.tests;
 
 import java.io.IOException;
-import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for <code>ChangedFromPreviousVersion</code> clause.
  *
  * @author dylangrald
  */
-public class ChangedFromPreviousVersionTest extends QueryClauseTest {
-
-    SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2010, 1, 31, 0, 0);
-
-    public ChangedFromPreviousVersionTest() throws IOException{
+public class DescriptionActiveLuceneMatchTest extends QueryClauseTest {
+    
+    public DescriptionActiveLuceneMatchTest(){
         this.q = new Query() {
+
             @Override
             protected NativeIdSetBI For() throws IOException {
-                return Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+                return Ts.get().getAllConceptNids();
             }
 
             @Override
             public void Let() throws IOException {
-                let("v2", setViewCoordinate.getViewCoordinate());
+                let("baranys", "barany's");
             }
 
             @Override
             public Clause Where() {
-                return Or(ChangedFromPreviousVersion("v2"));
+                return ConceptForComponent(DescriptionActiveLuceneMatch("baranys"));
             }
         };
-
     }
 }

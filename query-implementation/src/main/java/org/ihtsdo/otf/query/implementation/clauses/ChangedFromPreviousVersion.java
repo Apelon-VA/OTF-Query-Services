@@ -25,9 +25,10 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 
 /**
  * Computes the components that have been modified since the version specified
@@ -80,17 +81,14 @@ public class ChangedFromPreviousVersion extends LeafClause {
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-//        NativeIdSetItrBI iter = conceptVersion.getIds().getSetBitIterator();
-//        while (iter.next()) {
-//            ComponentChronicleBI dc = conceptVersion.getComponent(iter.nid());
-//            ComponentVersionBI c1 = dc.getVersion(getEnclosingQuery().getViewCoordinate());
-//            if (c1 != null && dc.getVersion(previousViewCoordinate) != null) {
-//                if (!dc.getVersion(previousViewCoordinate).equals(c1)) {
-//                    getResultsCache().add(dc.getNid());
-//                }
-//            }
-//        }
-   }
+        for (DescriptionVersionBI desc : conceptVersion.getDescriptionsActive()) {
+            if(desc.getVersion(previousViewCoordinate) != null){
+                if(!desc.getVersion(previousViewCoordinate).equals(desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest()))){
+                    getResultsCache().add(desc.getConceptNid());
+                }
+            }
+        }
+    }
 
     @Override
     public WhereClause getWhereClause() {

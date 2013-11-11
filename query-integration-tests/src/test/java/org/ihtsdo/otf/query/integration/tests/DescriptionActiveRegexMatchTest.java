@@ -35,12 +35,12 @@ public class DescriptionActiveRegexMatchTest extends QueryClauseTest {
 
             @Override
             protected NativeIdSetBI For() throws IOException {
-                return Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+                return Ts.get().isChildOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
             }
 
             @Override
             public void Let() throws IOException {
-                let("regex", ".*tion.*");
+                let("regex", ".*(physical force).*");
             }
 
             @Override

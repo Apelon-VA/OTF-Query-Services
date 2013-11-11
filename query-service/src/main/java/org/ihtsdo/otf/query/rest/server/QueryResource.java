@@ -54,7 +54,7 @@ public class QueryResource {
                 + "WHERE: " + whereValue + "\n   "
                 + "RETURN: " + returnValue;
         System.out.println("Received: \n   " + queryString);
-        
+
         QueryFromJaxb query;
         try {
             query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
@@ -102,7 +102,7 @@ public class QueryResource {
             return writer.toString();
         } else {
             //The default result type is DESCRIPTION_VERSION_FSN
-            ArrayList<Object> objectList = query.returnResults();
+            ArrayList<Object> objectList = query.returnDisplayObjects(resultSet, ReturnTypes.DESCRIPTION_VERSION_FSN);
 
             ResultList resultList = new ResultList();
             resultList.setTheResults(objectList);

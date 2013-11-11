@@ -17,10 +17,10 @@ package org.ihtsdo.otf.query.implementation;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 import java.util.UUID;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -43,6 +43,7 @@ import static org.ihtsdo.otf.query.implementation.ClauseSemantic.REL_TYPE;
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.XOR;
 import org.ihtsdo.otf.tcc.api.coordinate.SimpleViewCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.SimpleConceptSpecification;
@@ -123,11 +124,18 @@ public class QueryFromJaxb extends Query {
 
         if (forXml == null || forXml.equals("null") || forXml.equals("")) {
             this.forCollection = Ts.get().getAllConceptNids();
-        } else if (convertedMap.containsKey("Custom FOR set")) {            
-            ArrayList<UUID> uuids = (ArrayList<UUID>) convertedMap.get("Custom FOR set");
-            for(UUID u : uuids){
-                this.forCollection.add(Ts.get().getNidForUuids(u));
+        } else if (convertedMap.containsKey("Custom FOR set")) {
+            String UUIDset = (String) convertedMap.get("Custom FOR set");
+            ConcurrentBitSet cbs = new ConcurrentBitSet();
+            StringTokenizer tok = new StringTokenizer(UUIDset, ",");
+            while (tok.hasMoreTokens()) {
+                String next = tok.nextToken();
+                if (next.matches("[0-9a-z-]*")) {
+                    UUID nextUUID = UUID.fromString(next);
+                    cbs.add(Ts.get().getComponent(nextUUID).getNid());
+                }
             }
+            this.forCollection = cbs;
         } else {
             try {
                 ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
@@ -204,7 +212,7 @@ public class QueryFromJaxb extends Query {
                 return q.ConceptIsDescendentOf(clause.letKeys.get(0), clause.letKeys.get(1));
             case CONCEPT_IS_KIND_OF:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 2 : "Let keys should have one and only one value: " + clause.letKeys;
+                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
                 return q.ConceptIsKindOf(clause.letKeys.get(0), clause.letKeys.get(1));
             case CHANGED_FROM_PREVIOUS_VERSION:
                 assert childClauses.length == 0 : childClauses;
@@ -216,8 +224,8 @@ public class QueryFromJaxb extends Query {
                 return q.DescriptionLuceneMatch(clause.letKeys.get(0));
             case DESCRIPTION_ACTIVE_LUCENE_MATCH:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.DescriptionActiveLuceneMatch(clause.letKeys.get(0));
+                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
+                return q.DescriptionActiveLuceneMatch(clause.letKeys.get(0), clause.letKeys.get(1));
             case DESCRIPTION_ACTIVE_REGEX_MATCH:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
@@ -252,10 +260,12 @@ public class QueryFromJaxb extends Query {
                 return q.RefsetContainsString(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
             case REL_RESTRICTION:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 : "Let keys should have three or four values: " + clause.letKeys;
+                assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 || clause.letKeys.size() == 5: "Let keys should have three, four, or five values: " + clause.letKeys;
                 if (clause.letKeys.size() == 3) {
                     return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
-                } else {
+//                } else if(clause.letKeys.size() == 4) {
+//                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
+                } else{
                     return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
                 }
             case REL_TYPE:

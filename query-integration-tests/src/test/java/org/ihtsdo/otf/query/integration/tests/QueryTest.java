@@ -34,6 +34,8 @@ import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
@@ -48,7 +50,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -80,14 +81,6 @@ public class QueryTest {
     public void tearDown() {
     }
 
-//    @Test
-//    public void testChangedFromPreviousVersion() throws IOException, Exception {
-//        System.out.println("Changed from previous version");
-//        ChangedFromPreviousVersionTest changeTest = new ChangedFromPreviousVersionTest();
-//        NativeIdSetBI results = changeTest.computeQuery();
-//        Assert.assertEquals(1, results.size());
-//
-//    }
     @Test
     public void testSimpleQuery() throws IOException, Exception {
         System.out.println("Simple query: ");
@@ -517,35 +510,90 @@ public class QueryTest {
         Assert.assertEquals(1, test.getResults().size());
     }
 
-    @Ignore
+    @Test
+    public void descriptionActiveLuceneMatchTest() throws Exception {
+        System.out.println("DescriptionActiveLuceneMatch test");
+        Query q1 = new Query() {
+
+            @Override
+            protected NativeIdSetBI For() throws IOException {
+                return Ts.get().getAllConceptNids();
+            }
+
+            @Override
+            public void Let() throws IOException {
+                let("baranys", "barany's");
+            }
+
+            @Override
+            public Clause Where() {
+                return ConceptForComponent(DescriptionLuceneMatch("baranys"));
+            }
+        };
+        NativeIdSetBI results1 = q1.compute();
+        Assert.assertEquals(1, results1.size());
+
+        for (DescriptionVersionBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.BARANYS_SIGN.getNid()).getDescriptionsActive()) {
+            this.setActiveStatus(desc, Status.INACTIVE);
+        }
+        DescriptionActiveLuceneMatchTest test = new DescriptionActiveLuceneMatchTest();
+        NativeIdSetBI results2 = test.computeQuery();
+        Assert.assertEquals(results2.size(), results1.size() - 1);
+        for (DescriptionChronicleBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.BARANYS_SIGN.getNid()).getDescriptions()) {
+            DescriptionVersionBI descVersion = desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest());
+            this.setActiveStatus(descVersion, Status.ACTIVE);
+        }
+    }
+
+    /**
+     * TODO
+     * @throws IOException
+     * @throws Exception 
+     */
+    @Test
+    public void ChangeFromPreviousVersionTest() throws IOException, Exception {
+        System.out.println("Changed from previous version test");
+        ChangedFromPreviousVersionTest test = new ChangedFromPreviousVersionTest();
+        SetViewCoordinate svc = new SetViewCoordinate(2010, 1, 31, 0, 0);
+        ViewCoordinate previousVC = svc.getViewCoordinate();
+        this.modifyDesc(previousVC, "Motion physical force");
+        NativeIdSetBI results2 = test.computeQuery();
+        for (Object o : test.q.returnDisplayObjects(results2, ReturnTypes.DESCRIPTION_VERSION_FSN)) {
+            System.out.println(o);
+        }
+        Assert.assertEquals(2, results2.size());
+        this.modifyDesc(previousVC, "Motion (physical force)");
+    }
+
     @Test
     public void DescriptionActiveRegexMatchTest() throws IOException, ContradictionException, InvalidCAB, Exception {
         System.out.println("Description active regex match test");
-//        setInactive(Snomed.ACCELERATION.getNid());
-        for (DescriptionVersionBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.ACCELERATION.getNid()).getDescriptionsActive()) {
-            this.setInactive(desc.getNid());
-            System.out.println(Ts.get().getComponentVersion(StandardViewCoordinates.getSnomedInferredLatest(), desc.getNid()));
+        for (DescriptionVersionBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.CENTRIFUGAL_FORCE.getNid()).getDescriptionsActive()) {
+            this.setActiveStatus(desc, Status.INACTIVE);
         }
         DescriptionActiveRegexMatchTest test = new DescriptionActiveRegexMatchTest();
         for (Object o : test.q.returnDisplayObjects(test.computeQuery(), ReturnTypes.COMPONENT)) {
             System.out.println(o);
         }
-        Assert.assertEquals(3, test.computeQuery().size());
-
+        Assert.assertEquals(test.q.getForSet().size(), test.computeQuery().size());
+        for (DescriptionChronicleBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.CENTRIFUGAL_FORCE.getNid()).getDescriptions()) {
+            DescriptionVersionBI descVersion = desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest());
+            this.setActiveStatus(descVersion, Status.ACTIVE);
+        }
     }
 
-    public void setInactive(int nid) throws IOException, ContradictionException, InvalidCAB {
-        DescriptionVersionBI desc = (DescriptionVersionBI) Ts.get().getComponentVersion(StandardViewCoordinates.getSnomedInferredLatest(), nid);
-        DescriptionCAB descCAB = desc.makeBlueprint(StandardViewCoordinates.getSnomedInferredLatest(), IdDirective.PRESERVE, RefexDirective.EXCLUDE);
-        descCAB.setRetired();
+    public static void setActiveStatus(DescriptionVersionBI desc, Status status) throws IOException, ContradictionException, InvalidCAB {
+        ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
+        DescriptionCAB descCAB = desc.makeBlueprint(vc, IdDirective.PRESERVE, RefexDirective.EXCLUDE);
+        descCAB.setStatus(status);
         int authorNid = TermAux.USER.getLenient().getConceptNid();
-        int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
+        int editPathNid = TermAux.SNOMED_CORE.getLenient().getConceptNid();
         EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
-        TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
+        TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, vc);
         DescriptionChronicleBI descChronicle = tb.construct(descCAB);
-        System.out.println(descChronicle);
-        Ts.get().addUncommitted(desc.getEnclosingConcept());
+        Ts.get().addUncommitted(desc.getEnclosingConcept().getVersion(vc));
         Ts.get().commit();
+        System.out.println(descChronicle.getVersion(vc));
     }
 
     public void addRefsetMember() throws IOException {
@@ -567,5 +615,18 @@ public class QueryTest {
             Logger.getLogger(QueryTest.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void modifyDesc(ViewCoordinate vc, String text) throws IOException, ContradictionException, InvalidCAB {
+        DescriptionVersionBI desc = Ts.get().getConceptVersion(vc, Snomed.MOTION.getNid()).getFullySpecifiedDescription();
+        DescriptionCAB descCAB = desc.makeBlueprint(vc, IdDirective.PRESERVE, RefexDirective.EXCLUDE);
+        descCAB.setText(text);
+        int authorNid = TermAux.USER.getLenient().getConceptNid();
+        int editPathNid = TermAux.SNOMED_CORE.getLenient().getConceptNid();
+        EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
+        TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, vc);
+        DescriptionChronicleBI descChronicle = tb.construct(descCAB);
+        Ts.get().addUncommitted(desc.getEnclosingConcept().getVersion(vc));
+        Ts.get().commit();
     }
 }

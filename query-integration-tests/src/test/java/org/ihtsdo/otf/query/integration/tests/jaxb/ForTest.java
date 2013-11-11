@@ -115,9 +115,9 @@ public class ForTest {
     @Ignore
     @Test
     public void getCustomForSetTest() throws IOException {
-        ForCollection forCollection = new ForCollection(Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest()));
-        NativeIdSetBI forSet = forCollection.getCollection();
-        Assert.assertEquals(7, forSet.size());
+//        ForCollection forCollection = new ForCollection(Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest()));
+//        NativeIdSetBI forSet = forCollection.getCollection();
+//        Assert.assertEquals(7, forSet.size());
 
     }
 }

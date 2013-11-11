@@ -61,7 +61,7 @@ public abstract class LeafClause extends Clause {
     }
 
     @Override
-    public final NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException {
+    public NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException {
         resultsCache.and(incomingComponents);
         return resultsCache;
     }
