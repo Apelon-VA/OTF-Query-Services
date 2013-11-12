@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -76,6 +78,7 @@ public class RegexResource {
             return writer.toString();
 
         } catch (NullPointerException e) {
+            Logger.getLogger(RegexResource.class.getName()).log(Level.SEVERE, e.getMessage());
             throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
         }
     }

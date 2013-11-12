@@ -30,7 +30,7 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.otf.tcc.api.nid.HybridNidSet;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
@@ -87,7 +87,7 @@ public class LuceneResource {
 
             List<SearchResult> results = descriptionIndexer.query(queryText, ComponentProperty.DESCRIPTION_TEXT, 500);
 
-            NativeIdSetBI resultSet = new HybridNidSet();
+            NativeIdSetBI resultSet = new ConcurrentBitSet();
 
             System.out.println("result: " + results);
             for (SearchResult r : results) {
@@ -97,7 +97,7 @@ public class LuceneResource {
                 resultSet.add(r.nid);
             }
             ArrayList<Object> objectList = Query.returnDisplayObjects(resultSet,
-                    ReturnTypes.DESCRIPTION,
+                    ReturnTypes.DESCRIPTION_FOR_COMPONENT,
                     StandardViewCoordinates.getSnomedInferredLatest());
 
             ResultList resultList = new ResultList();

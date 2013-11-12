@@ -139,7 +139,7 @@ public class QueryTest {
         for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.COMPONENT)) {
             System.out.println(o);
         }
-        for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)) {
+        for (Object o : descLuceneMatch.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_FOR_COMPONENT)) {
             System.out.println(o);
         }
         Assert.assertEquals(6, results.size());
@@ -190,7 +190,7 @@ public class QueryTest {
         };
         NativeIdSetBI results = q.compute();
         System.out.println("Description lucene match (leg) size: " + results.size());
-        for (Object o : q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION)) {
+        for (Object o : q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_FOR_COMPONENT)) {
             Assert.assertTrue(o != null);
         }
         Assert.assertTrue(results.size() > 800);

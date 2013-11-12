@@ -17,6 +17,7 @@ package org.ihtsdo.otf.query.integration.tests.rest;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import static java.lang.String.valueOf;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -372,11 +373,11 @@ public class RestQueryTest extends JerseyTest {
         //Print the url
         StringBuilder urlBuilder = new StringBuilder("{default-host}/otf/query-service/query?");
 
-        urlBuilder.append("VIEW=").append(URLEncoder.encode(viewCoordinateXml, "UTF-8")).append(
+        urlBuilder.append("VIEWPOINT=").append(
                 "&FOR=").append(URLEncoder.encode(forXml, "UTF-8")).append(
                         "&LET=").append(URLEncoder.encode(letMapXml, "UTF-8")).append(
                         "&WHERE=").append(URLEncoder.encode(whereXml, "UTF-8")).append(
-                        "&RETURN=null");
+                        "&RETURN=").append(valueOf(returnType));
 
         System.out.println("URL: " + urlBuilder.toString());
 

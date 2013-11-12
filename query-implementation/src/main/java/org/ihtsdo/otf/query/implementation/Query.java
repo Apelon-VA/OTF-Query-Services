@@ -258,7 +258,7 @@ public abstract class Query {
                     }
                 }
                 break;
-            case DESCRIPTION:
+            case DESCRIPTION_FOR_COMPONENT:
                 while (iter.next()) {
                     ComponentChronicleBI component = Ts.get().getComponent(iter.nid());
                     if (component == null) {

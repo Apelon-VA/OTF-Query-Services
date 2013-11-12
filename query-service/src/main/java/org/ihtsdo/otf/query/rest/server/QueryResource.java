@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,8 +28,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
@@ -61,6 +64,35 @@ public class QueryResource {
         } catch (NullPointerException e) {
             throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
         }
+
+        ViewCoordinate vc = null;
+        try {
+            vc = query.getViewCoordinate();
+        } catch (NullPointerException e) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed VIEWPOINT value.");
+        }
+
+        NativeIdSetBI forSet = null;
+        try {
+            query.getForCollection();
+        } catch (NullPointerException e) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed FOR value.");
+        }
+
+        HashMap<String, Object> letMap = null;
+        try {
+            letMap = query.getLetDeclarations();
+        } catch (NullPointerException e) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed LET value.");
+        }
+
+        Clause where = null;
+        try {
+            where = query.getRootClause();
+        } catch (NullPointerException e) {
+            throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed WHERE value.");
+        }
+
         if (query.getViewCoordinate() == null) {
             throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed VIEWPOINT value.");
         } else if (query.getForCollection() == null) {
@@ -72,14 +104,17 @@ public class QueryResource {
         } else if (query.nullSpec == true) {
             throw new QueryApplicationException(HttpErrorType.ERROR422, "Null ConceptSpec.");
         }
+
         NativeIdSetBI resultSet = null;
+
         try {
             resultSet = query.compute();
         } catch (ValidationException e) {
             throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed input concept in LET value. See below for ValidationException details.", e);
         }
 
-        if (!returnValue.equals("null") && !returnValue.equals("")) {
+        if (!returnValue.equals(
+                "null") && !returnValue.equals("")) {
             ReturnTypes returnType;
             if (returnValue.startsWith("<?xml")) {
                 try {
@@ -89,7 +124,11 @@ public class QueryResource {
                     throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed RETURN value.");
                 }
             } else {
-                returnType = ReturnTypes.valueOf(returnValue);
+                try {
+                    returnType = ReturnTypes.valueOf(returnValue);
+                } catch (IllegalArgumentException e) {
+                    throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed RETURN value.");
+                }
             }
             ArrayList<Object> objectList = query.returnDisplayObjects(resultSet,
                     returnType);

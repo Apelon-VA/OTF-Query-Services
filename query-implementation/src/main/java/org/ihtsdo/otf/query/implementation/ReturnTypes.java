@@ -48,7 +48,7 @@ public enum ReturnTypes {
      * concept, then the description of the fully specified name will be
      * returned.
      */
-    DESCRIPTION,
+    DESCRIPTION_FOR_COMPONENT,
     /**
      * Description version of the fully specified name.
      */
