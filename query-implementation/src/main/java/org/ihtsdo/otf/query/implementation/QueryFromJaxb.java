@@ -199,21 +199,37 @@ public class QueryFromJaxb extends Query {
                 assert childClauses.length == 1;
                 return q.ConceptForComponent(childClauses[0]);
             case CONCEPT_IS:
-                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
+                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should have one or two values: " + clause.letKeys;
                 assert childClauses.length == 0 : childClauses;
-                return q.ConceptIs(clause.letKeys.get(0), clause.letKeys.get(1));
+                if (clause.letKeys.size() == 1) {
+                    return q.ConceptIs(clause.letKeys.get(0));
+                } else {
+                    return q.ConceptIs(clause.letKeys.get(0), clause.letKeys.get(1));
+                }
             case CONCEPT_IS_CHILD_OF:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
-                return q.ConceptIsChildOf(clause.letKeys.get(0), clause.letKeys.get(1));
+                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should have one or two values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.ConceptIsChildOf(clause.letKeys.get(0));
+                } else {
+                    return q.ConceptIsChildOf(clause.letKeys.get(0), clause.letKeys.get(1));
+                }
             case CONCEPT_IS_DESCENDENT_OF:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
-                return q.ConceptIsDescendentOf(clause.letKeys.get(0), clause.letKeys.get(1));
+                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should have one or two values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.ConceptIsDescendentOf(clause.letKeys.get(0));
+                } else {
+                    return q.ConceptIsDescendentOf(clause.letKeys.get(0), clause.letKeys.get(1));
+                }
             case CONCEPT_IS_KIND_OF:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
-                return q.ConceptIsKindOf(clause.letKeys.get(0), clause.letKeys.get(1));
+                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should have one or two values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.ConceptIsKindOf(clause.letKeys.get(0));
+                } else {
+                    return q.ConceptIsKindOf(clause.letKeys.get(0), clause.letKeys.get(1));
+                }
             case CHANGED_FROM_PREVIOUS_VERSION:
                 assert childClauses.length == 0 : childClauses;
                 assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
@@ -228,12 +244,20 @@ public class QueryFromJaxb extends Query {
                 return q.DescriptionActiveLuceneMatch(clause.letKeys.get(0), clause.letKeys.get(1));
             case DESCRIPTION_ACTIVE_REGEX_MATCH:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 1 : "Let keys should have one and only one value: " + clause.letKeys;
-                return q.DescriptionActiveRegexMatch(clause.letKeys.get(0));
+                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should have one or two values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.DescriptionActiveRegexMatch(clause.letKeys.get(0));
+                } else {
+                    return q.DescriptionActiveRegexMatch(clause.letKeys.get(0), clause.letKeys.get(1));
+                }
             case DESCRIPTION_REGEX_MATCH:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 2 : "Let keys should have two values: " + clause.letKeys;
-                return q.DescriptionRegexMatch(clause.letKeys.get(0), clause.letKeys.get(1));
+                assert clause.letKeys.size() == 1 || clause.letKeys.size() == 2 : "Let keys should have one or two values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.DescriptionRegexMatch(clause.letKeys.get(0));
+                } else {
+                    return q.DescriptionRegexMatch(clause.letKeys.get(0), clause.letKeys.get(1));
+                }
             case FULLY_SPECIFIED_NAME_FOR_CONCEPT:
                 assert clause.letKeys.isEmpty() : "Let keys should be empty: " + clause.letKeys;
                 assert childClauses.length == 1;
@@ -248,24 +272,36 @@ public class QueryFromJaxb extends Query {
                 return q.RefsetLuceneMatch(clause.letKeys.get(0));
             case REFSET_CONTAINS_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 3 : "Let keys should have two values: " + clause.letKeys;
-                return q.RefsetContainsConcept(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                assert clause.letKeys.size() == 2 || clause.letKeys.size() == 3 : "Let keys should have two or three values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.RefsetContainsConcept(clause.letKeys.get(0), clause.letKeys.get(1));
+                } else {
+                    return q.RefsetContainsConcept(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                }
             case REFSET_CONTAINS_KIND_OF_CONCEPT:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 3 : "Let keys should have two values: " + clause.letKeys;
-                return q.RefsetContainsKindOfConcept(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                assert clause.letKeys.size() == 2 || clause.letKeys.size() == 3 : "Let keys should have two or three values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.RefsetContainsKindOfConcept(clause.letKeys.get(0), clause.letKeys.get(1));
+                } else {
+                    return q.RefsetContainsKindOfConcept(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                }
             case REFSET_CONTAINS_STRING:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 3 : "Let keys should have two values: " + clause.letKeys;
-                return q.RefsetContainsString(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                assert clause.letKeys.size() == 2 || clause.letKeys.size() == 3 : "Let keys should have two or three values: " + clause.letKeys;
+                if (clause.letKeys.size() == 1) {
+                    return q.RefsetContainsString(clause.letKeys.get(0), clause.letKeys.get(1));
+                } else {
+                    return q.RefsetContainsString(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
+                }
             case REL_RESTRICTION:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 || clause.letKeys.size() == 5: "Let keys should have three, four, or five values: " + clause.letKeys;
+                assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 || clause.letKeys.size() == 5 : "Let keys should have three, four, or five values: " + clause.letKeys;
                 if (clause.letKeys.size() == 3) {
                     return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
-//                } else if(clause.letKeys.size() == 4) {
-//                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
-                } else{
+                } else if(clause.letKeys.size() == 4) {
+                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
+                } else {
                     return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
                 }
             case REL_TYPE:

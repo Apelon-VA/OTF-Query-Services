@@ -43,7 +43,7 @@ import org.ihtsdo.otf.tcc.datastore.Bdb;
  */
 public class RelRestriction extends LeafClause {
 
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
     Query enclosingQuery;
     String relTypeKey;
     ConceptSpec relType;
@@ -90,27 +90,31 @@ public class RelRestriction extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        } else {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }
         NativeIdSetBI relTypeSet = new ConcurrentBitSet();
         relTypeSet.add(this.relType.getNid());
         if (this.relTypeSubsumption) {
-            relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), vc));
+            relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), viewCoordinate));
         }
-        NativeIdSetBI relationshipSet = Bdb.getMemoryCache().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.vc);
+        NativeIdSetBI relationshipSet = Bdb.getMemoryCache().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.viewCoordinate);
         getResultsCache().or(relationshipSet);
         int parentNid = relRestrictionSpec.getNid();
         NativeIdSetBI restrictionSet = new ConcurrentBitSet();
         restrictionSet.add(parentNid);
-        restrictionSet.or(Ts.get().isKindOfSet(parentNid, vc));
+        restrictionSet.or(Ts.get().isKindOfSet(parentNid, viewCoordinate));
         if (!this.destinationSubsumption) {
             getResultsCache().and(restrictionSet);
             return getResultsCache();
         } else {
             //Default is to compute using subsumption
-            NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
+            NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, viewCoordinate);
             NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
             while (iter.next()) {
-                getResultsCache().or(Bdb.getMemoryCache().getDestRelNids(iter.nid(), relTypeSet, vc));
+                getResultsCache().or(Bdb.getMemoryCache().getDestRelNids(iter.nid(), relTypeSet, viewCoordinate));
             }
         }
         getResultsCache().and(restrictionSet);

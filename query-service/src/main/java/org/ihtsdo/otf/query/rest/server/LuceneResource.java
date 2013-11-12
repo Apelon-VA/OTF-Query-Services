@@ -20,6 +20,8 @@ import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -108,6 +110,7 @@ public class LuceneResource {
             return writer.toString();
 
         } catch (NullPointerException e) {
+            Logger.getLogger(LuceneResource.class.getName()).log(Level.INFO, "Database error.", e);
             throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
         }
 

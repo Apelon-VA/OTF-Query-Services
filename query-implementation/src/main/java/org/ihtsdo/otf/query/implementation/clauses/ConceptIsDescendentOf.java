@@ -61,7 +61,11 @@ public class ConceptIsDescendentOf extends LeafClause {
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents)
             throws ValidationException, IOException, ContradictionException {
-        this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        } else {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }
         int parentNid = kindOfSpec.getNid(viewCoordinate);
         getResultsCache().or(Ts.get().isKindOfSet(parentNid, viewCoordinate));
         getResultsCache().remove(parentNid);
@@ -70,7 +74,7 @@ public class ConceptIsDescendentOf extends LeafClause {
 
     @Override
     public EnumSet<ClauseComputeType> getComputePhases() {
-        return PRE_AND_POST_ITERATION;
+        return PRE_ITERATION;
     }
 
     @Override

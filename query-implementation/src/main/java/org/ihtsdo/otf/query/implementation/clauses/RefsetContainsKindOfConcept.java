@@ -47,7 +47,7 @@ public class RefsetContainsKindOfConcept extends LeafClause {
     String conceptSpecKey;
     ConceptSpec conceptSpec;
     String viewCoordinateKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
 
     public RefsetContainsKindOfConcept(Query enclosingQuery, String refsetSpecKey, String conceptSpecKey, String viewCoordinateKey) {
         super(enclosingQuery);
@@ -78,13 +78,17 @@ public class RefsetContainsKindOfConcept extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        } else {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }
 
         int parentNid = this.conceptSpec.getNid();
-        NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
+        NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, viewCoordinate);
         int refsetNid = this.refsetSpec.getNid();
-        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
-        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(vc)) {
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(viewCoordinate, refsetNid);
+        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(viewCoordinate)) {
             if (kindOfSet.contains(rm.getReferencedComponentNid())) {
                 getResultsCache().add(refsetNid);
             }

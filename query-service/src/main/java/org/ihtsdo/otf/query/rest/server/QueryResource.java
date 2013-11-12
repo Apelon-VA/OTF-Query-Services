@@ -21,6 +21,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -62,6 +64,7 @@ public class QueryResource {
         try {
             query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
         } catch (NullPointerException e) {
+            Logger.getLogger(QueryResource.class.getName()).log(Level.INFO, "Database error.", e);
             throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
         }
 

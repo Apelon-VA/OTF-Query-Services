@@ -78,7 +78,7 @@ public class RegexResource {
             return writer.toString();
 
         } catch (NullPointerException e) {
-            Logger.getLogger(RegexResource.class.getName()).log(Level.SEVERE, e.getMessage());
+            Logger.getLogger(RegexResource.class.getName()).log(Level.INFO, "Database error.", e);
             throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
         }
     }

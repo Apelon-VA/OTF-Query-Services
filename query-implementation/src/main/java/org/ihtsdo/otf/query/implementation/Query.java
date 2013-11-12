@@ -73,16 +73,18 @@ public abstract class Query {
             = new HashMap<>();
 
     public HashMap<String, Object> getLetDeclarations() {
-        try {
-            letDeclarations.put(currentViewCoordinateKey, StandardViewCoordinates.getSnomedInferredLatest());
-        } catch (IOException ex) {
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return letDeclarations;
     }
 
     public void setLetDelclarations(HashMap<String, Object> letMap) {
         this.letDeclarations = letMap;
+    }
+
+    public HashMap<String, Object> getVCLetDeclarations() throws IOException {
+        HashMap<String, Object> letVCDeclarations
+                = new HashMap<>();
+        letVCDeclarations.put(currentViewCoordinateKey, StandardViewCoordinates.getSnomedInferredLatest());
+        return letVCDeclarations;
     }
     /**
      * Number of Components output in the returnResultSet method.
@@ -409,7 +411,7 @@ public abstract class Query {
     protected DescriptionActiveRegexMatch DescriptionActiveRegexMatch(String regexKey) {
         return new DescriptionActiveRegexMatch(this, regexKey, this.currentViewCoordinateKey);
     }
-    
+
     protected DescriptionActiveRegexMatch DescriptionActiveRegexMatch(String regexKey, String viewCoordinateKey) {
         return new DescriptionActiveRegexMatch(this, regexKey, viewCoordinateKey);
     }
@@ -548,8 +550,8 @@ public abstract class Query {
     protected RefsetContainsString RefsetContainsString(String refsetSpecKey, String stringMatchKey) {
         return new RefsetContainsString(this, refsetSpecKey, stringMatchKey, this.currentViewCoordinateKey);
     }
-    
-    protected RefsetContainsString RefsetContainsString(String refsetSpecKey, String stringMatchKey, String viewCoordinateKey){
+
+    protected RefsetContainsString RefsetContainsString(String refsetSpecKey, String stringMatchKey, String viewCoordinateKey) {
         return new RefsetContainsString(this, refsetSpecKey, stringMatchKey, viewCoordinateKey);
     }
 

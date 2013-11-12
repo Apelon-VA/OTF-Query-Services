@@ -21,7 +21,6 @@ package org.ihtsdo.otf.query.implementation.clauses;
  */
 import java.io.IOException;
 import java.util.EnumSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
@@ -51,7 +50,7 @@ public class RefsetContainsString extends LeafClause {
     Query enclosingQuery;
     String queryText;
     String viewCoordinateKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
     NativeIdSetBI cache;
     ConceptSpec refsetSpec;
     String refsetSpecKey;
@@ -73,11 +72,15 @@ public class RefsetContainsString extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        } else {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+        }
         int refsetNid = this.refsetSpec.getNid();
-        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(viewCoordinate, refsetNid);
 
-        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(vc)) {
+        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(viewCoordinate)) {
             switch (rm.getRefexType()) {
                 case CID_STR:
                 case CID_CID_CID_STRING:
