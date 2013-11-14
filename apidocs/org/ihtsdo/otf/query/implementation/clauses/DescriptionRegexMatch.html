@@ -103,6 +103,10 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveRegexMatch</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <span class="strong">DescriptionRegexMatch</span>
@@ -129,7 +133,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#POST_ITERATION">POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
 </ul>
 </li>
 </ul>
@@ -145,8 +149,9 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html#DescriptionRegexMatch(org.ihtsdo.otf.query.implementation.Query, java.lang.String)">DescriptionRegexMatch</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;enclosingQuery,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey)</code>&nbsp;</td>
+<td class="colOne"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html#DescriptionRegexMatch(org.ihtsdo.otf.query.implementation.Query, java.lang.String, java.lang.String)">DescriptionRegexMatch</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;enclosingQuery,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -196,7 +201,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation">LeafClause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#setResultsCache(org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet)">setResultsCache</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.ihtsdo.otf.query.implementation.Clause">
@@ -226,14 +231,15 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="DescriptionRegexMatch(org.ihtsdo.otf.query.implementation.Query, java.lang.String)">
+<a name="DescriptionRegexMatch(org.ihtsdo.otf.query.implementation.Query, java.lang.String, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DescriptionRegexMatch</h4>
 <pre>public&nbsp;DescriptionRegexMatch(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;enclosingQuery,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey)</pre>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regexKey,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
 </li>
 </ul>
 </li>
@@ -266,7 +272,8 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <ul class="blockList">
 <li class="blockList">
 <h4>computePossibleComponents</h4>
-<pre>public&nbsp;org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;incomingPossibleComponents)</pre>
+<pre>public&nbsp;org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;incomingPossibleComponents)
+                                                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">Clause</a></code></strong></div>
 <div class="block">Compute components that meet the where clause criterion without using
  iteration. If the set of possibilities cannot be computed without
@@ -274,7 +281,9 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computePossibleComponents</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></code></dd>
-<dt><span class="strong">Returns:</span></dt><dd></dd></dl>
+<dt><span class="strong">Returns:</span></dt><dd></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
 <a name="getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">

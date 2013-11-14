@@ -106,9 +106,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
    &lt;complexContent>
      &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
        &lt;sequence>
-         &lt;element name="customCollection" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
          &lt;element name="forCollectionString" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
        &lt;/sequence>
+       &lt;attribute name="customCollection">
+         &lt;simpleType>
+           &lt;list itemType="{http://www.w3.org/2001/XMLSchema}string" />
+         &lt;/simpleType>
+       &lt;/attribute>
      &lt;/restriction>
    &lt;/complexContent>
  &lt;/complexType>
@@ -211,22 +215,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="customCollection">
+<a name="forCollectionString">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>customCollection</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; customCollection</pre>
+<h4>forCollectionString</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> forCollectionString</pre>
 </li>
 </ul>
-<a name="forCollectionString">
+<a name="customCollection">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>forCollectionString</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> forCollectionString</pre>
+<h4>customCollection</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; customCollection</pre>
 </li>
 </ul>
 </li>
@@ -254,10 +258,34 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getCustomCollection()">
+<a name="getForCollectionString()">
 <!--   -->
 </a>
 <ul class="blockList">
+<li class="blockList">
+<h4>getForCollectionString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getForCollectionString()</pre>
+<div class="block">Gets the value of the forCollectionString property.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>possible object is
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a></dd></dl>
+</li>
+</ul>
+<a name="setForCollectionString(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setForCollectionString</h4>
+<pre>public&nbsp;void&nbsp;setForCollectionString(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
+<div class="block">Sets the value of the forCollectionString property.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - allowed object is
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a></dd></dl>
+</li>
+</ul>
+<a name="getCustomCollection()">
+<!--   -->
+</a>
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getCustomCollection</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getCustomCollection()</pre>
@@ -279,30 +307,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  <p>
  Objects of the following type(s) are allowed in the list
  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a></div>
-</li>
-</ul>
-<a name="getForCollectionString()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getForCollectionString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getForCollectionString()</pre>
-<div class="block">Gets the value of the forCollectionString property.</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>possible object is
-     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a></dd></dl>
-</li>
-</ul>
-<a name="setForCollectionString(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>setForCollectionString</h4>
-<pre>public&nbsp;void&nbsp;setForCollectionString(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
-<div class="block">Sets the value of the forCollectionString property.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - allowed object is
-     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a></dd></dl>
 </li>
 </ul>
 </li>

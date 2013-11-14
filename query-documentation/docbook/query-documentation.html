@@ -13,42 +13,41 @@ body { background-image: url('images/draft.png');
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="street">Gammeltorv&nbsp;4,&nbsp;1.</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="postcode">1457</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="country">Denmark</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></div></h3></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e24">Project overview</a></span></dt><dt><span class="section"><a href="#d0e32">Project requirements</a></span></dt><dt><span class="section"><a href="#d0e62">Setup</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e65">Maven</a></span></dt><dt><span class="section"><a href="#d0e114">Java</a></span></dt><dt><span class="section"><a href="#d0e131">tomcatsetup. Tomcat setup</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e190">Project checkout</a></span></dt><dt><span class="section"><a href="#d0e198">Query service build profiles</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e208">Default build profile</a></span></dt><dt><span class="section"><a href="#d0e228">Query Service build profile</a></span></dt><dt><span class="section"><a href="#d0e237">Integration tests build profile</a></span></dt><dt><span class="section"><a href="#d0e246">Documentation build profile</a></span></dt><dt><span class="section"><a href="#d0e259">All build profile</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e267">Query service repository structure</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e272">Maven Modules</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e404">Deploy to app server</a></span></dt><dt><span class="section"><a href="#d0e457">Module overview</a></span></dt><dd><dl><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-client">Query Client</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-implementation">Query Implementation</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-integration-tests">Query Integration Tests</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-service">Query Service</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_data-display-objects_jaxb">JAXB Objects</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_documentation-strategy">Documentation</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e646">Troubleshooting Tomcat</a></span></dt><dt><span class="section"><a href="#d0e654">Tomcat Shutdown</a></span></dt></dl></div><div class="section" title="Project overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24"></a>Project overview</h2></div></div></div><p>The OTF-Query-Services module is a component of the IHTSDO Open Terminology Tooling
-            Framework that implements queries that can be conducted against a Berkeley SNOMED
-            database. The project illustrates examples of how queries can be executed from within
-            Java or from a REST client server. The input parameters and syntax of the queries is
-            derived from <a class="link" href="http://en.wikipedia.org/wiki/FLWOR" target="_top">XQuery FLWOR
-                expressions</a>. </p></div><div class="section" title="Project requirements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e32"></a>Project requirements</h2></div></div></div><p>A working knowledge of Maven is a preqrequisite to understanding how to build and work
-            with the query service. More information on Maven is available at the <a class="link" href="http://maven.apache.org" target="_top">Apache Maven</a> site. Maven supports
-            project aggregation in addition to project inheritance through its module structure. See
-                <a class="link" href="http://maven.apache.org/guides/mini/guide-multiple-modules.html" target="_top">Maven's Guide to Working with Multiple Modules</a> and <a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html" target="_top">Maven's Introduction to the POM</a> for more information about Maven modules,
-            project inheritance, and project aggregation. </p><p>The minimum software requirements for the project are as follows: </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><a class="link" href="http://maven.apache.org/download.cgi" target="_top">Apache Maven
-                            3.1.0</a></p></li><li class="listitem"><p><a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html" target="_top">Java 1.7</a> or higher</p></li></ol></div><p>If you plan to perform queries using the REST service, you will need to
-            install an <a class="link" href="http://tomcat.apache.org/download-70.cgi" target="_top">Apache Tomcat 7.0
-                server</a>. </p></div><div class="section" title="Setup"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62"></a>Setup</h2></div></div></div><div class="section" title="Maven"><div class="titlepage"><div><div><h3 class="title"><a name="d0e65"></a>Maven</h3></div></div></div><p>In order to build the Query Service project, developers must either install Maven
-                3.1.0 to use from the command line, use an IDE that has Maven 3.1.0 already
-                integrated (IntelliJ IDEA, Netbeans), or add a plugin to their IDE that adds Maven
-                3.1.0 support. Instructions on installing Maven for use from the command line are
-                available at Maven's <a class="link" href="http://maven.apache.org/download.cgi" target="_top">download site</a>. Integration information for IntelliJ IDEA is available
-                from the Jetbrains wiki for <a class="link" href="http://wiki.jetbrains.net/intellij/Creating_and_importing_Maven_projects" target="_top">creating and importing maven projects</a>. Integration information for
-                Netbeans is available from Netbean's <a class="link" href="http://wiki.netbeans.org/Maven" target="_top">Maven wiki page</a>.</p><p>Please note that the project build requires the most recent version of Maven
-                (3.1.0) and Java 1.7 or higher. Ensure that you are running the minimum requirements
-                for Maven and Java by entering the command <code class="code">mvn --version</code>, which will
-                output the Maven and Java versions running on your machine. If the output displays a
-                version earlier than 1.7, download it <a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html" target="_top">here</a> and ensure that JAVA_HOME and PATH variables are set to point at a
-                JDK 1.7 or higher. </p><p>Once Maven is configured, you will need to download JavaFX artifacts to your local
-                repository by running the command <code class="code">mvn
-                    org.codeartisans.javafx:javafx-deployer-maven-plugin:1.2:install</code> from a
-                directory that is not a Maven project.</p><p>To access the artifact dependencies necessary to build the project, the Maven
-                settings.xml file must be appropriately configured. More information about the
-                settings.xml file and its location is available on Maven's <a class="link" href="http://maven.apache.org/settings.html" target="_top">Settings Reference</a> web
-                page. As noted in the Settings Reference page, locate and edit the settings.xml in
-                the directory <code class="code">${user.home}/.m2/</code>.</p><p>For build profiles other than the default build, developers will need an account
-                to download artifacts in the IHTSDO's repository, which can be requested from Rory
-                Davidson. Below is a copy of a settings.xml that allows a user to conduct the
-                default build. In order to perform other build profiles, enter IHTSDO Maestro
-                credentials into the username and password fields.</p><div class="example"><a name="d0e102"></a><p class="title"><b>Example&nbsp;1.&nbsp;Example settings.xml file</b></p><div class="example-contents"><p>
-                    </p><div class="programlistingco"><pre class="programlisting">                    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></div></h3></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e24">Project overview</a></span></dt><dt><span class="section"><a href="#d0e32">Project requirements</a></span></dt><dt><span class="section"><a href="#d0e62">Setup</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e65">Maven</a></span></dt><dt><span class="section"><a href="#d0e121">Java</a></span></dt><dt><span class="section"><a href="#d0e138">tomcatsetup. Tomcat setup</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e227">Project checkout</a></span></dt><dt><span class="section"><a href="#d0e235">Query service build profiles</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e245">Default build profile</a></span></dt><dt><span class="section"><a href="#d0e266">Query Service build profile</a></span></dt><dt><span class="section"><a href="#d0e276">Integration tests build profile</a></span></dt><dt><span class="section"><a href="#d0e286">Documentation build profile</a></span></dt><dt><span class="section"><a href="#d0e299">All build profile</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e307">Query service repository structure</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e312">Maven Modules</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e444">Deploy to app server</a></span></dt><dt><span class="section"><a href="#d0e522">Module overview</a></span></dt><dd><dl><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-client">Query Client</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-implementation">Query Implementation</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-integration-tests">Query Integration Tests</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_query-service">Query Service</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_data-display-objects_jaxb">JAXB Objects</a></span></dt><dt><span class="section"><a href="#org.ihtsdo.otf.query_documentation-strategy">Documentation</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e759">Troubleshooting Tomcat</a></span></dt><dt><span class="section"><a href="#d0e770">Tomcat Shutdown</a></span></dt></dl></div><div class="section" title="Project overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24"></a>Project overview</h2></div></div></div><p>The OTF-Query-Services module is a component of the IHTSDO Open Terminology Tooling
+      Framework that implements queries that can be conducted against a Berkeley SNOMED database.
+      The project illustrates examples of how queries can be executed from within Java or from a
+      REST client server. The input parameters and syntax of the queries is derived from <a class="link" href="http://en.wikipedia.org/wiki/FLWOR" target="_top">XQuery FLWOR expressions</a>.</p></div><div class="section" title="Project requirements"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e32"></a>Project requirements</h2></div></div></div><p>A working knowledge of Maven is a prerequisite to understanding how to build and work with
+      the query service. More information on Maven is available at the <a class="link" href="http://maven.apache.org" target="_top">Apache Maven</a> site. Maven supports project
+      aggregation in addition to project inheritance through its module structure. See <a class="link" href="http://maven.apache.org/guides/mini/guide-multiple-modules.html" target="_top">Maven's Guide
+        to Working with Multiple Modules</a> and <a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html" target="_top">Maven's Introduction to the POM</a> for more information about Maven modules, project
+      inheritance, and project aggregation.</p><p>The minimum software requirements for the project are as follows: </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><a class="link" href="http://maven.apache.org/download.cgi" target="_top">Apache Maven
+            3.1.0</a></p></li><li class="listitem"><p><a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html" target="_top">Java 1.7</a> or higher</p></li></ol></div><p>If you plan to perform queries using the REST service, you will need to install
+      an <a class="link" href="http://tomcat.apache.org/download-70.cgi" target="_top">Apache Tomcat 7.0
+      server</a>.</p></div><div class="section" title="Setup"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62"></a>Setup</h2></div></div></div><div class="section" title="Maven"><div class="titlepage"><div><div><h3 class="title"><a name="d0e65"></a>Maven</h3></div></div></div><p>In order to build the Query Service project, developers must either install Maven 3.1.0
+        to use from the command line, use an IDE that has Maven 3.1.0 already integrated (IntelliJ
+        IDEA, Netbeans), or add a plugin to their IDE that adds Maven 3.1.0 support. Instructions on
+        installing Maven for use from the command line are available at Maven's <a class="link" href="http://maven.apache.org/download.cgi" target="_top">download site</a>. Integration
+        information for IntelliJ IDEA is available from the Jetbrains wiki for <a class="link" href="http://wiki.jetbrains.net/intellij/Creating_and_importing_Maven_projects" target="_top">creating and importing maven projects</a>. Integration information for Netbeans is
+        available from Netbean's <a class="link" href="http://wiki.netbeans.org/Maven" target="_top">Maven wiki
+          page</a>.</p><p>Please note that the project build requires the most recent version of Maven, 3.1.0, and
+        Java 1.7 or higher. Ensure that you are running the minimum requirements for Maven and Java
+        by entering the command <code class="code">mvn --version</code>, which will output the Maven and Java
+        versions running on your machine. If the output displays a Java version earlier than 1.7,
+        download it <a class="link" href="http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html" target="_top">here</a> and ensure that JAVA_HOME and PATH variables are set to point at JDK 1.7 or
+        higher.</p><p>Once Maven is configured, you will need to download JavaFX artifacts to your local
+        repository by running the command <code class="code">$ mvn
+          org.codeartisans.javafx:javafx-deployer-maven-plugin:1.2:install</code> from a directory
+        that is not a Maven project.</p><p>To access the artifact dependencies necessary to build the project, the Maven
+          <code class="code">settings.xml</code> file must be appropriately configured. More information about
+        the <code class="code">settings.xml</code> file and its location is available on Maven's <a class="link" href="http://maven.apache.org/settings.html" target="_top">Settings Reference</a> web page. As
+        noted in the Settings Reference page, locate and edit the settings.xml in the directory
+          <code class="code">{user.home}/.m2/</code> .</p><p>For build profiles other than the default build, developers will need an account to
+        download a SNOMED CT berkeley database in the IHTSDO's repository. Credentials can be
+        requested from Rory Davidson. All of the other artifacts required for the project are open
+        source resources from Apache. Below is a copy of a <code class="code">settings.xml</code> file that
+        allows a user to conduct the default build. In order to perform build profiles other than
+        the default build, enter IHTSDO Maestro credentials into the username and password
+        fields.</p><div class="example"><a name="d0e111"></a><p class="title"><b>Example&nbsp;1.&nbsp;Example settings.xml file</b></p><div class="example-contents"><div class="programlistingco"><pre class="programlisting">                    
 &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -70,29 +69,24 @@ body { background-image: url('images/draft.png');
          &lt;/mirror&gt; 
      &lt;/mirrors&gt; 
 &lt;/settings&gt; 
-                    </pre></div><p>
-                </p></div></div><br class="example-break"></div><div class="section" title="Java"><div class="titlepage"><div><div><h3 class="title"><a name="d0e114"></a>Java</h3></div></div></div><p>The Query service project requires Java 1.7 or higher. To give Java more heap
-                space, you should set the following JAVA_OPTS: <code class="code">-J-Xss2m -J-Xms1g -J-Xmx2g
-                    -J-XX:PermSize=1600m</code>. If you're using the command line, these options can
-                be set with the command <code class="code">JAVA_OPTS set -J-Xss2m -J-Xms1g -J-Xmx2g
-                    -J-XX:PermSize=1600m</code>. Within Netbeans, these options should be added to
-                the <code class="code">netbeans_default_options</code> in the <code class="code">netbeans.conf</code>
-                file.</p></div><div class="section" title="Tomcat setup"><div class="titlepage"><div><div><h3 class="title"><a name="d0e131"></a>Tomcat setup</h3></div></div></div><p>Apache Tomcat 7.0 can be downloaded <a class="link" href="http://tomcat.apache.org/download-70.cgi" target="_top">here</a>. Configure
-                Tomcat with the following startup with the following JVM options: <code class="code">-Xmx6g
-                    -Xms6g -XX:PermSize=256m -XX:MaxPermSize=512m
-                    -Dorg.ihtsdo.otf.tcc.datastore.bdb-location=&lt;location of the berkeley-db
-                    folder&gt;</code>. This is how these parameters are set based upon your operating system:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Windows - use the command <code class="code">--JvmOptions</code> to set the above
-                            options. For more information on command-line parameters for Tomcat 7 on
-                            a Windows machine, please see this <a class="link" href="http://tomcat.apache.org/tomcat-7.0-doc/windows-service-howto.html#Command_line_parameters" target="_top">link</a>.</p></li><li class="listitem"><p>Linux/ Unix - add the given parameters as <code class="code">JAVA_OPTS</code> in
-                            the <code class="code">catalina.sh</code> file, which is located in the
-                                <code class="code">/bin</code> folder within Tomcat.</p></li></ol></div><p>This <a class="link" href="http://wolfpaulus.com/jounal/mac/tomcat7" target="_top">link</a> gives explicit instructions on how to configure your machine to
-                launch Tomcat from the command line with <code class="code">startup.sh</code> and
-                    <code class="code">shutdown.sh</code> scripts in OS X.</p><p>If you want to run Tomcat within Netbeans, this <a class="link" href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/" target="_top">link</a> gives directions on how to download Apache 7.0 and configure it to
-                run within Netbeans. Include the startup parameters stated above in the VM Options
-                box.</p><p> Here is a sample <code class="code">tomcat-users.xml</code> file that will setup a user
-                "admin" with a password "password" and privileges to access the Tomcat Web
-                Application Manager:</p><div class="programlistingco"><pre class="programlisting">                    
-&lt;?xml version='1.0' encoding='utf-8'?&gt;
+                    </pre></div></div></div><br class="example-break"></div><div class="section" title="Java"><div class="titlepage"><div><div><h3 class="title"><a name="d0e121"></a>Java</h3></div></div></div><p>The Query service project requires Java 1.7 or higher. To give Java more heap space, you
+        should set the following JAVA_OPTS: <code class="code">-J-Xss2m -J-Xms1g -J-Xmx2g
+          -J-XX:PermSize=1600m</code>. If you're using the command line, these options can be set
+        with the command <code class="code">JAVA_OPTS set -J-Xss2m -J-Xms1g -J-Xmx2g -J-XX:PermSize=1600m</code>.
+        Within Netbeans, these options should be added to the <code class="code">netbeans_default_options</code>
+        in the <code class="code">netbeans.conf</code> file.</p></div><div class="section" title="Tomcat setup"><div class="titlepage"><div><div><h3 class="title"><a name="d0e138"></a>Tomcat setup</h3></div></div></div><p>Apache Tomcat 7.0 can be downloaded <a class="link" href="http://tomcat.apache.org/download-70.cgi" target="_top">here</a>. Configure the following
+        properties in
+        <code class="code">.bash_profile</code>:</p><pre class="programlisting">export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/
+export CATALINA_HOME="/Applications/apache-tomcat-7.0.42"
+export CATALINA_OPTS="-Xms4g -Xmx6g -XX:MaxPermSize=512m -Dorg.ihtsdo.otf.tcc.repository.username=admin -Dorg.ihtsdo.otf.tcc.repository.password=password;
+-Duser.home=${CATALINA_HOME}/temp/bdb"</pre><p>Ensure that you replace <code class="code"></code>This <a class="link" href="http://wolfpaulus.com/jounal/mac/tomcat7" target="_top">link</a> gives
+        explicit instructions on how to configure your machine to launch Tomcat from the command
+        line with <code class="code">startup.sh</code> and <code class="code">shutdown.sh</code> scripts in OS X.</p><p>If you want to run Tomcat within Netbeans, this <a class="link" href="http://technology.amis.nl/2012/01/02/installing-tomcat-7-and-configuring-as-server-in-netbeans/" target="_top">link</a> gives directions on how to download Apache 7.0 and configure it to run within
+        Netbeans.</p><p>In order to gain access to the Tomcat Web Application Manager, you need to configure a
+        Tomcat user with the appropriate privileges by editing the <code class="code">tomcat-users.xml</code>
+        file that is stored in <code class="code">CATALINA_HOME/conf/</code>. Here is a sample
+          <code class="code">tomcat-users.xml</code> file that will setup a user named "admin" with a password
+        "password" and privileges to access the Tomcat Web Application Manager:</p><div class="example"><a name="d0e180"></a><p class="title"><b>Example&nbsp;2.&nbsp;Sample tomcat-users.xml</b></p><div class="example-contents"><div class="programlistingco"><pre class="programlisting">&lt;?xml version='1.0' encoding='utf-8'?&gt;
 &lt;tomcat-users&gt;
   &lt;role rolename="tomcat"/&gt;
   &lt;role rolename="role1"/&gt;
@@ -103,38 +97,48 @@ body { background-image: url('images/draft.png');
   &lt;user username="tomcat" password="tomcat" roles="tomcat"/&gt;
   &lt;user username="role1" password="tomcat" roles="role1"/&gt;
   &lt;user username="both" password="tomcat" roles="tomcat,role1"/&gt;
-&lt;/tomcat-users&gt;
-                    </pre></div></div></div><div class="section" title="Project checkout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e190"></a>Project checkout</h2></div></div></div><p>The Query service project can be checked out anonymously from GIT by entering the
-            prompt <code class="code">$git clone https://github.com/IHTSDO/OTF-Query-Services.git</code> in an
-            empty directory folder. </p></div><div class="section" title="Query service build profiles"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e198"></a>Query service build profiles</h2></div></div></div><p>The query service defines five build profiles described in the following sections. For
-            more information on build profiles, see Maven's <a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html" target="_top">Introduction to build profiles</a>. The default build is the only build profile
-            that can be conducted without acquiring IHTSDO Maestro credentials.</p><p>A developer can execute the builds from the command line, using the appropriate
-            command described below, or from an IDE that supports Maven by selecting the desired
-            build profile.</p><div class="section" title="Default build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e208"></a>Default build profile</h3></div></div></div><p>The default build profile consists of the modules that build when no profile is
-                specified. By default the following modules are built:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Client</p></li><li class="listitem"><p>JAXB objects</p></li></ol></div><p>This profile will provide a sufficient build to test the query client with the
-                provided settings.xml file. </p><p>These artifacts are located in the IHTSDO public Maven repository, and a user can
-                perform the default build without IHTSDO Maestro credentials.</p><p>The default build can be conducted from the console with the command <code class="code">$mvn
-                    clean install</code></p></div><div class="section" title="Query Service build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e228"></a>Query Service build profile</h3></div></div></div><p>This profile will build the query service and dependent modules. This project has
-                more dependencies, including dependencies in the IHTSDO Maven repository, which
-                required a user account. </p><p>The command for this build is <code class="code">$mvn clean install -P
-                query-service</code></p></div><div class="section" title="Integration tests build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e237"></a>Integration tests build profile</h3></div></div></div><p>The integration tests build profile adds the integration tests module to the
-                build. The integration tests are not part of the default build profile because they
-                have an external dependency on a Berkeley SNOMED database that is rather large, and
-                downloading and opening this database may not be necessary for all types of
-                development. Omitting this module from the default build profile makes the default
-                build rapid. </p><p>Assuming all of the required dependencies are installed, the build time for the
-                integration tests module takes about 1 min 20 sec on a high-spec developers laptop,
-                while the other modules in this project take between 0.5 and 5 seconds. To build
-                this from the console, use the command <code class="code">$mvn clean install -P
-                    integration-tests</code></p></div><div class="section" title="Documentation build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e246"></a>Documentation build profile</h3></div></div></div><p>The documentation build profile adds the integration tests module and the
-                documentation module to the build when the build profile id <span class="italic">documentation</span> is activated. Generation of documentation depends of
-                proper execution of the integration tests module, and therefore is removed from the
-                default build profile secondary to the resource requirements and build time of the
-                integration tests module. </p><p>Execute the documentation profile build with the command <code class="code">$mvn clean install
-                    -P documentation</code>.</p></div><div class="section" title="All build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e259"></a>All build profile</h3></div></div></div><p>Perform all of the goals listed in the above build profiles with the command
-                    <code class="code">$mvn clean install -P all</code>.</p></div></div><div class="section" title="Query service repository structure"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e267"></a>Query service repository structure</h2></div></div></div><p>The query service top-level project is the query-parent project that defines the root of
+&lt;/tomcat-users&gt; </pre></div></div></div><p><br class="example-break"></p><p>If you want to perform REST queries longer than 9000 characters, then edit the
+          <code class="code">maxHttpHeaderSize</code> parameter by conducting the following two changes:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Edit the <code class="code">server.xml</code> file in the directory
+                <code class="code">CATALINA_HOME/conf</code> to include your desired
+                <code class="code">maxHttpHeaderSize</code>as follows:
+              </p><pre class="programlisting">  &lt;Connector port="8080" protocol="HTTP/1.1"
+              connectionTimeout="20000"
+              redirectPort="8443"
+              maxHttpHeaderSize="15000"/&gt;</pre></li><li class="listitem"><p>Edit the <code class="code">param-value</code> for the <code class="code">httpMaxHeaderSize</code> in the
+                <code class="code">web.xml</code> file in the directory
+                <code class="code">OTF-Query-Services/query-service/src/main/webapps/WEB-INF</code> as
+              shown:</p><pre class="programlisting">        &lt;init-param&gt;
+            &lt;param-name&gt;httpMaxHeaderSize&lt;/param-name&gt;
+            &lt;param-value&gt;15000&lt;/param-value&gt;
+        &lt;/init-param&gt; </pre></li></ol></div></div></div><div class="section" title="Project checkout"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e227"></a>Project checkout</h2></div></div></div><p>The Query service project can be checked out anonymously from GIT by entering the prompt
+        <code class="code">$ git clone https://github.com/IHTSDO/OTF-Query-Services.git</code> in an empty
+      directory folder.</p></div><div class="section" title="Query service build profiles"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e235"></a>Query service build profiles</h2></div></div></div><p>The query service defines five build profiles described in the following sections. For
+      more information on build profiles, see Maven's <a class="link" href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html" target="_top">Introduction to build profiles</a>. The default build is the only build profile that can
+      be conducted without acquiring IHTSDO Maestro credentials.</p><p>A developer can execute the builds from the command line, using the appropriate command
+      described below, or from an IDE that supports Maven by selecting the desired build
+      profile.</p><div class="section" title="Default build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e245"></a>Default build profile</h3></div></div></div><p>The default build profile consists of the modules that build when no profile is
+        specified. By default the following modules are built:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Client</p></li><li class="listitem"><p>JAXB objects</p></li></ol></div><p>This profile will provide a sufficient build to test the query client with the provided
+        settings.xml file.</p><p>The artifacts required for the default build are located in the IHTSDO public Maven
+        repository, and a user can perform the default build without IHTSDO Maestro
+        credentials.</p><p>The default build can be conducted from the console with the command <code class="code">$ mvn clean
+          install</code> .</p></div><div class="section" title="Query Service build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e266"></a>Query Service build profile</h3></div></div></div><p>This profile will build the query service and dependent modules. This project has more
+        dependencies, including dependencies in the IHTSDO Maven repository, which require a user
+        account.</p><p>The command for this build is <code class="code">$ mvn clean install -P query-service</code> .</p></div><div class="section" title="Integration tests build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e276"></a>Integration tests build profile</h3></div></div></div><p>The integration tests build profile adds the integration tests module to the build. The
+        integration tests are not part of the default build profile because they have an external
+        dependency on a Berkeley SNOMED database that is rather large, and downloading and opening
+        this database may not be necessary for all types of development. Omitting this module from
+        the default build profile makes the default build rapid.</p><p>Assuming all of the required dependencies are installed, the build time for the
+        integration tests module takes about 1 min 20 sec on a high-spec developers laptop, while
+        the other modules in this project take between 0.5 and 5 seconds. To build this from the
+        console, use the command <code class="code">$ mvn clean install -P integration-tests</code> .</p></div><div class="section" title="Documentation build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e286"></a>Documentation build profile</h3></div></div></div><p>The documentation build profile adds the integration tests module and the documentation
+        module to the build when the build profile id <span class="italic">documentation</span> is activated. Generation of documentation depends of proper
+        execution of the integration tests module, and therefore is removed from the default build
+        profile secondary to the resource requirements and build time of the integration tests
+        module.</p><p>Execute the documentation profile build with the command <code class="code">$ mvn clean install -P
+          documentation</code> .</p></div><div class="section" title="All build profile"><div class="titlepage"><div><div><h3 class="title"><a name="d0e299"></a>All build profile</h3></div></div></div><p>Perform all of the goals listed in the above build profiles with the command <code class="code">$ mvn
+          clean install -P all</code> .</p></div></div><div class="section" title="Query service repository structure"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e307"></a>Query service repository structure</h2></div></div></div><p>The query service top-level project is the query-parent project that defines the root of
         the repository structure. The query service repository holds a maven multi-module project,
-        which manages the sources and documents for the project.</p><div class="section" title="Maven Modules"><div class="titlepage"><div><div><h3 class="title"><a name="d0e272"></a>Maven Modules</h3></div></div></div><p>Within the top level project are six maven modules (subprojects), some of which are
+        which manages the sources and documents for the project.</p><div class="section" title="Maven Modules"><div class="titlepage"><div><div><h3 class="title"><a name="d0e312"></a>Maven Modules</h3></div></div></div><p>Within the top level project are six maven modules (subprojects), some of which are
             only built when a particular build profile is activated.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_query-client" title="Query Client">Client</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>demonstrates how to connect to the query service REST server
                                     using a <a class="link" href="http://tomcat.apache.org" target="_top">Tomcat
                                         7.0</a> REST client</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-client</p></li><li class="listitem"><p>directory: query-client</p></li><li class="listitem"><p>build profiles: default, all, query-service,
@@ -146,1398 +150,677 @@ body { background-image: url('images/draft.png');
                                     JAXB xjc against the the underlying implementation</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-jaxb-objects</p></li><li class="listitem"><p>directory: query-jaxb-objects</p></li><li class="listitem"><p>build profiles: all, query-service, integration-tests,
                                     documentation</p></li></ul></div></li><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_query-integration-tests" title="Query Integration Tests">Integration
                             tests</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>conducts tests of queries against a SNOMED CT database</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-integration-tests</p></li><li class="listitem"><p>directory: query-integration-tests</p></li><li class="listitem"><p>build profiles: all, integration-tests, documentation</p></li></ul></div></li><li class="listitem"><p><a class="link" href="#org.ihtsdo.otf.query_documentation-strategy" title="Documentation">Documentation</a></p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>handles compilation of documentation fir Query Services
-                                    project</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-documentation</p></li><li class="listitem"><p>directory: query-documentation</p></li><li class="listitem"><p>build profiles: all, documentation</p></li></ul></div></li></ol></div></div></div><div class="section" title="Deploy to app server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e404"></a>Deploy to app server</h2></div></div></div><p>The default build command generates a <code class="code">.war</code> file that can be deployed to
-            an app server. Before deployment the app server must be properly configured with
-            adequate memory and access to the Berkeley database folder. The database folder can be
-            accessed from the <a class="link" href="https://csfe.aceworkspace.net/sf/frs/do/listReleases/projects.the_ihtsdo_terminology_open_tool/frs.test_data" target="_top">file releases section</a> of the <a class="link" href="https://csfe.aceworkspace.net/sf/projects/the_ihtsdo_terminology_open_tool/" target="_top">Open Tooling Framework</a> website.</p><p>Please see the Tomcat Setup section for instructions on how to configure your Tomcat
-            server. Here are the instructions for deploying the .war file to your Tomcat server
-            based upon how you're launching Tomcat: </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>From the command line: save the following xml file in
-                        CATALINA_HOME/conf/Catalina/localhost as otf.xml: </p><div class="programlistingco"><pre class="programlisting">                    
+                                    project</p></li><li class="listitem"><p>group id: org.ihtsdo.otf</p></li><li class="listitem"><p>artifact id: query-documentation</p></li><li class="listitem"><p>directory: query-documentation</p></li><li class="listitem"><p>build profiles: all, documentation</p></li></ul></div></li></ol></div></div></div><div class="section" title="Deploy to app server"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e444"></a>Deploy to app server</h2></div></div></div><p>The default build command generates a <code class="code">.war</code> file that can be deployed to an
+      app server. Please see the Tomcat Setup section for instructions on how to configure your
+      Tomcat server. In order to avoid causing lock errors when opening the berkeley database,
+      undeploy the otf app before redeploying. In order to undeploy the app, choose "undeploy" from
+      the Mananger App (http://localhost:8080/manager/html) or from within the Tomcat server in your
+      IDE. Here is a <a class="link" href="http://tomcat.apache.org/tomcat-7.0-doc/manager-howto.html" target="_top">link</a> to more information about the Tomcat 7 Manager App. Based upon how you're using
+      Tomcat, these are the instructions for deploying the <code class="code">.war</code> file to your Tomcat
+      server: </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>From the command line: once you have built the project from the command line: save
+            the following xml file in the directory
+              <code class="code">{CATALINA_HOME}/conf/Catalina/localhost/</code> as <code class="code">otf.xml</code> and
+            replace the text {OTF Query Service Home} with the directory where you saved the
+            OTF-Query-Service project on your machine.</p><div class="programlistingco"><pre class="programlisting">                    
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;Context
-antiJARLocking="true" docBase="/Users/dylangrald/tcc-sprint2/OTF-Query-Service/query-service/target/query-service-1.1-SNAPSHOT"
+antiJARLocking="true" docBase="{OTF Query Service Home}/query-service/target/query-service-1.1-SNAPSHOT"
 path="/otf"/&gt;
-                            </pre></div><p> execute the <code class="code">startup</code> bat or sh file,
-                        depending on your operating system. In OS X, in order to execute <code class="code">bash
-                            startup.sh</code>, you must first enter the command <code class="code">chmod +x
-                            /bin/*.sh</code> from CATALINA_HOME to make all of the <code class="code">.sh</code>
-                        files executable. Test the deployment of the war with the following command
-                        with the following command from the query-client folder <code class="code">mvn exec:java
-                            -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.HelloExample"
-                            package</code></p></li><li class="listitem"><p>From Netbeans, right-click the query-service project, click "Run," and
-                        select the Tomcat 7 server.</p></li></ol></div><p>
-        </p><p> You should see the following in the Apache Tomcat log when the data
-            </p><pre class="programlisting">Sep 20, 2013 2:58:19 PM org.apache.catalina.core.AprLifecycleListener init
-INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/jprofiler7/bin/macos::/Users/dylangrald/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
-Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
-INFO: Initializing ProtocolHandler ["http-bio-8080"]
-Sep 20, 2013 2:58:19 PM org.apache.coyote.AbstractProtocol init
-INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
-Sep 20, 2013 2:58:19 PM org.apache.catalina.startup.Catalina load
-INFO: Initialization processed in 473 ms
-Sep 20, 2013 2:58:19 PM org.apache.catalina.core.StandardService startInternal
-INFO: Starting service Catalina
-Sep 20, 2013 2:58:19 PM org.apache.catalina.core.StandardEngine startInternal
-INFO: Starting Servlet Engine: Apache Tomcat/7.0.42
-Sep 20, 2013 2:58:19 PM org.apache.catalina.startup.HostConfig deployDescriptor
-INFO: Deploying configuration descriptor /Library/Tomcat/apache-tomcat-7.0.42/conf/Catalina/localhost/otf.xml
-Sep 20, 2013 2:58:22 PM org.apache.catalina.util.SessionIdGenerator createSecureRandom
-INFO: Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [186] milliseconds.
-Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
-INFO: org.ihtsdo.otf.tcc.datastore.bdb-location set. Starting from location: /Users/dylangrald/NetBeansProjects/berkeley-db
-Sep 20, 2013 2:58:22 PM org.glassfish.jersey.server.ApplicationHandler initialize
-INFO: Initiating Jersey application, version Jersey: 2.2 2013-08-14 08:51:58...
-Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
-INFO: NidCidMap readOnlyRecords: 812
-Sep 20, 2013 2:58:22 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+                            </pre></div><p>Then, execute the <code class="code">startup.bat</code> or <code class="code">startup.sh</code>
+            file, depending on your operating system. In OS X, in order to execute<code class="code"> $ bash
+              startup.sh</code>, you must first enter the command <code class="code">$ chmod +x /bin/*.sh</code>
+            from the CATALINA_HOME directory to make all of the <code class="code">.sh</code> files executable.
+            Test the deployment of the war with the following command with the following command
+            from the query-client folder <code class="code">$ mvn exec:java
+              -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.HelloExample"
+              package</code> or type the url http://localhost:8080/otf/query-service/hello/frank
+            into a browser.</p></li><li class="listitem"><p>From Netbeans: right-click the query-service project, click "Run," and select the
+            Tomcat 7 server.</p></li></ol></div><p>Deploying the app creates a folder at <code class="code">{user.home}/app-server</code> and ensures that
+      you have the updated version of the berkeley database. You should see the following in the
+      Tomcat localhost log when the Maven build is successful and the database has been opened:
+      </p><pre class="programlisting">Oct 28, 2013 11:43:05 AM org.apache.catalina.core.ApplicationContext log
+INFO: Embedded maven build succeeded: 0
+Oct 28, 2013 11:43:05 AM org.apache.catalina.core.ApplicationContext log
+INFO: Finised database dependency setup: 0 min, 20 sec
+Oct 28, 2013 11:43:09 AM org.apache.catalina.core.ApplicationContext log
+INFO: Released storeSemaphore for init. 
+Oct 28, 2013 11:43:09 AM org.apache.catalina.core.ApplicationContext log
+INFO: Finised database startup: 0 min, 24 sec</pre><p>
+      Then, it will open the berkeley database at the configured location. Please see the Tomcat
+      Setup section for more information on how to set this location. It can take up to a couple
+      minutes to open the database, then you will see the following output in the Tomcat Catalina
+      log
+      file:</p><pre class="programlisting">Index: /Users/dylangrald/app-server/berkeley-db/lucene/descriptions
+Oct 28, 2013 11:43:05 AM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
+INFO: org.ihtsdo.otf.tcc.datastore.bdb-location set. Starting from location: /Users/dylangrald/app-server/berkeley-db
+Index: /Users/dylangrald/app-server/berkeley-db/lucene/refex
+!## maxMem: 6174015488 heapSize: HEAP_6000
+setup dbRoot: /Users/dylangrald/app-server/berkeley-db
+absolute dbRoot: /Users/dylangrald/app-server/berkeley-db
+Oct 28, 2013 11:43:05 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: NidCidMap readOnlyRecords: 952
+Oct 28, 2013 11:43:05 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: NidCidMap mutableRecords: 0
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
-INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/docs
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
-INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/examples
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
-INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/host-manager
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
-INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/manager
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.HostConfig deployDirectory
-INFO: Deploying web application directory /Library/Tomcat/apache-tomcat-7.0.42/webapps/ROOT
-Sep 20, 2013 2:58:23 PM org.apache.coyote.AbstractProtocol start
-INFO: Starting ProtocolHandler ["http-bio-8080"]
-Sep 20, 2013 2:58:23 PM org.apache.coyote.AbstractProtocol start
-INFO: Starting ProtocolHandler ["ajp-bio-8009"]
-Sep 20, 2013 2:58:23 PM org.apache.catalina.startup.Catalina start
-INFO: Server startup in 3860 ms</pre><p>
-            Then, it will open the berkeley database at the configured location. Please see the
-            Tomcat Setup section for more information on how to set this location. It takes a couple
-            minutes to open the database, then you will see the following output in the log
-            file:</p><pre class="programlisting">
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
-INFO: mutable maxMem: 224000
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:43:09 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: mutable maxMem: 4224000
+Oct 28, 2013 11:43:09 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: mutable shared cache: true
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
-INFO: readOnly maxMem: 224000
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:43:09 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+INFO: readOnly maxMem: 4224000
+Oct 28, 2013 11:43:09 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: readOnly shared cache: true
-Sep 20, 2013 2:59:32 PM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
+Oct 28, 2013 11:43:09 AM org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore &lt;init&gt;
 INFO: Database setup complete</pre><p>
-            Test the deployment of the war by running the HelloExample in a web browser. Please see
-            the Query Client section below for instructions on how to run the HelloExample and
-            KindOfQueryExample.</p></div><div class="section" title="Module overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e457"></a>Module overview</h2></div></div></div><div class="section" title="Query Client"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-client"></a>Query Client</h3></div></div></div><p>This query client module demonstrates how to connect to the query service REST server
-        using an <a class="link" href="http://tomcat.apache.org" target="_top">Apache Tomcat 7.0</a> REST
-        client.</p><p>There are two example programs: <code class="code">HelloExample</code> and
-            <code class="code">KindOfQueryExample</code>. </p><div class="section" title="HelloExample"><div class="titlepage"><div><div><h4 class="title"><a name="d0e476"></a>HelloExample</h4></div></div></div><p>The <code class="code">HelloExample</code> program, located in package,
-                <code class="code">org.ihtsdo.otf.query.rest.client.examples</code> is a simple program that
-            sends a hello request to the rest server. If you haven't deployed the war to your Tomcat
-            server, you can still run the HelloExample with the url
-                <code class="code">http://api.snomedtools.com/query-service/hello/frank</code>. If you deployed
-            the war to your Tomcat server, you can run the hello example in the following
-            ways:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Enter the url <code class="code">http://localhost:8080/otf/query-service/hello/frank</code>
-                    in a browser</p></li><li class="listitem"><p>Run the command <code class="code">mvn exec:java
-                        -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.HelloExample"
-                        package</code> from the query-client folder</p></li><li class="listitem"><p>Run the main method of HelloExample.java, located in the query-client module,
-                    in an IDE</p></li></ol></div><p>Running the hello example should produce the output:</p><p><code class="code">200</code></p><p><code class="code">hello frank.</code></p></div><div class="section" title="KindOfQueryExample"><div class="titlepage"><div><div><h4 class="title"><a name="d0e514"></a>KindOfQueryExample</h4></div></div></div><p>The <code class="code">KindOfQueryExample</code> program, located in package
-                <code class="code">org.ihtsdo.otf.query.rest.client.examples</code>, performs a simple "kind of"
-            query using the rest server and returns data display objects with the results. This
-            example demonstrates the parameters required for a query and how to run queries using
-            the REST service.</p><p>The structure of a query is defined by:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>a <code class="code">ViewCoordinate</code> that defines what version of the terminology
-                        to query against, as well as other information such as the preferred
-                        language for results.</p></li><li class="listitem"><p>a FOR that defines the set of components to iterate over</p></li><li class="listitem"><p>a LET that defines references to concept specifications or other view
-                        coordinates used by where clauses. </p></li><li class="listitem"><p>a WHERE that defines the where clauses for the query</p></li><li class="listitem"><p>a RETURN that defines that type of components to return (concepts,
-                        descriptions, etc). </p></li></ul></div><p>The following parameters are required for a query: </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Let declarations</p></li><li class="listitem"><p>Where clauses</p></li></ol></div><p>If a ViewCoordinate is not specified, then the Snomed inferred latest will
-            be used. The default FOR set is all concepts. And the default RETURN value is the fully
-            specified description version of the components in the result set.</p><p>This KindOfQueryExample's main method will setup a kind-of query that will return
-            concepts that are a kind-of SNOMED concept "allergic asthma." If a server is not
-            specified, a default server is chosen from the QueryProcessorForRestXml class, located
-            in the package: <code class="code">org.ihtsdo.otf.query.rest.client</code>.</p><p>Run this example in the following ways:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>If you haven't deployed the war to a Tomcat server, you can still run the
-                    example with the command <code class="code">$ java -cp
-                        query-client/target/query-client-1.1-SNAPSHOT-jar-with-dependencies.jar
-                        org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample
-                        http://api.snomedtools.com</code> from the top level directory of the
-                    OTF-Query-Service.</p></li><li class="listitem"><p>If you're running Tomcat from the command line, navigate to the query-client
-                    folder and enter the command <code class="code">mvn exec:java
-                        -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample"
-                        package</code></p></li><li class="listitem"><p>If you're running Tomcat from an IDE, such as Netbeans, then run the main
-                    method of KindOfQueryExample.java in the
-                    org.ihtsdo.otf.query.rest.client.examples package.</p></li></ol></div><p>Below is an example output that is generated by a successful run (xml formatting was
-            added after the fact to make the results display better in this document).</p><p>
-            </p><div class="example"><a name="d0e581"></a><p class="title"><b>Example&nbsp;2.&nbsp;<code class="code">KindOfQueryExample</code> output</b></p><div class="example-contents"><p>
-                    </p><pre class="programlisting">
-                INFO: Results: 
-&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
-&lt;ns4:result-list xmlns:ns2="http://query.jaxb.otf.ihtsdo.org"
-    xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org"
-    xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;91340006&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;XE0YS&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-51190&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2146452539&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;8981e7b8-c195-3548-a877-57505fcc1ec0&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2146452539&lt;/nid&gt;
-            &lt;text&gt;Extrinsic asthma with status asthmaticus (disorder)&lt;/text&gt;
-            &lt;uuid&gt;8981e7b8-c195-3548-a877-57505fcc1ec0&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;8981e7b8-c195-3548-a877-57505fcc1ec0&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1170230400000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;424643009&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1170230400000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;XUf7Y&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1170230400000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;DF-007C8&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2146452418&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2146452418&lt;/nid&gt;
-            &lt;text&gt;Extrinsic asthma&lt;/text&gt;
-            &lt;uuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1044000000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;389145006&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1044000000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;XUXNz&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1044000000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;DC-57006&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2146452198&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;531abe20-8324-3db9-9104-8bcdbf251ac7&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2146452198&lt;/nid&gt;
-            &lt;text&gt;Atopic asthma&lt;/text&gt;
-            &lt;uuid&gt;531abe20-8324-3db9-9104-8bcdbf251ac7&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;531abe20-8324-3db9-9104-8bcdbf251ac7&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;59327009&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;XE0YU&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-51220&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2146294976&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;e3fc10f9-641d-3d01-8fac-07e52ded5e49&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2146294976&lt;/nid&gt;
-            &lt;text&gt;Intrinsic asthma with status asthmaticus (disorder)&lt;/text&gt;
-            &lt;uuid&gt;e3fc10f9-641d-3d01-8fac-07e52ded5e49&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;e3fc10f9-641d-3d01-8fac-07e52ded5e49&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1170230400000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;423889005&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1170230400000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;XUf7Z&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1170230400000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;DF-007C9&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2146294741&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2146294741&lt;/nid&gt;
-            &lt;text&gt;Non-IgE mediated allergic asthma&lt;/text&gt;
-            &lt;uuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;63088003&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;XE0YR&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-51180&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2143907524&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;1a630c84-d723-309f-88ca-3a0bc0e0ab17&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2143907524&lt;/nid&gt;
-            &lt;text&gt;Extrinsic asthma without status asthmaticus (disorder)&lt;/text&gt;
-            &lt;uuid&gt;1a630c84-d723-309f-88ca-3a0bc0e0ab17&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;1a630c84-d723-309f-88ca-3a0bc0e0ab17&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;233685005&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;X1022&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-00013&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2143875845&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;ccdd5b1e-74f6-35f6-bf93-3385348f7912&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2143875845&lt;/nid&gt;
-            &lt;text&gt;Intrinsic asthma with asthma attack (disorder)&lt;/text&gt;
-            &lt;uuid&gt;ccdd5b1e-74f6-35f6-bf93-3385348f7912&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;ccdd5b1e-74f6-35f6-bf93-3385348f7912&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;30352005&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;XUBMl&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-51112&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2143486226&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;dba55554-caa3-34bc-9ce8-b788f3a787ce&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2143486226&lt;/nid&gt;
-            &lt;text&gt;Allergic-infective asthma (disorder)&lt;/text&gt;
-            &lt;uuid&gt;dba55554-caa3-34bc-9ce8-b788f3a787ce&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;dba55554-caa3-34bc-9ce8-b788f3a787ce&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;12428000&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;H3310&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-51210&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2142649850&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;2eb77f24-816b-30b8-82a7-26fb04be352f&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2142649850&lt;/nid&gt;
-            &lt;text&gt;Intrinsic asthma without status asthmaticus (disorder)&lt;/text&gt;
-            &lt;uuid&gt;2eb77f24-816b-30b8-82a7-26fb04be352f&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;2eb77f24-816b-30b8-82a7-26fb04be352f&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;233681001&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;X101y&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-51101&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2140611618&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;7ddc3edc-d49d-3f0f-b5ab-81efb44e5e62&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2140611618&lt;/nid&gt;
-            &lt;text&gt;Extrinsic asthma with asthma attack (disorder)&lt;/text&gt;
-            &lt;uuid&gt;7ddc3edc-d49d-3f0f-b5ab-81efb44e5e62&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;7ddc3edc-d49d-3f0f-b5ab-81efb44e5e62&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
-    &lt;theResults xsi:type="ns4:conceptChronicleDdo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-        &lt;descriptionList/&gt;
-        &lt;destinationRelationshipList/&gt;
-        &lt;mediaList/&gt;
-        &lt;refsetMemberList/&gt;
-        &lt;conceptAttributes&gt;
-            &lt;additionalIdList&gt;
-                &lt;additionalId xsi:type="ns4:identifierLongDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483506&lt;/nid&gt;
-                        &lt;text&gt;SNOMED integer id&lt;/text&gt;
-                        &lt;uuid&gt;0418a591-f75b-39ad-be2c-3ab849326da9&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:long" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;56968009&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483478&lt;/nid&gt;
-                        &lt;text&gt;CTV3_ID&lt;/text&gt;
-                        &lt;uuid&gt;7f951a3a-39e0-3fba-92a0-1138edafa4c0&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;H35y7&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-                &lt;additionalId xsi:type="ns4:identifierStringDdo"&gt;
-                    &lt;authorReference&gt;
-                        &lt;nid&gt;-2147483611&lt;/nid&gt;
-                        &lt;text&gt;user&lt;/text&gt;
-                        &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
-                    &lt;/authorReference&gt;
-                    &lt;fxTime&gt;
-                        &lt;time&gt;1012464000000&lt;/time&gt;
-                    &lt;/fxTime&gt;
-                    &lt;moduleReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/moduleReference&gt;
-                    &lt;pathReference&gt;
-                        &lt;nid&gt;-2147483534&lt;/nid&gt;
-                        &lt;text&gt;SNOMED Core&lt;/text&gt;
-                        &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
-                    &lt;/pathReference&gt;
-                    &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
-                    &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-                    &lt;authorityRef&gt;
-                        &lt;nid&gt;-2147483476&lt;/nid&gt;
-                        &lt;text&gt;SNOMED RT Id&lt;/text&gt;
-                        &lt;uuid&gt;740f47ef-caf3-3e4e-bdeb-39792b408f1c&lt;/uuid&gt;
-                    &lt;/authorityRef&gt;
-                    &lt;denotation xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                        &gt;D2-54262&lt;/denotation&gt;
-                &lt;/additionalId&gt;
-            &lt;/additionalIdList&gt;
-            &lt;annotationList/&gt;
-            &lt;versionList/&gt;
-            &lt;componentNid&gt;-2140298245&lt;/componentNid&gt;
-            &lt;primordialComponentUuid&gt;7aa5d3d5-97a5-349e-b2f0-9a1638e8a176&lt;/primordialComponentUuid&gt;
-        &lt;/conceptAttributes&gt;
-        &lt;conceptReference&gt;
-            &lt;nid&gt;-2140298245&lt;/nid&gt;
-            &lt;text&gt;Saw dust asthma&lt;/text&gt;
-            &lt;uuid&gt;7aa5d3d5-97a5-349e-b2f0-9a1638e8a176&lt;/uuid&gt;
-        &lt;/conceptReference&gt;
-        &lt;primordialUuid&gt;7aa5d3d5-97a5-349e-b2f0-9a1638e8a176&lt;/primordialUuid&gt;
-        &lt;viewCoordinateUuid&gt;bd58d1df-b3be-4c6a-9c01-89c7561fafe8&lt;/viewCoordinateUuid&gt;
-        &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
-        &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
-        &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
-    &lt;/theResults&gt;
+      Test the deployment of the <code class="code">.war</code> by running the <code class="code">HelloExample</code> in a web
+      browser at the URL <code class="code">{default host}/otf/query-service/hello/frank</code> . Please see the
+      Query Client section below for instructions on how to run the <code class="code">HelloExample</code> and
+        <code class="code">KindOfQueryExample</code>.</p></div><div class="section" title="Module overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e522"></a>Module overview</h2></div></div></div><div class="section" title="Query Client"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-client"></a>Query Client</h3></div></div></div><p>This query client module demonstrates how to connect to the query
+  service REST server using an <a class="link" href="http://tomcat.apache.org" target="_top">Apache Tomcat 7.0</a> REST client
+  and provides examples of queries that can be constructed in Java.</p><p>There are several example programs, including the
+  <code class="code">HelloExample</code>, <code class="code">KindOfQueryExample</code>, and
+  <code class="code">LuceneExample</code>.</p><div class="section" title="HelloExample"><div class="titlepage"><div><div><h4 class="title"><a name="d0e544"></a>HelloExample</h4></div></div></div><p>The <code class="code">HelloExample</code> program, located in package,
+    <code class="code">org.ihtsdo.otf.query.rest.client.examples</code> is a simple program
+    that sends a hello request to the rest server. If you haven't deployed the
+    war to your Tomcat server, you can still run the <code class="code">HelloExample</code>
+    with the url
+    <code class="code">http://api.snomedtools.com/query-service/hello/frank</code>. If you
+    deployed the war to your Tomcat server, you can run the hello example in
+    the following ways:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Enter the url
+        <code class="code">http://localhost:8080/otf/query-service/hello/frank</code> in a
+        browser</p></li><li class="listitem"><p>Run the command <code class="code">$ mvn exec:java
+        -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.HelloExample"
+        package</code> from the query-client folder</p></li><li class="listitem"><p>Run the main method of <code class="code">HelloExample.java</code>, located
+        in the query-client module, in an IDE</p></li></ol></div><p>Running the hello example should produce the output:</p><p><code class="code">200</code></p><p><code class="code">hello frank.</code></p></div><div class="section" title="KindOfQueryExample"><div class="titlepage"><div><div><h4 class="title"><a name="d0e588"></a>KindOfQueryExample</h4></div></div></div><p>The <code class="code">KindOfQueryExample</code> program, located in package
+    <code class="code">org.ihtsdo.otf.query.rest.client.examples</code>, performs a simple
+    "kind of" query using the rest server and returns data display objects
+    with the results. This example demonstrates the parameters required for a
+    query and how to run queries using the REST service.</p><p>The structure of a query is defined by:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>a <code class="code">ViewCoordinate</code> that defines what version of the
+          terminology to query against, as well as other information such as
+          the preferred language for results.</p></li><li class="listitem"><p>a FOR that defines the set of components to iterate
+          over</p></li><li class="listitem"><p>a LET that defines references to concept specifications or
+          other view coordinates used by where clauses.</p></li><li class="listitem"><p>a WHERE that defines the where clauses for the query</p></li><li class="listitem"><p>a RETURN that defines that type of components to return
+          (concepts, descriptions, etc).</p></li></ul></div><p>The following parameters are required for a query:
+    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Let declarations</p></li><li class="listitem"><p>Where clauses</p></li></ol></div><p>If a ViewCoordinate is not specified, then the Snomed
+    inferred latest will be used. The default FOR set is all concepts. And the
+    default RETURN value is the fully specified description version of the
+    components in the result set.</p><p>This KindOfQueryExample's main method will setup a kind-of query
+    that will return concepts that are a kind-of SNOMED concept "allergic
+    asthma." If a server is not specified, a default server is chosen from the
+    QueryProcessorForRestXml class, located in the package:
+    <code class="code">org.ihtsdo.otf.query.rest.client</code>.</p><p>Run this example in the following ways:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>If you haven't deployed the war to a Tomcat server, you can
+        still run the example with the command <code class="code">$ java -cp
+        query-client/target/query-client-1.1-SNAPSHOT-jar-with-dependencies.jar
+        org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample
+        http://api.snomedtools.com</code> from the top level directory of the
+        OTF-Query-Service.</p></li><li class="listitem"><p>If you're running Tomcat from the command line, navigate to the
+        query-client folder and enter the command <code class="code">$ mvn exec:java
+        -Dexec.mainClass="org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample"
+        package</code></p></li><li class="listitem"><p>If you're running Tomcat from an IDE, such as Netbeans, then run
+        the main method of <code class="code">KindOfQueryExample.java</code> in the
+        <code class="code">org.ihtsdo.otf.query.rest.client.examples package</code>.</p></li></ol></div><p>Below is an example output that is generated by a successful run
+    (xml formatting was added after the fact to make the results display
+    better in this document).</p><div class="example"><a name="d0e660"></a><p class="title"><b>Example&nbsp;3.&nbsp;<code class="code">KindOfQueryExample</code> output</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ns4:result-list xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org" xmlns:ns2="http://query.jaxb.otf.ihtsdo.org" xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2145791879&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;8981e7b8-c195-3548-a877-57505fcc1ec0&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2145791879&lt;/nid&gt;
+         &lt;text&gt;Extrinsic asthma with status asthmaticus (disorder)&lt;/text&gt;
+         &lt;uuid&gt;8981e7b8-c195-3548-a877-57505fcc1ec0&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;8981e7b8-c195-3548-a877-57505fcc1ec0&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2145791857&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2145791857&lt;/nid&gt;
+         &lt;text&gt;Extrinsic asthma&lt;/text&gt;
+         &lt;uuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2145791576&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;531abe20-8324-3db9-9104-8bcdbf251ac7&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2145791576&lt;/nid&gt;
+         &lt;text&gt;Atopic asthma&lt;/text&gt;
+         &lt;uuid&gt;531abe20-8324-3db9-9104-8bcdbf251ac7&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;531abe20-8324-3db9-9104-8bcdbf251ac7&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2145526765&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;e3fc10f9-641d-3d01-8fac-07e52ded5e49&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2145526765&lt;/nid&gt;
+         &lt;text&gt;Intrinsic asthma with status asthmaticus (disorder)&lt;/text&gt;
+         &lt;uuid&gt;e3fc10f9-641d-3d01-8fac-07e52ded5e49&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;e3fc10f9-641d-3d01-8fac-07e52ded5e49&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2145526668&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2145526668&lt;/nid&gt;
+         &lt;text&gt;Non-IgE mediated allergic asthma&lt;/text&gt;
+         &lt;uuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2141503191&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;1a630c84-d723-309f-88ca-3a0bc0e0ab17&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2141503191&lt;/nid&gt;
+         &lt;text&gt;Extrinsic asthma without status asthmaticus (disorder)&lt;/text&gt;
+         &lt;uuid&gt;1a630c84-d723-309f-88ca-3a0bc0e0ab17&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;1a630c84-d723-309f-88ca-3a0bc0e0ab17&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2141449681&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;ccdd5b1e-74f6-35f6-bf93-3385348f7912&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2141449681&lt;/nid&gt;
+         &lt;text&gt;Intrinsic asthma with asthma attack (disorder)&lt;/text&gt;
+         &lt;uuid&gt;ccdd5b1e-74f6-35f6-bf93-3385348f7912&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;ccdd5b1e-74f6-35f6-bf93-3385348f7912&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2140794649&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;dba55554-caa3-34bc-9ce8-b788f3a787ce&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2140794649&lt;/nid&gt;
+         &lt;text&gt;Allergic-infective asthma (disorder)&lt;/text&gt;
+         &lt;uuid&gt;dba55554-caa3-34bc-9ce8-b788f3a787ce&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;dba55554-caa3-34bc-9ce8-b788f3a787ce&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2139389896&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;2eb77f24-816b-30b8-82a7-26fb04be352f&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2139389896&lt;/nid&gt;
+         &lt;text&gt;Intrinsic asthma without status asthmaticus (disorder)&lt;/text&gt;
+         &lt;uuid&gt;2eb77f24-816b-30b8-82a7-26fb04be352f&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;2eb77f24-816b-30b8-82a7-26fb04be352f&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2135975835&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;7ddc3edc-d49d-3f0f-b5ab-81efb44e5e62&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2135975835&lt;/nid&gt;
+         &lt;text&gt;Extrinsic asthma with asthma attack (disorder)&lt;/text&gt;
+         &lt;uuid&gt;7ddc3edc-d49d-3f0f-b5ab-81efb44e5e62&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;7ddc3edc-d49d-3f0f-b5ab-81efb44e5e62&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2135452099&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;7aa5d3d5-97a5-349e-b2f0-9a1638e8a176&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2135452099&lt;/nid&gt;
+         &lt;text&gt;Saw dust asthma&lt;/text&gt;
+         &lt;uuid&gt;7aa5d3d5-97a5-349e-b2f0-9a1638e8a176&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;7aa5d3d5-97a5-349e-b2f0-9a1638e8a176&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;7dcb2c4a-fdb7-4b1b-bd50-a1e981837326&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
 &lt;/ns4:result-list&gt;
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Extrinsic asthma with status asthmaticus (disorder)
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Extrinsic asthma
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Atopic asthma
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Intrinsic asthma with status asthmaticus (disorder)
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Non-IgE mediated allergic asthma
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Extrinsic asthma without status asthmaticus (disorder)
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Intrinsic asthma with asthma attack (disorder)
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Allergic-infective asthma (disorder)
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Intrinsic asthma without status asthmaticus (disorder)
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Extrinsic asthma with asthma attack (disorder)
-Aug 28, 2013 10:11:24 PM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
+Oct 16, 2013 11:38:10 AM org.ihtsdo.otf.query.rest.client.examples.KindOfQueryExample main
 INFO: Returned concept: Saw dust asthma
         
-                    </pre><p>
-                </p></div></div><p><br class="example-break">
-        </p></div><div class="section" title="Lucene Resource"><div class="titlepage"><div><div><h4 class="title"><a name="d0e592"></a>Lucene Resource</h4></div></div></div><p>Once the client has been deployed, you can conduct a Lucene serach at
-                <code class="code">DEFAULT_HOST/otf/query-service/lucene/{desired Lucene query text}</code>. If
-            the desired Lucene query text includes spaces or other characters not permitted in URLs,
-            you can encode the text <a class="link" href="http://www.url-encode-decode.com" target="_top">here</a>
-            by entering the text, selecting UTF-8 from the drop-down menu, and clicking the "Url
-            encode" button.</p></div></div><div class="section" title="Query Implementation"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-implementation"></a>Query Implementation</h3></div></div></div><p>This query implementation module implements queries against the Terminology Component
+                    </pre></div></div><p><br class="example-break"></p></div></div><div class="section" title="Query Implementation"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-implementation"></a>Query Implementation</h3></div></div></div><p>This query implementation module implements queries against the Terminology Component
         Chronicle service, which can be forked <a class="link" href="https://github.com/IHTSDO/OTF-Versioning-Service" target="_top">here</a>. The pure Java
         implementation of query capabilities is demonstrated in the integration tests and may be
         called independently of the REST service. The query implementation is called by the REST
-        service to perform queries.</p></div><div class="section" title="Query Integration Tests"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-integration-tests"></a>Query Integration Tests</h3></div></div></div><p>This module performs integrations tests against a SNOMED CT database. These tests show
-        examples of how queries can be constructed within Java.</p></div><div class="section" title="Query Service"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-service"></a>Query Service</h3></div></div></div><p>This module implements a <a class="link" href="http://tomcat.apache.org" target="_top">Tomcat 7.0</a>
-        REST service for querying.</p></div><div class="section" title="JAXB Objects"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_data-display-objects_jaxb"></a>JAXB Objects</h3></div></div></div><p>This module generates Java data display objects derived from running the JAXB xjc against
+        service to perform queries.</p></div><div class="section" title="Query Integration Tests"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-integration-tests"></a>Query Integration Tests</h3></div></div></div><p>This module performs integrations tests against a SNOMED CT database. These tests demonstrate
+        examples of how queries can be constructed within Java.</p></div><div class="section" title="Query Service"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_query-service"></a>Query Service</h3></div></div></div><p>This module implements a <a class="link" href="http://tomcat.apache.org" target="_top">Tomcat 7.0</a> REST service for
+  querying. Once you have deployed the Query Service to Tomcat, you can
+  utilize the following resources to create queries using the REST
+  service.</p><div class="section" title="Lucene Resource"><div class="titlepage"><div><div><h4 class="title"><a name="d0e689"></a>Lucene Resource</h4></div></div></div><p>Once the client has been deployed, you can conduct a Lucene search
+    at <code class="code">{host}/otf/query-service/lucene/{desired Lucene query
+    text}</code>. If the desired Lucene query text includes spaces or other
+    characters not permitted in URLs, encode the text <a class="link" href="http://www.url-encode-decode.com" target="_top">here</a> by entering the
+    text, selecting UTF-8 from the drop-down menu, and clicking the "Url
+    encode" button.</p><p>Once you have deployed the war file, search for descriptions
+    matching the text "extrasystole" by entering the URL
+    <code class="code">localhost:8080/otf/query-service/lucene/extrasystole</code> . The
+    search outputs the following results, which were formatted:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ns4:result-list xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org" xmlns:ns2="http://query.jaxb.otf.ihtsdo.org" xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1217487600000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142320111&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;7891de6b-8dd5-3e07-b20f-555ebd869dec&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483625&lt;/nid&gt;
+         &lt;text&gt;Fully specified name&lt;/text&gt;
+         &lt;uuid&gt;00791270-77c9-32b6-b34f-d932569bd2bf&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;true&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;ECG: extrasystole (finding)&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1012464000000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142320119&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;b4836b5d-da3e-3dbf-b937-48b414b43950&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483620&lt;/nid&gt;
+         &lt;text&gt;Synonym&lt;/text&gt;
+         &lt;uuid&gt;8bfba944-3965-3946-9bcb-1e80a5da63a2&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;true&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;ECG: extrasystole&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1154329200000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142319952&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;3b413fc4-6bd8-38be-a69b-8be034e1595e&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483620&lt;/nid&gt;
+         &lt;text&gt;Synonym&lt;/text&gt;
+         &lt;uuid&gt;8bfba944-3965-3946-9bcb-1e80a5da63a2&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;false&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;Electrocardiogram: extrasystole&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1154329200000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142319960&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;d2c81732-2561-37a1-ba39-67e3cc2b986f&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483625&lt;/nid&gt;
+         &lt;text&gt;Fully specified name&lt;/text&gt;
+         &lt;uuid&gt;00791270-77c9-32b6-b34f-d932569bd2bf&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;false&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;Electrocardiogram: extrasystole (finding)&lt;/text&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:descriptionVersionDdo"&gt;
+      &lt;authorReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483619&lt;/nid&gt;
+         &lt;text&gt;user&lt;/text&gt;
+         &lt;uuid&gt;f7495b58-6630-3499-a44e-2052b5fcf06c&lt;/uuid&gt;
+      &lt;/authorReference&gt;
+      &lt;fxTime&gt;
+         &lt;time&gt;1012464000000&lt;/time&gt;
+      &lt;/fxTime&gt;
+      &lt;moduleReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483519&lt;/nid&gt;
+         &lt;text&gt;SNOMED CT core&lt;/text&gt;
+         &lt;uuid&gt;1b4f1ba5-b725-390f-8c3b-33ec7096bdca&lt;/uuid&gt;
+      &lt;/moduleReference&gt;
+      &lt;pathReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483549&lt;/nid&gt;
+         &lt;text&gt;SNOMED Core&lt;/text&gt;
+         &lt;uuid&gt;8c230474-9f11-30ce-9cad-185a96fd03a2&lt;/uuid&gt;
+      &lt;/pathReference&gt;
+      &lt;statusString&gt;ACTIVE&lt;/statusString&gt;
+      &lt;viewCoordinateUuid&gt;0c734870-836a-11e2-9e96-0800200c9a66&lt;/viewCoordinateUuid&gt;
+      &lt;componentNid&gt;-2142319964&lt;/componentNid&gt;
+      &lt;primordialComponentUuid&gt;c58822fc-ebe3-3c70-9d4a-9d5b3a18dbe9&lt;/primordialComponentUuid&gt;
+      &lt;typeReference&gt;
+         &lt;definitionalState&gt;NECESSARY&lt;/definitionalState&gt;
+         &lt;nid&gt;-2147483620&lt;/nid&gt;
+         &lt;text&gt;Synonym&lt;/text&gt;
+         &lt;uuid&gt;8bfba944-3965-3946-9bcb-1e80a5da63a2&lt;/uuid&gt;
+      &lt;/typeReference&gt;
+      &lt;initialCaseSignificant&gt;true&lt;/initialCaseSignificant&gt;
+      &lt;language&gt;en&lt;/language&gt;
+      &lt;text&gt;ECG: extrasystole&lt;/text&gt;
+   &lt;/theResults&gt;
+&lt;/ns4:result-list&gt;
+            </pre><p>If this URL doesn't display the results listed above, please see the
+    Troubleshooting Tomcat section.</p></div><div class="section" title="Query Resource"><div class="titlepage"><div><div><h4 class="title"><a name="d0e709"></a>Query Resource</h4></div></div></div><p>Once the <code class="code">.war</code> has been deployed, you can utilize the
+    Query Resource to develop queries at
+    <code class="code">{host}/otf/query-service/query?</code> . Queries are constructed by
+    stringing together the VIEWPOINT, FOR, LET, WHERE, and RETURN objects
+    encoded in UTF-8 in the following manner:
+    <code class="code">{host}/otf/query-service/query?VIEWPOINT=&lt;viewpoint
+    xml&gt;&amp;FOR=&lt;for xml&gt;&amp;LET=&lt;let
+    xml&gt;&amp;WHERE=&lt;where xml&gt;&amp;RETURN=&lt;return xml&gt;</code> .
+    Here is a <a class="link" href="http://www.url-encode-decode.com/urlencode" target="_top">link</a> to an
+    online URL encoder. Note that the objects need to be encoded individually
+    and strung together with &amp; symbols. The LET and WHERE parameters are
+    required in order to conduct a query, while the VIEWPOINT, FOR, and RETURN
+    parameters are optional. These optional parameters can be set to the
+    default options using one of the following:
+    <code class="code">{host}/otf/query-service/query?VIEWPOINT=&amp;FOR=&amp;LET=&lt;let
+    xml&gt;&amp;WHERE=&lt;where xml&gt;&amp;RETURN=</code> or
+    <code class="code">{host}/otf/query-service/query?VIEWPOINT=null&amp;FOR=null&amp;LET=&lt;let
+    xml&gt;&amp;WHERE=&lt;where xml&gt;&amp;RETURN=null</code> . This <a class="link" href="http://localhost:8080/otf/query-service/query?VIEWPOINT=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Asimple-view-coordinate+xmlns%3Ans2%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3CallowedStatus%3EACTIVE%3C%2FallowedStatus%3E%3CclassifierSpecification%3E%3Cdescription%3EIHTSDO+Classifier%3C%2Fdescription%3E%3Cuuid%3E7e87cc5b-e85f-3860-99eb-7a44f2b9e6f9%3C%2Fuuid%3E%3C%2FclassifierSpecification%3E%3CcontradictionPolicy%3ELAST_COMMIT_WINS%3C%2FcontradictionPolicy%3E%3ClangSort%3ERF2_LANG_REFEX%3C%2FlangSort%3E%3ClanguagePreferenceOrderList%3E%3Cdescription%3EUnited+States+of+America+English+language+reference+set+%28foundation+metadata+concept%29%3C%2Fdescription%3E%3Cuuid%3Ebca0a686-3516-3daf-8fcf-fe396d13cfad%3C%2Fuuid%3E%3C%2FlanguagePreferenceOrderList%3E%3ClanguageSpecification%3E%3Cdescription%3EUnited+States+of+America+English+language+reference+set+%28foundation+metadata+concept%29%3C%2Fdescription%3E%3Cuuid%3Ebca0a686-3516-3daf-8fcf-fe396d13cfad%3C%2Fuuid%3E%3C%2FlanguageSpecification%3E%3Cname%3ESnomed+Inferred+Latest%3C%2Fname%3E%3Cprecedence%3EPATH%3C%2Fprecedence%3E%3CrelAssertionType%3EINFERRED%3C%2FrelAssertionType%3E%3CviewPosition%3E%3Cpath%3E%3Corigins%3E%3Cpath%3E%3CpathConceptSpecification%3E%3Cdescription%3EWorkbench+Auxiliary%3C%2Fdescription%3E%3Cuuid%3E2faa9260-8fb2-11db-b606-0800200c9a66%3C%2Fuuid%3E%3C%2FpathConceptSpecification%3E%3C%2Fpath%3E%3CtimePoint%3E9223372036854775807%3C%2FtimePoint%3E%3C%2Forigins%3E%3CpathConceptSpecification%3E%3Cdescription%3ESNOMED+Core%3C%2Fdescription%3E%3Cuuid%3E8c230474-9f11-30ce-9cad-185a96fd03a2%3C%2Fuuid%3E%3C%2FpathConceptSpecification%3E%3C%2Fpath%3E%3CtimePoint%3E9223372036854775807%3C%2FtimePoint%3E%3C%2FviewPosition%3E%3C%2Fns2%3Asimple-view-coordinate%3E&amp;FOR=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AforCollection+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3CforCollectionString%3ECONCEPT%3C%2FforCollectionString%3E%3C%2Fns2%3AforCollection%3E&amp;LET=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Eallergic-asthma%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EAllergic+asthma%3C%2Fdescription%3E%3Cuuid%3E531abe20-8324-3db9-9104-8bcdbf251ac7%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3EIs+a%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EIs+a+%28attribute%29%3C%2Fdescription%3E%3Cuuid%3Ec93a30b9-ba77-3adb-a9b8-4589c9f8fb25%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E&amp;WHERE=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Awhere+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3CrootClause%3E%3CletKeys%3EIs+a%3C%2FletKeys%3E%3CletKeys%3Eallergic-asthma%3C%2FletKeys%3E%3CsemanticString%3EREL_TYPE%3C%2FsemanticString%3E%3C%2FrootClause%3E%3C%2Fns2%3Awhere%3E&amp;RETURN=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AreturnTypes+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3ECONCEPT_VERSION%3C%2Fns2%3AreturnTypes%3E" target="_top">link</a>
+    provides an example of a query using the Query Resource. The construction
+    of the LET and WHERE objects for this query is shown in Java class
+    org.ihtsdo.otf.query.rest.client.examples.SimpleQueryExample. Here are the
+    formatted results:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ns4:result-list xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org" xmlns:ns2="http://query.jaxb.otf.ihtsdo.org" xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2145791857&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2145791857&lt;/nid&gt;
+         &lt;text&gt;Extrinsic asthma&lt;/text&gt;
+         &lt;uuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;904794b3-1536-382f-9323-f7eb3c7e343f&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;e7113695-0e84-431b-bcb4-e6e210626105&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+   &lt;theResults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns4:conceptChronicleDdo"&gt;
+      &lt;descriptionList /&gt;
+      &lt;destinationRelationshipList /&gt;
+      &lt;mediaList /&gt;
+      &lt;refsetMemberList /&gt;
+      &lt;conceptAttributes&gt;
+         &lt;additionalIdList /&gt;
+         &lt;annotationList /&gt;
+         &lt;versionList /&gt;
+         &lt;componentNid&gt;-2145526668&lt;/componentNid&gt;
+         &lt;primordialComponentUuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/primordialComponentUuid&gt;
+      &lt;/conceptAttributes&gt;
+      &lt;conceptReference&gt;
+         &lt;definitionalState&gt;UNDETERMINED&lt;/definitionalState&gt;
+         &lt;nid&gt;-2145526668&lt;/nid&gt;
+         &lt;text&gt;Non-IgE mediated allergic asthma&lt;/text&gt;
+         &lt;uuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/uuid&gt;
+      &lt;/conceptReference&gt;
+      &lt;primordialUuid&gt;b714e0a9-33f0-30ad-a795-8fb9437b4af6&lt;/primordialUuid&gt;
+      &lt;viewCoordinateUuid&gt;e7113695-0e84-431b-bcb4-e6e210626105&lt;/viewCoordinateUuid&gt;
+      &lt;refexPolicy&gt;REFEX_MEMBERS_AND_REFSET_MEMBERS&lt;/refexPolicy&gt;
+      &lt;relationshipPolicy&gt;DESTINATION_RELATIONSHIPS&lt;/relationshipPolicy&gt;
+      &lt;versionPolicy&gt;ACTIVE_VERSIONS&lt;/versionPolicy&gt;
+   &lt;/theResults&gt;
+&lt;/ns4:result-list&gt;</pre></div></div><div class="section" title="JAXB Objects"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_data-display-objects_jaxb"></a>JAXB Objects</h3></div></div></div><p>This module generates Java data display objects derived from running the JAXB xjc against
         the the underlying implementation. This XML Schema Document is then compiled using JAXB
         schemagen to generate Java files. The .xsd document may be similarly useful for generating
         JSON for JavaScript developers. Future versions of the project will provide more complete
@@ -1545,54 +828,49 @@ INFO: Returned concept: Saw dust asthma
         other libraries. </p></div><div class="section" title="Documentation"><div class="titlepage"><div><div><h3 class="title"><a name="org.ihtsdo.otf.query_documentation-strategy"></a>Documentation</h3></div></div></div><p>This project uses <a class="link" href="http://www.docbook.org" target="_top">Docbook 5</a> for
         generating documentation. Docbook generation is integrated with Maven using <a class="link" href="http://code.google.com/p/docbkx-tools/" target="_top">Docbkx Tools</a>, and follows in
         the footsteps of other development projects such as <a class="link" href="http://blog.sonatype.com/people/2008/04/writing-a-book-with-maven-part-i/" target="_top">Sonatype's Maven book</a> and <a class="link" href="https://www.jboss.org/pressgang/jdg" target="_top">JBoss's community documentation</a>. More details on how to contribute documentation
-        will come in subsequent versions of this documentation. </p></div></div><div class="section" title="Troubleshooting Tomcat"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e646"></a>Troubleshooting Tomcat</h2></div></div></div><p>You may receive an ENV_LOCKED error when trying to start the Tomcat server. This
-            occurs if you try to redeploy the war when the database has not yet been initialized.
-            The best fix for this is to shutdown Tomcat, ensure that <code class="code">Released shutdown
-                permit</code> prints to the console, and restart Tomcat. If restarting Tomcat
-            doesn't solve the issue, the issue may be resolved by restarting your computer.</p></div><div class="section" title="Tomcat Shutdown"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e654"></a>Tomcat Shutdown</h2></div></div></div><p>When you shutdown your Tomcat server, you should see the following
-            output:</p><pre class="programlisting">Sep 20, 2013 4:27:29 PM org.apache.catalina.core.StandardServer await
-INFO: A valid shutdown command was received via the shutdown port. Stopping the Server instance.
-Sep 20, 2013 4:27:29 PM org.apache.coyote.AbstractProtocol pause
-INFO: Pausing ProtocolHandler ["http-bio-8080"]
-Sep 20, 2013 4:27:29 PM org.apache.coyote.AbstractProtocol pause
-INFO: Pausing ProtocolHandler ["ajp-bio-8009"]
-Sep 20, 2013 4:27:29 PM org.apache.catalina.core.StandardService stopInternal
-INFO: Stopping service Catalina
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+        will come in subsequent versions of this documentation. </p></div></div><div class="section" title="Troubleshooting Tomcat"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e759"></a>Troubleshooting Tomcat</h2></div></div></div><p>You may receive an ENV_LOCKED error when trying to start the Tomcat server. This occurs if
+      you try to redeploy the <code class="code">.war</code> when the database has not yet been initialized. The
+      best fix for this is to undeploy the "otf" application, shutdown Tomcat, ensure that
+        <code class="code">Released shutdown permit</code> prints to the console, and restart Tomcat. If
+      restarting Tomcat doesn't solve the issue, the ENV_LOCKED error may be resolved by restarting
+      your computer.</p></div><div class="section" title="Tomcat Shutdown"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e770"></a>Tomcat Shutdown</h2></div></div></div><p>When you shutdown your Tomcat server, you should see the following output in the Tomcat
+      Catalina log
+      file:</p><pre class="programlisting">Interrupting: Nid data service 4
+Interrupting: Nid data service 1
+Interrupting: Nid data service 3
+Interrupting: Nid data service 2
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Database sync to disk...
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Database sync complete.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Shutting down dbWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Interrupting: Nid data service 6
+Interrupting: Nid data service 5
+Interrupting: Nid data service 4
+Interrupting: Nid data service 4
 INFO: Awaiting termination of dbWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Shutting down changeSetWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Awaiting termination of changeSetWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: BdbCommitManager is shutdown.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager close
-INFO: Shutting down luceneWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager close
-INFO: Awaiting termination of luceneWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager closeRefset
-INFO: Shutting down luceneWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.model.cc.lucene.LuceneManager closeRefset
-INFO: Awaiting termination of luceneWriterService.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Shutting down NidDataFromBdb executor pool.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Awaiting termination of NidDataFromBdb executor pool.
-Sep 20, 2013 4:27:29 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: Termination NidDataFromBdb executor pool.
-Sep 20, 2013 4:27:30 PM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts warning
+WARNING: org.apache.lucene.store.AlreadyClosedException: this IndexWriter is closed
+Oct 28, 2013 11:50:15 AM org.ihtsdo.otf.tcc.datastore.temp.LogWithAlerts info
 INFO: bdb close finished.
-Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol stop
-INFO: Stopping ProtocolHandler ["http-bio-8080"]
-Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol stop
-INFO: Stopping ProtocolHandler ["ajp-bio-8009"]
-Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol destroy
-INFO: Destroying ProtocolHandler ["http-bio-8080"]
-Sep 20, 2013 4:27:30 PM org.apache.coyote.AbstractProtocol destroy
-INFO: Destroying ProtocolHandler ["ajp-bio-8009"]</pre></div></div></body></html>
+Oct 28, 2013 11:50:16 AM org.apache.catalina.startup.HostConfig deleteRedeployResources
+INFO: Undeploying context [/otf]</pre><p>And you should see the following in the Tomcat localhost log file:</p><pre class="programlisting">Oct 28, 2013 11:50:15 AM org.apache.catalina.core.ApplicationContext log
+INFO: Destroy ChronicleServletContainer
+Oct 28, 2013 11:50:15 AM org.apache.catalina.core.ApplicationContext log
+INFO: Aquired storeSemaphore for destroy. 
+Oct 28, 2013 11:50:15 AM org.apache.catalina.core.ApplicationContext log
+INFO: Released storeSemaphore for destroy. </pre></div></div></body></html>

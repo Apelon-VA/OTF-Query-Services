@@ -129,7 +129,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#POST_ITERATION">POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
 </ul>
 </li>
 </ul>
@@ -145,13 +145,13 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html#RelRestriction(org.ihtsdo.otf.query.implementation.Query, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, boolean)">RelRestriction</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;enclosingQuery,
+<td class="colOne"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html#RelRestriction(org.ihtsdo.otf.query.implementation.Query, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Boolean)">RelRestriction</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;enclosingQuery,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sourceSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption,
-              boolean&nbsp;relTypeSubsumption)</code>&nbsp;</td>
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;relTypeSubsumption)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -201,7 +201,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation">LeafClause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#setResultsCache(org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet)">setResultsCache</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.ihtsdo.otf.query.implementation.Clause">
@@ -231,7 +231,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="RelRestriction(org.ihtsdo.otf.query.implementation.Query, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, boolean)">
+<a name="RelRestriction(org.ihtsdo.otf.query.implementation.Query, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -243,7 +243,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sourceSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption,
-              boolean&nbsp;relTypeSubsumption)</pre>
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;relTypeSubsumption)</pre>
 </li>
 </ul>
 </li>

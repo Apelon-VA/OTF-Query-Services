@@ -36,7 +36,7 @@
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ComponentIsMemberOfRefset.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/ihtsdo/otf/query/implementation/clauses/ChangedFromPreviousVersion.html" target="_top">Frames</a></li>
@@ -107,9 +107,9 @@
 <br>
 <pre>public class <span class="strong">ChangedFromPreviousVersion</span>
 extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation">LeafClause</a></pre>
-<div class="block">Computes the components that have been modified since the version specified 
- by the <code>ViewCoordinate</code>. Currently only retrieves descriptions that were
- modified since the specified <code>ViewCoordinate</code>.</div>
+<div class="block">Computes the components that have been modified since the version specified
+ by the <code>ViewCoordinate</code>. Currently only retrieves descriptions
+ that were modified since the specified <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Author:</span></dt>
   <dd>dylangrald</dd></dl>
 </li>
@@ -129,7 +129,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#POST_ITERATION">POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
 </ul>
 </li>
 </ul>
@@ -147,9 +147,8 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <tr class="altColor">
 <td class="colOne"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ChangedFromPreviousVersion.html#ChangedFromPreviousVersion(org.ihtsdo.otf.query.implementation.Query, java.lang.String)">ChangedFromPreviousVersion</a></strong>(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;enclosingQuery,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;previousViewCoordinateKey)</code>
-<div class="block">Creates an instance of a ChangedFromPreviousVersion
- <code>Clause</code> from the enclosing query and key used in let
- declarations for a previous
+<div class="block">Creates an instance of a ChangedFromPreviousVersion <code>Clause</code>
+ from the enclosing query and key used in let declarations for a previous
  <code>ViewCoordinate</code>.</div>
 </td>
 </tr>
@@ -201,7 +200,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation">LeafClause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#setResultsCache(org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet)">setResultsCache</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.ihtsdo.otf.query.implementation.Clause">
@@ -239,9 +238,8 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <h4>ChangedFromPreviousVersion</h4>
 <pre>public&nbsp;ChangedFromPreviousVersion(<a href="../../../../../../org/ihtsdo/otf/query/implementation/Query.html" title="class in org.ihtsdo.otf.query.implementation">Query</a>&nbsp;enclosingQuery,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;previousViewCoordinateKey)</pre>
-<div class="block">Creates an instance of a ChangedFromPreviousVersion
- <code>Clause</code> from the enclosing query and key used in let
- declarations for a previous
+<div class="block">Creates an instance of a ChangedFromPreviousVersion <code>Clause</code>
+ from the enclosing query and key used in let declarations for a previous
  <code>ViewCoordinate</code>.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>enclosingQuery</code> - </dd><dd><code>previousViewCoordinateKey</code> - </dd></dl>
 </li>
@@ -356,7 +354,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClaus
 <div class="subNav">
 <ul class="navList">
 <li>Prev Class</li>
-<li><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ComponentIsMemberOfRefset.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">Next Class</span></a></li>
+<li><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/ConceptForComponent.html" title="class in org.ihtsdo.otf.query.implementation.clauses"><span class="strong">Next Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/ihtsdo/otf/query/implementation/clauses/ChangedFromPreviousVersion.html" target="_top">Frames</a></li>

@@ -112,7 +112,6 @@
 <br>
 <pre>public class <span class="strong">DescriptionActiveLuceneMatch</span>
 extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></pre>
-<div class="block">TODO: not implemented yet.</div>
 <dl><dt><span class="strong">Author:</span></dt>
   <dd>dylangrald</dd></dl>
 </li>
@@ -132,7 +131,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/D
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html" title="class in org.ihtsdo.otf.query.implementation">Clause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#ITERATION">ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#POST_ITERATION">POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_AND_POST_ITERATION">PRE_AND_POST_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION">PRE_ITERATION</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#PRE_ITERATION_AND_ITERATION">PRE_ITERATION_AND_ITERATION</a></code></li>
 </ul>
 </li>
 </ul>
@@ -168,16 +167,16 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/D
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/ihtsdo/otf/query/implementation/ClauseComputeType.html" title="enum in org.ihtsdo.otf.query.implementation">ClauseComputeType</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html#getComputePhases()">getComputePhases</a></strong>()</code>
-<div class="block">Getter for the iteration types required to compute the clause.</div>
+<td class="colFirst"><code>org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a></strong>(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;incomingComponents)</code>
+<div class="block">Compute final results based on possible components, and any cached query
+ matches.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html#getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">getQueryMatches</a></strong>(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI&nbsp;conceptVersion)</code>
-<div class="block">Collect intermediate results for clauses that require iteration over the
- database.</div>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/ihtsdo/otf/query/implementation/ClauseComputeType.html" title="enum in org.ihtsdo.otf.query.implementation">ClauseComputeType</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html#getComputePhases()">getComputePhases</a></strong>()</code>
+<div class="block">Getter for the iteration types required to compute the clause.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -193,14 +192,14 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/D
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.clauses.<a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computePossibleComponents</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computePossibleComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html#getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">getQueryMatches</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.ihtsdo.otf.query.implementation.LeafClause">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.<a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation">LeafClause</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#setResultsCache(org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet)">setResultsCache</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#addToResultsCache(int)">addToResultsCache</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#getResultsCache()">getResultsCache</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.ihtsdo.otf.query.implementation.Clause">
@@ -265,23 +264,23 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/D
  elements for the clause.</dd></dl>
 </li>
 </ul>
-<a name="getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">
+<a name="computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getQueryMatches</h4>
-<pre>public&nbsp;void&nbsp;getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI&nbsp;conceptVersion)</pre>
-<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">Clause</a></code></strong></div>
-<div class="block">Collect intermediate results for clauses that require iteration over the
- database. This method will only be called if one of the clauses has a
- compute type of
- <code>ClauseComputeType.ITERATION</code>. The clause will cache results,
- and return the final results during the computeComponents method.</div>
+<h4>computeComponents</h4>
+<pre>public final&nbsp;org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI&nbsp;incomingComponents)
+                                                                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">Clause</a></code></strong></div>
+<div class="block">Compute final results based on possible components, and any cached query
+ matches. This third pass was necessary to support the NOT operator.</div>
 <dl>
 <dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html#getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">getQueryMatches</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></code></dd>
-</dl>
+<dd><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html#computeComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computeComponents</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/LeafClause.html" title="class in org.ihtsdo.otf.query.implementation">LeafClause</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
 </li>
 </ul>
 <a name="getWhereClause()">
