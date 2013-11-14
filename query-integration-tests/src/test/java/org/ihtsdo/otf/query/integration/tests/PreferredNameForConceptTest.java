@@ -19,9 +19,8 @@ import java.io.IOException;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  * Creates a test for the
@@ -32,23 +31,21 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 public class PreferredNameForConceptTest extends QueryClauseTest {
 
     public PreferredNameForConceptTest() throws IOException {
-
+        final SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2002, 1, 31, 0, 0);
         this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
-                NativeIdSetBI forSet = new ConcurrentBitSet();
-                forSet.add(Snomed.STATUS.getNid());
-                return forSet;
+                return Ts.get().getAllComponentNids();
             }
 
             @Override
             public void Let() throws IOException {
-                let("status", Snomed.STATUS);
+                let("oligophrenia", "oligophrenia");
             }
 
             @Override
             public Clause Where() {
-                return PreferredNameForConcept(ConceptIsKindOf("status"));
+                return PreferredNameForConcept(ConceptForComponent(DescriptionLuceneMatch("oligophrenia")));
             }
         };
     }

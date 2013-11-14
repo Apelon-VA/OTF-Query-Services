@@ -22,7 +22,6 @@ import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
-import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
@@ -44,7 +43,7 @@ import org.ihtsdo.otf.tcc.datastore.Bdb;
  */
 public class RelRestriction extends LeafClause {
 
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
     Query enclosingQuery;
     String relTypeKey;
     ConceptSpec relType;
@@ -57,7 +56,7 @@ public class RelRestriction extends LeafClause {
     Boolean relTypeSubsumption;
 
     public RelRestriction(Query enclosingQuery, String relRestrictionSpecKey, String relTypeKey, String sourceSpecKey,
-            String viewCoordinateKey, Boolean destinationSubsumption, boolean relTypeSubsumption) {
+            String viewCoordinateKey, Boolean destinationSubsumption, Boolean relTypeSubsumption) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
         this.sourceSpecKey = sourceSpecKey;
@@ -76,10 +75,10 @@ public class RelRestriction extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REL_RESTRICTION);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
+        whereClause.getLetKeys().add(relRestrictionSpecKey);
+        whereClause.getLetKeys().add(relTypeKey);
         whereClause.getLetKeys().add(sourceSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
 
     }
@@ -91,31 +90,31 @@ public class RelRestriction extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
         NativeIdSetBI relTypeSet = new ConcurrentBitSet();
         relTypeSet.add(this.relType.getNid());
         if (this.relTypeSubsumption) {
-            relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), vc));
+            relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), viewCoordinate));
         }
-        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.vc);
+        NativeIdSetBI relationshipSet = Bdb.getMemoryCache().getDestRelNids(this.sourceSpec.getNid(), relTypeSet, this.viewCoordinate);
         getResultsCache().or(relationshipSet);
         int parentNid = relRestrictionSpec.getNid();
         NativeIdSetBI restrictionSet = new ConcurrentBitSet();
         restrictionSet.add(parentNid);
-        restrictionSet.or(Ts.get().isKindOfSet(parentNid, vc));
+        restrictionSet.or(Ts.get().isKindOfSet(parentNid, viewCoordinate));
         if (!this.destinationSubsumption) {
             getResultsCache().and(restrictionSet);
             return getResultsCache();
         } else {
             //Default is to compute using subsumption
-            NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
-            NativeIdSetItrBI iter = kindOfSet.getIterator();
+            NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, viewCoordinate);
+            NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
             while (iter.next()) {
-                getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(iter.nid(), relTypeSet, vc));
+                getResultsCache().or(Bdb.getMemoryCache().getDestRelNids(iter.nid(), relTypeSet, viewCoordinate));
             }
         }
         getResultsCache().and(restrictionSet);

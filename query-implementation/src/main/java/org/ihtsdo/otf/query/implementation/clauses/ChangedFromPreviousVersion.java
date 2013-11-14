@@ -17,8 +17,6 @@ package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
@@ -27,27 +25,26 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 
 /**
- * Computes the components that have been modified since the version specified 
- * by the <code>ViewCoordinate</code>. Currently only retrieves descriptions that were
- * modified since the specified <code>ViewCoordinate</code>.
+ * Computes the components that have been modified since the version specified
+ * by the <code>ViewCoordinate</code>. Currently only retrieves descriptions
+ * that were modified since the specified <code>ViewCoordinate</code>.
  *
  * @author dylangrald
  */
 public class ChangedFromPreviousVersion extends LeafClause {
 
     /**
-     * The
-     * <code>ViewCoordinate</code> used to specify the previous version.
+     * The <code>ViewCoordinate</code> used to specify the previous version.
      */
     ViewCoordinate previousViewCoordinate;
     /**
-     * The
-     * <code>String</code> Let key that designate the previous
+     * The <code>String</code> Let key that designate the previous
      * <code>ViewCoordinate</code>.
      */
     String previousViewCoordinateKey;
@@ -58,9 +55,8 @@ public class ChangedFromPreviousVersion extends LeafClause {
     NativeIdSetBI cache = new ConcurrentBitSet();
 
     /**
-     * Creates an instance of a ChangedFromPreviousVersion
-     * <code>Clause</code> from the enclosing query and key used in let
-     * declarations for a previous
+     * Creates an instance of a ChangedFromPreviousVersion <code>Clause</code>
+     * from the enclosing query and key used in let declarations for a previous
      * <code>ViewCoordinate</code>.
      *
      * @param enclosingQuery
@@ -85,16 +81,10 @@ public class ChangedFromPreviousVersion extends LeafClause {
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-        for (int nid : conceptVersion.getAllNidsForVersion()) {
-            if (this.cache.contains(nid)) {
-                ComponentChronicleBI dc = conceptVersion.getComponent(nid);
-                if (cache.isMember(dc.getNid())) {
-                    ComponentVersionBI v1 = dc.getVersion(getEnclosingQuery().getViewCoordinate());
-                    if (v1 != null && dc.getVersion(previousViewCoordinate) != null) {
-                        if (!dc.getVersion(previousViewCoordinate).equals(v1)) {
-                            getResultsCache().add(dc.getNid());
-                        }
-                    }
+        for (DescriptionVersionBI desc : conceptVersion.getDescriptionsActive()) {
+            if(desc.getVersion(previousViewCoordinate) != null){
+                if(!desc.getVersion(previousViewCoordinate).equals(desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest()))){
+                    getResultsCache().add(desc.getConceptNid());
                 }
             }
         }
@@ -104,9 +94,6 @@ public class ChangedFromPreviousVersion extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.CHANGED_FROM_PREVIOUS_VERSION);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(previousViewCoordinateKey);
         return whereClause;
     }

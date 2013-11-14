@@ -35,15 +35,25 @@ public class Not extends ParentClause {
 
     public Not(Query enclosingQuery, Clause child) {
         super(enclosingQuery, child);
-        forSet = enclosingQuery.getForSet();
-        assert forSet != null;
     }
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
         this.notSet = new ConcurrentBitSet();
         for (Clause c : getChildren()) {
-            notSet.or(c.computePossibleComponents(incomingPossibleComponents));
+            for (ClauseComputeType cp : c.getComputePhases()) {
+                switch (cp) {
+                    case PRE_ITERATION:
+                        notSet.or(c.computePossibleComponents(incomingPossibleComponents));
+                        break;
+                    case ITERATION:
+                        c.computePossibleComponents(incomingPossibleComponents);
+                        break;
+                    case POST_ITERATION:
+                        c.computePossibleComponents(incomingPossibleComponents);
+                        break;
+                }
+            }
         }
         return incomingPossibleComponents;
     }
@@ -60,11 +70,12 @@ public class Not extends ParentClause {
 
     @Override
     public NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException, ValidationException, ContradictionException {
-        NativeIdSetBI forSetCopy = new ConcurrentBitSet(forSet);
+        this.forSet = enclosingQuery.getForSet();
+        assert forSet != null;
         for (Clause c : getChildren()) {
             notSet.or(c.computeComponents(incomingComponents));
         }
-        forSetCopy.andNot(notSet);
-        return forSetCopy;
+        forSet.andNot(notSet);
+        return forSet;
     }
 }

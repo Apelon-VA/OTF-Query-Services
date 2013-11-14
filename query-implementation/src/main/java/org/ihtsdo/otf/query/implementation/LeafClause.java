@@ -1,4 +1,5 @@
 /*
+
  * Copyright 2013 International Health Terminology Standards Development Organisation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,14 +52,6 @@ public abstract class LeafClause extends Clause {
     }
 
     /**
-     * Setter for the results cache.
-     * @param cache
-     */
-    public void setResultsCache(ConcurrentBitSet cache) {
-        this.resultsCache = cache;
-    }
-
-    /**
      * Sets the specified nid as a member of the results cache set.
      *
      * @param nid
@@ -68,7 +61,7 @@ public abstract class LeafClause extends Clause {
     }
 
     @Override
-    public final NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException {
+    public NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException {
         resultsCache.and(incomingComponents);
         return resultsCache;
     }

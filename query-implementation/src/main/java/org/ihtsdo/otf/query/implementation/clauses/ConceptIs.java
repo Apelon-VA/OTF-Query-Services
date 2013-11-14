@@ -17,7 +17,6 @@ package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
@@ -57,9 +56,8 @@ public class ConceptIs extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.CONCEPT_IS);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
+        whereClause.getLetKeys().add(conceptSpecString);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 

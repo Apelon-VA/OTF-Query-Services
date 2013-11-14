@@ -50,12 +50,18 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>tcc-test-data</artifactId>   
-            <version>2.0</version>     
+            <version>3.0</version>     
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -86,9 +92,9 @@
                         <!-- Let JUnit annotations decide -->
                         <include>**/*.class</include>
                     </includes>
-                    <systemPropertyVariables>
+                    <!--                    <systemPropertyVariables>
                         <org.ihtsdo.otf.tcc.query.lucene-root-location>${project.build.directory}</org.ihtsdo.otf.tcc.query.lucene-root-location>
-                    </systemPropertyVariables>
+                    </systemPropertyVariables>-->
                 </configuration>
             </plugin>      
             <plugin>

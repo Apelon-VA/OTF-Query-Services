@@ -18,17 +18,13 @@ package org.ihtsdo.otf.query.implementation.clauses;
 import java.io.IOException;
 import java.util.EnumSet;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
-import org.ihtsdo.otf.query.implementation.LeafClause;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
-import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
-import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
+import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 
 /**
  * Calculates the active descriptions that match the specified Java Regular
@@ -36,22 +32,10 @@ import org.ihtsdo.otf.query.implementation.WhereClause;
  *
  * @author dylangrald
  */
-public class DescriptionActiveRegexMatch extends LeafClause {
-
-    /**
-     * The Java Regular Expression used in the search.
-     */
-    String regex;
-    String regexKey;
-    /**
-     * Results cache used to optimize getQueryMatches method.
-     */
-    NativeIdSetBI cache = new ConcurrentBitSet();
-
-    public DescriptionActiveRegexMatch(Query enclosingQuery, String regexKey) {
-        super(enclosingQuery);
-        this.regexKey = regexKey;
-        this.regex = (String) enclosingQuery.getLetDeclarations().get(regexKey);
+public class DescriptionActiveRegexMatch extends DescriptionRegexMatch {
+    
+    public DescriptionActiveRegexMatch(Query enclosingQuery, String regexKey, String viewCoordinateKey) {
+        super(enclosingQuery, regexKey, viewCoordinateKey);
     }
 
     @Override
@@ -60,17 +44,11 @@ public class DescriptionActiveRegexMatch extends LeafClause {
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        this.cache = incomingPossibleComponents;
-        return incomingPossibleComponents;
-    }
-
-    @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
         for (DescriptionChronicleBI dc : conceptVersion.getDescriptionsActive()) {
             if (cache.contains(dc.getNid())) {
                 for (DescriptionVersionBI dv : dc.getVersions()) {
-                    if (dv.getText().matches(regex)) {
+                    if (dv.getText().matches(regex) && dv.isActive()) {
                         addToResultsCache((dv.getNid()));
                     }
                 }
@@ -81,11 +59,9 @@ public class DescriptionActiveRegexMatch extends LeafClause {
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
-        whereClause.setSemantic(ClauseSemantic.DESCRIPTION_REGEX_MATCH);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
+        whereClause.setSemantic(ClauseSemantic.DESCRIPTION_ACTIVE_REGEX_MATCH);
         whereClause.getLetKeys().add(regexKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

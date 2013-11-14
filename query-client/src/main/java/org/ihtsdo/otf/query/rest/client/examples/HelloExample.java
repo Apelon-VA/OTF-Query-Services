@@ -40,7 +40,7 @@ public class HelloExample {
      */
     public static void main(String[] args) {
         // default host.
-        String host = "http://localhost:8080/";
+        String host = "http://localhost:8080/otf/";
         
         // if host is provided, override default host.
         if (args.length > 0) {
@@ -49,7 +49,7 @@ public class HelloExample {
         // create the client
         Client client = ClientBuilder.newClient();
         // specify the host and the path. 
-        WebTarget target = client.target(host).path("otf/query-service/hello/frank");
+        WebTarget target = client.target(host).path("query-service/hello/frank");
         // get the response from the server
         Response response = target.request(MediaType.TEXT_PLAIN_TYPE).get();
         // should return "200"

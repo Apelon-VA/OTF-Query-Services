@@ -79,4 +79,10 @@ public class SctidUuidTest extends JerseyTest {
          assertEquals("285649006", resultString);
 
     }
+   
+   @Test
+   public void runSctidTestRefset(){
+       String resultString = target("query-service/uuid/447566000").request(MediaType.TEXT_PLAIN).get(String.class);
+       assertEquals("c259d808-8011-3772-bece-b4fbde18d375", resultString);
+   }
 }

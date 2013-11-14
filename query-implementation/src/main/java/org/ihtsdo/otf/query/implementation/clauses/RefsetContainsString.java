@@ -21,18 +21,15 @@ package org.ihtsdo.otf.query.implementation.clauses;
  */
 import java.io.IOException;
 import java.util.EnumSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.WhereClause;
-import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_STRING;
 import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_STR;
 import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_STR;
@@ -44,7 +41,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * TODO: not implemented yet.
+ * .
  *
  * @author dylangrald
  */
@@ -53,7 +50,7 @@ public class RefsetContainsString extends LeafClause {
     Query enclosingQuery;
     String queryText;
     String viewCoordinateKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
     NativeIdSetBI cache;
     ConceptSpec refsetSpec;
     String refsetSpecKey;
@@ -75,52 +72,29 @@ public class RefsetContainsString extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
         int refsetNid = this.refsetSpec.getNid();
-        //ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, refsetNid);
-        ComponentChronicleBI cc = Ts.get().getComponent(refsetNid);
-        for(RefexChronicleBI rc : cc.getRefexes()){
-            System.out.println(rc.toString());
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(viewCoordinate, refsetNid);
+
+        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(viewCoordinate)) {
+            switch (rm.getRefexType()) {
+                case CID_STR:
+                case CID_CID_CID_STRING:
+                case CID_CID_STR:
+                case STR:
+                    RefexStringVersionBI rsv = (RefexStringVersionBI) rm;
+                    if (rsv.getString1().toLowerCase().contains(queryText.toLowerCase())) {
+                        getResultsCache().add(refsetNid);
+                    }
+                default:
+                //do nothing
+
+            }
         }
-        
-        /*for(NidPairForRefex i:P.s.getRefexPairs(refsetNid)){
-         ConceptChronicleBI memberConcept = Ts.get().getConcept(i.getMemberNid());
-         if(memberConcept.g)
-         getResultsCache().add(memberConcept.getConceptNid());
-            
-//         }*/
-//        for (RefexChronicleBI rc : conceptVersion.getChronicle().getRefexes()) {
-//
-//            for (RefexVersionBI rv : rc.getRefexMembersActive(vc)) {
-//                switch (rc.getRefexType()) {
-//                    case CID_STR:
-//                    case CID_CID_CID_STRING:
-//                    case CID_CID_STR:
-//                    case STR:
-//                        RefexStringVersionBI rsv = (RefexStringVersionBI) rv;
-//                        if (rsv.getString1().matches(queryText)) {
-//                            getResultsCache().add(rv.getNid());
-//                        }
-//                    default:
-//                    // do nothing... 
-//
-//                }
-//            }
-//        }
-        /*for(RefexVersionBI r: conceptVersion.getRefsetMembersActive()){
-         if(r.toUserString().matches(queryText)){
-         getResultsCache().add(r.getConceptNid());
-         }
-         }*/
-        /*for(RefexChronicleBI r :conceptVersion.getEnclosingConcept().getRefsetMembers()){
-         if(r.toUserString().matches(queryText)){
-         getResultsCache().add(r.getConceptNid());
-         }
-         }*/
 
         return getResultsCache();
     }
@@ -133,12 +107,10 @@ public class RefsetContainsString extends LeafClause {
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
-        whereClause.setSemantic(ClauseSemantic.REFSET_CONTAINS_KIND_OF_CONCEPT);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
+        whereClause.setSemantic(ClauseSemantic.REFSET_CONTAINS_STRING);
         whereClause.getLetKeys().add(refsetSpecKey);
         whereClause.getLetKeys().add(queryText);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

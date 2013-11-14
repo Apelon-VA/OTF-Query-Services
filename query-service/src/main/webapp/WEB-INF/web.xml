@@ -11,10 +11,18 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>org.ihtsdo.otf.query.rest.server;org.ihtsdo.otf.tcc.rest.server</param-value>
         </init-param>
+        <init-param>
+            <param-name>httpMaxHeaderSize</param-name>
+            <param-value>9000</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>OTF Jersey REST server</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+    <display-name>OTF Query Service</display-name>
+    <listener>
+        <listener-class>org.ihtsdo.otf.query.rest.server.QueryServletRequestListener</listener-class>
+    </listener>
 </web-app>

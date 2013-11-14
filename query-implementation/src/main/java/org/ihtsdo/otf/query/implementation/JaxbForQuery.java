@@ -25,6 +25,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.SimplePath;
 import org.ihtsdo.otf.tcc.api.coordinate.SimplePosition;
 import org.ihtsdo.otf.tcc.api.coordinate.SimpleViewCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.RelSpec;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
@@ -48,6 +49,7 @@ public class JaxbForQuery {
                     LastCommitWins.class,
                     Where.class,
                     ForCollection.class,
+                    ConcurrentBitSet.class,
                     Position.class, LetMap.class,
                     Path.class, ConceptSpec.class, RelSpec.class, 
                     ResultList.class,

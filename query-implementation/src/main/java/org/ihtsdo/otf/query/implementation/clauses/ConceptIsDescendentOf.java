@@ -74,7 +74,7 @@ public class ConceptIsDescendentOf extends LeafClause {
 
     @Override
     public EnumSet<ClauseComputeType> getComputePhases() {
-        return PRE_AND_POST_ITERATION;
+        return PRE_ITERATION;
     }
 
     @Override
@@ -86,10 +86,8 @@ public class ConceptIsDescendentOf extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.CONCEPT_IS_DESCENDENT_OF);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(kindOfSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

@@ -40,14 +40,13 @@ public class OrTest extends QueryClauseTest {
 
             @Override
             public void Let() throws IOException {
-                let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
-                let("respiratory disorder", Snomed.RESPIRATORY_DISORDER);
-                let("person", Snomed.PERSON);
+                let("acceleration", Snomed.ACCELERATION);
+                let("vibration", Snomed.VIBRATION);
             }
 
             @Override
             public Clause Where() {
-                return Or(ConceptIsKindOf("person"), ConceptIsKindOf("allergic-asthma"));
+                return Or(ConceptIsKindOf("acceleration"), ConceptIs("vibration"));
             }
         };
     }

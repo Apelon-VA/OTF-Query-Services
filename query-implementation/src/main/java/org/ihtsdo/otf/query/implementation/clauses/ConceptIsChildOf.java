@@ -84,10 +84,8 @@ public class ConceptIsChildOf extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.CONCEPT_IS_CHILD_OF);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(kindOfSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

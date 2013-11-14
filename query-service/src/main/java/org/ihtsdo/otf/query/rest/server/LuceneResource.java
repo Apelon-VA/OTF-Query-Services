@@ -20,6 +20,8 @@ import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,7 +32,7 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.otf.tcc.api.nid.HybridNidSet;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
@@ -46,10 +48,11 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
  */
 @Path("query-service/lucene")
 public class LuceneResource {
-        private static IndexerBI  descriptionIndexer;
 
-        static {
-        List<IndexerBI> lookers            = Hk2Looker.get().getAllServices(IndexerBI.class);
+    private static IndexerBI descriptionIndexer;
+
+    static {
+        List<IndexerBI> lookers = Hk2Looker.get().getAllServices(IndexerBI.class);
 
         for (IndexerBI li : lookers) {
             System.out.println("AlternativeIdResource found indexer: " + li.getIndexerName());
@@ -64,9 +67,7 @@ public class LuceneResource {
     @Produces("text/plain")
     public String doQuery() throws IOException, JAXBException, Exception {
         return "Put url encoded lucene query at the end of the url";
-    }    
-    
-    
+    }
 
     @GET
     @Path("{query}")
@@ -83,28 +84,35 @@ public class LuceneResource {
 
         //Decode the query text
         queryText = URLDecoder.decode(queryText, "UTF-8");
-        
-        List<SearchResult> results = descriptionIndexer.query(queryText, ComponentProperty.DESCRIPTION_TEXT, 500);
 
-        NativeIdSetBI resultSet = new HybridNidSet();
-        
-        System.out.println("result: " + results);
-        for (SearchResult r: results) {
-            System.out.println("nid: " + r.nid + " score:" + r.score);
+        try {
+
+            List<SearchResult> results = descriptionIndexer.query(queryText, ComponentProperty.DESCRIPTION_TEXT, 500);
+
+            NativeIdSetBI resultSet = new ConcurrentBitSet();
+
+            System.out.println("result: " + results);
+            for (SearchResult r : results) {
+                System.out.println("nid: " + r.nid + " score:" + r.score);
+            }
+            for (SearchResult r : results) {
+                resultSet.add(r.nid);
+            }
+            ArrayList<Object> objectList = Query.returnDisplayObjects(resultSet,
+                    ReturnTypes.DESCRIPTION_FOR_COMPONENT,
+                    StandardViewCoordinates.getSnomedInferredLatest());
+
+            ResultList resultList = new ResultList();
+            resultList.setTheResults(objectList);
+            StringWriter writer = new StringWriter();
+
+            JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
+            return writer.toString();
+
+        } catch (NullPointerException e) {
+            Logger.getLogger(LuceneResource.class.getName()).log(Level.INFO, "Database error.", e);
+            throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
         }
-        for (SearchResult r: results) {
-            resultSet.add(r.nid);
-        }
-        ArrayList<Object> objectList = Query.returnDisplayObjects(resultSet, 
-                ReturnTypes.DESCRIPTION, 
-                StandardViewCoordinates.getSnomedInferredLatest());
-
-        ResultList resultList = new ResultList();
-        resultList.setTheResults(objectList);
-        StringWriter writer = new StringWriter();
-
-        JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
-        return writer.toString();
 
     }
 }

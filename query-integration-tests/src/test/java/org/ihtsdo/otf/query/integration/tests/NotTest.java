@@ -18,10 +18,11 @@ package org.ihtsdo.otf.query.integration.tests;
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  * Creates a test for the
@@ -37,30 +38,27 @@ public class NotTest extends QueryClauseTest {
         this.q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
             @Override
             protected NativeIdSetBI For() throws IOException {
-                NativeIdSetBI forSet = new ConcurrentBitSet();
-                forSet.add(Snomed.MOTION.getNid());
-                forSet.add(Snomed.ACCELERATION.getNid());
-                forSet.add(Snomed.CENTRIFUGAL_FORCE.getNid());
-                forSet.add(Snomed.CONTINUED_MOVEMENT.getNid());
-                forSet.add(Snomed.DECELERATION.getNid());
-                forSet.add((Snomed.MOMENTUM.getNid()));
-                forSet.add(Snomed.VIBRATION.getNid());
-                return forSet;
+                return Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+//                return Ts.get().getAllConceptNids();
 
             }
 
             @Override
             public void Let() throws IOException {
                 let("motion", Snomed.MOTION);
-                let("acceleration", Snomed.ACCELERATION);
-                let("person", Snomed.PERSON);
-                let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
-                let("regex", "[Vv]ibration");
+                let("regex", "[Vv]ibration.*");
+                NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+                NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
+                StringBuilder forSet = new StringBuilder("");
+                while(iter.next()){
+                    forSet.append(Ts.get().getComponent(iter.nid()).getPrimordialUuid().toString()).append(",");
+                }
+                let("Custom FOR set", forSet.toString());
             }
 
             @Override
             public Clause Where() {
-                return And(ConceptIsDescendentOf("motion"), Not(ConceptForComponent(DescriptionRegexMatch("regex"))));
+                return Not(ConceptForComponent(DescriptionRegexMatch("regex")));
             }
         };
 

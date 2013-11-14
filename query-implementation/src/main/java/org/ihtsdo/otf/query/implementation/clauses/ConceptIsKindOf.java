@@ -25,7 +25,6 @@ import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
@@ -57,10 +56,10 @@ public class ConceptIsKindOf extends LeafClause {
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents)
             throws ValidationException, IOException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.viewCoordinate = (ViewCoordinate) enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {
-            this.viewCoordinate = (ViewCoordinate) enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
         int parentNid = kindOfSpec.getNid(this.viewCoordinate);
         getResultsCache().or(Ts.get().isKindOfSet(parentNid, this.viewCoordinate));
@@ -70,7 +69,7 @@ public class ConceptIsKindOf extends LeafClause {
 
     @Override
     public EnumSet<ClauseComputeType> getComputePhases() {
-        return PRE_AND_POST_ITERATION;
+        return PRE_ITERATION;
     }
 
     @Override
@@ -81,11 +80,9 @@ public class ConceptIsKindOf extends LeafClause {
     @Override
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
-        whereClause.setSemantic(ClauseSemantic.CONCEPT_IS_CHILD_OF);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
+        whereClause.setSemantic(ClauseSemantic.CONCEPT_IS_KIND_OF);
         whereClause.getLetKeys().add(kindOfSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 }

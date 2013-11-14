@@ -69,9 +69,10 @@ public class DescriptionLuceneMatch extends LeafClause {
     public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
         if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
             this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
-        } else if (this.viewCoordinateKey != null) {
+        } else {
             this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
+
         NativeIdSetBI nids = new ConcurrentBitSet();
         try {
             List<IndexerBI> lookers = Hk2Looker.get().getAllServices(IndexerBI.class);
@@ -89,7 +90,7 @@ public class DescriptionLuceneMatch extends LeafClause {
             Logger.getLogger(DescriptionLuceneMatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         //Filter the results, based upon the input ViewCoordinate
-        NativeIdSetItrBI iter = nids.getIterator();
+        NativeIdSetItrBI iter = nids.getSetBitIterator();
         while (iter.next()) {
             try {
                 if (Ts.get().getComponentVersion(viewCoordinate, iter.nid()) == null) {
@@ -113,9 +114,6 @@ public class DescriptionLuceneMatch extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.DESCRIPTION_LUCENE_MATCH);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
         whereClause.getLetKeys().add(luceneMatchKey);
         return whereClause;
     }

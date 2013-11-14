@@ -22,7 +22,6 @@ import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
@@ -48,21 +47,21 @@ public class RelType extends LeafClause {
     ConceptSpec targetSpec;
     String targetSpecKey;
     String viewCoordinateKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
     Query enclosingQuery;
     ConceptSpec relType;
-    String relTypeKey;
+    String relTypeSpecKey;
     NativeIdSetBI cache;
     Boolean relTypeSubsumption;
 
-    public RelType(Query enclosingQuery, String relTypeKey, String targetSpecKey, String viewCoordinateKey, Boolean relTypeSubsumption) {
+    public RelType(Query enclosingQuery, String relTypeSpecKey, String targetSpecKey, String viewCoordinateKey, Boolean relTypeSubsumption) {
         super(enclosingQuery);
         this.targetSpecKey = targetSpecKey;
         this.targetSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(targetSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
         this.enclosingQuery = enclosingQuery;
-        this.relTypeKey = relTypeKey;
-        this.relType = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relTypeKey);
+        this.relTypeSpecKey = relTypeSpecKey;
+        this.relType = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relTypeSpecKey);
         this.relTypeSubsumption = relTypeSubsumption;
 
     }
@@ -71,11 +70,9 @@ public class RelType extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REL_TYPE);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
+        whereClause.getLetKeys().add(relTypeSpecKey);
         whereClause.getLetKeys().add(targetSpecKey);
-        whereClause.getLetKeys().add(relTypeKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
     }
 
@@ -86,22 +83,22 @@ public class RelType extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
         NativeIdSetBI relTypeSet = new ConcurrentBitSet();
         relTypeSet.add(this.relType.getNid());
         if (this.relTypeSubsumption) {
-            relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), vc));
+            relTypeSet.or(Ts.get().isKindOfSet(this.relType.getNid(), viewCoordinate));
         }
-        NativeIdSetBI relationshipSet = Bdb.getNidCNidMap().getDestRelNids(this.targetSpec.getNid(), relTypeSet, this.vc);
+        NativeIdSetBI relationshipSet = Bdb.getMemoryCache().getDestRelNids(this.targetSpec.getNid(), relTypeSet, this.viewCoordinate);
         getResultsCache().or(relationshipSet);
         int relTypetNid = this.relType.getNid();
         if (this.relTypeSubsumption) {
-            NativeIdSetBI relTypeSubsumptionSet = Ts.get().isKindOfSet(relTypetNid, vc);
-            getResultsCache().or(Bdb.getNidCNidMap().getDestRelNids(this.targetSpec.getNid(), relTypeSubsumptionSet, vc));
+            NativeIdSetBI relTypeSubsumptionSet = Ts.get().isKindOfSet(relTypetNid, viewCoordinate);
+            getResultsCache().or(Bdb.getMemoryCache().getDestRelNids(this.targetSpec.getNid(), relTypeSubsumptionSet, viewCoordinate));
         }
 
         return getResultsCache();

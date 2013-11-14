@@ -18,22 +18,24 @@ package org.ihtsdo.otf.query.implementation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
-import org.ihtsdo.otf.tcc.datastore.Bdb;
 
 /**
- * The <code>ForCollection</code> enables the specification of a 
- * set of objects over which the query should iterate. 
- * The <code>ForCollection</code> can either be specified by an enumeration 
- * that identifies a standard set, or by an enumerated list. 
+ * The <code>ForCollection</code> enables the specification of a set of objects
+ * over which the query should iterate. The <code>ForCollection</code> can
+ * either be specified by an enumeration that identifies a standard set, or by
+ * an enumerated list.
+ *
  * @author kec
  */
 @XmlRootElement(name = "forCollection")
@@ -41,90 +43,88 @@ import org.ihtsdo.otf.tcc.datastore.Bdb;
 public class ForCollection {
 
     /**
-     * An enumeration to specify either a standard set of components, 
-     * or a custom collection for query iteration. 
+     * An enumeration to specify either a standard set of components, or a
+     * custom collection for query iteration.
      */
     public enum ForCollectionContents {
 
         /**
-         * The query should iterate over a collection of all concepts. 
+         * The query should iterate over a collection of all concepts.
          */
-        CONCEPT, 
+        CONCEPT,
         /**
-         * The query should iterate over a collection of all components. 
+         * The query should iterate over a collection of all components.
          */
-        COMPONENT, 
-        
+        COMPONENT,
         /**
-         * The query should iterate over a provided custom collection. 
+         * The query should iterate over a provided custom collection.
          */
-        CUSTOM;
+        CUSTOM,
     }
     ForCollectionContents forCollection = ForCollectionContents.CONCEPT;
     List<UUID> customCollection = new ArrayList<>();
+    public NativeIdSetBI customCollectionOfNids;
+
+    public ForCollection() {
+
+    }
 
     /**
-     * 
-     * @return a collection of native identifiers that a query should iterate over. 
-     * @throws IOException 
+     *
+     * @param forCollectionSet
+     * @return a collection of native identifiers that a query should iterate
+     * over.
+     * @throws IOException
      */
-    public NativeIdSetBI getCollection() throws IOException {
+    public NativeIdSetBI getCollection(String... forCollectionSet) throws IOException {
         TerminologyStoreDI ts = Ts.get();
         switch (forCollection) {
             case COMPONENT:
-                ConcurrentBitSet componentBitSet = new ConcurrentBitSet();
                 return ts.getAllComponentNids();
             case CONCEPT:
                 return ts.getAllConceptNids();
             case CUSTOM:
-                ConcurrentBitSet cbs = new ConcurrentBitSet();
-                for (UUID uuid : customCollection) {
-                    cbs.add(ts.getNidForUuids(uuid));
-                }
-                return cbs;
-
+                //Is handled in LetMap
+                return null;
             default:
                 throw new UnsupportedOperationException("Can't handle: " + forCollection);
         }
     }
 
     /**
-     * Return the for collection enumeration as a string. 
-     * @return 
+     * Return the for collection enumeration as a string.
+     *
+     * @return
      */
     public String getForCollectionString() {
         return forCollection.name();
     }
 
     /**
-     * 
-     * @param forCollectionString 
+     *
+     * @param forCollectionString
      */
     public void setForCollectionString(String forCollectionString) {
         this.forCollection = ForCollectionContents.valueOf(forCollectionString);
     }
 
-    @XmlTransient
-    public ForCollectionContents getForCollection() {
-        return forCollection;
-    }
-    
     public void setForCollection(ForCollectionContents forCollection) {
         this.forCollection = forCollection;
     }
 
     /**
-     * 
-     * @return a custom collection of UUIDs over which the query should iterate.  
+     *
+     * @return a custom collection of UUIDs over which the query should iterate.
      */
+    @XmlAttribute
     public List<UUID> getCustomCollection() {
         return customCollection;
     }
 
     /**
-     * 
-     * @param customCollection Set the collection of component UUIDs for the 
-     * query to iterate over. 
+     *
+     * @param customCollection Set the collection of component UUIDs for the
+     * query to iterate over.
      */
     public void setCustomCollection(List<UUID> customCollection) {
         this.customCollection = customCollection;

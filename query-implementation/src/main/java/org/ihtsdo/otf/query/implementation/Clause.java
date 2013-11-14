@@ -44,6 +44,7 @@ public abstract class Clause {
     protected static final EnumSet<ClauseComputeType> PRE_ITERATION = EnumSet.of(ClauseComputeType.PRE_ITERATION);
     protected static final EnumSet<ClauseComputeType> PRE_ITERATION_AND_ITERATION = EnumSet.of(ClauseComputeType.PRE_ITERATION, ClauseComputeType.ITERATION);
     protected static final EnumSet<ClauseComputeType> ITERATION = EnumSet.of(ClauseComputeType.ITERATION);
+    protected static final EnumSet<ClauseComputeType> POST_ITERATION = EnumSet.of(ClauseComputeType.POST_ITERATION);
 
     /**
      * Getter for the

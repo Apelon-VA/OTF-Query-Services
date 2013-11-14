@@ -24,8 +24,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.datastore.Bdb;
@@ -87,10 +88,6 @@ public class ForTest {
         } catch (JAXBException | IOException ex) {
             Logger.getLogger(ForTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
     }
 
     @Test
@@ -99,6 +96,7 @@ public class ForTest {
         forCollection.setForCollection(ForCollection.ForCollectionContents.COMPONENT);
         NativeIdSetBI forSet = forCollection.getCollection();
         System.out.println(forSet.size());
+        Assert.assertTrue(forSet.contiguous());
         Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() - Integer.MIN_VALUE, forSet.size());
     }
 
@@ -111,26 +109,15 @@ public class ForTest {
     }
 
     /**
-     * TODO: this is a check for the getAllComponentNids() method. The newly
-     * implemented getAllComponents() method returns 15 nids that are not in the
-     * set returned by Ts.get().getComponentNidsForConceptNids(allConcepts):
-     * [Integer.MIN_VALUE, Integer.MIN_VALUE + 13] and the nid -2137096776
-     *
-     * @throws IOException
+     * TODO: enable ability write custom FOR sets
+     * @throws IOException 
      */
     @Ignore
     @Test
-    public void getAllComponents() throws IOException {
-        System.out.println("All components test");
-        NativeIdSetBI allConcepts = ts.getAllConceptNids();
-        NativeIdSetBI allComponents = ts.getComponentNidsForConceptNids(allConcepts);
-        allComponents.xor(ts.getAllComponentNids());
-        NativeIdSetItrBI iter = allComponents.getIterator();
-        while (iter.next()) {
-            System.out.println(iter.nid());
-            System.out.println(iter.nid() - Integer.MIN_VALUE);
-            System.out.println(ts.getComponent(iter.nid()));
-        }
-        Assert.assertEquals(Bdb.getUuidsToNidMap().getCurrentMaxNid() - Integer.MIN_VALUE, allComponents.size());
+    public void getCustomForSetTest() throws IOException {
+//        ForCollection forCollection = new ForCollection(Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest()));
+//        NativeIdSetBI forSet = forCollection.getCollection();
+//        Assert.assertEquals(7, forSet.size());
+
     }
 }

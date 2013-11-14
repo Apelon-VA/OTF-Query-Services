@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -42,10 +44,8 @@ public class RegexResource {
     @Produces("text/plain")
     public String doQuery() throws IOException, JAXBException, Exception {
         return "Put url encoded regex query at the end of the url";
-    }    
-    
-    
-    
+    }
+
     @GET
     @Path("{regex}")
     @Produces("text/plain")
@@ -62,18 +62,24 @@ public class RegexResource {
         //Decode the queryText
         regex = URLDecoder.decode(regex, "UTF-8");
 
-        RegexQueryFromJaxb query = new RegexQueryFromJaxb(regex);
-        NativeIdSetBI resultSet = query.compute();
-        
-        //The default result type is DESCRIPTION_VERSION_FSN
-        ArrayList<Object> objectList = query.returnResults();
+        try {
 
-        ResultList resultList = new ResultList();
-        resultList.setTheResults(objectList);
-        StringWriter writer = new StringWriter();
+            RegexQueryFromJaxb query = new RegexQueryFromJaxb(regex);
+            NativeIdSetBI resultSet = query.compute();
 
-        JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
-        return writer.toString();
+            //The default result type is DESCRIPTION_VERSION_FSN
+            ArrayList<Object> objectList = query.returnResults();
 
+            ResultList resultList = new ResultList();
+            resultList.setTheResults(objectList);
+            StringWriter writer = new StringWriter();
+
+            JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
+            return writer.toString();
+
+        } catch (NullPointerException e) {
+            Logger.getLogger(RegexResource.class.getName()).log(Level.INFO, "Database error.", e);
+            throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
+        }
     }
 }

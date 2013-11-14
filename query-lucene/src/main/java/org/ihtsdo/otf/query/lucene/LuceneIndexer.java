@@ -53,18 +53,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class LuceneIndexer implements IndexerBI {
-    public static final String             LUCENE_ROOT_LOCATION_PROPERTY =
+    public static final String           LUCENE_ROOT_LOCATION_PROPERTY =
         "org.ihtsdo.otf.tcc.query.lucene-root-location";
-    public static final String             DEFAULT_LUCENE_LOCATION       = "lucene";
-    protected static final Logger          logger                        =
+    public static final String           DEFAULT_LUCENE_LOCATION       = "lucene";
+    protected static final Logger        logger                        =
         Logger.getLogger(LuceneIndexer.class.getName());
-    public static final Version            luceneVersion                 = Version.LUCENE_43;
-    protected static final ExecutorService luceneWriterService           =
-        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2,
-                                     new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
-    protected static ExecutorService luceneWriterFutureCheckerService =
-        Executors.newFixedThreadPool(1, new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
-    private static final UnindexedFuture unindexedFuture = new UnindexedFuture();
+    public static final Version          luceneVersion                 = Version.LUCENE_43;
+    private static final UnindexedFuture unindexedFuture               = new UnindexedFuture();
+    private static final ThreadGroup     threadGroup                   = new ThreadGroup("Lucene");
     public static File                   root;
     private static final FieldType       indexedComponentNidType;
     private static final FieldType       referencedComponentNidType;
@@ -85,15 +81,24 @@ public abstract class LuceneIndexer implements IndexerBI {
     }
 
     private ConcurrentHashMap<Integer, IndexedGenerationCallable> componentNidLatch = new ConcurrentHashMap<>();
+    private boolean                                               enabled           = true;
+    protected final ExecutorService                               luceneWriterService;
+    protected ExecutorService                                     luceneWriterFutureCheckerService;
+    private final NRTManagerReopenThread                          reopenThread;
     private NRTManager.TrackingIndexWriter                        trackingIndexWriter;
     private NRTManager                                            searcherManager;
     private String                                                indexName;
 
     public LuceneIndexer(String indexName) throws IOException {
-        this.indexName = indexName;
+        this.indexName      = indexName;
+        luceneWriterService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
+                new NamedThreadFactory(threadGroup, indexName + " Lucene writer"));
+        luceneWriterFutureCheckerService = Executors.newFixedThreadPool(1,
+                new NamedThreadFactory(threadGroup, indexName + " Lucene future checker"));
         setupRoot();
 
         File      indexDirectoryFile = new File(root.getPath() + "/" + indexName);
+        System.out.println("Index: " + indexDirectoryFile);
         Directory indexDirectory     = initDirectory(indexDirectoryFile);
 
         indexDirectory.clearLock("write.lock");
@@ -114,9 +119,8 @@ public abstract class LuceneIndexer implements IndexerBI {
 
         // Refreshes searcher every 5 seconds when nobody is waiting, and up to 100 msec delay
         // when somebody is waiting:
-        NRTManagerReopenThread reopenThread = new NRTManagerReopenThread(searcherManager, 5.0, 0.1);
-
-        reopenThread.setName("Lucene NRT Reopen Thread");
+        reopenThread = new NRTManagerReopenThread(searcherManager, 5.0, 0.1);
+        reopenThread.setName("Lucene NRT " + indexName + " Reopen Thread");
         reopenThread.setPriority(Math.min(Thread.currentThread().getPriority() + 2, Thread.MAX_PRIORITY));
         reopenThread.setDaemon(true);
         reopenThread.start();
@@ -246,9 +250,16 @@ public abstract class LuceneIndexer implements IndexerBI {
     @Override
     public final void closeWriter() {
         try {
+            reopenThread.close();
+            luceneWriterService.shutdown();
+            luceneWriterService.awaitTermination(15, TimeUnit.MINUTES);
+            luceneWriterFutureCheckerService.shutdown();
+            luceneWriterFutureCheckerService.awaitTermination(15, TimeUnit.MINUTES);
             trackingIndexWriter.getIndexWriter().close(true);
         } catch (IOException ex) {
             Logger.getLogger(LuceneRefexIndexer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(LuceneIndexer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -265,6 +276,10 @@ public abstract class LuceneIndexer implements IndexerBI {
 
     @Override
     public final Future<Long> index(ComponentChronicleBI chronicle) {
+        if (!enabled) {
+            return null;
+        }
+
         if (indexChronicle(chronicle)) {
             Future<Long> future = luceneWriterService.submit(new AddDocument(chronicle));
 
@@ -325,6 +340,16 @@ public abstract class LuceneIndexer implements IndexerBI {
         }
 
         return indexedLatch;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     private class AddDocument implements Callable<Long> {

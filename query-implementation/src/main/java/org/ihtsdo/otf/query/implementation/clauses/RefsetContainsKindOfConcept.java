@@ -16,7 +16,6 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.EnumSet;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
@@ -28,30 +27,33 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
-import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * TODO: not implemented yet. <code>LeafClause</code> that computes refsets that contain concepts that are
- * a kind of concept specified by the input
- * <code>ConceptSpec</code>.
+ * <code>LeafClause</code> that returns the nid of the input refset if a kind of
+ * the input concept is a member of the refset and returns an empty set if a
+ * kind of the input concept is not a member of the refset.
  *
  * @author dylangrald
  */
 public class RefsetContainsKindOfConcept extends LeafClause {
 
     Query enclosingQuery;
+    String refsetSpecKey;
+    ConceptSpec refsetSpec;
     String conceptSpecKey;
     ConceptSpec conceptSpec;
     String viewCoordinateKey;
-    ViewCoordinate vc;
+    ViewCoordinate viewCoordinate;
 
-    public RefsetContainsKindOfConcept(Query enclosingQuery, String conceptSpecKey, String viewCoordinateKey) {
+    public RefsetContainsKindOfConcept(Query enclosingQuery, String refsetSpecKey, String conceptSpecKey, String viewCoordinateKey) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
+        this.refsetSpecKey = refsetSpecKey;
+        this.refsetSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(refsetSpecKey);
         this.conceptSpecKey = conceptSpecKey;
         this.conceptSpec = (ConceptSpec) this.enclosingQuery.getLetDeclarations().get(conceptSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
@@ -62,10 +64,9 @@ public class RefsetContainsKindOfConcept extends LeafClause {
     public WhereClause getWhereClause() {
         WhereClause whereClause = new WhereClause();
         whereClause.setSemantic(ClauseSemantic.REFSET_CONTAINS_KIND_OF_CONCEPT);
-        for (Clause clause : getChildren()) {
-            whereClause.getChildren().add(clause.getWhereClause());
-        }
+        whereClause.getLetKeys().add(refsetSpecKey);
         whereClause.getLetKeys().add(conceptSpecKey);
+        whereClause.getLetKeys().add(viewCoordinateKey);
         return whereClause;
 
     }
@@ -77,22 +78,22 @@ public class RefsetContainsKindOfConcept extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
-        if (this.viewCoordinateKey.equals(enclosingQuery.currentViewCoordinateKey)) {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
+        if (this.viewCoordinateKey.equals(this.enclosingQuery.currentViewCoordinateKey)) {
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getVCLetDeclarations().get(viewCoordinateKey);
         } else {
-            this.vc = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
+            this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
-        int parentNid = this.conceptSpec.getNid();
-        NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, vc);
-        NativeIdSetItrBI iter = kindOfSet.getIterator();
-        while (iter.next()) {
-            ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(vc, iter.nid());
-            Collection<? extends RefexChronicleBI<?>> refexes = conceptVersion.getRefexes();
-            for (RefexChronicleBI r : refexes) {
-                this.getResultsCache().add(r.getNid());
-            }
 
+        int parentNid = this.conceptSpec.getNid();
+        NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(parentNid, viewCoordinate);
+        int refsetNid = this.refsetSpec.getNid();
+        ConceptVersionBI conceptVersion = Ts.get().getConceptVersion(viewCoordinate, refsetNid);
+        for (RefexVersionBI<?> rm : conceptVersion.getCurrentRefsetMembers(viewCoordinate)) {
+            if (kindOfSet.contains(rm.getReferencedComponentNid())) {
+                getResultsCache().add(refsetNid);
+            }
         }
+
         return getResultsCache();
     }
 

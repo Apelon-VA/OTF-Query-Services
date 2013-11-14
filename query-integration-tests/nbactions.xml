@@ -77,7 +77,7 @@
                 <goal>-e</goal>
             </goals>
             <properties>
-                <Env.MAVEN_OPTS>-ea -d64 -XX:+UseCompressedOops -Xmx4g -Xms4g -Xbootclasspath/a:/Applications/jprofiler6/bin/agent.jar -agentpath:/Applications/jprofiler6/bin/macos/libjprofilerti.jnilib</Env.MAVEN_OPTS>
+                <Env.MAVEN_OPTS>-ea -d64 -XX:+UseCompressedOops -Xmx4g -Xms4g -Xbootclasspath/a:/Applications/jprofiler8/bin/agent.jar -agentpath:/Applications/jprofiler8/bin/macos/libjprofilerti.jnilib</Env.MAVEN_OPTS>
             </properties>
         </action>
     </actions>

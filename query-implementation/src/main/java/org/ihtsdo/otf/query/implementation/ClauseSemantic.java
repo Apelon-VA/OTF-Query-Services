@@ -116,4 +116,9 @@ public enum ClauseSemantic {
      * Test to see if a refset contains a kind of specified concept.
      */
     REFSET_CONTAINS_KIND_OF_CONCEPT,
+    /**
+     * Test to see if a refset contains a member that matches the specified
+     * string.
+     */
+    REFSET_CONTAINS_STRING,
 }
