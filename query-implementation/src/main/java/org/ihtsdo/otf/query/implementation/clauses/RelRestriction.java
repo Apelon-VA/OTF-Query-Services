@@ -17,7 +17,6 @@ package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.LeafClause;
@@ -52,11 +51,13 @@ public class RelRestriction extends LeafClause {
     String relRestrictionSpecKey;
     ConceptSpec relRestrictionSpec;
     String viewCoordinateKey;
+    String destinationSubsumptionKey;
     Boolean destinationSubsumption;
+    String relTypeSubsumptionKey;
     Boolean relTypeSubsumption;
 
     public RelRestriction(Query enclosingQuery, String relRestrictionSpecKey, String relTypeKey, String sourceSpecKey,
-            String viewCoordinateKey, Boolean destinationSubsumption, Boolean relTypeSubsumption) {
+            String viewCoordinateKey, String destinationSubsumptionKey, String relTypeSubsumptionKey) {
         super(enclosingQuery);
         this.enclosingQuery = enclosingQuery;
         this.sourceSpecKey = sourceSpecKey;
@@ -66,8 +67,10 @@ public class RelRestriction extends LeafClause {
         this.relRestrictionSpecKey = relRestrictionSpecKey;
         this.relRestrictionSpec = (ConceptSpec) enclosingQuery.getLetDeclarations().get(relRestrictionSpecKey);
         this.viewCoordinateKey = viewCoordinateKey;
-        this.relTypeSubsumption = relTypeSubsumption;
-        this.destinationSubsumption = destinationSubsumption;
+        this.relTypeSubsumptionKey = relTypeSubsumptionKey;
+        this.destinationSubsumptionKey = destinationSubsumptionKey;
+        this.relTypeSubsumption = (Boolean) enclosingQuery.getLetDeclarations().get(relTypeSubsumptionKey);
+        this.destinationSubsumption = (Boolean) enclosingQuery.getLetDeclarations().get(destinationSubsumptionKey);
 
     }
 
@@ -79,6 +82,9 @@ public class RelRestriction extends LeafClause {
         whereClause.getLetKeys().add(relTypeKey);
         whereClause.getLetKeys().add(sourceSpecKey);
         whereClause.getLetKeys().add(viewCoordinateKey);
+        whereClause.getLetKeys().add(destinationSubsumptionKey);
+        whereClause.getLetKeys().add(relTypeSubsumptionKey);
+        System.out.println("Where clause size: " + whereClause.getLetKeys().size());
         return whereClause;
 
     }
@@ -95,6 +101,14 @@ public class RelRestriction extends LeafClause {
         } else {
             this.viewCoordinate = (ViewCoordinate) this.enclosingQuery.getLetDeclarations().get(viewCoordinateKey);
         }
+        //The defaults are relTypeSubsumption and destinationSubsumption are true.
+        if (this.relTypeSubsumption == null) {
+            this.relTypeSubsumption = true;
+        }
+        if (this.destinationSubsumption == null) {
+            this.destinationSubsumption = true;
+        }
+
         NativeIdSetBI relTypeSet = new ConcurrentBitSet();
         relTypeSet.add(this.relType.getNid());
         if (this.relTypeSubsumption) {

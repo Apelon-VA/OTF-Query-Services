@@ -57,7 +57,7 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 @Path("query-service")
 public class AlternativeIdResource {
     private static IndexerBI  sctIdIndexer;
-    private static int snomedAssemblageNid = Integer.MIN_VALUE;
+    private static volatile int snomedAssemblageNid = Integer.MIN_VALUE;
     
     static {
         List<IndexerBI> lookers            = Hk2Looker.get().getAllServices(IndexerBI.class);

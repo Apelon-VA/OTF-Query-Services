@@ -18,13 +18,11 @@ package org.ihtsdo.otf.query.implementation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
@@ -63,12 +61,11 @@ public class ForCollection {
     }
     ForCollectionContents forCollection = ForCollectionContents.CONCEPT;
     List<UUID> customCollection = new ArrayList<>();
-    public NativeIdSetBI customCollectionOfNids;
 
     public ForCollection() {
-
+        
     }
-
+    
     /**
      *
      * @param forCollectionSet
@@ -84,8 +81,11 @@ public class ForCollection {
             case CONCEPT:
                 return ts.getAllConceptNids();
             case CUSTOM:
-                //Is handled in LetMap
-                return null;
+                ConcurrentBitSet cbs = new ConcurrentBitSet();
+                for (UUID uuid : customCollection) {
+                    cbs.add(ts.getNidForUuids(uuid));
+                }
+                return cbs;
             default:
                 throw new UnsupportedOperationException("Can't handle: " + forCollection);
         }
@@ -128,5 +128,6 @@ public class ForCollection {
      */
     public void setCustomCollection(List<UUID> customCollection) {
         this.customCollection = customCollection;
+        this.forCollection = ForCollectionContents.CUSTOM;
     }
 }

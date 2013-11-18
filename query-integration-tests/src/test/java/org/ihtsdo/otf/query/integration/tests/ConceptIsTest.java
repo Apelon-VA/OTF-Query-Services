@@ -23,8 +23,7 @@ import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Creates a test for the
- * <code>ConceptIs</code> clause.
+ * Creates a test for the <code>ConceptIs</code> clause.
  *
  * @author dylangrald
  */
@@ -41,12 +40,12 @@ public class ConceptIsTest extends QueryClauseTest {
             @Override
             public void Let() throws IOException {
                 let("motion", Snomed.MOTION);
-//                let("v2", vc.getViewCoordinate());
+                let("v2", vc.getViewCoordinate());
             }
 
             @Override
             public Clause Where() {
-                return Or(ConceptIs("motion"));
+                return Union(ConceptIs("motion"));
             }
         };
     }

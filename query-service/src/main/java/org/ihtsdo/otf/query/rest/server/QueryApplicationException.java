@@ -20,8 +20,9 @@ package org.ihtsdo.otf.query.rest.server;
  * @author dylangrald
  */
 import java.io.Serializable;
+import javax.ws.rs.WebApplicationException;
 
-public class QueryApplicationException extends Exception implements Serializable {
+public class QueryApplicationException extends WebApplicationException implements Serializable {
 
     private static final long serialVersionUID = 1L;
     StackTraceElement[] otherST;
@@ -38,7 +39,7 @@ public class QueryApplicationException extends Exception implements Serializable
         super();
         this.errorType = type;
     }
-
+    
     public QueryApplicationException(HttpErrorType type, String reason) {
         super();
         this.errorType = type;
@@ -46,11 +47,7 @@ public class QueryApplicationException extends Exception implements Serializable
     }
 
     public QueryApplicationException(String msg) {
-        super(msg);
-    }
-
-    public QueryApplicationException(String msg, Exception e) {
-        super(msg, e);
+        super();
     }
 
     public QueryApplicationException(HttpErrorType type, String reason, Exception ve) {

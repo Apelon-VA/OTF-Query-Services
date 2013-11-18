@@ -39,7 +39,6 @@ public class NotTest extends QueryClauseTest {
             @Override
             protected NativeIdSetBI For() throws IOException {
                 return Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
-//                return Ts.get().getAllConceptNids();
 
             }
 

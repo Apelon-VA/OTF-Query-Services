@@ -16,8 +16,6 @@
 package org.ihtsdo.otf.query.implementation.clauses;
 
 import java.io.IOException;
-import java.util.EnumSet;
-import org.ihtsdo.otf.query.implementation.ClauseComputeType;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
@@ -25,6 +23,7 @@ import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  * Calculates the active descriptions that match the specified Java Regular
@@ -33,24 +32,17 @@ import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
  * @author dylangrald
  */
 public class DescriptionActiveRegexMatch extends DescriptionRegexMatch {
-    
+
     public DescriptionActiveRegexMatch(Query enclosingQuery, String regexKey, String viewCoordinateKey) {
         super(enclosingQuery, regexKey, viewCoordinateKey);
     }
 
     @Override
-    public EnumSet<ClauseComputeType> getComputePhases() {
-        return ITERATION;
-    }
-
-    @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-        for (DescriptionChronicleBI dc : conceptVersion.getDescriptionsActive()) {
-            if (cache.contains(dc.getNid())) {
-                for (DescriptionVersionBI dv : dc.getVersions()) {
-                    if (dv.getText().matches(regex) && dv.isActive()) {
-                        addToResultsCache((dv.getNid()));
-                    }
+        for (DescriptionChronicleBI dc : conceptVersion.getDescriptions()) {
+            for (DescriptionVersionBI dv : dc.getVersions()) {
+                if (dv.getText().matches(regex) && Ts.get().getComponentVersion(viewCoordinate, dv.getNid()).isActive()) {
+                    addToResultsCache((dv.getNid()));
                 }
             }
         }
