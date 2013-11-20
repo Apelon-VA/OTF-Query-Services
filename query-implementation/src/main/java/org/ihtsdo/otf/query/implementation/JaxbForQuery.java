@@ -32,6 +32,7 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.description.SimpleDescriptionVersionDdo;
 import org.ihtsdo.otf.tcc.model.cc.LanguageSortPrefs;
 
 /**
@@ -55,7 +56,8 @@ public class JaxbForQuery {
                     ResultList.class,
                     DescriptionChronicleDdo.class,
                     DescriptionVersionDdo.class,
-                    ConceptChronicleDdo.class, 
+                    ConceptChronicleDdo.class,
+                    SimpleDescriptionVersionDdo.class,
                     SimpleViewCoordinate.class,
                     SimplePath.class,
                     SimplePosition.class, 
