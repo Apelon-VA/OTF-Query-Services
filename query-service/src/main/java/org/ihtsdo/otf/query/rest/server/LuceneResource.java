@@ -38,6 +38,7 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
 import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
+import com.wordnik.swagger.annotations.*;
 
 /**
  * Creates a simple REST call for a Lucene search of descriptions. Encode the
@@ -46,7 +47,9 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
  *
  * @author dylangrald
  */
+@Api(value = "/lucene", description = "Lucene based queries")
 @Path("query-service/lucene")
+@Produces({"application/json", "application/xml"})
 public class LuceneResource {
 
     private static IndexerBI descriptionIndexer;
@@ -72,6 +75,11 @@ public class LuceneResource {
     @GET
     @Path("{query}")
     @Produces("text/plain")
+    @ApiOperation(value = "Find concepts by description", notes = "TODO More notes about this method", response = String.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 400, message = "TODO Invalid pet ID supplied"),
+        @ApiResponse(code = 404, message = "TODO Pet not found")
+    })
     public String doQuery(@PathParam("query") String queryText) throws IOException, JAXBException, Exception {
         String queryString = "query: " + queryText;
         System.out.println("Received: \n   " + queryString);
