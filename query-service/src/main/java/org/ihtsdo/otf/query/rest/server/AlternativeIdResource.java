@@ -67,7 +67,7 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
  *
  * @author kec
  */
-@Path("query-service")
+@Path("/")
 public class AlternativeIdResource {
 
     private static IndexerBI sctIdIndexer;

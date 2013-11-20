@@ -39,7 +39,7 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
  *
  * @author dylangrald
  */
-@Path("query-service/regex")
+@Path("/regex")
 public class RegexResource {
 
     @GET

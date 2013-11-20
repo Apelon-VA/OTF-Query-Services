@@ -19,7 +19,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
     </servlet>
     <servlet-mapping>
         <servlet-name>OTF Jersey REST server</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/query-service/*</url-pattern>
     </servlet-mapping>
     <display-name>OTF Query Service</display-name>
     <listener>

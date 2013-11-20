@@ -48,7 +48,7 @@ import com.wordnik.swagger.annotations.*;
  * @author dylangrald
  */
 @Api(value = "/lucene", description = "Lucene based queries")
-@Path("query-service/lucene")
+@Path("/lucene")
 @Produces({"application/json", "application/xml"})
 public class LuceneResource {
 

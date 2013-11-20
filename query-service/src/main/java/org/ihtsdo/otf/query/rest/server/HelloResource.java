@@ -28,7 +28,7 @@ import javax.ws.rs.Produces;
  * "hello bob."
  * @author kec
  */
-@Path("query-service/hello")
+@Path("/hello")
 public class HelloResource {
 
     /**
