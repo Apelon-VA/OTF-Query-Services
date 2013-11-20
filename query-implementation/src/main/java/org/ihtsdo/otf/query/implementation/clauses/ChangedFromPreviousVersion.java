@@ -75,6 +75,7 @@ public class ChangedFromPreviousVersion extends LeafClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
+        System.out.println(incomingPossibleComponents.size());
         this.cache = incomingPossibleComponents;
         return incomingPossibleComponents;
     }
@@ -82,8 +83,8 @@ public class ChangedFromPreviousVersion extends LeafClause {
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
         for (DescriptionVersionBI desc : conceptVersion.getDescriptionsActive()) {
-            if(desc.getVersion(previousViewCoordinate) != null){
-                if(!desc.getVersion(previousViewCoordinate).equals(desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest()))){
+            if (desc.getVersion(previousViewCoordinate) != null) {
+                if (!desc.getVersion(previousViewCoordinate).equals(desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest()))) {
                     getResultsCache().add(desc.getConceptNid());
                 }
             }

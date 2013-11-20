@@ -45,7 +45,7 @@ public class RelRestriction2Test extends QueryClauseTest {
 
             @Override
             public Clause Where() {
-                return Or(RelRestriction("Acceleration", "Is a", "Motion", false));
+                return Or(RelRestriction("Acceleration", "Is a", "Motion", "false"));
             }
         };
     }

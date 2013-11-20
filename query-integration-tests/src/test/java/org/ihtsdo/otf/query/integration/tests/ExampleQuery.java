@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.otf.query.implementation;
+package org.ihtsdo.otf.query.integration.tests;
 
 import java.io.IOException;
-import javax.xml.bind.JAXBException;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.query.implementation.Clause;
+import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
- * Finds concepts with descriptions that match the input string using Lucene.
  *
- * @author dylangrald
+ * @author kec
  */
-public class LuceneQueryFromJaxb extends Query {
+public class ExampleQuery extends Query {
 
-    private String queryText;
-
-    public LuceneQueryFromJaxb(String queryText) throws JAXBException, IOException {
-        super();
-        this.queryText = queryText;
+    public ExampleQuery(ViewCoordinate viewCoordinate) {
+        super(viewCoordinate);
     }
 
     @Override
@@ -41,11 +40,11 @@ public class LuceneQueryFromJaxb extends Query {
 
     @Override
     public void Let() throws IOException {
-        let(queryText, queryText);
+        let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
     }
 
     @Override
     public Clause Where() {
-        return ConceptForComponent(DescriptionLuceneMatch(queryText));
+        return And(ConceptIsKindOf("allergic-asthma"));
     }
 }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ihtsdo.otf.query.integration.tests;
 
 import java.io.IOException;
@@ -22,6 +21,7 @@ import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
@@ -29,18 +29,25 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
  * @author dylangrald
  */
 public class DescriptionActiveRegexMatchTest extends QueryClauseTest {
-    
-    public DescriptionActiveRegexMatchTest(){
+
+    public DescriptionActiveRegexMatchTest() {
         this.q = new Query() {
 
             @Override
             protected NativeIdSetBI For() throws IOException {
-                return Ts.get().isChildOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+                return Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
             }
 
             @Override
             public void Let() throws IOException {
-                let("regex", ".*(physical force).*");
+                let("regex", ".*tion.*");
+                NativeIdSetBI kindOfSet = Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+                NativeIdSetItrBI iter = kindOfSet.getSetBitIterator();
+                StringBuilder forSet = new StringBuilder("");
+                while (iter.next()) {
+                    forSet.append(Ts.get().getComponent(iter.nid()).getPrimordialUuid().toString()).append(",");
+                }
+                let("Custom FOR set", forSet.toString());
             }
 
             @Override
@@ -49,5 +56,5 @@ public class DescriptionActiveRegexMatchTest extends QueryClauseTest {
             }
         };
     }
-    
+
 }

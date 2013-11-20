@@ -25,6 +25,7 @@ import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.QueryExample;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
+import org.ihtsdo.otf.query.integration.tests.rest.TermstoreChanges;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
@@ -43,6 +44,7 @@ import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.ddo.concept.component.description.DescriptionVersionDdo;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.junit.After;
@@ -129,6 +131,12 @@ public class QueryTest {
         ConceptIsTest test = new ConceptIsTest();
         NativeIdSetBI results = test.computeQuery();
         Assert.assertEquals(1, results.size());
+        for (Object o : test.q.returnDisplayObjects(results, ReturnTypes.DESCRIPTION_VERSION_PREFERRED)) {
+            DescriptionVersionDdo ddo = (DescriptionVersionDdo) o;
+            Assert.assertTrue(ddo.getText().equals("Motion"));
+            Assert.assertTrue(ddo.getComponentNid() == Ts.get().getConceptVersion(test.q.getViewCoordinate(), Snomed.MOTION.getNid()).getPreferredDescription().getNid());
+        }
+
     }
 
     @Test
@@ -460,8 +468,9 @@ public class QueryTest {
 
     @Test
     public void refsetContainsConceptTest() throws IOException, Exception {
-        this.addRefsetMember();
         System.out.println("RefsetContainsConcept test");
+        TermstoreChanges tc = new TermstoreChanges(StandardViewCoordinates.getSnomedInferredLatest());
+        tc.addRefsetMember();
         RefsetContainsConceptTest rccTest = new RefsetContainsConceptTest();
         NativeIdSetBI ids = rccTest.computeQuery();
         Assert.assertEquals(1, ids.size());
@@ -471,7 +480,8 @@ public class QueryTest {
     @Test
     public void refsetContainsStringTest() throws Exception {
         System.out.println("RefsetContainsString test");
-        this.addRefsetMember();
+        TermstoreChanges tc = new TermstoreChanges(StandardViewCoordinates.getSnomedInferredLatest());
+        tc.addRefsetMember();
         RefsetContainsStringTest rcsTest = new RefsetContainsStringTest();
         NativeIdSetBI ids = rcsTest.computeQuery();
         Assert.assertEquals(1, ids.size());
@@ -480,7 +490,8 @@ public class QueryTest {
     @Test
     public void refsetContainsKindOfConceptTest() throws Exception {
         System.out.println("RefsetContainsKindOfConcept test");
-        this.addRefsetMember();
+        TermstoreChanges tc = new TermstoreChanges(StandardViewCoordinates.getSnomedInferredLatest());
+        tc.addRefsetMember();
         RefsetContainsKindOfConceptTest rckocTest = new RefsetContainsKindOfConceptTest();
         NativeIdSetBI nids = rckocTest.computeQuery();
         Assert.assertEquals(1, nids.size());
@@ -533,100 +544,50 @@ public class QueryTest {
         NativeIdSetBI results1 = q1.compute();
         Assert.assertEquals(1, results1.size());
 
+        TermstoreChanges tc = new TermstoreChanges(StandardViewCoordinates.getSnomedInferredLatest());
+        
         for (DescriptionVersionBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.BARANYS_SIGN.getNid()).getDescriptionsActive()) {
-            this.setActiveStatus(desc, Status.INACTIVE);
+            tc.setActiveStatus(desc, Status.INACTIVE);
         }
         DescriptionActiveLuceneMatchTest test = new DescriptionActiveLuceneMatchTest();
         NativeIdSetBI results2 = test.computeQuery();
         Assert.assertEquals(results2.size(), results1.size() - 1);
         for (DescriptionChronicleBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.BARANYS_SIGN.getNid()).getDescriptions()) {
             DescriptionVersionBI descVersion = desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest());
-            this.setActiveStatus(descVersion, Status.ACTIVE);
+            tc.setActiveStatus(descVersion, Status.ACTIVE);
         }
     }
 
-    /**
-     * TODO
-     * @throws IOException
-     * @throws Exception 
-     */
     @Test
     public void ChangeFromPreviousVersionTest() throws IOException, Exception {
         System.out.println("Changed from previous version test");
         ChangedFromPreviousVersionTest test = new ChangedFromPreviousVersionTest();
         SetViewCoordinate svc = new SetViewCoordinate(2010, 1, 31, 0, 0);
         ViewCoordinate previousVC = svc.getViewCoordinate();
-        this.modifyDesc(previousVC, "Motion physical force");
+        TermstoreChanges tc = new TermstoreChanges(previousVC);
+        tc.modifyDesc("Admin statuses", Snomed.ADMINISTRATIVE_STATUSES.getNid());
         NativeIdSetBI results2 = test.computeQuery();
         for (Object o : test.q.returnDisplayObjects(results2, ReturnTypes.DESCRIPTION_VERSION_FSN)) {
             System.out.println(o);
         }
-        Assert.assertEquals(2, results2.size());
-        this.modifyDesc(previousVC, "Motion (physical force)");
+        Assert.assertEquals(1, results2.size());
     }
 
     @Test
     public void DescriptionActiveRegexMatchTest() throws IOException, ContradictionException, InvalidCAB, Exception {
         System.out.println("Description active regex match test");
-        for (DescriptionVersionBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.CENTRIFUGAL_FORCE.getNid()).getDescriptionsActive()) {
-            this.setActiveStatus(desc, Status.INACTIVE);
+        TermstoreChanges tc = new TermstoreChanges(StandardViewCoordinates.getSnomedInferredLatest());
+        for (DescriptionVersionBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.ACCELERATION.getNid()).getDescriptionsActive()) {
+            tc.setActiveStatus(desc, Status.INACTIVE);
         }
         DescriptionActiveRegexMatchTest test = new DescriptionActiveRegexMatchTest();
         for (Object o : test.q.returnDisplayObjects(test.computeQuery(), ReturnTypes.COMPONENT)) {
             System.out.println(o);
         }
-        Assert.assertEquals(test.q.getForSet().size(), test.computeQuery().size());
-        for (DescriptionChronicleBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.CENTRIFUGAL_FORCE.getNid()).getDescriptions()) {
+        Assert.assertEquals(3, test.computeQuery().size());
+        for (DescriptionChronicleBI desc : Ts.get().getConceptVersion(StandardViewCoordinates.getSnomedInferredLatest(), Snomed.ACCELERATION.getNid()).getDescriptions()) {
             DescriptionVersionBI descVersion = desc.getVersion(StandardViewCoordinates.getSnomedInferredLatest());
-            this.setActiveStatus(descVersion, Status.ACTIVE);
+            tc.setActiveStatus(descVersion, Status.ACTIVE);
         }
-    }
-
-    public static void setActiveStatus(DescriptionVersionBI desc, Status status) throws IOException, ContradictionException, InvalidCAB {
-        ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
-        DescriptionCAB descCAB = desc.makeBlueprint(vc, IdDirective.PRESERVE, RefexDirective.EXCLUDE);
-        descCAB.setStatus(status);
-        int authorNid = TermAux.USER.getLenient().getConceptNid();
-        int editPathNid = TermAux.SNOMED_CORE.getLenient().getConceptNid();
-        EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
-        TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, vc);
-        DescriptionChronicleBI descChronicle = tb.construct(descCAB);
-        Ts.get().addUncommitted(desc.getEnclosingConcept().getVersion(vc));
-        Ts.get().commit();
-        System.out.println(descChronicle.getVersion(vc));
-    }
-
-    public void addRefsetMember() throws IOException {
-        try {
-            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
-            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
-            int authorNid = TermAux.USER.getLenient().getConceptNid();
-            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
-            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
-            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, StandardViewCoordinates.getSnomedInferredLatest());
-            RefexChronicleBI rc = tb.construct(refex);
-            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
-            Ts.get().commit();
-
-        } catch (InvalidCAB ex) {
-            Logger.getLogger(QueryTest.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } catch (ContradictionException ex) {
-            Logger.getLogger(QueryTest.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void modifyDesc(ViewCoordinate vc, String text) throws IOException, ContradictionException, InvalidCAB {
-        DescriptionVersionBI desc = Ts.get().getConceptVersion(vc, Snomed.MOTION.getNid()).getFullySpecifiedDescription();
-        DescriptionCAB descCAB = desc.makeBlueprint(vc, IdDirective.PRESERVE, RefexDirective.EXCLUDE);
-        descCAB.setText(text);
-        int authorNid = TermAux.USER.getLenient().getConceptNid();
-        int editPathNid = TermAux.SNOMED_CORE.getLenient().getConceptNid();
-        EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
-        TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, vc);
-        DescriptionChronicleBI descChronicle = tb.construct(descCAB);
-        Ts.get().addUncommitted(desc.getEnclosingConcept().getVersion(vc));
-        Ts.get().commit();
     }
 }

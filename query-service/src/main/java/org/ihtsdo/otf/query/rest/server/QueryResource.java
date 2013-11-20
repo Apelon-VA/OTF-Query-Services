@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -30,10 +29,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
-import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
@@ -60,6 +57,11 @@ public class QueryResource {
                 + "RETURN: " + returnValue;
         System.out.println("Received: \n   " + queryString);
 
+        if (letValue == null && whereValue == null) {
+            return ("Enter the required LET and WHERE parameters. See the documentation at "
+                    + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html for more information.");
+        }
+
         QueryFromJaxb query;
         try {
             query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
@@ -68,30 +70,26 @@ public class QueryResource {
             throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
         }
 
-        ViewCoordinate vc = null;
         try {
-            vc = query.getViewCoordinate();
+            query.getViewCoordinate();
         } catch (NullPointerException e) {
             throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed VIEWPOINT value.");
         }
 
-        NativeIdSetBI forSet = null;
         try {
             query.getForCollection();
         } catch (NullPointerException e) {
             throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed FOR value.");
         }
 
-        HashMap<String, Object> letMap = null;
         try {
-            letMap = query.getLetDeclarations();
+            query.getLetDeclarations();
         } catch (NullPointerException e) {
             throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed LET value.");
         }
 
-        Clause where = null;
         try {
-            where = query.getRootClause();
+            query.getRootClause();
         } catch (NullPointerException e) {
             throw new QueryApplicationException(HttpErrorType.ERROR422, "Malformed WHERE value.");
         }
@@ -143,7 +141,7 @@ public class QueryResource {
             JaxbForQuery.get().createMarshaller().marshal(resultList, writer);
             return writer.toString();
         } else {
-            //The default result type is DESCRIPTION_VERSION_FSN
+            //The default return type is DESCRIPTION_VERSION_FSN
             ArrayList<Object> objectList = query.returnDisplayObjects(resultSet, ReturnTypes.DESCRIPTION_VERSION_FSN);
 
             ResultList resultList = new ResultList();

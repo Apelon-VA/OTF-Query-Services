@@ -26,15 +26,13 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
-import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 /**
- * Calculates descriptions that match the specified Java Regular Expression. Very
- * slow when iterating over a large
- * <code>For</code> set.
+ * Calculates descriptions that match the specified Java Regular Expression.
+ * Very slow when iterating over a large <code>For</code> set.
  *
  * @author kec
  */

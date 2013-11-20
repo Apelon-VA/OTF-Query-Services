@@ -248,10 +248,14 @@ public abstract class Query {
 
             case DESCRIPTION_VERSION_PREFERRED:
                 while (iter.next()) {
-                    ComponentVersionBI cv = Ts.get().getComponent(iter.nid()).getVersion(vc);
+                    int componentNid = iter.nid();
+                    ComponentVersionBI cv = Ts.get().getComponent(componentNid).getVersion(vc);
                     if (cv != null) {
-                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, iter.nid()).getPreferredDescription();
-                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(iter.nid()), VersionPolicy.ACTIVE_VERSIONS,
+                        if (!(cv instanceof ConceptVersionBI)) {
+                            componentNid = Ts.get().getComponent(componentNid).getEnclosingConcept().getConceptNid();
+                        }
+                        DescriptionChronicleBI desc = Ts.get().getConceptVersion(vc, componentNid).getPreferredDescription();
+                        ConceptChronicleDdo cc = new ConceptChronicleDdo(Ts.get().getSnapshot(vc), Ts.get().getConcept(componentNid), VersionPolicy.ACTIVE_VERSIONS,
                                 RefexPolicy.REFEX_MEMBERS_AND_REFSET_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
                         DescriptionChronicleDdo descChronicle = new DescriptionChronicleDdo(Ts.get().getSnapshot(vc), cc, desc);
                         DescriptionVersionBI descVersionBI = desc.getVersion(vc);
@@ -478,12 +482,12 @@ public abstract class Query {
         return new DescriptionActiveLuceneMatch(this, queryTextKey, this.currentViewCoordinateKey);
     }
 
-    protected DescriptionLuceneMatch DescriptionLuceneMatch(String queryTextKey) {
-        return new DescriptionLuceneMatch(this, queryTextKey, this.currentViewCoordinateKey);
+    protected DescriptionActiveLuceneMatch DescriptionActiveLuceneMatch(String queryTextKey, String viewCoordinateKey) {
+        return new DescriptionActiveLuceneMatch(this, queryTextKey, viewCoordinateKey);
     }
 
-    protected DescriptionLuceneMatch DescriptionActiveLuceneMatch(String queryTextKey, String viewCoordinateKey) {
-        return new DescriptionLuceneMatch(this, queryTextKey, viewCoordinateKey);
+    protected DescriptionLuceneMatch DescriptionLuceneMatch(String queryTextKey) {
+        return new DescriptionLuceneMatch(this, queryTextKey, this.currentViewCoordinateKey);
     }
 
     protected And And(Clause... clauses) {
@@ -515,20 +519,28 @@ public abstract class Query {
         return new RelType(this, relTypeKey, conceptSpecKey, viewCoordinateKey, subsumption);
     }
 
-    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, Boolean destinationSubsumption) {
-        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, destinationSubsumption, true);
-    }
-
-    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, String viewCoordinateKey) {
-        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, viewCoordinateKey, true, true);
-    }
-
     protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey) {
-        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, true, true);
+        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, null, null);
     }
 
-    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, Boolean destinationSubsumption, Boolean relTypeSubsumption) {
-        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, destinationSubsumption, relTypeSubsumption);
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, String key) {
+        if (this.letDeclarations.get(key) instanceof Boolean) {
+            return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, key, null);
+        } else {
+            return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, key, null, null);
+        }
+    }
+
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, String key1, String key2) {
+        if (this.letDeclarations.get(key2) instanceof Boolean) {
+            return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, this.currentViewCoordinateKey, key1, key2);
+        } else {
+            return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, key1, key2, null);
+        }
+    }
+
+    protected RelRestriction RelRestriction(String conceptSpecKey, String relTypeKey, String relRestrictionKey, String viewCoordinateKey, String relTypeSubsumptionKey, String targetSubsumptionKey) {
+        return new RelRestriction(this, conceptSpecKey, relTypeKey, relRestrictionKey, viewCoordinateKey, relTypeSubsumptionKey, targetSubsumptionKey);
     }
 
     protected RefsetContainsConcept RefsetContainsConcept(String refsetSpecKey, String conceptSpecKey) {

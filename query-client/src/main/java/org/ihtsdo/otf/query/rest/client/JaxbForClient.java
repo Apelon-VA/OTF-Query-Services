@@ -28,6 +28,8 @@ import org.ihtsdo.otf.jaxb.chronicle.api.SimpleViewCoordinate;
 import org.ihtsdo.otf.jaxb.object.display.ConceptChronicleDdo;
 import org.ihtsdo.otf.jaxb.object.display.DescriptionChronicleDdo;
 import org.ihtsdo.otf.jaxb.object.display.ResultList;
+import org.ihtsdo.otf.jaxb.object.display.SimpleDescriptionVersionDdo;
+import org.ihtsdo.otf.jaxb.object.display.SimpleVersionDdo;
 import org.ihtsdo.otf.jaxb.query.ForCollection;
 import org.ihtsdo.otf.jaxb.query.LetMap;
 import org.ihtsdo.otf.jaxb.query.ReturnTypes;
@@ -56,7 +58,9 @@ public class JaxbForClient {
                         Where.class, 
                         ResultList.class, 
                         ConceptChronicleDdo.class,
-                        DescriptionChronicleDdo.class);
+                        DescriptionChronicleDdo.class,
+                        SimpleVersionDdo.class,
+                        SimpleDescriptionVersionDdo.class);
             } catch (JAXBException ex) {
                 throw new RuntimeException(ex);
             }

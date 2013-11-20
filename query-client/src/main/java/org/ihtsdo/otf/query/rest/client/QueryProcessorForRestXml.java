@@ -76,6 +76,17 @@ public class QueryProcessorForRestXml {
         // specify the host and the path. 
         WebTarget target = client.target(host).path("query-service/query");
 
+        String viewpointXml = URLEncoder.encode(getXmlString(viewpoint), "UTF-8");
+        String forObjectString = URLEncoder.encode(getXmlString(forObject), "UTF-8");
+        String letMapString = URLEncoder.encode(getXmlString(letMap), "UTF-8");
+        String whereString = URLEncoder.encode(getXmlString(where), "UTF-8");
+        String returnTypeString = URLEncoder.encode(getXmlString(returnType), "UTF-8");
+
+        StringBuilder bi = new StringBuilder();
+        bi.append("VIEWPOINT=").append(viewpointXml).append("&FOR=").append(forObjectString).append("&LET=").append(letMapString).append("&WHERE=").append(whereString).append("&RETURN=").append(returnTypeString);
+
+        System.out.println("Query URL: ");
+        System.out.println(bi.toString());
 
         return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
                 queryParam("FOR", getXmlString(forObject)).
@@ -93,38 +104,12 @@ public class QueryProcessorForRestXml {
     public static String lucene(String queryText, String host) throws UnsupportedEncodingException, JAXBException {
         Client client = ClientBuilder.newClient();
 
-        WebTarget target = client.target(host).path("query-service/Lucene/query");
+        WebTarget target = client.target(host).path("query-service/lucene/");
 
         String encodedUrl = URLEncoder.encode(queryText, "UTF-8");
 
-        //Set return type
-        ReturnTypes returnType = ReturnTypes.DESCRIPTION_VERSION_FSN;
-
-        ForCollection forObject = new ForCollection();
-        forObject.setForCollectionString(ForCollectionContents.CONCEPT.name());
-
-        SimpleViewCoordinate viewpoint = ViewCoordinateExample.getSnomedInferredLatest();
-
-        LetMap letMap = new LetMap();
-        LetMap.Map.Entry entry = new LetMap.Map.Entry();
-        entry.setKey(encodedUrl);
-        entry.setValue(queryText);
-
-        Where where = new Where();
-        WhereClause descLuceneMatch = new WhereClause();
-        descLuceneMatch.setSemanticString(ClauseSemantic.DESCRIPTION_LUCENE_MATCH.name());
-        descLuceneMatch.getLetKeys().add(queryText);
-        where.setRootClause(descLuceneMatch);
-        WhereClause conceptForComponent = new WhereClause();
-        conceptForComponent.setSemanticString(ClauseSemantic.CONCEPT_FOR_COMPONENT.name());
-        where.setRootClause(conceptForComponent);
-
-        return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
-                queryParam("FOR", getXmlString(forObject)).
-                queryParam("LET", getXmlString(letMap)).
-                queryParam("WHERE", getXmlString(where)).
-                queryParam("RETURN", getXmlString(returnType)).
-                request(MediaType.TEXT_PLAIN).get(String.class);
+        return target.queryParam("Query string", encodedUrl)
+                .request(MediaType.TEXT_PLAIN).get(String.class);
     }
 
     public static String regex(String queryText) throws UnsupportedEncodingException, JAXBException {
@@ -134,40 +119,12 @@ public class QueryProcessorForRestXml {
     public static String regex(String queryText, String host) throws UnsupportedEncodingException, JAXBException {
         Client client = ClientBuilder.newClient();
 
-        WebTarget target = client.target(host).path("query-service/Regex/query");
+        WebTarget target = client.target(host).path("query-service/regex/");
 
         String encodedUrl = URLEncoder.encode(queryText, "UTF-8");
 
-        //Set return type
-        ReturnTypes returnType = ReturnTypes.DESCRIPTION_VERSION_FSN;
-
-        //Set ViewCoordinate
-        ForCollection forObject = new ForCollection();
-        forObject.setForCollectionString(ForCollectionContents.CONCEPT.name());
-
-        //Set ViewCoordinate
-        SimpleViewCoordinate viewpoint = ViewCoordinateExample.getSnomedInferredLatest();
-
-        //Set let map
-        LetMap letMap = new LetMap();
-        LetMap.Map.Entry entry = new LetMap.Map.Entry();
-        entry.setKey(encodedUrl);
-        entry.setValue(queryText);
-
-        //Set the Where clause
-        Where where = new Where();
-        WhereClause descRegexMatch = new WhereClause();
-        descRegexMatch.setSemanticString(ClauseSemantic.DESCRIPTION_REGEX_MATCH.name());
-        descRegexMatch.getLetKeys().add(queryText);
-        where.setRootClause(descRegexMatch);
-
-
-        return target.queryParam("VIEWPOINT", getXmlString(viewpoint)).
-                queryParam("FOR", getXmlString(forObject)).
-                queryParam("LET", getXmlString(letMap)).
-                queryParam("WHERE", getXmlString(where)).
-                queryParam("RETURN", getXmlString(returnType)).
-                request(MediaType.TEXT_PLAIN).get(String.class);
+        return target.queryParam("Query string", encodedUrl)
+                .request(MediaType.TEXT_PLAIN).get(String.class);
     }
 
     private static String getXmlString(Object obj) throws JAXBException {
