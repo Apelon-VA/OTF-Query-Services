@@ -67,14 +67,14 @@ public class SctidUuidTest extends JerseyTest {
 
     @Test
     public void runUuidTest() {
-        String resultString = target("uuid/285649006").
+        String resultString = target("alternate-id/uuid/285649006").
                 request(MediaType.TEXT_PLAIN).get(String.class);
         assertEquals("2b684fe1-8baf-34ef-9d2a-df03142c915a", resultString);
     }
 
     @Test
     public void runSctidTest() {
-        String resultString = target("sctid/2b684fe1-8baf-34ef-9d2a-df03142c915a").
+        String resultString = target("alternate-id/sctid/2b684fe1-8baf-34ef-9d2a-df03142c915a").
                 request(MediaType.TEXT_PLAIN).get(String.class);
         assertEquals("285649006", resultString);
 
@@ -82,19 +82,19 @@ public class SctidUuidTest extends JerseyTest {
 
     @Test
     public void runSctidTestRefset() {
-        String resultString = target("uuid/447566000").request(MediaType.TEXT_PLAIN).get(String.class);
+        String resultString = target("alternate-id/uuid/447566000").request(MediaType.TEXT_PLAIN).get(String.class);
         assertEquals("c259d808-8011-3772-bece-b4fbde18d375", resultString);
     }
 
     @Test
     public void runNullSctidTest() {
-        String resultString = target("sctid").request(MediaType.TEXT_PLAIN).get(String.class);
+        String resultString = target("alternate-id/sctid").request(MediaType.TEXT_PLAIN).get(String.class);
         assertEquals("Add the UUID to the end of the URL", resultString);
     }
 
     @Test
     public void runNullUUIDTest() {
-        String resultString = target("uuid").request(MediaType.TEXT_PLAIN).get(String.class);
+        String resultString = target("alternate-id/uuid").request(MediaType.TEXT_PLAIN).get(String.class);
         assertEquals("Add the SNOMED ID to the end of the URL", resultString);
     }
 }

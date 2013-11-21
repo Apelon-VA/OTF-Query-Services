@@ -34,7 +34,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
         </init-param>
         <init-param>
             <param-name>swagger.api.basepath</param-name>
-            <param-value>api.snomedtools.com</param-value>
+            <param-value>http://localhost:8080/otf/query-service</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>

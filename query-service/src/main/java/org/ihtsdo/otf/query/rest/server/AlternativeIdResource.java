@@ -18,6 +18,8 @@ package org.ihtsdo.otf.query.rest.server;
 //~--- non-JDK imports --------------------------------------------------------
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
 import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 
@@ -53,8 +55,8 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
  *
  * @author kec
  */
-@Api(value = "/", description = "Retrieve component UUID from input SCTID and vice-versa.")
-@Path("/")
+@Api(value = "/alternate-id", description = "Retrieve component UUID from input SCTID and vice-versa.")
+@Path("/alternate-id")
 @Produces({"text/plain"})
 public class AlternativeIdResource {
 
@@ -77,6 +79,9 @@ public class AlternativeIdResource {
     @Path("/uuid/{id}")
     @Produces("text/plain")
     @ApiOperation(value = "Find UUID from SNOMED id", response = String.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 422, message = "No UUIDs found for SCTID")
+    })
     public String getUuidFromSctid(@PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting UUID for: " + id);
         System.out.println("SCTID indexer: " + sctIdIndexer);
@@ -89,9 +94,9 @@ public class AlternativeIdResource {
         System.out.println("result: " + result);
 
         if (!result.isEmpty()) {
-            ComponentChronicleBI cc = Ts.get().getComponent(result.get(0).nid);
+            ComponentChronicleBI cc = ts.getComponent(result.get(0).nid);
             RefexChronicleBI rx = (RefexChronicleBI) cc;
-            UUID uuid = Ts.get().getUuidPrimordialForNid(rx.getReferencedComponentNid());
+            UUID uuid = ts.getUuidPrimordialForNid(rx.getReferencedComponentNid());
             return uuid.toString();
         }
         return "no entry found";
@@ -115,6 +120,9 @@ public class AlternativeIdResource {
     @Path("/sctid/{id}")
     @Produces("text/plain")
     @ApiOperation(value = "Find SNOMED id from UUID", response = String.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 422, message = "No SCTIDs found for UUID")
+    })
     public String getSctidFromUuid(@PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting sctid for: " + id);
         if (snomedAssemblageNid == Integer.MIN_VALUE) {
@@ -127,7 +135,7 @@ public class AlternativeIdResource {
             }
         }
 
-        ComponentChronicleBI<?> component = Ts.get().getComponent(UUID.fromString(id));
+        ComponentChronicleBI<?> component = ts.getComponent(UUID.fromString(id));
 
         for (RefexChronicleBI<?> annotation : component.getAnnotations()) {
             if (annotation.getAssemblageNid() == snomedAssemblageNid) {

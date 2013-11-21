@@ -619,7 +619,7 @@ public class RestQueryTest extends JerseyTest {
         String whereXml = getXmlString(ctx, where);
 
         //Print the url
-        StringBuilder urlBuilder = new StringBuilder("{default-host}/otf/query?");
+        StringBuilder urlBuilder = new StringBuilder("{default-host}/otf/query-service/query?");
 
         urlBuilder.append("VIEWPOINT=").append(
                 "&FOR=").append(URLEncoder.encode(forXml, "UTF-8")).append(
