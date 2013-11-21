@@ -68,7 +68,6 @@ import org.ihtsdo.otf.query.integration.tests.RelRestrictionTest;
 import org.ihtsdo.otf.query.integration.tests.RelTypeTest;
 import org.ihtsdo.otf.query.integration.tests.SetViewCoordinate;
 import org.ihtsdo.otf.query.integration.tests.XorTest;
-import org.ihtsdo.otf.query.rest.server.HttpErrorType;
 import org.ihtsdo.otf.query.rest.server.LuceneResource;
 import org.ihtsdo.otf.query.rest.server.QueryApplicationException;
 import org.ihtsdo.otf.query.rest.server.QueryExceptionMapper;
@@ -129,7 +128,7 @@ public class RestQueryTest extends JerseyTest {
 
     @Test
     public void nullParamsTest() {
-        String resultString = target("query-service/query").
+        String resultString = target("query").
                 request(MediaType.TEXT_PLAIN).get(String.class);
         Assert.assertEquals("Enter the required LET and WHERE parameters. See the documentation at "
                 + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html for more information.", resultString);
@@ -157,7 +156,7 @@ public class RestQueryTest extends JerseyTest {
 
             String whereXml = getXmlString(ctx, where);
 
-            final String resultString = target("query-service/query").
+            final String resultString = target("query").
                     queryParam("VIEWPOINT", viewCoordinateXml).
                     queryParam("FOR", forXml).
                     queryParam("LET", letMapXml).
@@ -184,7 +183,7 @@ public class RestQueryTest extends JerseyTest {
         String where = "%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Aclause+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22+xmlns%3Ans4%3D%22http%3A%2F%2Fdisplay.object.jaxb.otf.ihtsdo.org%22+xmlns%3Ans3%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3Cchildren%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3ECurrent+view+coordinate%3C%2FletKeys%3E%3CsemanticString%3ECONCEPT_IS%3C%2FsemanticString%3E%3C%2Fchildren%3E%3CsemanticString%3EOR%3C%2FsemanticString%3E%3C%2Fns2%3Aclause%3E";
         String resultString = "";
         try {
-            resultString = target("query-service/query").
+            resultString = target("query").
                     queryParam("VIEWPOINT", viewPoint).
                     queryParam("FOR", forSet).
                     queryParam("LET", URLDecoder.decode(letMap, "UTF-8")).
@@ -391,7 +390,7 @@ public class RestQueryTest extends JerseyTest {
 
         String whereXml = getXmlString(ctx, where);
 
-        final String resultString = target("query-service/query").
+        final String resultString = target("query").
                 queryParam("VIEWPOINT", "null").
                 queryParam("FOR", forSet).
                 queryParam("LET", letMapXml).
@@ -481,7 +480,7 @@ public class RestQueryTest extends JerseyTest {
 
         tc.modifyDesc("Admin status", Snomed.ADMINISTRATIVE_STATUSES.getNid());
         
-        final String resultString = target("query-service/query").
+        final String resultString = target("query").
                 queryParam("VIEWPOINT", "null").
                 queryParam("FOR", forSet).
                 queryParam("LET", letMapXml).
@@ -522,7 +521,7 @@ public class RestQueryTest extends JerseyTest {
 
         System.out.println(url);
 
-        String resultString = target("query-service/query" + url).
+        String resultString = target("query" + url).
                 request(MediaType.TEXT_PLAIN).get(String.class);
         Assert.assertEquals("Enter the required LET and WHERE parameters. See the documentation at "
                 + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html for more information.", resultString);
@@ -530,7 +529,7 @@ public class RestQueryTest extends JerseyTest {
 
 //    @Test
 //    public void RelRestrictionNullBooleansTest2() {
-//        String url = "query-service/query?VIEWPOINT=&FOR=&LET=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Eacceleration%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EAcceleration+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E6ef49616-e2c7-3557-b7f1-456a2c5a5e54%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Eis+a%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EIs+a+%28attribute%29%3C%2Fdescription%3E%3Cuuid%3Ec93a30b9-ba77-3adb-a9b8-4589c9f8fb25%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMotion+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Efalse%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22xs%3Aboolean%22+xmlns%3Axs%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3Efalse%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E&WHERE=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Awhere+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3CrootClause%3E%3CletKeys%3Eacceleration%3C%2FletKeys%3E%3CletKeys%3Eis+a%3C%2FletKeys%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3Efalse%3C%2FletKeys%3E%3CsemanticString%3EREL_RESTRICTION%3C%2FsemanticString%3E%3C%2FrootClause%3E%3C%2Fns2%3Awhere%3E&RETURN=NIDS";
+//        String url = "query?VIEWPOINT=&FOR=&LET=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Eacceleration%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EAcceleration+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E6ef49616-e2c7-3557-b7f1-456a2c5a5e54%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Eis+a%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EIs+a+%28attribute%29%3C%2Fdescription%3E%3Cuuid%3Ec93a30b9-ba77-3adb-a9b8-4589c9f8fb25%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMotion+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Efalse%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22xs%3Aboolean%22+xmlns%3Axs%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3Efalse%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E&WHERE=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Awhere+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3CrootClause%3E%3CletKeys%3Eacceleration%3C%2FletKeys%3E%3CletKeys%3Eis+a%3C%2FletKeys%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3Efalse%3C%2FletKeys%3E%3CsemanticString%3EREL_RESTRICTION%3C%2FsemanticString%3E%3C%2FrootClause%3E%3C%2Fns2%3Awhere%3E&RETURN=NIDS";
 //        String resultString = target(url).
 //                request(MediaType.TEXT_PLAIN).get(String.class);
 //        NativeIdSetBI results = getNidSet(resultString);
@@ -545,7 +544,7 @@ public class RestQueryTest extends JerseyTest {
         String letMapXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Eacceleration%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EAcceleration+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E6ef49616-e2c7-3557-b7f1-456a2c5a5e54%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Eis+a%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EIs+a+%28attribute%29%3C%2Fdescription%3E%3Cuuid%3Ec93a30b9-ba77-3adb-a9b8-4589c9f8fb25%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMotion+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Efalse%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22xs%3Aboolean%22+xmlns%3Axs%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3Efalse%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E", "UTF-8");
         String whereXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Awhere+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3CrootClause%3E%3CletKeys%3Eacceleration%3C%2FletKeys%3E%3CletKeys%3Eis+a%3C%2FletKeys%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3Efalse%3C%2FletKeys%3E%3CsemanticString%3EREL_RESTRICTION%3C%2FsemanticString%3E%3C%2FrootClause%3E%3C%2Fns2%3Awhere%3E", "UTF-8");
 
-        final String resultString = target("query-service/query").
+        final String resultString = target("query").
                 queryParam("VIEWPOINT", "null").
                 queryParam("FOR", "null").
                 queryParam("LET", letMapXml).
@@ -620,7 +619,7 @@ public class RestQueryTest extends JerseyTest {
         String whereXml = getXmlString(ctx, where);
 
         //Print the url
-        StringBuilder urlBuilder = new StringBuilder("{default-host}/otf/query-service/query?");
+        StringBuilder urlBuilder = new StringBuilder("{default-host}/otf/query?");
 
         urlBuilder.append("VIEWPOINT=").append(
                 "&FOR=").append(URLEncoder.encode(forXml, "UTF-8")).append(
@@ -630,7 +629,7 @@ public class RestQueryTest extends JerseyTest {
 
         System.out.println("URL: " + urlBuilder.toString());
 
-        final String resultString = target("query-service/query").
+        final String resultString = target("query").
                 queryParam("VIEWPOINT", viewCoordinateXml).
                 queryParam("FOR", forXml).
                 queryParam("LET", letMapXml).
