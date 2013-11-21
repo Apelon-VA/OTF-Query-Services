@@ -68,13 +68,13 @@ public class LuceneQueryTest extends JerseyTest {
 
     @Test
     public void nullLuceneTest() {
-        String resultString = target("query-service/lucene").request(MediaType.TEXT_PLAIN).get(String.class);
+        String resultString = target("lucene").request(MediaType.TEXT_PLAIN).get(String.class);
         Assert.assertEquals("Put url encoded lucene query at the end of the url", resultString);
     }
     
     @Test
     public void testLucene(){
-        String resultString = target("query-service/lucene/oligophrenia").request(MediaType.TEXT_PLAIN).get(String.class);
+        String resultString = target("lucene/oligophrenia").request(MediaType.TEXT_PLAIN).get(String.class);
         System.out.println(resultString);
         NativeIdSetBI results = this.getNidSet(resultString);
         Assert.assertEquals(6, results.size());

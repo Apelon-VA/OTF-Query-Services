@@ -15,6 +15,10 @@
  */
 package org.ihtsdo.otf.query.rest.server;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
 import java.io.IOException;
 import java.io.StringReader;
@@ -40,11 +44,17 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
  *
  * @author kec
  */
+@Api(value = "/query", description = "Retrieve components based upon query criterion.")
 @Path("/query")
+@Produces({"text/plain"})
 public class QueryResource {
 
     @GET
     @Produces("text/plain")
+    @ApiOperation(value = "Find results from LET and WHERE objects.", response = String.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 422, message = "Invalid input objects"),
+        @ApiResponse(code = 414, message = "Request-URI Too Long.")})
     public String doQuery(HttpServletRequest request, @QueryParam("VIEWPOINT") String viewValue,
             @QueryParam("FOR") String forValue,
             @QueryParam("LET") String letValue,
@@ -65,9 +75,12 @@ public class QueryResource {
         QueryFromJaxb query;
         try {
             query = new QueryFromJaxb(viewValue, forValue, letValue, whereValue);
+
         } catch (NullPointerException e) {
-            Logger.getLogger(QueryResource.class.getName()).log(Level.INFO, "Database error.", e);
-            throw new QueryApplicationException(HttpErrorType.ERROR503, "Please contact system administrator.");
+            Logger.getLogger(QueryResource.class
+                    .getName()).log(Level.INFO, "Database error.", e);
+            throw new QueryApplicationException(HttpErrorType.ERROR503,
+                    "Please contact system administrator.");
         }
 
         try {

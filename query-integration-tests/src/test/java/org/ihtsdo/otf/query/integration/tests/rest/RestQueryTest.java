@@ -577,7 +577,7 @@ public class RestQueryTest extends JerseyTest {
 
         Assert.assertEquals(3, resultSet.size());
     }
-
+    
     public String getURLString(ViewCoordinate vc, ForCollection forCollection, LetMap let, Where where, ReturnTypes rt) throws JAXBException, UnsupportedEncodingException {
         StringBuilder bi = new StringBuilder();
         bi.append("?VIEW=");

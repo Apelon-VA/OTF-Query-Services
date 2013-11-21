@@ -47,9 +47,9 @@ import com.wordnik.swagger.annotations.*;
  *
  * @author dylangrald
  */
-@Api(value = "/lucene", description = "Lucene based queries")
+@Api(value = "/lucene", description = "Search description text using Lucene.")
 @Path("/lucene")
-@Produces({"application/json", "application/xml"})
+@Produces({"text/plain"})
 public class LuceneResource {
 
     private static IndexerBI descriptionIndexer;
@@ -73,13 +73,9 @@ public class LuceneResource {
     }
 
     @GET
-    @Path("{query}")
+    @Path("/{query}")
     @Produces("text/plain")
-    @ApiOperation(value = "Find concepts by description", notes = "TODO More notes about this method", response = String.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "TODO Invalid pet ID supplied"),
-        @ApiResponse(code = 404, message = "TODO Pet not found")
-    })
+    @ApiOperation(value = "Find concepts by description", response = String.class)
     public String doQuery(@PathParam("query") String queryText) throws IOException, JAXBException, Exception {
         String queryString = "query: " + queryText;
         System.out.println("Received: \n   " + queryString);

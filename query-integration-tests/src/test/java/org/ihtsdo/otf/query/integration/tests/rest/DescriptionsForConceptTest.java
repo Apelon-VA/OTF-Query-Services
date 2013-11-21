@@ -15,11 +15,13 @@
  */
 package org.ihtsdo.otf.query.integration.tests.rest;
 
+import java.util.StringTokenizer;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import junit.framework.Assert;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
-import org.ihtsdo.otf.query.rest.server.AlternativeIdResource;
+import org.ihtsdo.otf.query.rest.server.DescriptionsForConceptResource;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
 import org.junit.After;
@@ -27,24 +29,22 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 
 /**
- * Test converting UUIDs to SCTIDs and the reverse.
  *
- * @author kec
+ * @author dylangrald
  */
 @RunWith(BdbTestRunner.class)
 @BdbTestRunnerConfig()
-public class SctidUuidTest extends JerseyTest {
+public class DescriptionsForConceptTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(AlternativeIdResource.class);
+        return new ResourceConfig(DescriptionsForConceptResource.class);
     }
 
-    public SctidUuidTest() {
+    public DescriptionsForConceptTest() {
     }
 
     @BeforeClass
@@ -66,35 +66,39 @@ public class SctidUuidTest extends JerseyTest {
     }
 
     @Test
-    public void runUuidTest() {
-        String resultString = target("uuid/285649006").
+    public void nullParamsTest() {
+        String resultString = target("descriptions").
                 request(MediaType.TEXT_PLAIN).get(String.class);
-        assertEquals("2b684fe1-8baf-34ef-9d2a-df03142c915a", resultString);
+        Assert.assertEquals("Please enter SCTID.", resultString);
     }
 
     @Test
-    public void runSctidTest() {
-        String resultString = target("sctid/2b684fe1-8baf-34ef-9d2a-df03142c915a").
+    public void getDescForConceptTest() {
+        String resultString = target("descriptions/195500007").
                 request(MediaType.TEXT_PLAIN).get(String.class);
-        assertEquals("285649006", resultString);
+        Assert.assertEquals(2, getResultCount(resultString));
 
     }
 
     @Test
-    public void runSctidTestRefset() {
-        String resultString = target("uuid/447566000").request(MediaType.TEXT_PLAIN).get(String.class);
-        assertEquals("c259d808-8011-3772-bece-b4fbde18d375", resultString);
+    public void tooLongIDTest() {
+        String resultString = target("descriptions/1955000070000000000000").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+        Assert.assertEquals("Incorrect SNOMED id.", resultString);
+
     }
 
-    @Test
-    public void runNullSctidTest() {
-        String resultString = target("sctid").request(MediaType.TEXT_PLAIN).get(String.class);
-        assertEquals("Add the UUID to the end of the URL", resultString);
+    public int getResultCount(String resultString) {
+        int count = 0;
+        StringTokenizer st = new StringTokenizer(resultString, "<>");
+        while (st.hasMoreElements()) {
+            String nextToken = st.nextToken();
+            System.out.println(nextToken);
+            if (nextToken.matches("Synonym.*") || nextToken.matches("Fully specified name") || nextToken.matches("Definition.*")) {
+                count++;
+            }
+        }
+        return count;
     }
 
-    @Test
-    public void runNullUUIDTest() {
-        String resultString = target("uuid").request(MediaType.TEXT_PLAIN).get(String.class);
-        assertEquals("Add the SNOMED ID to the end of the URL", resultString);
-    }
 }

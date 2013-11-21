@@ -15,6 +15,8 @@
  */
 package org.ihtsdo.otf.query.rest.server;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -28,7 +30,9 @@ import javax.ws.rs.Produces;
  * "hello bob."
  * @author kec
  */
+@Api(value = "/hello", description = "Test the deployment of the .war file through this simple API.")
 @Path("/hello")
+@Produces({"text/plain"})
 public class HelloResource {
 
     /**
@@ -38,7 +42,7 @@ public class HelloResource {
      */
     @GET
     @Path("{name}")
-    @Produces("text/plain")
+    @Produces("text/plain")    @ApiOperation(value = "Find UUID from SNOMED id", response = String.class)
     public String sayHello(@PathParam("name") String name)   {
         System.out.println("Saying hello to: " + name);
         return "hello " + name + ".";
