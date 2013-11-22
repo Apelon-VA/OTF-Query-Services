@@ -293,8 +293,37 @@
       <title>Descriptions for Concept Resource</title>
       <para>This resource returns all of the descriptions that are active in the inferred latest
          version of SNOMED from an input SNOMED identifier of a concept. This resource is available
-         at: <code>{host}/otf/query-service/descriptions/{input SNOMED id}</code> . For example, the
-         request <code>{host}/otf/query-service/descriptions/</code> . Please see the Swagger documentation
-         at <code>{host}/otf</code> for more information.</para>
+         at: <code>{host}/otf/query-service/descriptions/{input SNOMED id}</code> . Please see the
+         Swagger documentation at <code>{host}/otf</code> for more information. A request of
+            <code>{host}/otf/query-service/descriptions/</code> request
+            <code>{host}/otf/query-service/descriptions/195500007</code> retrieves all of the active
+         descriptions for the SNOMED code 195500007. Here is the output from this request: </para>
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;ns4:result-list xmlns:ns2="http://query.jaxb.otf.ihtsdo.org"
+    xmlns:ns4="http://display.object.jaxb.otf.ihtsdo.org"
+    xmlns:ns3="http://api.chronicle.jaxb.otf.ihtsdo.org"&gt;
+    &lt;theResults xsi:type="ns4:simpleDescriptionVersionDdo" text="Lymph node infarction (disorder)"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+        &lt;language&gt;en&lt;/language&gt;
+        &lt;dateCreated&gt;20020131&lt;/dateCreated&gt;
+        &lt;descriptionType&gt;Fully specified name&lt;/descriptionType&gt;
+    &lt;/theResults&gt;
+    &lt;theResults xsi:type="ns4:simpleDescriptionVersionDdo" text="Lymph node infarction"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+        &lt;language&gt;en&lt;/language&gt;
+        &lt;dateCreated&gt;20020131&lt;/dateCreated&gt;
+        &lt;descriptionType&gt;Synonym pt:EN-US&lt;/descriptionType&gt;
+    &lt;/theResults&gt;
+&lt;/ns4:result-list&gt;</programlisting>
+   </section>
+
+   <section>
+      <title>Alternate Id Resource</title>
+      <para>This API returns the UUID corresponding to the component of an input SNOMED id and vice
+         versa. For instance, a request of
+            <code>{host}/otf/query-service/alternate-id//sctid/c265cf22-2a11-3488-b71e-296ec0317f96</code>
+         returns <code>195967001</code> . Similarly, a request of
+            <code>{host}/otf/query-service/alternate-id/uuid/195967001</code> returns
+            <code>c265cf22-2a11-3488-b71e-296ec0317f96</code> .</para>
    </section>
 </section>

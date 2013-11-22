@@ -76,7 +76,10 @@ public class LuceneResource {
     @Path("/{query}")
     @Produces("text/plain")
     @ApiOperation(value = "Find concepts by description", response = String.class)
-    public String doQuery(@PathParam("query") String queryText) throws IOException, JAXBException, Exception {
+    public String doQuery(
+            @ApiParam(value = "Search descriptions matching an input string. "
+                    + "For instance, find all descriptions that match hyperphenylalaninemia.", required = true)
+            @PathParam("query") String queryText) throws IOException, JAXBException, Exception {
         String queryString = "query: " + queryText;
         System.out.println("Received: \n   " + queryString);
         if (queryText == null) {
@@ -105,6 +108,10 @@ public class LuceneResource {
             ArrayList<Object> objectList = Query.returnDisplayObjects(resultSet,
                     ReturnTypes.DESCRIPTION_FOR_COMPONENT,
                     StandardViewCoordinates.getSnomedInferredLatest());
+
+            if (objectList.isEmpty()) {
+                return "No results found for " + queryString;
+            }
 
             ResultList resultList = new ResultList();
             resultList.setTheResults(objectList);

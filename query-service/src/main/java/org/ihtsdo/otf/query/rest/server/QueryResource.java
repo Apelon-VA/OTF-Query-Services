@@ -17,6 +17,7 @@ package org.ihtsdo.otf.query.rest.server;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.ihtsdo.otf.query.implementation.QueryFromJaxb;
@@ -51,14 +52,20 @@ public class QueryResource {
 
     @GET
     @Produces("text/plain")
-    @ApiOperation(value = "Find results from LET and WHERE objects.", response = String.class)
+    @ApiOperation(value = "Find results from required LET and WHERE objects and optional VIEWPOINT, FOR, and RETURN values.", response = String.class)
     @ApiResponses(value = {
         @ApiResponse(code = 422, message = "Invalid input objects"),
         @ApiResponse(code = 414, message = "Request-URI Too Long.")})
-    public String doQuery(HttpServletRequest request, @QueryParam("VIEWPOINT") String viewValue,
+    public String doQuery(
+            @ApiParam(value = "Version of SNOMED to query.", required = false)
+            @QueryParam("VIEWPOINT") String viewValue,
+            @ApiParam(value = "Components to iterate over.", required = false)
             @QueryParam("FOR") String forValue,
+            @ApiParam(value = "Map used for objects required for Where clause.", required = true)
             @QueryParam("LET") String letValue,
+            @ApiParam(value = "Clauses used to create criterion to find components.", required = true)
             @QueryParam("WHERE") String whereValue,
+            @ApiParam(value = "Information returned from result components. Default is fully specified description version.", required = false)
             @QueryParam("RETURN") String returnValue) throws IOException, JAXBException, Exception {
         String queryString = "VIEWPOINT: " + viewValue + "\n   "
                 + "FOR: " + forValue + "\n   "

@@ -191,10 +191,10 @@ public class RestQueryTest extends JerseyTest {
                     queryParam("RETURN", ReturnTypes.NIDS.name()).request(MediaType.TEXT_PLAIN).get(String.class);
             System.out.println(resultString);
         } catch (QueryApplicationException e) {
-            System.out.println("class: "+ e.getClass());
-            System.out.println("toString: "+ e.toString());
-            System.out.println("getMessage: "+ e.getMessage());
-            System.out.println("getCause: "+ e.getCause());
+            System.out.println("class: " + e.getClass());
+            System.out.println("toString: " + e.toString());
+            System.out.println("getMessage: " + e.getMessage());
+            System.out.println("getCause: " + e.getCause());
             Assert.assertTrue(e.getMessage().matches(".*Validation exception.*"));
         }
         //Assert.assertTrue(resultString.contains("ConceptSpec"));
@@ -444,7 +444,7 @@ public class RestQueryTest extends JerseyTest {
         SetViewCoordinate svc = new SetViewCoordinate(2010, 1, 31, 0, 0);
         ViewCoordinate previousVC = svc.getViewCoordinate();
         TermstoreChanges tc = new TermstoreChanges(previousVC);
-        
+
         JAXBContext ctx = JaxbForQuery.get();
 
         ForCollection fc = new ForCollection();
@@ -453,7 +453,7 @@ public class RestQueryTest extends JerseyTest {
         cb.add(Snomed.CLINICAL_FINDING.getNid());
         cb.or(Ts.get().isChildOfSet(Snomed.CLINICAL_FINDING.getNid(), previousVC));
         NativeIdSetItrBI iter = cb.getSetBitIterator();
-        while(iter.next()){
+        while (iter.next()) {
             uuids.add(Ts.get().getComponentVersion(previousVC, iter.nid()).getPrimordialUuid());
         }
         fc.setCustomCollection(uuids);
@@ -470,16 +470,16 @@ public class RestQueryTest extends JerseyTest {
         clause.setSemanticString(ClauseSemantic.CHANGED_FROM_PREVIOUS_VERSION.name());
         clause.getLetKeys().add("v2");
         where.setRootClause(clause);
-        
+
         WhereClause or = new WhereClause();
         or.setSemanticString(ClauseSemantic.OR.name());
         or.getChildren().add(clause);
         where.setRootClause(or);
-        
+
         String whereXml = getXmlString(ctx, where);
 
         tc.modifyDesc("Admin status", Snomed.ADMINISTRATIVE_STATUSES.getNid());
-        
+
         final String resultString = target("query").
                 queryParam("VIEWPOINT", "null").
                 queryParam("FOR", forSet).
@@ -487,7 +487,7 @@ public class RestQueryTest extends JerseyTest {
                 queryParam("WHERE", whereXml).
                 queryParam("RETURN", "NIDS").
                 request(MediaType.TEXT_PLAIN).get(String.class);
-        
+
         tc.modifyDesc("Administrative statuses", Snomed.ADMINISTRATIVE_STATUSES.getNid());
 
         NativeIdSetBI results = this.getNidSet(resultString);
@@ -576,7 +576,71 @@ public class RestQueryTest extends JerseyTest {
 
         Assert.assertEquals(3, resultSet.size());
     }
-    
+
+    @Test
+    public void definitionalStateTest() throws UnsupportedEncodingException {
+        System.out.println("Definitional state test.");
+
+        String letXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22+xmlns%3Ans4%3D%22http%3A%2F%2Fdisplay.object.jaxb.otf.ihtsdo.org%22+xmlns%3Ans3%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns3%3AconceptSpec%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMotion+%28physical+force%29%3C%2Fdescription%3E%3CuuidStrs%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2FuuidStrs%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E", "UTF-8");
+        String whereXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Aclause+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22+xmlns%3Ans4%3D%22http%3A%2F%2Fdisplay.object.jaxb.otf.ihtsdo.org%22+xmlns%3Ans3%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3Cchildren%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3ECurrent+view+coordinate%3C%2FletKeys%3E%3CsemanticString%3ECONCEPT_IS%3C%2FsemanticString%3E%3C%2Fchildren%3E%3CsemanticString%3EOR%3C%2FsemanticString%3E%3C%2Fns2%3Aclause%3E", "UTF-8");
+
+        final String resultString = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", "null").
+                queryParam("LET", letXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "DESCRIPTION_VERSION_FSN").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        Assert.assertTrue(stringMatchesDefinitionalStateRegex(resultString));
+
+        final String resultStringConcept = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", "null").
+                queryParam("LET", letXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "CONCEPT_VERSION").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        Assert.assertTrue(stringMatchesDefinitionalStateRegex(resultStringConcept));
+
+        final String resultStringDesc = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", "null").
+                queryParam("LET", letXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "CONCEPT_VERSION").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        Assert.assertTrue(stringMatchesDefinitionalStateRegex(resultStringDesc));
+
+    }
+
+    public boolean stringMatchesDefinitionalStateRegex(String result) {
+
+        StringTokenizer st = new StringTokenizer(result, "<");
+
+        ArrayList<String> definitionalStates = new ArrayList<>();
+
+        boolean matches = false;
+
+        while (st.hasMoreTokens()) {
+            String next = st.nextToken();
+            if (next.matches("definitionalState>.*")) {
+                definitionalStates.add(next);
+            }
+        }
+
+        for (String s : definitionalStates) {
+            if (s.matches("definitionalState>NECESSARY") || s.matches("definitionalState>NECESSARY_AND_SUFFICIENT") || s.matches("definitionalState>UNDETERMINED") || s.matches("definitionalState>NOT_A_DEFINED_COMPONENT")) {
+                matches = true;
+            }
+        }
+
+        return matches;
+
+    }
+
     public String getURLString(ViewCoordinate vc, ForCollection forCollection, LetMap let, Where where, ReturnTypes rt) throws JAXBException, UnsupportedEncodingException {
         StringBuilder bi = new StringBuilder();
         bi.append("?VIEW=");
