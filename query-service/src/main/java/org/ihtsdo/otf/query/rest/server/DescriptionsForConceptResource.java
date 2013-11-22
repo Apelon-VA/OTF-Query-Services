@@ -52,7 +52,7 @@ import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 /**
- *
+ * 
  * @author dylangrald
  */
 @Path("/descriptions")

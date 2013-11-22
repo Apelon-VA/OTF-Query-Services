@@ -16,7 +16,6 @@
 package org.ihtsdo.otf.query.rest.server;
 
 import java.io.IOException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
