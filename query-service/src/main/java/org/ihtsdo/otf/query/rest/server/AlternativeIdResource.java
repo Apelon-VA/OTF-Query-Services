@@ -18,6 +18,7 @@ package org.ihtsdo.otf.query.rest.server;
 //~--- non-JDK imports --------------------------------------------------------
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
@@ -82,7 +83,10 @@ public class AlternativeIdResource {
     @ApiResponses(value = {
         @ApiResponse(code = 422, message = "No UUIDs found for SCTID")
     })
-    public String getUuidFromSctid(@PathParam("id") String id) throws IOException, JAXBException, Exception {
+    public String getUuidFromSctid(
+            @ApiParam(value = "Retrieve the UUID of a component from a SNOMED id. "
+                    + "For instance, try the the SNOMED id 195967001.", required = true)
+            @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting UUID for: " + id);
         System.out.println("SCTID indexer: " + sctIdIndexer);
 
@@ -99,7 +103,7 @@ public class AlternativeIdResource {
             UUID uuid = ts.getUuidPrimordialForNid(rx.getReferencedComponentNid());
             return uuid.toString();
         }
-        return "no entry found";
+        return "No UUIDs found for " + id;
     }
 
     @GET
@@ -123,7 +127,10 @@ public class AlternativeIdResource {
     @ApiResponses(value = {
         @ApiResponse(code = 422, message = "No SCTIDs found for UUID")
     })
-    public String getSctidFromUuid(@PathParam("id") String id) throws IOException, JAXBException, Exception {
+    public String getSctidFromUuid(
+            @ApiParam(value = "Retrieve the SNOMED id corresponding to an input UUID. "
+                    + "For instance, try the UUID c265cf22-2a11-3488-b71e-296ec0317f96.")
+            @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting sctid for: " + id);
         if (snomedAssemblageNid == Integer.MIN_VALUE) {
             try {
@@ -134,18 +141,16 @@ public class AlternativeIdResource {
                 Logger.getLogger(LuceneRefexIndexer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
         ComponentChronicleBI<?> component = ts.getComponent(UUID.fromString(id));
-
-        for (RefexChronicleBI<?> annotation : component.getAnnotations()) {
-            if (annotation.getAssemblageNid() == snomedAssemblageNid) {
-                RefexLongVersionBI sctid = (RefexLongVersionBI) annotation.getPrimordialVersion();
-                return Long.toString(sctid.getLong1());
+        if (component != null) {
+            for (RefexChronicleBI<?> annotation : component.getAnnotations()) {
+                if (annotation.getAssemblageNid() == snomedAssemblageNid) {
+                    RefexLongVersionBI sctid = (RefexLongVersionBI) annotation.getPrimordialVersion();
+                    return Long.toString(sctid.getLong1());
+                }
             }
-
         }
-
-        return "no entry found";
+        return "No SCTIDs found for " + id;
     }
 
 }

@@ -30,6 +30,7 @@ public class QueryApplicationException extends WebApplicationException implement
     HttpErrorType errorType;
     String reason = "See full stack trace.\n\n";
     String otherExceptionReason = null;
+    int status;
 
     public QueryApplicationException() {
         super();
@@ -38,11 +39,13 @@ public class QueryApplicationException extends WebApplicationException implement
     public QueryApplicationException(HttpErrorType type) {
         super();
         this.errorType = type;
+        this.status = type.getValue();
     }
     
     public QueryApplicationException(HttpErrorType type, String reason) {
         super();
         this.errorType = type;
+        this.status = type.getValue();
         this.reason = reason;
     }
 
@@ -52,6 +55,7 @@ public class QueryApplicationException extends WebApplicationException implement
 
     public QueryApplicationException(HttpErrorType type, String reason, Exception ve) {
         this(type, reason);
+        this.status = type.getValue();
         this.otherExceptionReason = ve.getMessage();
         this.otherST = ve.getStackTrace();
     }
@@ -99,5 +103,9 @@ public class QueryApplicationException extends WebApplicationException implement
         } else {
             return getErrorTypeString() + getReason() + getStackTraceString("QueryApplicationException", this.getStackTrace()) + "\n\n" + getOtherExceptionReason() + "\n\n" + getStackTraceString("ValidationException", this.otherST) + getReason() + "\n\n\n" + getMoreInfoString();
         }
+    }
+    
+    public int getStatus(){
+        return this.status;
     }
 }

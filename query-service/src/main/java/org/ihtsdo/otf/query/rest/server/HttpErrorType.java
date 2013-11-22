@@ -20,8 +20,18 @@ package org.ihtsdo.otf.query.rest.server;
  * @author dylangrald
  */
 public enum HttpErrorType {
-    ERROR414,
-    ERROR422,
-    ERROR503
-    
+
+    ERROR414(414),
+    ERROR422(422),
+    ERROR503(503);
+
+    private int value;
+
+    private HttpErrorType(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }

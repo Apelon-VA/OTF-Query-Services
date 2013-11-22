@@ -17,6 +17,7 @@ package org.ihtsdo.otf.query.rest.server;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.io.IOException;
@@ -52,7 +53,7 @@ import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 
 /**
- * 
+ *
  * @author dylangrald
  */
 @Path("/descriptions")
@@ -84,11 +85,13 @@ public class DescriptionsForConceptResource {
     @GET
     @Path("/{id}")
     @Produces("text/plain")
-    @ApiOperation(value = "Find descriptions from SCTID", response = String.class)
+    @ApiOperation(value = "Find descriptions from an input SCTID.", response = String.class)
     @ApiResponses(value = {
         @ApiResponse(code = 422, message = "No descriptions found for SCTID")
     })
-    public String getDescFromSctid(@PathParam("id") String id) throws IOException, JAXBException, Exception {
+    public String getDescFromSctid(
+            @ApiParam(value = "Find all active descriptions for input SCTID. Use 195967001 as an example.", required = true)
+            @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting descriptions for: " + id);
         System.out.println("SCTID indexer: " + sctIdIndexer);
 
