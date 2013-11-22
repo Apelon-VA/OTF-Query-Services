@@ -41,6 +41,10 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
     <servlet>
         <servlet-name>SwaggerConfig</servlet-name>
         <servlet-class>org.ihtsdo.otf.query.rest.server.SwaggerServlet</servlet-class>
+        <init-param>
+            <param-name>api.version</param-name>
+            <param-value>1.0.0</param-value>
+        </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
 </web-app>

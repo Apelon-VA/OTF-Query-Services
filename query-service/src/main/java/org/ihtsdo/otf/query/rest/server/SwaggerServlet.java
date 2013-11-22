@@ -33,7 +33,7 @@ public class SwaggerServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config){
         ConfigFactory.config().setBasePath(config.getServletContext().getContextPath() + "/query-service");
-        ConfigFactory.config().setApiVersion("1.0.0");
+        ConfigFactory.config().setApiVersion(config.getInitParameter("api.version"));
         ScannerFactory.setScanner(new DefaultJaxrsScanner());
         ClassReaders.setReader(new DefaultJaxrsApiReader());
     }
