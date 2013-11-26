@@ -22,7 +22,6 @@ import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
 import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
 import com.wordnik.swagger.reader.ClassReaders;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
 /**
@@ -32,7 +31,9 @@ import javax.servlet.http.HttpServlet;
 public class SwaggerServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config){
-        ConfigFactory.config().setBasePath(config.getServletContext().getContextPath() + "/query-service");
+        String url = System.getProperty("host.url");
+        url = url.substring(0, url.indexOf("/otf") + 4) + "/query-service";
+        ConfigFactory.config().setBasePath(url);
         ConfigFactory.config().setApiVersion(config.getInitParameter("api.version"));
         ScannerFactory.setScanner(new DefaultJaxrsScanner());
         ClassReaders.setReader(new DefaultJaxrsApiReader());

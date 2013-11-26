@@ -19,6 +19,7 @@ import java.io.IOException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -36,7 +37,13 @@ public class QueryServletRequestListener implements ServletRequestListener {
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         ServletRequest servletRequest = sre.getServletRequest();
+        String url = null;
+        if(servletRequest instanceof HttpServletRequest){
+            HttpServletRequest request = (HttpServletRequest) servletRequest;
+            url = request.getRequestURL().toString();
+        }
         System.out.println("ServletRequest initialized. Remote IP=" + servletRequest.getRemoteAddr());
+        System.setProperty("host.url", url);
     }
 
     private void initializeQuery(ServletRequestEvent sre) throws QueryApplicationException {
