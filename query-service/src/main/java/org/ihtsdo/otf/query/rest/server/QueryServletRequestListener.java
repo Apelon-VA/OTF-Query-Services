@@ -37,7 +37,7 @@ public class QueryServletRequestListener implements ServletRequestListener {
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         ServletRequest servletRequest = sre.getServletRequest();
-        String url = null;
+        String url = "EMPTY";
         if(servletRequest instanceof HttpServletRequest){
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             url = request.getRequestURL().toString();
