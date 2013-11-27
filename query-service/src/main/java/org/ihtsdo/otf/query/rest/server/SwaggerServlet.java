@@ -32,6 +32,7 @@ public class SwaggerServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config){
         String url = System.getProperty("host.url");
+        url = "http://this-should-never-be-used";
         if(url.contains("/otf")){
             url = url.substring(0, url.indexOf("/otf") + 4) + "/query-service";
         }
