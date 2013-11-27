@@ -25,7 +25,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
     <listener>
         <listener-class>org.ihtsdo.otf.query.rest.server.QueryServletRequestListener</listener-class>
     </listener>
-<!--    <servlet>
+    <servlet>
         <servlet-name>JerseyJaxrsConfig</servlet-name>
         <servlet-class>com.wordnik.swagger.jersey.config.JerseyJaxrsConfig</servlet-class>
         <init-param>
@@ -34,11 +34,11 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
         </init-param>
         <init-param>
             <param-name>swagger.api.basepath</param-name>
-            <param-value>http://localhost:8080/otf/query-service</param-value>
+            <param-value>http://api.snomedtools.com/otf/query-service</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
-    </servlet>-->
-    <servlet>
+    </servlet>
+<!--    <servlet>
         <servlet-name>SwaggerConfig</servlet-name>
         <servlet-class>org.ihtsdo.otf.query.rest.server.SwaggerServlet</servlet-class>
         <init-param>
@@ -46,5 +46,5 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
             <param-value>1.0.0</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
-    </servlet>
+    </servlet>-->
 </web-app>
