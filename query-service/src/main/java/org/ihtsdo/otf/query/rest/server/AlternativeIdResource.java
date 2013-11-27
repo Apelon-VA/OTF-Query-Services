@@ -56,7 +56,7 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
  *
  * @author kec
  */
-@Api(value = "/alternate-id", description = "Retrieve component UUID from input SCTID and vice-versa.")
+@Api(value = "/alternate-id", description = "Retrieve UUID from SCTID and vice-versa.")
 @Path("/alternate-id")
 @Produces({"text/plain"})
 public class AlternativeIdResource {
@@ -79,12 +79,12 @@ public class AlternativeIdResource {
     @GET
     @Path("/uuid/{id}")
     @Produces("text/plain")
-    @ApiOperation(value = "Find UUID from SNOMED id", response = String.class)
+    @ApiOperation(value = "Find UUID from SCTID", response = String.class)
     @ApiResponses(value = {
         @ApiResponse(code = 422, message = "No UUIDs found for SCTID")
     })
     public String getUuidFromSctid(
-            @ApiParam(value = "Retrieve the UUID of a component from a SNOMED id. ", required = true, defaultValue = "195967001")
+            @ApiParam(value = "Retrieve the UUID of a component from a SCTID. ", required = true, defaultValue = "195967001")
             @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting UUID for: " + id);
         System.out.println("SCTID indexer: " + sctIdIndexer);
@@ -122,12 +122,12 @@ public class AlternativeIdResource {
     @GET
     @Path("/sctid/{id}")
     @Produces("text/plain")
-    @ApiOperation(value = "Find SNOMED id from UUID", response = String.class)
+    @ApiOperation(value = "Find SCTID from UUID", response = String.class)
     @ApiResponses(value = {
         @ApiResponse(code = 422, message = "No SCTIDs found for UUID")
     })
     public String getSctidFromUuid(
-            @ApiParam(value = "Retrieve the SNOMED id corresponding to an input UUID. ", required = true, defaultValue = "c265cf22-2a11-3488-b71e-296ec0317f96")
+            @ApiParam(value = "Retrieve the SCTID corresponding to an input UUID. ", required = true, defaultValue = "c265cf22-2a11-3488-b71e-296ec0317f96")
             @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting sctid for: " + id);
         if (snomedAssemblageNid == Integer.MIN_VALUE) {

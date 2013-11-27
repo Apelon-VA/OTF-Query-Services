@@ -51,7 +51,7 @@ public class QueryResource {
 
     @GET
     @Produces("text/plain")
-    @ApiOperation(value = "Find results from required LET and WHERE objects and optional VIEWPOINT, FOR, and RETURN values.", response = String.class)
+    @ApiOperation(value = "Find results from the LET and WHERE objects and VIEWPOINT, FOR, and RETURN values.", response = String.class)
     @ApiResponses(value = {
         @ApiResponse(code = 422, message = "Invalid input objects"),
         @ApiResponse(code = 414, message = "Request-URI Too Long.")})
