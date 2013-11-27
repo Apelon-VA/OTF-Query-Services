@@ -90,7 +90,7 @@ public class DescriptionsForConceptResource {
         @ApiResponse(code = 422, message = "No descriptions found for SCTID")
     })
     public String getDescFromSctid(
-            @ApiParam(value = "Find all active descriptions for input SCTID. Use 195967001 as an example.", required = true)
+            @ApiParam(value = "Find all active descriptions for input SCTID.", required = true, defaultValue = "195967001")
             @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting descriptions for: " + id);
         System.out.println("SCTID indexer: " + sctIdIndexer);

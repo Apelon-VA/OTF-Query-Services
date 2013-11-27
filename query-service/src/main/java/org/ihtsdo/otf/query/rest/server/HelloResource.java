@@ -47,7 +47,7 @@ public class HelloResource {
     @Produces("text/plain")
     @ApiOperation(value = "Test the deployment of the app by saying hello.", response = String.class)
     public String sayHello(
-            @ApiParam(value = "Say hello to the following name. For intance, say hello to Bob.", required = true)
+            @ApiParam(value = "Say hello to the following name.", required = true, defaultValue = "bob")
             @PathParam("name") final String name) {
         System.out.println("Saying hello to: " + name);
         return "hello " + name + ".";

@@ -84,8 +84,7 @@ public class AlternativeIdResource {
         @ApiResponse(code = 422, message = "No UUIDs found for SCTID")
     })
     public String getUuidFromSctid(
-            @ApiParam(value = "Retrieve the UUID of a component from a SNOMED id. "
-                    + "For instance, try the the SNOMED id 195967001.", required = true)
+            @ApiParam(value = "Retrieve the UUID of a component from a SNOMED id. ", required = true, defaultValue = "195967001")
             @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting UUID for: " + id);
         System.out.println("SCTID indexer: " + sctIdIndexer);
@@ -128,8 +127,7 @@ public class AlternativeIdResource {
         @ApiResponse(code = 422, message = "No SCTIDs found for UUID")
     })
     public String getSctidFromUuid(
-            @ApiParam(value = "Retrieve the SNOMED id corresponding to an input UUID. "
-                    + "For instance, try the UUID c265cf22-2a11-3488-b71e-296ec0317f96.")
+            @ApiParam(value = "Retrieve the SNOMED id corresponding to an input UUID. ", required = true, defaultValue = "c265cf22-2a11-3488-b71e-296ec0317f96")
             @PathParam("id") String id) throws IOException, JAXBException, Exception {
         System.out.println("Getting sctid for: " + id);
         if (snomedAssemblageNid == Integer.MIN_VALUE) {

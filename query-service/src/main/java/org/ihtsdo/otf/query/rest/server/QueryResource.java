@@ -27,7 +27,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -57,15 +56,15 @@ public class QueryResource {
         @ApiResponse(code = 422, message = "Invalid input objects"),
         @ApiResponse(code = 414, message = "Request-URI Too Long.")})
     public String doQuery(
-            @ApiParam(value = "Version of SNOMED to query.", required = false)
+            @ApiParam(value = "Version of SNOMED to query.", required = true, defaultValue = "null")
             @QueryParam("VIEWPOINT") String viewValue,
-            @ApiParam(value = "Components to iterate over.", required = false)
+            @ApiParam(value = "Components to iterate over.", required = true, defaultValue = "null")
             @QueryParam("FOR") String forValue,
-            @ApiParam(value = "Map used for objects required for Where clause.", required = true)
+            @ApiParam(value = "Map used for objects required for Where clause", required = true, defaultValue ="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:letMap xmlns:ns2=\"http://query.jaxb.otf.ihtsdo.org\"><map><entry><key>allergic-asthma</key><value xsi:type=\"ns4:simpleConceptSpecification\" xmlns:ns4=\"http://api.chronicle.jaxb.otf.ihtsdo.org\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><description>Allergic asthma</description><uuid>531abe20-8324-3db9-9104-8bcdbf251ac7</uuid></value></entry><entry><key>Is a</key><value xsi:type=\"ns4:simpleConceptSpecification\" xmlns:ns4=\"http://api.chronicle.jaxb.otf.ihtsdo.org\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><description>Is a (attribute)</description><uuid>c93a30b9-ba77-3adb-a9b8-4589c9f8fb25</uuid></value></entry></map></ns2:letMap>")
             @QueryParam("LET") String letValue,
-            @ApiParam(value = "Clauses used to create criterion to find components.", required = true)
+            @ApiParam(value = "Clauses used to create criterion to find components.", required = true, defaultValue="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:where xmlns:ns2=\"http://query.jaxb.otf.ihtsdo.org\"><rootClause><letKeys>Is a</letKeys><letKeys>allergic-asthma</letKeys><semanticString>REL_TYPE</semanticString></rootClause></ns2:where>")
             @QueryParam("WHERE") String whereValue,
-            @ApiParam(value = "Information returned from result components. Default is fully specified description version.", required = false)
+            @ApiParam(value = "Information returned from result components. Default is fully specified description version.", required = true, defaultValue = "null")
             @QueryParam("RETURN") String returnValue) throws IOException, JAXBException, Exception {
         String queryString = "VIEWPOINT: " + viewValue + "\n   "
                 + "FOR: " + forValue + "\n   "

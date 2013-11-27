@@ -77,8 +77,7 @@ public class LuceneResource {
     @Produces("text/plain")
     @ApiOperation(value = "Find concepts by description", response = String.class)
     public String doQuery(
-            @ApiParam(value = "Search descriptions matching an input string. "
-                    + "For instance, find all descriptions that match hyperphenylalaninemia.", required = true)
+            @ApiParam(value = "Search descriptions matching an input string. ", required = true, defaultValue = "hyperphenylalaninemia")
             @PathParam("query") String queryText) throws IOException, JAXBException, Exception {
         String queryString = "query: " + queryText;
         System.out.println("Received: \n   " + queryString);

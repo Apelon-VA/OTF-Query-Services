@@ -37,13 +37,7 @@ public class QueryServletRequestListener implements ServletRequestListener {
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         ServletRequest servletRequest = sre.getServletRequest();
-        String url = "EMPTY";
-        if(servletRequest instanceof HttpServletRequest){
-            HttpServletRequest request = (HttpServletRequest) servletRequest;
-            url = request.getRequestURL().toString();
-        }
         System.out.println("ServletRequest initialized. Remote IP=" + servletRequest.getRemoteAddr());
-        System.setProperty("host.url", url);
     }
 
     private void initializeQuery(ServletRequestEvent sre) throws QueryApplicationException {
