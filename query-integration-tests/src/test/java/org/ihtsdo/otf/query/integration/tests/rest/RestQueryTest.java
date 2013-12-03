@@ -604,16 +604,6 @@ public class RestQueryTest extends JerseyTest {
 
         Assert.assertTrue(stringMatchesDefinitionalStateRegex(resultStringConcept));
 
-        final String resultStringDesc = target("query").
-                queryParam("VIEWPOINT", "null").
-                queryParam("FOR", "null").
-                queryParam("LET", letXml).
-                queryParam("WHERE", whereXml).
-                queryParam("RETURN", "CONCEPT_VERSION").
-                request(MediaType.TEXT_PLAIN).get(String.class);
-
-        Assert.assertTrue(stringMatchesDefinitionalStateRegex(resultStringDesc));
-
     }
 
     public boolean stringMatchesDefinitionalStateRegex(String result) {

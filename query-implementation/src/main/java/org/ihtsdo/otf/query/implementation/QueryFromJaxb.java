@@ -59,7 +59,7 @@ import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
 public class QueryFromJaxb extends Query {
 
     private static ViewCoordinate getViewCoordinate(SimpleViewCoordinate obj) throws ValidationException {
-       return new ViewCoordinate((SimpleViewCoordinate) obj);
+        return new ViewCoordinate((SimpleViewCoordinate) obj);
     }
     private Clause rootClause;
     /**
@@ -119,18 +119,20 @@ public class QueryFromJaxb extends Query {
 
         if (forXml == null || forXml.equals("null") || forXml.equals("")) {
             this.forCollection = Ts.get().getAllConceptNids();
-        } else if (convertedMap.containsKey("Custom FOR set")) {
-            String UUIDset = (String) convertedMap.get("Custom FOR set");
-            ConcurrentBitSet cbs = new ConcurrentBitSet();
-            StringTokenizer tok = new StringTokenizer(UUIDset, ",");
-            while (tok.hasMoreTokens()) {
-                String next = tok.nextToken();
-                if (next.matches("[0-9a-z-]*")) {
-                    UUID nextUUID = UUID.fromString(next);
-                    cbs.add(Ts.get().getComponent(nextUUID).getNid());
+        } else if (convertedMap != null) {
+            if (convertedMap.containsKey("Custom FOR set")) {
+                String UUIDset = (String) convertedMap.get("Custom FOR set");
+                ConcurrentBitSet cbs = new ConcurrentBitSet();
+                StringTokenizer tok = new StringTokenizer(UUIDset, ",");
+                while (tok.hasMoreTokens()) {
+                    String next = tok.nextToken();
+                    if (next.matches("[0-9a-z-]*")) {
+                        UUID nextUUID = UUID.fromString(next);
+                        cbs.add(Ts.get().getComponent(nextUUID).getNid());
+                    }
                 }
+                this.forCollection = cbs;
             }
-            this.forCollection = cbs;
         } else {
             try {
                 ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
