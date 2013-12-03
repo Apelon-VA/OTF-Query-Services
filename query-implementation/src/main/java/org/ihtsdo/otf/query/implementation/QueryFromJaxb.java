@@ -132,20 +132,20 @@ public class QueryFromJaxb extends Query {
                     }
                 }
                 this.forCollection = cbs;
-            }
-        } else {
-            try {
-                ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
-                if (_for.forCollection.equals(ForCollectionContents.CUSTOM)) {
-                    this.forCollection = new ConcurrentBitSet();
-                    for (UUID i : _for.getCustomCollection()) {
-                        forCollection.add(Ts.get().getConcept(i).getConceptNid());
+            } else {
+                try {
+                    ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
+                    if (_for.forCollection.equals(ForCollectionContents.CUSTOM)) {
+                        this.forCollection = new ConcurrentBitSet();
+                        for (UUID i : _for.getCustomCollection()) {
+                            forCollection.add(Ts.get().getConcept(i).getConceptNid());
+                        }
+                    } else {
+                        this.forCollection = _for.getCollection();
                     }
-                } else {
-                    this.forCollection = _for.getCollection();
+                } catch (JAXBException e) {
+                    this.forCollection = null;
                 }
-            } catch (JAXBException e) {
-                this.forCollection = null;
             }
         }
 
