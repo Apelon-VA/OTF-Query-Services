@@ -109,16 +109,14 @@ public class DescriptionsForConceptResource {
             ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
             ComponentChronicleBI cc = Ts.get().getComponent(result.get(0).nid);
             UUID uuid = Ts.get().getUuidPrimordialForNid(cc.getNid());
-            ConceptChronicleBI concept = Ts.get().getComponent(uuid).getEnclosingConcept(); //AKF:  ConceptChronicleBI concept = cc.getEnclosingConcept();
+            ConceptChronicleBI concept = Ts.get().getComponent(uuid).getEnclosingConcept();
             ConceptVersionBI cv = concept.getVersion(vc);
 
             ArrayList<Object> list = new ArrayList<>();
             
-//AKF:            Collection<? extends DescriptionVersionBI> descriptionsActive = concept.getVersion(vc).getDescriptionsActive(); 
             for (DescriptionChronicleBI dc : concept.getVersion(vc).getDescriptions()) {
                 if (dc.getVersion(vc) != null) {
                     DescriptionVersionBI dv = dc.getVersion(vc);
-//AKF: seems like a pain to have to make 2 different DDOs in order to get the "simple" ddo
                     ConceptChronicleDdo ccDdo = new ConceptChronicleDdo(ts.getSnapshot(vc), concept, VersionPolicy.ACTIVE_VERSIONS, RefexPolicy.REFEX_MEMBERS, RelationshipPolicy.DESTINATION_RELATIONSHIPS);
                     DescriptionChronicleDdo dcDdo = new DescriptionChronicleDdo(ts.getSnapshot(vc), ccDdo, dc);
                     list.add(new SimpleDescriptionVersionDdo(dcDdo, ts.getSnapshot(vc), dv, cv));
