@@ -26,9 +26,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBException;
+import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
-import org.ihtsdo.otf.query.implementation.RegexQueryFromJaxb;
+import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.ddo.ResultList;
 
 /**
@@ -37,7 +39,7 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
  *
  * @author dylangrald
  */
-@Path("query-service/regex")
+@Path("/regex")
 public class RegexResource {
 
     @GET
@@ -52,21 +54,29 @@ public class RegexResource {
     public String doQuery(@PathParam("regex") String regex) throws IOException, JAXBException, Exception {
         String queryString = "regex: " + regex;
         System.out.println("Received: \n   " + queryString);
-        if (regex == null) {
-            return "Malformed query. Lucene query must have input regular expression. \n"
-                    + "Found: " + queryString
-                    + "\n See: the section on Query Client in the query documentation: \n"
-                    + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html";
-        }
 
         //Decode the queryText
-        regex = URLDecoder.decode(regex, "UTF-8");
+        final String decodedRegex = URLDecoder.decode(regex, "UTF-8");
 
         try {
 
-            RegexQueryFromJaxb query = new RegexQueryFromJaxb(regex);
-            NativeIdSetBI resultSet = query.compute();
+            Query query = new Query() {
 
+                @Override
+                protected NativeIdSetBI For() throws IOException {
+                    return Ts.get().getAllConceptNids();
+                }
+
+                @Override
+                public void Let() throws IOException {
+                    let(decodedRegex, decodedRegex);
+                }
+
+                @Override
+                public Clause Where() {
+                    return DescriptionLuceneMatch(decodedRegex);
+                }
+            };
             //The default result type is DESCRIPTION_VERSION_FSN
             ArrayList<Object> objectList = query.returnResults();
 

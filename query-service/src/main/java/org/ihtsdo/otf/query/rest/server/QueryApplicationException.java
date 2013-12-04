@@ -20,8 +20,9 @@ package org.ihtsdo.otf.query.rest.server;
  * @author dylangrald
  */
 import java.io.Serializable;
+import javax.ws.rs.WebApplicationException;
 
-public class QueryApplicationException extends Exception implements Serializable {
+public class QueryApplicationException extends WebApplicationException implements Serializable {
 
     private static final long serialVersionUID = 1L;
     StackTraceElement[] otherST;
@@ -29,6 +30,7 @@ public class QueryApplicationException extends Exception implements Serializable
     HttpErrorType errorType;
     String reason = "See full stack trace.\n\n";
     String otherExceptionReason = null;
+    int status;
 
     public QueryApplicationException() {
         super();
@@ -37,24 +39,23 @@ public class QueryApplicationException extends Exception implements Serializable
     public QueryApplicationException(HttpErrorType type) {
         super();
         this.errorType = type;
+        this.status = type.getValue();
     }
-
+    
     public QueryApplicationException(HttpErrorType type, String reason) {
         super();
         this.errorType = type;
+        this.status = type.getValue();
         this.reason = reason;
     }
 
     public QueryApplicationException(String msg) {
-        super(msg);
-    }
-
-    public QueryApplicationException(String msg, Exception e) {
-        super(msg, e);
+        super();
     }
 
     public QueryApplicationException(HttpErrorType type, String reason, Exception ve) {
         this(type, reason);
+        this.status = type.getValue();
         this.otherExceptionReason = ve.getMessage();
         this.otherST = ve.getStackTrace();
     }
@@ -102,5 +103,9 @@ public class QueryApplicationException extends Exception implements Serializable
         } else {
             return getErrorTypeString() + getReason() + getStackTraceString("QueryApplicationException", this.getStackTrace()) + "\n\n" + getOtherExceptionReason() + "\n\n" + getStackTraceString("ValidationException", this.otherST) + getReason() + "\n\n\n" + getMoreInfoString();
         }
+    }
+    
+    public int getStatus(){
+        return this.status;
     }
 }

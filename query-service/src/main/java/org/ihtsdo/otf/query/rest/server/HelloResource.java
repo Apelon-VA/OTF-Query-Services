@@ -15,6 +15,9 @@
  */
 package org.ihtsdo.otf.query.rest.server;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -22,24 +25,30 @@ import javax.ws.rs.Produces;
 
 /**
  * This resource is deliberately simple in order to demonstrate proper
- * connectivity and service availability. When
- * a path of "hello/frank" is provided, it will return "hello
- * frank." Similarly, if "hello/bob" is provided, it will return
- * "hello bob."
+ * connectivity and service availability. When a path of "hello/frank" is
+ * provided, it will return "hello frank." Similarly, if "hello/bob" is
+ * provided, it will return "hello bob."
+ *
  * @author kec
  */
-@Path("query-service/hello")
+@Api(value = "/hello", description = "Test the deployment of the .war file through this simple API.")
+@Path("/hello")
+@Produces({"text/plain"})
 public class HelloResource {
 
     /**
-     * Method that says hello to a person. 
+     * Method that says hello to a person.
+     *
      * @param name the name of the person to say hello to.
-     * @return the hello string. 
+     * @return the hello string.
      */
     @GET
-    @Path("{name}")
+    @Path("/{name}")
     @Produces("text/plain")
-    public String sayHello(@PathParam("name") String name)   {
+    @ApiOperation(value = "Test the deployment of the app by saying hello.", response = String.class)
+    public String sayHello(
+            @ApiParam(value = "Say hello to the following name.", required = true, defaultValue = "bob")
+            @PathParam("name") final String name) {
         System.out.println("Saying hello to: " + name);
         return "hello " + name + ".";
     }

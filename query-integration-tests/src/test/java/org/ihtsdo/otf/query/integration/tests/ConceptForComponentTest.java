@@ -47,7 +47,7 @@ public class ConceptForComponentTest extends QueryClauseTest {
 
             @Override
             public Clause Where() {
-                return And(ConceptIsChildOf("motion"),
+                return Intersection(ConceptIsChildOf("motion"),
                             ConceptForComponent(DescriptionRegexMatch("regex")));
             }
         };

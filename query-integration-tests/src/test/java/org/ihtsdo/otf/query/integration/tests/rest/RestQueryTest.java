@@ -15,12 +15,19 @@
  */
 package org.ihtsdo.otf.query.integration.tests.rest;
 
+import org.ihtsdo.otf.query.integration.tests.ExampleQuery;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import static java.lang.String.valueOf;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Application;
@@ -32,16 +39,19 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.ihtsdo.otf.query.implementation.Clause;
+import org.ihtsdo.otf.query.implementation.ClauseSemantic;
 import org.ihtsdo.otf.query.rest.server.QueryResource;
 import org.ihtsdo.otf.query.implementation.ForCollection;
 import org.ihtsdo.otf.query.implementation.JaxbForQuery;
 import org.ihtsdo.otf.query.implementation.LetMap;
 import org.ihtsdo.otf.query.implementation.Query;
 import org.ihtsdo.otf.query.implementation.ReturnTypes;
+import org.ihtsdo.otf.query.implementation.Where;
 import org.ihtsdo.otf.query.implementation.WhereClause;
 import org.ihtsdo.otf.query.integration.tests.ConceptForComponentTest;
 import org.ihtsdo.otf.query.integration.tests.ConceptIsTest;
 import org.ihtsdo.otf.query.integration.tests.DescriptionActiveLuceneMatchTest;
+import org.ihtsdo.otf.query.integration.tests.DescriptionActiveRegexMatchTest;
 import org.ihtsdo.otf.query.integration.tests.FullySpecifiedNameForConceptTest;
 import org.ihtsdo.otf.query.integration.tests.IsChildOfTest;
 import org.ihtsdo.otf.query.integration.tests.IsDescendentOfTest;
@@ -49,7 +59,6 @@ import org.ihtsdo.otf.query.integration.tests.IsKindOfTest;
 import org.ihtsdo.otf.query.integration.tests.NotTest;
 import org.ihtsdo.otf.query.integration.tests.OrTest;
 import org.ihtsdo.otf.query.integration.tests.PreferredNameForConceptTest;
-import org.ihtsdo.otf.query.integration.tests.QueryTest;
 import org.ihtsdo.otf.query.integration.tests.RefsetContainsConceptTest;
 import org.ihtsdo.otf.query.integration.tests.RefsetContainsKindOfConceptTest;
 import org.ihtsdo.otf.query.integration.tests.RefsetContainsStringTest;
@@ -57,25 +66,21 @@ import org.ihtsdo.otf.query.integration.tests.RefsetLuceneMatchTest;
 import org.ihtsdo.otf.query.integration.tests.RelRestriction2Test;
 import org.ihtsdo.otf.query.integration.tests.RelRestrictionTest;
 import org.ihtsdo.otf.query.integration.tests.RelTypeTest;
+import org.ihtsdo.otf.query.integration.tests.SetViewCoordinate;
 import org.ihtsdo.otf.query.integration.tests.XorTest;
 import org.ihtsdo.otf.query.rest.server.LuceneResource;
-import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
-import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.query.rest.server.QueryApplicationException;
+import org.ihtsdo.otf.query.rest.server.QueryExceptionMapper;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
-import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
-import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
-import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
-import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
-import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunner;
 import org.ihtsdo.otf.tcc.junit.BdbTestRunnerConfig;
@@ -118,11 +123,20 @@ public class RestQueryTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(QueryResource.class);
+        return new ResourceConfig(QueryResource.class, QueryExceptionMapper.class);
+    }
+
+    @Test
+    public void nullParamsTest() {
+        String resultString = target("query").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+        Assert.assertEquals("Enter the required LET and WHERE parameters. See the documentation at "
+                + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html for more information.", resultString);
     }
 
     @Test
     public void testQuery() {
+        System.out.println("ExampleQuery test");
         try {
             ExampleQuery q = new ExampleQuery(null);
 
@@ -142,13 +156,15 @@ public class RestQueryTest extends JerseyTest {
 
             String whereXml = getXmlString(ctx, where);
 
-            final String resultString = target("query-service/query").
+            final String resultString = target("query").
                     queryParam("VIEWPOINT", viewCoordinateXml).
                     queryParam("FOR", forXml).
                     queryParam("LET", letMapXml).
                     queryParam("WHERE", whereXml).
-                    queryParam("RETURN", ReturnTypes.UUIDS.name()).
+                    queryParam("RETURN", ReturnTypes.DESCRIPTION_VERSION_FSN.name()).
                     request(MediaType.TEXT_PLAIN).get(String.class);
+
+            System.out.println(resultString);
 
             Logger.getLogger(RestQueryTest.class.getName()).log(Level.INFO,
                     "Result: {0}", resultString);
@@ -156,6 +172,32 @@ public class RestQueryTest extends JerseyTest {
         } catch (JAXBException | IOException ex) {
             Logger.getLogger(RestQueryTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Ignore
+    @Test(expected = QueryApplicationException.class)
+    public void malformedLetTest() throws UnsupportedEncodingException, QueryApplicationException {
+        String viewPoint = "";
+        String forSet = "";
+        String letMap = "%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22+xmlns%3Ans4%3D%22http%3A%2F%2Fdisplay.object.jaxb.otf.ihtsdo.org%22+xmlns%3Ans3%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns3%3AconceptSpec%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMoon+%28physical+force%29%3C%2Fdescription%3E%3CuuidStrs%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2FuuidStrs%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E";
+        String where = "%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Aclause+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22+xmlns%3Ans4%3D%22http%3A%2F%2Fdisplay.object.jaxb.otf.ihtsdo.org%22+xmlns%3Ans3%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3Cchildren%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3ECurrent+view+coordinate%3C%2FletKeys%3E%3CsemanticString%3ECONCEPT_IS%3C%2FsemanticString%3E%3C%2Fchildren%3E%3CsemanticString%3EOR%3C%2FsemanticString%3E%3C%2Fns2%3Aclause%3E";
+        String resultString = "";
+        try {
+            resultString = target("query").
+                    queryParam("VIEWPOINT", viewPoint).
+                    queryParam("FOR", forSet).
+                    queryParam("LET", URLDecoder.decode(letMap, "UTF-8")).
+                    queryParam("WHERE", URLDecoder.decode(where, "UTF-8")).
+                    queryParam("RETURN", ReturnTypes.NIDS.name()).request(MediaType.TEXT_PLAIN).get(String.class);
+            System.out.println(resultString);
+        } catch (QueryApplicationException e) {
+            System.out.println("class: " + e.getClass());
+            System.out.println("toString: " + e.toString());
+            System.out.println("getMessage: " + e.getMessage());
+            System.out.println("getCause: " + e.getCause());
+            Assert.assertTrue(e.getMessage().matches(".*Validation exception.*"));
+        }
+        //Assert.assertTrue(resultString.contains("ConceptSpec"));
     }
 
     @Test
@@ -184,8 +226,10 @@ public class RestQueryTest extends JerseyTest {
     public void conceptIsTest() throws IOException, JAXBException {
         System.out.println("ConceptIsTest");
         ConceptIsTest test = new ConceptIsTest();
-        String resultString = returnResultString(test.getQuery());
+        String resultString = returnResultString(test.getQuery(), ReturnTypes.CONCEPT_VERSION);
         Assert.assertEquals(1, getNidSet(resultString).size());
+        System.out.println(resultString);
+        Assert.assertTrue(resultString.matches(".*<componentNid>" + Snomed.MOTION.getNid() + "</componentNid>.*"));
     }
 
     @Test
@@ -248,7 +292,8 @@ public class RestQueryTest extends JerseyTest {
     @Test
     public void RefsetContainsConceptTest() throws IOException, JAXBException {
         System.out.println("RefsetContainsConcept test");
-        addRefsetMember();
+        TermstoreChanges tc = new TermstoreChanges(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
+        tc.addRefsetMember();
         RefsetContainsConceptTest test = new RefsetContainsConceptTest();
         String resultString = returnResultString(test.getQuery());
         Assert.assertEquals(1, getNidSet(resultString).size());
@@ -257,7 +302,8 @@ public class RestQueryTest extends JerseyTest {
     @Test
     public void RefsetContainsKindOfConceptTest() throws JAXBException, IOException {
         System.out.println("RefsetContainsKindOfConcept test");
-        addRefsetMember();
+        TermstoreChanges tc = new TermstoreChanges(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
+        tc.addRefsetMember();
         RefsetContainsKindOfConceptTest test = new RefsetContainsKindOfConceptTest();
         String resultString = returnResultString(test.getQuery());
         Assert.assertEquals(1, getNidSet(resultString).size());
@@ -266,7 +312,8 @@ public class RestQueryTest extends JerseyTest {
     @Test
     public void RefsetContainsStringTest() throws JAXBException, IOException {
         System.out.println("RefsetContainsString test");
-        addRefsetMember();
+        TermstoreChanges tc = new TermstoreChanges(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
+        tc.addRefsetMember();
         RefsetContainsStringTest test = new RefsetContainsStringTest();
         String resultString = returnResultString(test.getQuery());
         Assert.assertEquals(1, getNidSet(resultString).size());
@@ -288,12 +335,6 @@ public class RestQueryTest extends JerseyTest {
         Assert.assertEquals(3, getNidSet(resultString).size());
     }
 
-    /**
-     * TODO
-     *
-     * @throws Exception
-     */
-    @Ignore
     @Test
     public void RelRestrictionSubFalseTest() throws Exception {
         System.out.println("RelRestriction subsumption false test");
@@ -318,7 +359,48 @@ public class RestQueryTest extends JerseyTest {
         Assert.assertEquals(2, getNidSet(resultString).size());
     }
 
-    @Ignore
+    @Test
+    public void DescriptionRegexMatchTest() throws IOException, JAXBException {
+        System.out.println("DescriptionRegexMatch test");
+        JAXBContext ctx = JaxbForQuery.get();
+
+        ForCollection fc = new ForCollection();
+        List<UUID> uuids = new ArrayList<>();
+        uuids.add(Ts.get().getComponent(Snomed.ASSOCIATED_FINDING.getNid()).getPrimordialUuid());
+        uuids.add(Ts.get().getComponent(Snomed.CLINICAL_FINDING.getNid()).getPrimordialUuid());
+        fc.setCustomCollection(uuids);
+        String forSet = getXmlString(ctx, fc);
+
+        HashMap<String, Object> letMap = new HashMap<>();
+        letMap.put("regex", "[Cc]linical finding.*");
+        LetMap wrappedMap = new LetMap(letMap);
+        String letMapXml = getXmlString(ctx, wrappedMap);
+
+        // Set the where clause
+        Where where = new Where();
+        WhereClause clause = new WhereClause();
+        clause.setSemanticString(ClauseSemantic.DESCRIPTION_REGEX_MATCH.name());
+        clause.getLetKeys().add("regex");
+        where.setRootClause(clause);
+
+        WhereClause cForC = new WhereClause();
+        cForC.setSemanticString(ClauseSemantic.CONCEPT_FOR_COMPONENT.name());
+        cForC.getChildren().add(clause);
+        where.setRootClause(cForC);
+
+        String whereXml = getXmlString(ctx, where);
+
+        final String resultString = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", forSet).
+                queryParam("LET", letMapXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "NIDS").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        Assert.assertEquals(1, getNidSet(resultString).size());
+    }
+
     @Test
     public void DescriptionActiveLuceneMatchTest() throws JAXBException, IOException, Exception {
         System.out.println("DescriptionActiveLuceneMatch test");
@@ -342,16 +424,236 @@ public class RestQueryTest extends JerseyTest {
         NativeIdSetBI results1 = q1.compute();
         org.junit.Assert.assertEquals(1, results1.size());
 
+        TermstoreChanges tc = new TermstoreChanges(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
+
         for (DescriptionVersionBI desc : Ts.get().getConceptVersion(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest(), Snomed.BARANYS_SIGN.getNid()).getDescriptionsActive()) {
-            QueryTest.setActiveStatus(desc, Status.INACTIVE);
+            tc.setActiveStatus(desc, Status.INACTIVE);
         }
         DescriptionActiveLuceneMatchTest test = new DescriptionActiveLuceneMatchTest();
         String resultString = returnResultString(test.getQuery());
-        Assert.assertEquals(results1.size() - 1, getNidSet(resultString).size());
         for (DescriptionChronicleBI desc : Ts.get().getConceptVersion(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest(), Snomed.BARANYS_SIGN.getNid()).getDescriptions()) {
             DescriptionVersionBI descVersion = desc.getVersion(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
-            QueryTest.setActiveStatus(descVersion, Status.ACTIVE);
+            tc.setActiveStatus(descVersion, Status.ACTIVE);
         }
+        Assert.assertEquals(0, getNidSet(resultString).size());
+    }
+
+    @Test
+    public void ChangedFromPreviousVersionTest() throws IOException, JAXBException, ContradictionException, InvalidCAB {
+        System.out.println("ChangedFromPreviousVersion test");
+        SetViewCoordinate svc = new SetViewCoordinate(2010, 1, 31, 0, 0);
+        ViewCoordinate previousVC = svc.getViewCoordinate();
+        TermstoreChanges tc = new TermstoreChanges(previousVC);
+
+        JAXBContext ctx = JaxbForQuery.get();
+
+        ForCollection fc = new ForCollection();
+        List<UUID> uuids = new ArrayList<>();
+        NativeIdSetBI cb = new ConcurrentBitSet();
+        cb.add(Snomed.CLINICAL_FINDING.getNid());
+        cb.or(Ts.get().isChildOfSet(Snomed.CLINICAL_FINDING.getNid(), previousVC));
+        NativeIdSetItrBI iter = cb.getSetBitIterator();
+        while (iter.next()) {
+            uuids.add(Ts.get().getComponentVersion(previousVC, iter.nid()).getPrimordialUuid());
+        }
+        fc.setCustomCollection(uuids);
+        String forSet = getXmlString(ctx, fc);
+
+        HashMap<String, Object> letMap = new HashMap<>();
+        letMap.put("v2", previousVC);
+        LetMap wrappedMap = new LetMap(letMap);
+        String letMapXml = getXmlString(ctx, wrappedMap);
+
+        // Set the where clause
+        Where where = new Where();
+        WhereClause clause = new WhereClause();
+        clause.setSemanticString(ClauseSemantic.CHANGED_FROM_PREVIOUS_VERSION.name());
+        clause.getLetKeys().add("v2");
+        where.setRootClause(clause);
+
+        WhereClause or = new WhereClause();
+        or.setSemanticString(ClauseSemantic.OR.name());
+        or.getChildren().add(clause);
+        where.setRootClause(or);
+
+        String whereXml = getXmlString(ctx, where);
+
+        tc.modifyDesc("Admin status", Snomed.ADMINISTRATIVE_STATUSES.getNid());
+
+        final String resultString = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", forSet).
+                queryParam("LET", letMapXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "NIDS").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        tc.modifyDesc("Administrative statuses", Snomed.ADMINISTRATIVE_STATUSES.getNid());
+
+        NativeIdSetBI results = this.getNidSet(resultString);
+        Assert.assertEquals(1, results.size());
+
+    }
+
+    @Ignore
+    @Test
+    public void RelRestrictionNullBooleansTest() throws JAXBException, UnsupportedEncodingException {
+        System.out.println("RelRestriction null Booleans test");
+
+        HashMap<String, Object> letMap = new HashMap<>();
+        letMap.put("acceleration", Snomed.ACCELERATION);
+        letMap.put("is a", Snomed.IS_A);
+        letMap.put("motion", Snomed.MOTION);
+        letMap.put("false", false);
+        LetMap wrappedMap = new LetMap(letMap);
+
+        // Set the where clause
+        Where where = new Where();
+        WhereClause relRestriction = new WhereClause();
+        relRestriction.setSemanticString(ClauseSemantic.REL_RESTRICTION.name());
+        relRestriction.getLetKeys().add("acceleration");
+        relRestriction.getLetKeys().add("is a");
+        relRestriction.getLetKeys().add("motion");
+        relRestriction.getLetKeys().add("false");
+        where.setRootClause(relRestriction);
+
+        String url = getURLString(null, null, wrappedMap, where, ReturnTypes.DESCRIPTION_VERSION_FSN);
+
+        System.out.println(url);
+
+        String resultString = target("query" + url).
+                request(MediaType.TEXT_PLAIN).get(String.class);
+        Assert.assertEquals("Enter the required LET and WHERE parameters. See the documentation at "
+                + "http://ihtsdo.github.io/OTF-Query-Services/query-documentation/docbook/query-documentation.html for more information.", resultString);
+    }
+
+//    @Test
+//    public void RelRestrictionNullBooleansTest2() {
+//        String url = "query?VIEWPOINT=&FOR=&LET=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Eacceleration%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EAcceleration+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E6ef49616-e2c7-3557-b7f1-456a2c5a5e54%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Eis+a%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EIs+a+%28attribute%29%3C%2Fdescription%3E%3Cuuid%3Ec93a30b9-ba77-3adb-a9b8-4589c9f8fb25%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMotion+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Efalse%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22xs%3Aboolean%22+xmlns%3Axs%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3Efalse%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E&WHERE=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Awhere+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3CrootClause%3E%3CletKeys%3Eacceleration%3C%2FletKeys%3E%3CletKeys%3Eis+a%3C%2FletKeys%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3Efalse%3C%2FletKeys%3E%3CsemanticString%3EREL_RESTRICTION%3C%2FsemanticString%3E%3C%2FrootClause%3E%3C%2Fns2%3Awhere%3E&RETURN=NIDS";
+//        String resultString = target(url).
+//                request(MediaType.TEXT_PLAIN).get(String.class);
+//        NativeIdSetBI results = getNidSet(resultString);
+//        Assert.assertEquals(1, results.size());
+//
+//    }
+    @Test
+    public void RelRestrictionSubsumptionFalse() throws JAXBException, UnsupportedEncodingException {
+        System.out.println("RelRestriction");
+
+        //LET and WHERE objects constructed in org.ihtsdo.otf.query.rest.client.examples.RelRestrictionExample
+        String letMapXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Eacceleration%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EAcceleration+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E6ef49616-e2c7-3557-b7f1-456a2c5a5e54%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Eis+a%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EIs+a+%28attribute%29%3C%2Fdescription%3E%3Cuuid%3Ec93a30b9-ba77-3adb-a9b8-4589c9f8fb25%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns4%3AsimpleConceptSpecification%22+xmlns%3Ans4%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMotion+%28physical+force%29%3C%2Fdescription%3E%3Cuuid%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2Fuuid%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3Centry%3E%3Ckey%3Efalse%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22xs%3Aboolean%22+xmlns%3Axs%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3Efalse%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E", "UTF-8");
+        String whereXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Awhere+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22%3E%3CrootClause%3E%3CletKeys%3Eacceleration%3C%2FletKeys%3E%3CletKeys%3Eis+a%3C%2FletKeys%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3Efalse%3C%2FletKeys%3E%3CsemanticString%3EREL_RESTRICTION%3C%2FsemanticString%3E%3C%2FrootClause%3E%3C%2Fns2%3Awhere%3E", "UTF-8");
+
+        final String resultString = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", "null").
+                queryParam("LET", letMapXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "NIDS").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        NativeIdSetBI results = this.getNidSet(resultString);
+        Assert.assertEquals(1, results.size());
+    }
+
+    @Test
+    public void DescriptionActiveRegexMatchTest() throws IOException, ContradictionException, InvalidCAB, Exception {
+        System.out.println("Description active regex match test");
+        TermstoreChanges tc = new TermstoreChanges(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
+        for (DescriptionVersionBI desc : Ts.get().getConceptVersion(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest(), Snomed.ACCELERATION.getNid()).getDescriptionsActive()) {
+            tc.setActiveStatus(desc, Status.INACTIVE);
+        }
+
+        DescriptionActiveRegexMatchTest test = new DescriptionActiveRegexMatchTest();
+        String results = this.returnResultString(test.getQuery());
+
+        NativeIdSetBI resultSet = this.getNidSet(results);
+
+        for (DescriptionChronicleBI desc : Ts.get().getConceptVersion(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest(), Snomed.ACCELERATION.getNid()).getDescriptions()) {
+            DescriptionVersionBI descVersion = desc.getVersion(org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
+            tc.setActiveStatus(descVersion, Status.ACTIVE);
+        }
+
+        Assert.assertEquals(3, resultSet.size());
+    }
+
+    @Test
+    public void definitionalStateTest() throws UnsupportedEncodingException {
+        System.out.println("Definitional state test.");
+
+        String letXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3AletMap+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22+xmlns%3Ans4%3D%22http%3A%2F%2Fdisplay.object.jaxb.otf.ihtsdo.org%22+xmlns%3Ans3%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3Cmap%3E%3Centry%3E%3Ckey%3Emotion%3C%2Fkey%3E%3Cvalue+xsi%3Atype%3D%22ns3%3AconceptSpec%22+xmlns%3Axsi%3D%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%3E%3Cdescription%3EMotion+%28physical+force%29%3C%2Fdescription%3E%3CuuidStrs%3E45a8fde8-535d-3d2a-b76b-95ab67718b41%3C%2FuuidStrs%3E%3C%2Fvalue%3E%3C%2Fentry%3E%3C%2Fmap%3E%3C%2Fns2%3AletMap%3E", "UTF-8");
+        String whereXml = URLDecoder.decode("%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22+standalone%3D%22yes%22%3F%3E%3Cns2%3Aclause+xmlns%3Ans2%3D%22http%3A%2F%2Fquery.jaxb.otf.ihtsdo.org%22+xmlns%3Ans4%3D%22http%3A%2F%2Fdisplay.object.jaxb.otf.ihtsdo.org%22+xmlns%3Ans3%3D%22http%3A%2F%2Fapi.chronicle.jaxb.otf.ihtsdo.org%22%3E%3Cchildren%3E%3CletKeys%3Emotion%3C%2FletKeys%3E%3CletKeys%3ECurrent+view+coordinate%3C%2FletKeys%3E%3CsemanticString%3ECONCEPT_IS%3C%2FsemanticString%3E%3C%2Fchildren%3E%3CsemanticString%3EOR%3C%2FsemanticString%3E%3C%2Fns2%3Aclause%3E", "UTF-8");
+
+        final String resultString = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", "null").
+                queryParam("LET", letXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "DESCRIPTION_VERSION_FSN").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        Assert.assertTrue(stringMatchesDefinitionalStateRegex(resultString));
+
+        final String resultStringConcept = target("query").
+                queryParam("VIEWPOINT", "null").
+                queryParam("FOR", "null").
+                queryParam("LET", letXml).
+                queryParam("WHERE", whereXml).
+                queryParam("RETURN", "CONCEPT_VERSION").
+                request(MediaType.TEXT_PLAIN).get(String.class);
+
+        Assert.assertTrue(stringMatchesDefinitionalStateRegex(resultStringConcept));
+
+    }
+
+    public boolean stringMatchesDefinitionalStateRegex(String result) {
+
+        StringTokenizer st = new StringTokenizer(result, "<");
+
+        ArrayList<String> definitionalStates = new ArrayList<>();
+
+        boolean matches = false;
+
+        while (st.hasMoreTokens()) {
+            String next = st.nextToken();
+            if (next.matches("definitionalState>.*")) {
+                definitionalStates.add(next);
+            }
+        }
+
+        for (String s : definitionalStates) {
+            if (s.matches("definitionalState>NECESSARY") || s.matches("definitionalState>NECESSARY_AND_SUFFICIENT") || s.matches("definitionalState>UNDETERMINED") || s.matches("definitionalState>NOT_A_DEFINED_COMPONENT")) {
+                matches = true;
+            }
+        }
+
+        return matches;
+
+    }
+
+    public String getURLString(ViewCoordinate vc, ForCollection forCollection, LetMap let, Where where, ReturnTypes rt) throws JAXBException, UnsupportedEncodingException {
+        StringBuilder bi = new StringBuilder();
+        bi.append("?VIEW=");
+        JAXBContext ctx = JaxbForQuery.get();
+        if (vc != null) {
+            bi.append(URLEncoder.encode(getXmlString(ctx, vc), "UTF-8"));
+        }
+
+        bi.append("&FOR=");
+        if (forCollection != null) {
+            bi.append(URLEncoder.encode(getXmlString(ctx, forCollection), "UTF-8"));
+        }
+
+        bi.append("&LET=");
+        bi.append(URLEncoder.encode(getXmlString(ctx, let), "UTF-8"));
+
+        bi.append("&WHERE=");
+        bi.append(URLEncoder.encode(getXmlString(ctx, where), "UTF-8"));
+
+        bi.append("&RETURN=");
+        bi.append(valueOf(rt));
+
+        return (bi.toString());
     }
 
     public String returnResultString(Query q, ReturnTypes returnType) throws JAXBException, IOException {
@@ -381,7 +683,7 @@ public class RestQueryTest extends JerseyTest {
 
         System.out.println("URL: " + urlBuilder.toString());
 
-        final String resultString = target("query-service/query").
+        final String resultString = target("query").
                 queryParam("VIEWPOINT", viewCoordinateXml).
                 queryParam("FOR", forXml).
                 queryParam("LET", letMapXml).
@@ -414,24 +716,5 @@ public class RestQueryTest extends JerseyTest {
         ctx.createMarshaller().marshal(obj, writer);
         String letMapXml = writer.toString();
         return letMapXml;
-    }
-
-    public void addRefsetMember() throws IOException {
-        try {
-            RefexCAB refex = new RefexCAB(RefexType.STR, Snomed.MILD.getLenient().getNid(), Snomed.SEVERITY_REFSET.getLenient().getNid(), IdDirective.GENERATE_HASH, RefexDirective.INCLUDE);
-            refex.put(ComponentProperty.STRING_EXTENSION_1, "Mild severity");
-            int authorNid = TermAux.USER.getLenient().getConceptNid();
-            int editPathNid = TermAux.WB_AUX_PATH.getLenient().getConceptNid();
-
-            EditCoordinate ec = new EditCoordinate(authorNid, Snomed.CORE_MODULE.getLenient().getNid(), editPathNid);
-            TerminologyBuilderBI tb = Ts.get().getTerminologyBuilder(ec, org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates.getSnomedInferredLatest());
-            RefexChronicleBI rc = tb.construct(refex);
-            Ts.get().addUncommitted(Snomed.SEVERITY_REFSET.getLenient());
-            Ts.get().commit();
-        } catch (InvalidCAB ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ContradictionException ex) {
-            Logger.getLogger(QueryTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

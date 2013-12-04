@@ -38,6 +38,7 @@ import org.ihtsdo.otf.tcc.ddo.ResultList;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
 import org.ihtsdo.otf.tcc.model.index.service.IndexerBI;
 import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
+import com.wordnik.swagger.annotations.*;
 
 /**
  * Creates a simple REST call for a Lucene search of descriptions. Encode the
@@ -46,7 +47,9 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
  *
  * @author dylangrald
  */
-@Path("query-service/lucene")
+@Api(value = "/lucene", description = "Search description text using Lucene.")
+@Path("/lucene")
+@Produces({"text/plain"})
 public class LuceneResource {
 
     private static IndexerBI descriptionIndexer;
@@ -70,9 +73,12 @@ public class LuceneResource {
     }
 
     @GET
-    @Path("{query}")
+    @Path("/{query}")
     @Produces("text/plain")
-    public String doQuery(@PathParam("query") String queryText) throws IOException, JAXBException, Exception {
+    @ApiOperation(value = "Find concepts by description", response = String.class)
+    public String doQuery(
+            @ApiParam(value = "Search descriptions matching an input string. ", required = true, defaultValue = "hyperphenylalaninemia")
+            @PathParam("query") String queryText) throws IOException, JAXBException, Exception {
         String queryString = "query: " + queryText;
         System.out.println("Received: \n   " + queryString);
         if (queryText == null) {
@@ -101,6 +107,10 @@ public class LuceneResource {
             ArrayList<Object> objectList = Query.returnDisplayObjects(resultSet,
                     ReturnTypes.DESCRIPTION_FOR_COMPONENT,
                     StandardViewCoordinates.getSnomedInferredLatest());
+
+            if (objectList.isEmpty()) {
+                return "No results found for " + queryString;
+            }
 
             ResultList resultList = new ResultList();
             resultList.setTheResults(objectList);

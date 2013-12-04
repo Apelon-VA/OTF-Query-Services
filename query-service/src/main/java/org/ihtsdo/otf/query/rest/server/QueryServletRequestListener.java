@@ -16,10 +16,10 @@
 package org.ihtsdo.otf.query.rest.server;
 
 import java.io.IOException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -37,14 +37,6 @@ public class QueryServletRequestListener implements ServletRequestListener {
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         ServletRequest servletRequest = sre.getServletRequest();
-//        ServletContext sc = servletRequest.getServletContext();
-//        System.out.println(servletRequest.getParameterNames().nextElement());
-//        if (sre.getServletContext().getAttribute("status") != null) {
-//            String status = sre.getServletContext().getAttribute("status").toString();
-//            if (status.equals("The project is building.") || status.equals("Opening the database")) {
-//                throw new QueryApplicationException(HttpErrorType.ERROR503, "Opening the database. Please try again once the database is open.");
-//            }
-//        }
         System.out.println("ServletRequest initialized. Remote IP=" + servletRequest.getRemoteAddr());
     }
 

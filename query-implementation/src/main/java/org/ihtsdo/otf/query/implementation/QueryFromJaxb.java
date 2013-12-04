@@ -41,6 +41,7 @@ import static org.ihtsdo.otf.query.implementation.ClauseSemantic.PREFERRED_NAME_
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.REFSET_LUCENE_MATCH;
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.REL_TYPE;
 import static org.ihtsdo.otf.query.implementation.ClauseSemantic.XOR;
+import org.ihtsdo.otf.query.implementation.ForCollection.ForCollectionContents;
 import org.ihtsdo.otf.tcc.api.coordinate.SimpleViewCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
@@ -57,14 +58,8 @@ import org.ihtsdo.otf.tcc.datastore.BdbTerminologyStore;
  */
 public class QueryFromJaxb extends Query {
 
-    private static ViewCoordinate getViewCoordinate(Object obj) throws ValidationException {
-        if (obj instanceof ViewCoordinate) {
-            return (ViewCoordinate) obj;
-        }
-        if (obj instanceof SimpleViewCoordinate) {
-            return new ViewCoordinate((SimpleViewCoordinate) obj);
-        }
-        return null;
+    private static ViewCoordinate getViewCoordinate(SimpleViewCoordinate obj) throws ValidationException {
+        return new ViewCoordinate((SimpleViewCoordinate) obj);
     }
     private Clause rootClause;
     /**
@@ -86,7 +81,7 @@ public class QueryFromJaxb extends Query {
         super(null);
         if (viewCoordinateXml != null && !viewCoordinateXml.equals("null") && !viewCoordinateXml.equals("")) {
             try {
-                setViewCoordinate(getViewCoordinate(JaxbForQuery.get().createUnmarshaller()
+                setViewCoordinate(getViewCoordinate((SimpleViewCoordinate) JaxbForQuery.get().createUnmarshaller()
                         .unmarshal(new StringReader(viewCoordinateXml))));
             } catch (JAXBException e) {
                 this.setViewCoordinate(null);
@@ -124,24 +119,33 @@ public class QueryFromJaxb extends Query {
 
         if (forXml == null || forXml.equals("null") || forXml.equals("")) {
             this.forCollection = Ts.get().getAllConceptNids();
-        } else if (convertedMap.containsKey("Custom FOR set")) {
-            String UUIDset = (String) convertedMap.get("Custom FOR set");
-            ConcurrentBitSet cbs = new ConcurrentBitSet();
-            StringTokenizer tok = new StringTokenizer(UUIDset, ",");
-            while (tok.hasMoreTokens()) {
-                String next = tok.nextToken();
-                if (next.matches("[0-9a-z-]*")) {
-                    UUID nextUUID = UUID.fromString(next);
-                    cbs.add(Ts.get().getComponent(nextUUID).getNid());
+        } else if (convertedMap != null) {
+            if (convertedMap.containsKey("Custom FOR set")) {
+                String UUIDset = (String) convertedMap.get("Custom FOR set");
+                ConcurrentBitSet cbs = new ConcurrentBitSet();
+                StringTokenizer tok = new StringTokenizer(UUIDset, ",");
+                while (tok.hasMoreTokens()) {
+                    String next = tok.nextToken();
+                    if (next.matches("[0-9a-z-]*")) {
+                        UUID nextUUID = UUID.fromString(next);
+                        cbs.add(Ts.get().getComponent(nextUUID).getNid());
+                    }
                 }
-            }
-            this.forCollection = cbs;
-        } else {
-            try {
-                ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
-                this.forCollection = _for.getCollection();
-            } catch (JAXBException e) {
-                this.forCollection = null;
+                this.forCollection = cbs;
+            } else {
+                try {
+                    ForCollection _for = (ForCollection) unmarshaller.unmarshal(new StringReader(forXml));
+                    if (_for.forCollection.equals(ForCollectionContents.CUSTOM)) {
+                        this.forCollection = new ConcurrentBitSet();
+                        for (UUID i : _for.getCustomCollection()) {
+                            forCollection.add(Ts.get().getConcept(i).getConceptNid());
+                        }
+                    } else {
+                        this.forCollection = _for.getCollection();
+                    }
+                } catch (JAXBException e) {
+                    this.forCollection = null;
+                }
             }
         }
 
@@ -296,13 +300,15 @@ public class QueryFromJaxb extends Query {
                 }
             case REL_RESTRICTION:
                 assert childClauses.length == 0 : childClauses;
-                assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 || clause.letKeys.size() == 5 : "Let keys should have three, four, or five values: " + clause.letKeys;
+                assert clause.letKeys.size() == 3 || clause.letKeys.size() == 4 || clause.letKeys.size() == 5 || clause.letKeys.size() == 6 : "Let keys hould have three, four, five, or six values: " + clause.letKeys;
                 if (clause.letKeys.size() == 3) {
                     return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2));
-                } else if(clause.letKeys.size() == 4) {
+                } else if (clause.letKeys.size() == 4) {
                     return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
+                } else if (clause.letKeys.size() == 5) {
+                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3), clause.letKeys.get(4));
                 } else {
-                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3));
+                    return q.RelRestriction(clause.letKeys.get(0), clause.letKeys.get(1), clause.letKeys.get(2), clause.letKeys.get(3), clause.letKeys.get(4), clause.letKeys.get(5));
                 }
             case REL_TYPE:
                 assert childClauses.length == 0 : childClauses;

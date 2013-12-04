@@ -15,14 +15,14 @@ package org.ihtsdo.otf.query.integration.tests;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 import java.io.IOException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.query.implementation.Clause;
 import org.ihtsdo.otf.query.implementation.Query;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
@@ -32,17 +32,21 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
  */
 public class ChangedFromPreviousVersionTest extends QueryClauseTest {
 
-    SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2010, 1, 31, 0, 0);
+    NativeIdSetBI forSet;
 
-    public ChangedFromPreviousVersionTest() throws IOException{
+    public ChangedFromPreviousVersionTest() throws IOException {
         this.q = new Query() {
             @Override
             protected NativeIdSetBI For() throws IOException {
-                return Ts.get().isKindOfSet(Snomed.MOTION.getNid(), StandardViewCoordinates.getSnomedInferredLatest());
+                forSet = new ConcurrentBitSet();
+                forSet.or(Ts.get().isChildOfSet(Snomed.CLINICAL_FINDING.getNid(), StandardViewCoordinates.getSnomedInferredLatest()));
+                forSet.add(Snomed.CLINICAL_FINDING.getNid());
+                return forSet;
             }
 
             @Override
             public void Let() throws IOException {
+                SetViewCoordinate setViewCoordinate = new SetViewCoordinate(2010, 1, 31, 0, 0);
                 let("v2", setViewCoordinate.getViewCoordinate());
             }
 

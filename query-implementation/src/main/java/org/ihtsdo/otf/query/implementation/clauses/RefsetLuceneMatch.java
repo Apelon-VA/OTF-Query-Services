@@ -114,6 +114,5 @@ public class RefsetLuceneMatch extends LeafClause {
 
     @Override
     public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
-        getResultsCache();
     }
 }
