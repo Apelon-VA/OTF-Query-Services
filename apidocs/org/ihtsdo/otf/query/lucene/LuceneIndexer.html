@@ -416,8 +416,9 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code>query</code>&nbsp;in interface&nbsp;<code>org.ihtsdo.otf.tcc.model.index.service.IndexerBI</code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>query</code> - The query to apply.</dd><dd><code>field</code> - The component field to be queried.</dd><dd><code>sizeLimit</code> - The maximum size of the result list.</dd><dd><code>targetGeneration</code> - target generation that must be included in the search
- or Long.MIN_VALUE if there is no need to wait for a target generation.</dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>query</code> - The query to apply.</dd><dd><code>field</code> - The component field to be queried.</dd><dd><code>sizeLimit</code> - The maximum size of the result list.</dd><dd><code>targetGeneration</code> - target generation that must be included in the
+ search or Long.MIN_VALUE if there is no need to wait for a target
+ generation.</dd>
 <dt><span class="strong">Returns:</span></dt><dd>a List of <code>SearchResult</codes> that contins the nid of the
  component that matched, and the score of that match relative to other
  matches.</dd>
@@ -500,11 +501,11 @@ implements org.ihtsdo.otf.tcc.model.index.service.IndexerBI</pre>
 <dd><code>getIndexedGenerationCallable</code>&nbsp;in interface&nbsp;<code>org.ihtsdo.otf.tcc.model.index.service.IndexerBI</code></dd>
 <dt><span class="strong">Parameters:</span></dt><dd><code>nid</code> - for the component that the caller wished to wait until it's
  document is added to the index.</dd>
-<dt><span class="strong">Returns:</span></dt><dd>a <code>Callable&lt;Long&gt;</code> object that will block until this
- indexer has added the document to the index. The <code>call()</code> method
- on the object will return the index generation that contains the document,
- which can be used in search calls to make sure the generation is available
- to the searcher.</dd></dl>
+<dt><span class="strong">Returns:</span></dt><dd>a <code>Callable&lt;Long&gt;</code> object that will block until
+ this indexer has added the document to the index. The <code>call()</code>
+ method on the object will return the index generation that contains the
+ document, which can be used in search calls to make sure the generation
+ is available to the searcher.</dd></dl>
 </li>
 </ul>
 <a name="setEnabled(boolean)">

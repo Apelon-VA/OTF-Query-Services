@@ -72,7 +72,7 @@
 <li class="blockList"><a name="org.ihtsdo.otf.query.rest.server.QueryApplicationException">
 <!--   -->
 </a>
-<h3>Class <a href="org/ihtsdo/otf/query/rest/server/QueryApplicationException.html" title="class in org.ihtsdo.otf.query.rest.server">org.ihtsdo.otf.query.rest.server.QueryApplicationException</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a> implements Serializable</h3>
+<h3>Class <a href="org/ihtsdo/otf/query/rest/server/QueryApplicationException.html" title="class in org.ihtsdo.otf.query.rest.server">org.ihtsdo.otf.query.rest.server.QueryApplicationException</a> extends javax.ws.rs.WebApplicationException implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -99,9 +99,13 @@
 <h4>reason</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> reason</pre>
 </li>
-<li class="blockListLast">
+<li class="blockList">
 <h4>otherExceptionReason</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> otherExceptionReason</pre>
+</li>
+<li class="blockListLast">
+<h4>status</h4>
+<pre>int status</pre>
 </li>
 </ul>
 </li>

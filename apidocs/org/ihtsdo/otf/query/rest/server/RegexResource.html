@@ -95,8 +95,7 @@
 <li class="blockList">
 <hr>
 <br>
-<pre>@Path(value="query-service/regex")
-public class <span class="strong">RegexResource</span>
+<pre>public class <span class="strong">RegexResource</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Creates a simple REST call for a regex description match. Encode the regex at
  the following URL: http://www.url-encode-decode.com and select UTF-8.</div>
@@ -190,9 +189,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doQuery</h4>
-<pre>@GET
-@Produces(value="text/plain")
-public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;doQuery()
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;doQuery()
                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                       <a href="http://docs.oracle.com/javase/7/docs/api/javax/xml/bind/JAXBException.html?is-external=true" title="class or interface in javax.xml.bind">JAXBException</a>,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
@@ -208,11 +205,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.h
 <ul class="blockListLast">
 <li class="blockList">
 <h4>doQuery</h4>
-<pre>@GET
-@Path(value="{regex}")
-@Produces(value="text/plain")
-public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;doQuery(@PathParam(value="regex")
-                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regex)
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;doQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;regex)
                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                       <a href="http://docs.oracle.com/javase/7/docs/api/javax/xml/bind/JAXBException.html?is-external=true" title="class or interface in javax.xml.bind">JAXBException</a>,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>

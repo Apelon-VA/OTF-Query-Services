@@ -95,7 +95,7 @@
 <li class="blockList">
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../org/ihtsdo/otf/query/implementation/LuceneQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation">LuceneQueryFromJaxb</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation">QueryFromJaxb</a>, <a href="../../../../../org/ihtsdo/otf/query/implementation/RegexQueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation">RegexQueryFromJaxb</a></dd>
+<dd><a href="../../../../../org/ihtsdo/otf/query/implementation/QueryFromJaxb.html" title="class in org.ihtsdo.otf.query.implementation">QueryFromJaxb</a></dd>
 </dl>
 <hr>
 <br>
@@ -244,7 +244,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveLuceneMatch(java.lang.String)">DescriptionActiveLuceneMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryTextKey)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveLuceneMatch</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#DescriptionActiveLuceneMatch(java.lang.String, java.lang.String)">DescriptionActiveLuceneMatch</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryTextKey,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
 </tr>
@@ -374,25 +374,27 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
-<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Boolean)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;relTypeSubsumption)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</code>&nbsp;</td>
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key1,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/ihtsdo/otf/query/implementation/Query.html#RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)">RelRestriction</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeSubsumptionKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;targetSubsumptionKey)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelType.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelType</a></code></td>
@@ -891,6 +893,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveLuceneMatch</a>&nbsp;DescriptionActiveLuceneMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryTextKey)</pre>
 </li>
 </ul>
+<a name="DescriptionActiveLuceneMatch(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DescriptionActiveLuceneMatch</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionActiveLuceneMatch</a>&nbsp;DescriptionActiveLuceneMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryTextKey,
+                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
+</li>
+</ul>
 <a name="DescriptionLuceneMatch(java.lang.String)">
 <!--   -->
 </a>
@@ -898,16 +910,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>DescriptionLuceneMatch</h4>
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a>&nbsp;DescriptionLuceneMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryTextKey)</pre>
-</li>
-</ul>
-<a name="DescriptionActiveLuceneMatch(java.lang.String, java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>DescriptionActiveLuceneMatch</h4>
-<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionLuceneMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionLuceneMatch</a>&nbsp;DescriptionActiveLuceneMatch(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;queryTextKey,
-                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
 </li>
 </ul>
 <a name="And(org.ihtsdo.otf.query.implementation.Clause...)">
@@ -967,30 +969,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;subsumption)</pre>
 </li>
 </ul>
-<a name="RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>RelRestriction</h4>
-<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a>&nbsp;RelRestriction(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption)</pre>
-</li>
-</ul>
-<a name="RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>RelRestriction</h4>
-<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a>&nbsp;RelRestriction(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey)</pre>
-</li>
-</ul>
 <a name="RelRestriction(java.lang.String, java.lang.String, java.lang.String)">
 <!--   -->
 </a>
@@ -1002,7 +980,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey)</pre>
 </li>
 </ul>
-<a name="RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Boolean)">
+<a name="RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1011,8 +989,34 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a>&nbsp;RelRestriction(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;destinationSubsumption,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;relTypeSubsumption)</pre>
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+</li>
+</ul>
+<a name="RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RelRestriction</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a>&nbsp;RelRestriction(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key1,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key2)</pre>
+</li>
+</ul>
+<a name="RelRestriction(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RelRestriction</h4>
+<pre>protected&nbsp;<a href="../../../../../org/ihtsdo/otf/query/implementation/clauses/RelRestriction.html" title="class in org.ihtsdo.otf.query.implementation.clauses">RelRestriction</a>&nbsp;RelRestriction(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;conceptSpecKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relRestrictionKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewCoordinateKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;relTypeSubsumptionKey,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;targetSubsumptionKey)</pre>
 </li>
 </ul>
 <a name="RefsetContainsConcept(java.lang.String, java.lang.String)">

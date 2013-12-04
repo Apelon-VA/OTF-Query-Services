@@ -169,19 +169,13 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/D
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/ihtsdo/otf/query/implementation/ClauseComputeType.html" title="enum in org.ihtsdo.otf.query.implementation">ClauseComputeType</a>&gt;</code></td>
-<td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html#getComputePhases()">getComputePhases</a></strong>()</code>
-<div class="block">Getter for the iteration types required to compute the clause.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html#getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">getQueryMatches</a></strong>(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI&nbsp;conceptVersion)</code>
 <div class="block">Collect intermediate results for clauses that require iteration over the
  database.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/WhereClause.html" title="class in org.ihtsdo.otf.query.implementation">WhereClause</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionActiveRegexMatch.html#getWhereClause()">getWhereClause</a></strong>()</code>
 <div class="block">Getter for the
@@ -194,7 +188,7 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/D
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.ihtsdo.otf.query.implementation.clauses.<a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></h3>
-<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computePossibleComponents</a></code></li>
+<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html#computePossibleComponents(org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI)">computePossibleComponents</a>, <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html#getComputePhases()">getComputePhases</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_org.ihtsdo.otf.query.implementation.LeafClause">
@@ -250,22 +244,6 @@ extends <a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/D
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getComputePhases()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getComputePhases</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/ihtsdo/otf/query/implementation/ClauseComputeType.html" title="enum in org.ihtsdo.otf.query.implementation">ClauseComputeType</a>&gt;&nbsp;getComputePhases()</pre>
-<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/Clause.html#getComputePhases()">Clause</a></code></strong></div>
-<div class="block">Getter for the iteration types required to compute the clause.</div>
-<dl>
-<dt><strong>Overrides:</strong></dt>
-<dd><code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html#getComputePhases()">getComputePhases</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/ihtsdo/otf/query/implementation/clauses/DescriptionRegexMatch.html" title="class in org.ihtsdo.otf.query.implementation.clauses">DescriptionRegexMatch</a></code></dd>
-<dt><span class="strong">Returns:</span></dt><dd>an <code>EnumSet</code> of <code>ClauseComputeType</code>
- elements for the clause.</dd></dl>
-</li>
-</ul>
 <a name="getQueryMatches(org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI)">
 <!--   -->
 </a>
