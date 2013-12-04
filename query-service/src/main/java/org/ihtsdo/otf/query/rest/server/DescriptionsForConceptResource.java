@@ -23,7 +23,6 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import javax.ws.rs.GET;
@@ -77,7 +76,6 @@ public class DescriptionsForConceptResource {
     }
 
     @GET
-    @Path("")
     @Produces("text/plain")
     public String getDescFromSctid() {
         return "Please enter SCTID.";
