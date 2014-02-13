@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <version>${terminology-component-chronicle.version}</version>
+            <version>${otf-versioning-service.version}</version>
             <artifactId>tcc-datastore</artifactId>
         </dependency>
         <dependency>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>org.ihtsdo.otf</groupId>
             <artifactId>tcc-rest-server</artifactId>
-            <version>${terminology-component-chronicle.version}</version>
+            <version>${otf-versioning-service.version}</version>
             <type>war</type>
         </dependency>
         <dependency>

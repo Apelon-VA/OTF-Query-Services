@@ -30,7 +30,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>tcc-junit-ext</artifactId>
-            <version>${terminology-component-chronicle.version}</version>
+            <version>${otf-versioning-service.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

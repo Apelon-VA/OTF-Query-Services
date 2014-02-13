@@ -68,15 +68,15 @@
         </contributor>
     </contributors>
     <scm>
-        <connection>scm:git:https://github.com/IHTSDO/OTF-Query-Services.git</connection>
-        <developerConnection>scm:git:git@github.com:IHTSDO/OTF-Query-Services.git</developerConnection>
-        <url>https://github.com/IHTSDO/OTF-Query-Services</url>
-        <tag>sprint2</tag>
+        <connection>scm:git:https://github.com/Apelon-VA/OTF-Query-Services.git</connection>
+        <developerConnection>scm:git:git@github.com:Apelon-VA/OTF-Query-Services.git</developerConnection>
+        <url>https://github.com/Apelon-VA/OTF-Query-Services</url>
+        <tag>va-branch</tag>
     </scm>
     <distributionManagement>
         <site>
             <id>site</id>
-            <url>scm:git:git@github.com:IHTSDO/OTF-Query-Services.git</url>
+            <url>scm:git:git@github.com:Apelon-VA/OTF-Query-Services.git</url>
         </site>
     </distributionManagement>
     <properties>
@@ -85,7 +85,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jersey-version>2.2</jersey-version>
         <junit.version>4.11</junit.version>
-        <terminology-component-chronicle.version>1.1-SNAPSHOT</terminology-component-chronicle.version>
+        <otf-versioning-service.version>1.1-va-1.0-SNAPSHOT</otf-versioning-service.version>
         <org.apache.lucene.version>4.3.1</org.apache.lucene.version>
         <hk2.version>2.2.0-b14</hk2.version>
         <maven-plugin-plugin.version>2.6</maven-plugin-plugin.version>
