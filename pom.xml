@@ -74,6 +74,17 @@
         <tag>va-branch</tag>
     </scm>
     <distributionManagement>
+        <!-- I don't normally define these here, but the override doesn't seem to work when it is configured in a parent.  Sigh.  Maven. -->
+        <repository>
+          <id>maestro-deploy</id>
+          <name>VA Public Releases Repository</name>
+          <url>http://va-archiva-host:8082/archiva/repository/va-releases/</url>
+        </repository>
+        <snapshotRepository>
+          <id>maestro-deploy</id>
+          <name>VA Public Snapshots Repository</name>
+          <url>http://va-archiva-host:8082/archiva/repository/va-snapshots/</url>
+        </snapshotRepository>
         <site>
             <id>site</id>
             <url>scm:git:git@github.com:Apelon-VA/OTF-Query-Services.git</url>
