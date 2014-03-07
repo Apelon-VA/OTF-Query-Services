@@ -1,8 +1,11 @@
 package org.ihtsdo.otf.query.lucene;
 
 //~--- non-JDK imports --------------------------------------------------------
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.IntField;
@@ -11,14 +14,19 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.LogByteSizeMergePolicy;
 import org.apache.lucene.index.MergePolicy;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.NRTManager;
 import org.apache.lucene.search.NRTManagerReopenThread;
 import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
@@ -36,7 +44,7 @@ import org.ihtsdo.otf.tcc.model.index.service.SearchResult;
 //~--- JDK imports ------------------------------------------------------------
 import java.io.File;
 import java.io.IOException;
-
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -180,6 +188,25 @@ public abstract class LuceneIndexer implements IndexerBI {
             throws IOException, ParseException {
         return query(query, field, sizeLimit, Long.MIN_VALUE);
     }
+    
+    /**
+    *
+    * @param query The query to apply.
+    * @param field The component field to be queried.
+    * @param sizeLimit The maximum size of the result list.
+    * @param targetGeneration target generation that must be included in the
+    * search or Long.MIN_VALUE if there is no need to wait for a target
+    * generation.
+    * @return a List of <code>SearchResult</codes> that contins the nid of the
+    * component that matched, and the score of that match relative to other
+    * matches.
+    * @throws IOException
+    * @throws ParseException
+    */
+   public final List<SearchResult> query(String query, ComponentProperty field, int sizeLimit, long targetGeneration)
+           throws IOException, ParseException {
+       return query(query, false, field, sizeLimit, targetGeneration);
+   }
 
     /**
      *
@@ -189,13 +216,30 @@ public abstract class LuceneIndexer implements IndexerBI {
      * @param targetGeneration target generation that must be included in the
      * search or Long.MIN_VALUE if there is no need to wait for a target
      * generation.
+     * @param prefixSearch if true, utilize a search algorithm that is optimized 
+     * for prefix searching, such as the searching that would be done to implement 
+     * a type-ahead style search.  This is currently only applicable to 
+     * {@link ComponentProperty#DESCRIPTION_TEXT} cases - is ignored for all other 
+     * field types.  Does not use the Lucene Query parser.  Every term (or token) 
+     * that is part of the query string will be required to be found in the result.
+     * 
+     * Note, it is useful to NOT trim the text of the query before it is sent in - 
+     * if the last word of the query has a space character following it, that word 
+     * will be required as a complete term.  If the last word of the query does not 
+     * have a space character following it, that word will be required as a prefix 
+     * match only.
+     * 
+     * For example:
+     * The query "family test" will return results that contain 'Family Testudinidae'
+     * The query "family test " will not match on  'Testudinidae', so that will be excluded.
+     *
      * @return a List of <code>SearchResult</codes> that contins the nid of the
      * component that matched, and the score of that match relative to other
      * matches.
      * @throws IOException
      * @throws ParseException
      */
-    public final List<SearchResult> query(String query, ComponentProperty field, int sizeLimit, long targetGeneration)
+    public final List<SearchResult> query(String query, boolean prefixSearch, ComponentProperty field, int sizeLimit, long targetGeneration)
             throws IOException, ParseException {
         try {
             List<SearchResult> result;
@@ -210,25 +254,40 @@ public abstract class LuceneIndexer implements IndexerBI {
                     break;
 
                 case DESCRIPTION_TEXT:
-                    Query q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
+                    Query q;
+                    if (prefixSearch){
+                        q = buildPrefixQuery(query,field, new StandardAnalyzer(LuceneIndexer.luceneVersion));
+                    }
+                    else{
+                        q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
                             new StandardAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
+                    }
 
                     result = search(q, sizeLimit, targetGeneration);
+                    if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
+                        TermstoreLogger.logger.log(Level.FINE, "StandardAnalyzer query " + (prefixSearch ? "prefixAlgorithm " : "") 
+                            + "returned {0} hits", result.size());
+                    }
 
-                    if (result.size() > 0) {
-                        if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                            TermstoreLogger.logger.log(Level.FINE, "StandardAnalyzer query returned {0} hits",
-                                    result.size());
-                        }
-                    } else {
+                    if (result.size() == 0) {
                         if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
                             TermstoreLogger.logger.fine("StandardAnalyzer query returned no results. "
                                     + "Now trying WhitespaceAnalyzer query");
+                        }
+                        
+                        if (prefixSearch){
+                            q = buildPrefixQuery(query, field, new WhitespaceAnalyzer(LuceneIndexer.luceneVersion));
+                        }
+                        else{
                             q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
                                     new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
                         }
 
                         result = search(q, sizeLimit, targetGeneration);
+                        if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
+                            TermstoreLogger.logger.log(Level.FINE, "WhitespaceAnalyzer query " + (prefixSearch ? "prefixAlgorithm " : "") 
+                                + "returned {0} hits", result.size());
+                        }
                     }
 
                     break;
@@ -442,5 +501,35 @@ public abstract class LuceneIndexer implements IndexerBI {
         public Long get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
             return Long.MIN_VALUE;
         }
+    }
+    
+    private static Query buildPrefixQuery(String searchString, ComponentProperty field, Analyzer analyzer) throws IOException
+    {
+        StringReader textReader = new StringReader(searchString);
+        TokenStream tokenStream = analyzer.tokenStream(field.name(), textReader);
+        tokenStream.reset();
+        List<String> terms = new ArrayList<>();
+        CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+        
+        while (tokenStream.incrementToken())
+        {
+            terms.add(charTermAttribute.toString());
+        }
+        textReader.close();
+        tokenStream.close();
+        analyzer.close();
+        
+        BooleanQuery bq = new BooleanQuery();
+        if (terms.size() > 0 && !searchString.endsWith(" "))
+        {
+            String last = terms.remove(terms.size() - 1);
+            bq.add(new PrefixQuery((new Term(field.name(), last))), Occur.MUST);
+        }
+        for (String s : terms)
+        {
+            bq.add(new TermQuery(new Term(field.name(), s)), Occur.MUST);
+        }
+        
+        return bq;
     }
 }
