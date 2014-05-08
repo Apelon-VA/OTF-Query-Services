@@ -348,7 +348,7 @@ public class RestQueryTest extends JerseyTest {
         System.out.println("RelType test");
         RelTypeTest test = new RelTypeTest();
         String resultString = returnResultString(test.getQuery());
-        Assert.assertEquals(228, getNidSet(resultString).size());
+        Assert.assertEquals(220, getNidSet(resultString).size());
     }
 
     @Test
