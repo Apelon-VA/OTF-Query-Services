@@ -110,7 +110,7 @@ public class QueryTest {
         XorVersionTest xorTest = new XorVersionTest();
         NativeIdSetBI results = xorTest.computeQuery();
         System.out.println("Different query size: " + results.size());
-        Assert.assertEquals(55783, results.size());
+        Assert.assertEquals(57282, results.size());
 
     }
 
@@ -237,7 +237,7 @@ public class QueryTest {
         RelTypeTest relTest = new RelTypeTest();
         NativeIdSetBI results = relTest.getQuery().compute();
         System.out.println("Relationship test: " + results.size());
-        Assert.assertEquals(220, results.size());
+        Assert.assertEquals(226, results.size());
 
     }
 
@@ -265,7 +265,7 @@ public class QueryTest {
         };
 
         NativeIdSetBI results = q.compute();
-        Assert.assertEquals(220 - 17, results.size());
+        Assert.assertEquals(226 - 17, results.size());
     }
 
     @Test
