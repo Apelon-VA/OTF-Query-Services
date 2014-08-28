@@ -459,9 +459,9 @@ public abstract class LuceneIndexer implements IndexerBI {
      */
     private static class FutureChecker implements Runnable {
 
-        Future future;
+        Future<Long> future;
 
-        public FutureChecker(Future future) {
+        public FutureChecker(Future<Long> future) {
             this.future = future;
         }
 
