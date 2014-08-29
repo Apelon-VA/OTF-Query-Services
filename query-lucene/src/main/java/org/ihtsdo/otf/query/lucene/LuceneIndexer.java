@@ -32,7 +32,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-
+import org.ihtsdo.otf.query.lucene.LuceneDynamicRefexIndexerConfiguration.INDEXABLE;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.thread.NamedThreadFactory;
@@ -95,6 +95,8 @@ public abstract class LuceneIndexer implements IndexerBI {
     private final NRTManager.TrackingIndexWriter trackingIndexWriter;
     private final NRTManager searcherManager;
     private final String indexName;
+    
+    private Analyzer[] analyzers = new Analyzer[] {new StandardAnalyzer(LuceneIndexer.luceneVersion), new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)};
 
     public LuceneIndexer(String indexName) throws IOException {
         this.indexName = indexName;
@@ -174,6 +176,9 @@ public abstract class LuceneIndexer implements IndexerBI {
 
     /**
      * Query index with no specified target generation of the index.
+     * 
+     * Calls {@link #query(String, ComponentProperty, int, long)} with the targetGeneration 
+     * field set to Long.MIN_VALUE
      *
      * @param query The query to apply.
      * @param field The component field to be queried.
@@ -184,12 +189,16 @@ public abstract class LuceneIndexer implements IndexerBI {
      * @throws IOException
      * @throws ParseException
      */
+    @Override
     public final List<SearchResult> query(String query, ComponentProperty field, int sizeLimit)
             throws IOException, ParseException {
         return query(query, field, sizeLimit, Long.MIN_VALUE);
     }
     
     /**
+    *
+    *Calls {@link #query(String, boolean, ComponentProperty, int, long)} with the prefixSearch field set to 
+    * false.
     *
     * @param query The query to apply.
     * @param field The component field to be queried.
@@ -203,12 +212,19 @@ public abstract class LuceneIndexer implements IndexerBI {
     * @throws IOException
     * @throws ParseException
     */
-   public final List<SearchResult> query(String query, ComponentProperty field, int sizeLimit, long targetGeneration)
+   @Override
+    public final List<SearchResult> query(String query, ComponentProperty field, int sizeLimit, long targetGeneration)
            throws IOException, ParseException {
        return query(query, false, field, sizeLimit, targetGeneration);
    }
 
     /**
+     * A generic query API that handles most common cases.  The cases handled for various component property types
+     * are details below.
+     * 
+     * NOTE - subclasses of LuceneIndexer may have other query(...) methods that allow for more specific and or complex
+     * queries.  Specifically, {@link LuceneDynamicRefexIndexer} has its own query(...) methods.
+     *
      *
      * @param query The query to apply.
      * @param field The component field to be queried.
@@ -232,6 +248,19 @@ public abstract class LuceneIndexer implements IndexerBI {
      * For example:
      * The query "family test" will return results that contain 'Family Testudinidae'
      * The query "family test " will not match on  'Testudinidae', so that will be excluded.
+     * 
+     * At the moment, the only supported ComponentProperty types for a search are:
+     * 
+     * - {@link ComponentProperty#LONG_EXTENSION_1} - currently, only used by the 
+     *     {@link LuceneRefexIndexer} to index SCTIDs.
+     * 
+     * - {@link ComponentProperty#DESCRIPTION_TEXT} - this is the property value you 
+     *     pass in to search all indexed description types.
+     *     
+     * - {@link ComponentProperty#ASSEMBLAGE_ID} - This is the property value you 
+     *     pass in to search for all concepts which have references to a particular
+     *     Dynamic Refex Assemblage - and that particular Dynamic Refex Assemblage is 
+     *     defined as an annotation style refex.  
      *
      * @return a List of <code>SearchResult</codes> that contins the nid of the
      * component that matched, and the score of that match relative to other
@@ -239,64 +268,30 @@ public abstract class LuceneIndexer implements IndexerBI {
      * @throws IOException
      * @throws ParseException
      */
-    public final List<SearchResult> query(String query, boolean prefixSearch, ComponentProperty field, int sizeLimit, long targetGeneration)
+    public final List<SearchResult> query(String query, boolean prefixSearch, ComponentProperty field, int sizeLimit, Long targetGeneration)
             throws IOException, ParseException {
         try {
-            List<SearchResult> result;
 
             switch (field) {
                 case LONG_EXTENSION_1:
                     long long1 = Long.parseLong(query);
+                    //TODO this should be redone as a string field... indexing these as long's is needless and slower when it comes 
+                    // to indexing purely SCTIDs, or NIDs.  Plus, the API above doesn't give you any ability to create a complex query 
+                    // anyway... which is rather limiting.  What is the point of a range query, if we can't pass a range?
                     Query long1query = NumericRangeQuery.newLongRange(field.name(), long1, long1, true, true);
-
-                    result = search(long1query, sizeLimit, targetGeneration);
-
-                    break;
+                    return search(long1query, sizeLimit, targetGeneration);
 
                 case DESCRIPTION_TEXT:
-                    Query q;
-                    if (prefixSearch){
-                        q = buildPrefixQuery(query,field, new StandardAnalyzer(LuceneIndexer.luceneVersion));
-                    }
-                    else{
-                        q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
-                            new StandardAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
-                    }
+                    return runTokenizedStringSearch(null, query, field.name(), prefixSearch, sizeLimit, targetGeneration);
 
-                    result = search(q, sizeLimit, targetGeneration);
-                    if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                        TermstoreLogger.logger.log(Level.FINE, "StandardAnalyzer query " + (prefixSearch ? "prefixAlgorithm " : "") 
-                            + "returned {0} hits", result.size());
-                    }
-
-                    if (result.size() == 0) {
-                        if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                            TermstoreLogger.logger.fine("StandardAnalyzer query returned no results. "
-                                    + "Now trying WhitespaceAnalyzer query");
-                        }
-                        
-                        if (prefixSearch){
-                            q = buildPrefixQuery(query, field, new WhitespaceAnalyzer(LuceneIndexer.luceneVersion));
-                        }
-                        else{
-                            q = new QueryParser(LuceneIndexer.luceneVersion, field.name(),
-                                    new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)).parse(query);
-                        }
-
-                        result = search(q, sizeLimit, targetGeneration);
-                        if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                            TermstoreLogger.logger.log(Level.FINE, "WhitespaceAnalyzer query " + (prefixSearch ? "prefixAlgorithm " : "") 
-                                + "returned {0} hits", result.size());
-                        }
-                    }
-
-                    break;
+                case ASSEMBLAGE_ID:
+                    Query termQuery = new TermQuery(new Term(INDEXABLE.ASSEMBLAGE.name(), query));
+                    return search(termQuery, sizeLimit, targetGeneration);
 
                 default:
                     throw new IOException("Can't handle: " + field.name());
             }
 
-            return result;
         } catch (ParseException | IOException | NumberFormatException e) {
             throw new IOException(e);
         }
@@ -355,8 +350,11 @@ public abstract class LuceneIndexer implements IndexerBI {
         return unindexedFuture;
     }
 
-    private List<SearchResult> search(Query q, int sizeLimit, long targetGeneration) throws IOException {
-        if (targetGeneration != Long.MIN_VALUE) {
+    /**
+     * Subclasses may call this method with much more specific queries than this generic class is capable of constructing.
+     */
+    protected final List<SearchResult> search(Query q, int sizeLimit, Long targetGeneration) throws IOException {
+        if (targetGeneration != null && targetGeneration != Long.MIN_VALUE) {
             searcherManager.waitForGeneration(targetGeneration);
         }
 
@@ -503,10 +501,46 @@ public abstract class LuceneIndexer implements IndexerBI {
         }
     }
     
-    private static Query buildPrefixQuery(String searchString, ComponentProperty field, Analyzer analyzer) throws IOException
+    /**
+     * Construct and run a tokenized query by parsing the query string, either via the Lucene Query Parser (prefexSearch = false) 
+     * or via a custom prefix search algorithm.  Uses a standard analyzer, and if that returns nothing, falls back to a white space
+     * analyzer.
+     * @param preparsedQuery - optional, may be null.  If not null, will become a required part of the final query.
+     */
+    protected List<SearchResult> runTokenizedStringSearch(Query preparsedQuery, String query, String field, boolean prefixSearch, int sizeLimit, 
+            Long targetGeneration) throws IOException, ParseException
+    {
+        for (Analyzer analyzer : analyzers)
+        {
+            BooleanQuery q = new BooleanQuery();
+            
+            if (preparsedQuery != null) {
+                q.add(preparsedQuery, Occur.MUST);
+            }
+            if (prefixSearch) {
+                q.add(buildPrefixQuery(query,field, analyzer), Occur.MUST);
+            }
+            else {
+                q.add( new QueryParser(LuceneIndexer.luceneVersion, field, analyzer).parse(query), Occur.MUST);
+            }
+
+            List<SearchResult> result = search(q, sizeLimit, targetGeneration);
+            if (result.size() > 0) {
+                return result;
+            }
+            if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
+                TermstoreLogger.logger.log(Level.FINE, analyzer.getClass().getName() +  " query " + (prefixSearch ? "prefixAlgorithm " : "") 
+                        + "returned {0} hits", result.size());
+            }
+        }
+
+        return new ArrayList<>();
+    }
+    
+    protected static Query buildPrefixQuery(String searchString, String field, Analyzer analyzer) throws IOException
     {
         StringReader textReader = new StringReader(searchString);
-        TokenStream tokenStream = analyzer.tokenStream(field.name(), textReader);
+        TokenStream tokenStream = analyzer.tokenStream(field, textReader);
         tokenStream.reset();
         List<String> terms = new ArrayList<>();
         CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
@@ -523,11 +557,11 @@ public abstract class LuceneIndexer implements IndexerBI {
         if (terms.size() > 0 && !searchString.endsWith(" "))
         {
             String last = terms.remove(terms.size() - 1);
-            bq.add(new PrefixQuery((new Term(field.name(), last))), Occur.MUST);
+            bq.add(new PrefixQuery((new Term(field, last))), Occur.MUST);
         }
         for (String s : terms)
         {
-            bq.add(new TermQuery(new Term(field.name(), s)), Occur.MUST);
+            bq.add(new TermQuery(new Term(field, s)), Occur.MUST);
         }
         
         return bq;
