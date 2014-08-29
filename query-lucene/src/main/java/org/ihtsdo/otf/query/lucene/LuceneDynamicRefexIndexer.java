@@ -23,7 +23,6 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -42,7 +41,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.ihtsdo.otf.query.lucene.LuceneDynamicRefexIndexerConfiguration.INDEXABLE;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.refexDynamic.RefexDynamicChronicleBI;
@@ -74,10 +72,12 @@ import org.jvnet.hk2.annotations.Service;
 @SuppressWarnings("rawtypes")
 public class LuceneDynamicRefexIndexer extends LuceneIndexer
 {
+	private static final Logger logger = Logger.getLogger(LuceneDynamicRefexIndexer.class.getName());
+	
 	public static final String INDEX_NAME = "dynamicRefex";
-	private final Logger logger = Logger.getLogger(LuceneDynamicRefexIndexer.class.getName());
-	private final String COLUMN_FIELD_ID = "colID";
-	private final String COLUMN_FIELD_DATA = "colData";
+	private static final String COLUMN_FIELD_ID = "colID";
+	private static final String COLUMN_FIELD_DATA = "colData";
+	protected static final String COLUMN_FIELD_ASSEMBLAGE = "assemblage";
 
 	@Inject 
 	private LuceneDynamicRefexIndexerConfiguration lric;
@@ -106,69 +106,65 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 		for (@SuppressWarnings("unchecked") Iterator<RefexDynamicVersionBI<?>> it = (Iterator<RefexDynamicVersionBI<?>>) rdc.getVersions().iterator(); it.hasNext();)
 		{
 			RefexDynamicVersionBI<?> rdv = it.next();
-
-			for (Entry<INDEXABLE, Integer[]> indexSpec : lric.whatToIndex(rdv.getAssemblageNid()).entrySet())
+			
+			//Yes, this is a long, but we never do anything other than exact matches, so it performs better to index it as a string
+			//rather that indexing it as a long... as we never need to match things like nid > X
+			doc.add(new StringField(COLUMN_FIELD_ASSEMBLAGE, rdv.getAssemblageNid() + "", Store.NO));
+			
+			Integer[] columns = lric.whatColumnsToIndex(rdv.getAssemblageNid());
+			if (columns != null)
 			{
-				if (indexSpec.getKey() == INDEXABLE.ASSEMBLAGE)
+				for (int col : columns)
 				{
-					//Yes, this is a long, but we never do anything other than exact matches, so it performs better to index it as a string
-					//rather that indexing it as a long... as we never need to match things like nid > X
-					doc.add(new StringField(INDEXABLE.ASSEMBLAGE.name(), rdv.getAssemblageNid() + "", Store.NO));
-				}
-				else if (indexSpec.getKey() == INDEXABLE.COLUMN_DATA && indexSpec.getValue() != null)
-				{
-					for (int col : indexSpec.getValue())
+					RefexDynamicDataBI dataCol = rdv.getData(col);
+
+					//add an entry for the column ID, to support very specific searches
+					doc.add(new StringField(COLUMN_FIELD_ID, col + "", Store.NO));
+
+					if (dataCol instanceof RefexDynamicBooleanBI)
 					{
-						RefexDynamicDataBI dataCol = rdv.getData(col);
-
-						//add an entry for the column ID, to support very specific searches
-						doc.add(new StringField(COLUMN_FIELD_ID, col + "", Store.NO));
-
-						if (dataCol instanceof RefexDynamicBooleanBI)
-						{
-							doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
-						}
-						else if (dataCol instanceof RefexDynamicByteArrayBI)
-						{
-							logger.warning("Dynamic Refex Indexer configured to index a field that isn't indexable");
-						}
-						else if (dataCol instanceof RefexDynamicDoubleBI)
-						{
-							doc.add(new DoubleField(COLUMN_FIELD_DATA, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
-						}
-						else if (dataCol instanceof RefexDynamicFloatBI)
-						{
-							doc.add(new FloatField(COLUMN_FIELD_DATA, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
-						}
-						else if (dataCol instanceof RefexDynamicIntegerBI)
-						{
-							doc.add(new IntField(COLUMN_FIELD_DATA, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
-						}
-						else if (dataCol instanceof RefexDynamicLongBI)
-						{
-							doc.add(new LongField(COLUMN_FIELD_DATA, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
-						}
-						else if (dataCol instanceof RefexDynamicNidBI)
-						{
-							//No need for ranges on a nid
-							doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
-						}
-						else if (dataCol instanceof RefexDynamicPolymorphicBI)
-						{
-							logger.log(Level.SEVERE, "This should have been impossible (polymorphic?)");
-						}
-						else if (dataCol instanceof RefexDynamicStringBI)
-						{
-							doc.add(new TextField(COLUMN_FIELD_DATA, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
-						}
-						else if (dataCol instanceof RefexDynamicUUIDBI)
-						{
-							doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
-						}
-						else
-						{
-							logger.log(Level.SEVERE, "This should have been impossible (no match on col type)");
-						}
+						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
+					}
+					else if (dataCol instanceof RefexDynamicByteArrayBI)
+					{
+						logger.warning("Dynamic Refex Indexer configured to index a field that isn't indexable");
+					}
+					else if (dataCol instanceof RefexDynamicDoubleBI)
+					{
+						doc.add(new DoubleField(COLUMN_FIELD_DATA, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
+					}
+					else if (dataCol instanceof RefexDynamicFloatBI)
+					{
+						doc.add(new FloatField(COLUMN_FIELD_DATA, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
+					}
+					else if (dataCol instanceof RefexDynamicIntegerBI)
+					{
+						doc.add(new IntField(COLUMN_FIELD_DATA, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
+					}
+					else if (dataCol instanceof RefexDynamicLongBI)
+					{
+						doc.add(new LongField(COLUMN_FIELD_DATA, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
+					}
+					else if (dataCol instanceof RefexDynamicNidBI)
+					{
+						//No need for ranges on a nid
+						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
+					}
+					else if (dataCol instanceof RefexDynamicPolymorphicBI)
+					{
+						logger.log(Level.SEVERE, "This should have been impossible (polymorphic?)");
+					}
+					else if (dataCol instanceof RefexDynamicStringBI)
+					{
+						doc.add(new TextField(COLUMN_FIELD_DATA, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+					}
+					else if (dataCol instanceof RefexDynamicUUIDBI)
+					{
+						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
+					}
+					else
+					{
+						logger.log(Level.SEVERE, "This should have been impossible (no match on col type)");
 					}
 				}
 			}
@@ -192,7 +188,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 
 		if (assemblageNid != null)
 		{
-			bq.add(new TermQuery(new Term(INDEXABLE.ASSEMBLAGE.name(), assemblageNid + "")), Occur.MUST);
+			bq.add(new TermQuery(new Term(COLUMN_FIELD_ASSEMBLAGE, assemblageNid + "")), Occur.MUST);
 		}
 
 		addColumnConstraint(bq, searchColumns);
@@ -244,7 +240,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 		BooleanQuery bq = new BooleanQuery();
 		if (assemblageNid != null)
 		{
-			bq.add(new TermQuery(new Term(INDEXABLE.ASSEMBLAGE.name(), assemblageNid + "")), Occur.MUST);
+			bq.add(new TermQuery(new Term(COLUMN_FIELD_ASSEMBLAGE, assemblageNid + "")), Occur.MUST);
 		}
 
 		addColumnConstraint(bq, searchColumns);

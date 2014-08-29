@@ -19,6 +19,16 @@
 package org.ihtsdo.otf.query.lucene;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.metadata.binding.RefexDynamic;
+import org.ihtsdo.otf.tcc.api.refexDynamic.RefexDynamicChronicleBI;
+import org.ihtsdo.otf.tcc.api.refexDynamic.RefexDynamicVersionBI;
+import org.ihtsdo.otf.tcc.api.refexDynamic.data.RefexDynamicDataBI;
+import org.ihtsdo.otf.tcc.api.refexDynamic.data.dataTypes.RefexDynamicStringBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.jvnet.hk2.annotations.Service;
 
 /**
@@ -28,17 +38,16 @@ import org.jvnet.hk2.annotations.Service;
  *
  * @author <a href="mailto:daniel.armbrust.list@gmail.com">Dan Armbrust</a> 
  */
+@SuppressWarnings("deprecation")
 @Service
 public class LuceneDynamicRefexIndexerConfiguration
 {
-	public enum INDEXABLE {ASSEMBLAGE, COLUMN_DATA};
+	private static final Logger logger = Logger.getLogger(LuceneDynamicRefexIndexer.class.getName());
 	
-	//map assemblage nid to the components of the assemblage that should be indexed - and then - for COLUMN_DATA keys, keep the 0 indexed columns 
-	//order numbers that need to be indexed.
-	private HashMap<Integer, HashMap<INDEXABLE, Integer[]>> whatToIndex_ = new HashMap<>();
+	//store assemblage nids that should be indexed - and then - for COLUMN_DATA keys, keep the 0 indexed column order numbers that need to be indexed.
+	private HashMap<Integer, Integer[]> whatToIndex_ = new HashMap<>();
 		
-	private boolean readNeeded = true;
-	
+	private volatile boolean readNeeded = true;
 	
 	protected boolean needsIndexing(int assemblageNid)
 	{
@@ -46,7 +55,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 		return whatToIndex_.containsKey(assemblageNid);
 	}
 	
-	protected HashMap<INDEXABLE, Integer[]> whatToIndex(int assemblageNid)
+	protected Integer[] whatColumnsToIndex(int assemblageNid)
 	{
 		initCheck();
 		return whatToIndex_.get(assemblageNid);
@@ -56,27 +65,55 @@ public class LuceneDynamicRefexIndexerConfiguration
 	{
 		if (readNeeded)
 		{
-			//TODO implement read
-			HashMap<Integer, HashMap<INDEXABLE, Integer[]>> updatedWhatToIndex = new HashMap<>();
-			
-			whatToIndex_ = updatedWhatToIndex;
+			try
+			{
+				HashMap<Integer, Integer[]> updatedWhatToIndex = new HashMap<>();
+				
+				ConceptVersionBI c = Ts.get().getConceptVersion(StandardViewCoordinates.getWbAuxiliary(), RefexDynamic.REFEX_DYNAMIC_INDEX_CONFIGURATION.getUuids()[0]);
+				
+				for (RefexDynamicChronicleBI<?> r : c.getRefexDynamicMembers())
+				{
+					RefexDynamicVersionBI<?> rdv = r.getVersion(StandardViewCoordinates.getWbAuxiliary());
+					int assemblageToIndex = rdv.getReferencedComponentNid();
+					Integer[] finalCols = null;
+					RefexDynamicDataBI[] data = rdv.getData();
+					if (data != null && data.length > 0)
+					{
+						String colsToIndex = ((RefexDynamicStringBI) data[0]).getDataString();
+						String[] split = colsToIndex.split(",");
+						finalCols = new Integer[split.length];
+						for (int i = 0; i < split.length; i++)
+						{
+							finalCols[i] = Integer.parseInt(split[i]);
+						}
+					}
+					updatedWhatToIndex.put(assemblageToIndex, finalCols);
+				}
+				
+				whatToIndex_ = updatedWhatToIndex;
+			}
+			catch (Exception e)
+			{
+				logger.log(Level.SEVERE, "Unexpected error reading Dynamic Refex Index Configuration - generated index will be incomplete!", e);
+			}
 		}
 	}
 	
-	/**
-	 * true for indexing on, false for indexing off.
-	 */
-	public void configureAnnotationStyleIndexing(int assemblageNid, boolean enable)
-	{
-		//TODO implement pref store
-	}
 	
 	/**
 	 * for the given assemblage nid, which columns should be indexed?  null or empty list for none.
 	 * otherwise, 0 indexed column numbers.
+	 * 
+	 * Note - columnsToIndex must be provided for member-style assemblage NIDs - it doesn't make any 
+	 * sense to index the assemblageID of a member style refex.
+	 * 
+	 * So, for member style - you can configure which columns to index.
+	 * For annotation style - you can configure just indexing the assemblage itself, or you can also 
+	 * index individual data columns.
 	 */
 	public void configureColumnsToIndex(int assemblageNid, Integer[] columnsToIndex)
 	{
+		readNeeded = true;
 		//TODO implement pref store
 	}
 

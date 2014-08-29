@@ -32,7 +32,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import org.ihtsdo.otf.query.lucene.LuceneDynamicRefexIndexerConfiguration.INDEXABLE;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.thread.NamedThreadFactory;
@@ -95,8 +94,6 @@ public abstract class LuceneIndexer implements IndexerBI {
     private final NRTManager.TrackingIndexWriter trackingIndexWriter;
     private final NRTManager searcherManager;
     private final String indexName;
-    
-    private Analyzer[] analyzers = new Analyzer[] {new StandardAnalyzer(LuceneIndexer.luceneVersion), new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)};
 
     public LuceneIndexer(String indexName) throws IOException {
         this.indexName = indexName;
@@ -285,7 +282,7 @@ public abstract class LuceneIndexer implements IndexerBI {
                     return runTokenizedStringSearch(null, query, field.name(), prefixSearch, sizeLimit, targetGeneration);
 
                 case ASSEMBLAGE_ID:
-                    Query termQuery = new TermQuery(new Term(INDEXABLE.ASSEMBLAGE.name(), query));
+                    Query termQuery = new TermQuery(new Term(LuceneDynamicRefexIndexer.COLUMN_FIELD_ASSEMBLAGE, query));
                     return search(termQuery, sizeLimit, targetGeneration);
 
                 default:
@@ -510,13 +507,15 @@ public abstract class LuceneIndexer implements IndexerBI {
     protected List<SearchResult> runTokenizedStringSearch(Query preparsedQuery, String query, String field, boolean prefixSearch, int sizeLimit, 
             Long targetGeneration) throws IOException, ParseException
     {
-        for (Analyzer analyzer : analyzers)
+        for (int i = 0; i < 2; i++)
         {
             BooleanQuery q = new BooleanQuery();
             
             if (preparsedQuery != null) {
                 q.add(preparsedQuery, Occur.MUST);
             }
+            Analyzer analyzer = (i == 0 ? new StandardAnalyzer(LuceneIndexer.luceneVersion) : new WhitespaceAnalyzer(LuceneIndexer.luceneVersion));
+            
             if (prefixSearch) {
                 q.add(buildPrefixQuery(query,field, analyzer), Occur.MUST);
             }
