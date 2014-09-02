@@ -202,7 +202,8 @@ public abstract class LuceneIndexer implements IndexerBI {
     * @param sizeLimit The maximum size of the result list.
     * @param targetGeneration target generation that must be included in the
     * search or Long.MIN_VALUE if there is no need to wait for a target
-    * generation.
+    * generation.  Long.MAX_VALUE can be passed in to force this query to wait until 
+    * any inprogress indexing operations are completed - and then use the latest index.
     * @return a List of <code>SearchResult</codes> that contins the nid of the
     * component that matched, and the score of that match relative to other
     * matches.
@@ -228,7 +229,8 @@ public abstract class LuceneIndexer implements IndexerBI {
      * @param sizeLimit The maximum size of the result list.
      * @param targetGeneration target generation that must be included in the
      * search or Long.MIN_VALUE if there is no need to wait for a target
-     * generation.
+     * generation.  Long.MAX_VALUE can be passed in to force this query to wait until 
+     * any inprogress indexing operations are completed - and then use the latest index.
      * @param prefixSearch if true, utilize a search algorithm that is optimized 
      * for prefix searching, such as the searching that would be done to implement 
      * a type-ahead style search.  This is currently only applicable to 
@@ -352,9 +354,16 @@ public abstract class LuceneIndexer implements IndexerBI {
      */
     protected final List<SearchResult> search(Query q, int sizeLimit, Long targetGeneration) throws IOException {
         if (targetGeneration != null && targetGeneration != Long.MIN_VALUE) {
-            searcherManager.waitForGeneration(targetGeneration);
+            if (targetGeneration == Long.MAX_VALUE)
+            {
+                searcherManager.maybeRefreshBlocking();
+            }
+            else
+            {
+                searcherManager.waitForGeneration(targetGeneration);
+            }
         }
-
+        
         IndexSearcher searcher = searcherManager.acquire();
 
         try {
