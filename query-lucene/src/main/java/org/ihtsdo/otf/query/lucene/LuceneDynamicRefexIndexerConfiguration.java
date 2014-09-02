@@ -60,7 +60,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 	//store assemblage nids that should be indexed - and then - for COLUMN_DATA keys, keep the 0 indexed column order numbers that need to be indexed.
 	private HashMap<Integer, Integer[]> whatToIndex_ = new HashMap<>();
 
-	private volatile boolean readNeeded = true;
+	private volatile boolean readNeeded_ = true;
 
 	protected boolean needsIndexing(int assemblageNid)
 	{
@@ -76,7 +76,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 
 	private void initCheck()
 	{
-		if (readNeeded)
+		if (readNeeded_)
 		{
 			try
 			{
@@ -84,7 +84,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 
 				ConceptVersionBI c = Ts.get().getConceptVersion(StandardViewCoordinates.getWbAuxiliary(), RefexDynamic.REFEX_DYNAMIC_INDEX_CONFIGURATION.getUuids()[0]);
 
-				for (RefexDynamicChronicleBI<?> r : c.getRefexDynamicMembers())
+				for (RefexDynamicChronicleBI<?> r : c.getRefsetDynamicMembers())
 				{
 					RefexDynamicVersionBI<?> rdv = r.getVersion(StandardViewCoordinates.getWbAuxiliary());
 					if (!rdv.isActive())
@@ -117,6 +117,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 				}
 
 				whatToIndex_ = updatedWhatToIndex;
+				readNeeded_ = false;
 			}
 			catch (Exception e)
 			{
@@ -142,7 +143,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 	 */
 	public void configureColumnsToIndex(int assemblageNid, Integer[] columnsToIndex) throws ContradictionException, InvalidCAB, IOException
 	{
-		readNeeded = true;
+		readNeeded_ = true;
 
 		ConceptVersionBI assemblageConceptC = Ts.get().getConceptVersion(StandardViewCoordinates.getWbAuxiliary(),
 				RefexDynamic.REFEX_DYNAMIC_INDEX_CONFIGURATION.getNid());
@@ -216,7 +217,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 		{
 			if (rb.getRefexAssemblageUuid() == RefexDynamic.REFEX_DYNAMIC_INDEX_CONFIGURATION.getUuids()[0] && rb.getReferencedComponent().getNid() == assemblageNid)
 			{
-				readNeeded = true;
+				readNeeded_ = true;
 				rb.setStatus(Status.INACTIVE);
 				ConceptChronicleBI referencedAssemblageConceptC = Ts.get().getConcept(assemblageNid);
 				Ts.get().addUncommitted(assemblageConceptC);
