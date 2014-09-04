@@ -268,32 +268,28 @@ public abstract class LuceneIndexer implements IndexerBI {
      * @throws ParseException
      */
     public final List<SearchResult> query(String query, boolean prefixSearch, ComponentProperty field, int sizeLimit, Long targetGeneration)
-            throws IOException, ParseException {
-        try {
+            throws IOException, ParseException, NumberFormatException {
 
-            switch (field) {
-                case LONG_EXTENSION_1:
-                    long long1 = Long.parseLong(query);
-                    //TODO this should be redone as a string field... indexing these as long's is needless and slower when it comes 
-                    // to indexing purely SCTIDs, or NIDs.  Plus, the API above doesn't give you any ability to create a complex query 
-                    // anyway... which is rather limiting.  What is the point of a range query, if we can't pass a range?
-                    Query long1query = NumericRangeQuery.newLongRange(field.name(), long1, long1, true, true);
-                    return search(long1query, sizeLimit, targetGeneration);
+        switch (field) {
+            case LONG_EXTENSION_1:
+                long long1 = Long.parseLong(query);
+                //TODO this should be redone as a string field... indexing these as long's is needless and slower when it comes 
+                // to indexing purely SCTIDs, or NIDs.  Plus, the API above doesn't give you any ability to create a complex query 
+                // anyway... which is rather limiting.  What is the point of a range query, if we can't pass a range?
+                Query long1query = NumericRangeQuery.newLongRange(field.name(), long1, long1, true, true);
+                return search(long1query, sizeLimit, targetGeneration);
 
-                case DESCRIPTION_TEXT:
-                    return runTokenizedStringSearch(null, query, field.name(), prefixSearch, sizeLimit, targetGeneration);
+            case DESCRIPTION_TEXT:
+                return runTokenizedStringSearch(null, query, field.name(), prefixSearch, sizeLimit, targetGeneration);
 
-                case ASSEMBLAGE_ID:
-                    Query termQuery = new TermQuery(new Term(LuceneDynamicRefexIndexer.COLUMN_FIELD_ASSEMBLAGE, query));
-                    return search(termQuery, sizeLimit, targetGeneration);
+            case ASSEMBLAGE_ID:
+                Query termQuery = new TermQuery(new Term(LuceneDynamicRefexIndexer.COLUMN_FIELD_ASSEMBLAGE, query));
+                return search(termQuery, sizeLimit, targetGeneration);
 
-                default:
-                    throw new IOException("Can't handle: " + field.name());
-            }
-
-        } catch (ParseException | IOException | NumberFormatException e) {
-            throw new IOException(e);
+            default:
+                throw new IOException("Can't handle: " + field.name());
         }
+
     }
 
     @Override
