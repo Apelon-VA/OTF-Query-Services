@@ -121,7 +121,11 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					//add an entry for the column ID, to support very specific searches
 					doc.add(new StringField(COLUMN_FIELD_ID, col + "", Store.NO));
 
-					if (dataCol instanceof RefexDynamicBooleanBI)
+					if (dataCol == null)
+					{
+						//noop
+					}
+					else if (dataCol instanceof RefexDynamicBooleanBI)
 					{
 						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
 					}
@@ -164,7 +168,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					}
 					else
 					{
-						logger.log(Level.SEVERE, "This should have been impossible (no match on col type)");
+						logger.log(Level.SEVERE, "This should have been impossible (no match on col type) " + dataCol);
 					}
 				}
 			}
@@ -284,7 +288,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 	 * {@link LuceneIndexer#query(String, boolean, ComponentProperty, int, Long) with:
 	 * "boolean prefexSearch" set to false "ComponentProperty field" set to {@link ComponentProperty#ASSEMBLAGE_ID}
 	 */
-	public final List<SearchResult> queryAssemblageUsage(int assemblageNid, int sizeLimit, Long targetGeneration) throws IOException, ParseException
+	public final List<SearchResult> queryAssemblageUsage(int assemblageNid, int sizeLimit, Long targetGeneration) throws IOException, ParseException, NumberFormatException
 	{
 		return query(assemblageNid + "", false, ComponentProperty.ASSEMBLAGE_ID, sizeLimit, targetGeneration);
 	}
