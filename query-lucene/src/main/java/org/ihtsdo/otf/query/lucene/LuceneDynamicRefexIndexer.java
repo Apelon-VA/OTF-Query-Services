@@ -216,7 +216,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 	 * Calls the method {@link #query(RefexDynamicDataBI, Integer, boolean, Integer[], int, long) with a null parameter for
 	 * the searchColumns, and wraps the queryString into a RefexDynamicString.
 	 */
-	public final List<SearchResult> query(String queryString, Integer assemblageNid, boolean prefixSearch, int sizeLimit, long targetGeneration) throws IOException,
+	public final List<SearchResult> query(String queryString, Integer assemblageNid, boolean prefixSearch, int sizeLimit, Long targetGeneration) throws IOException,
 			ParseException
 	{
 		try
