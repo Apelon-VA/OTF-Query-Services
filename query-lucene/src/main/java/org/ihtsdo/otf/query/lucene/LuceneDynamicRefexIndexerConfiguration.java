@@ -93,12 +93,12 @@ public class LuceneDynamicRefexIndexerConfiguration
 				for (RefexDynamicChronicleBI<?> r : c.getRefsetDynamicMembers())
 				{
 					RefexDynamicVersionBI<?> rdv = r.getVersion(StandardViewCoordinates.getWbAuxiliary());
-					if (rdv == null || !rdv.isActive())
+					if (rdv == null || !rdv.isActive() || rdv.getAssemblageNid() != RefexDynamic.REFEX_DYNAMIC_INDEX_CONFIGURATION.getNid())
 					{
 						continue;
 					}
 					int assemblageToIndex = rdv.getReferencedComponentNid();
-					Integer[] finalCols = null;
+					Integer[] finalCols = new Integer[] {};
 					RefexDynamicDataBI[] data = rdv.getData();
 					if (data != null && data.length > 0)
 					{
@@ -225,31 +225,7 @@ public class LuceneDynamicRefexIndexerConfiguration
 	 */
 	public static Integer[] readIndexInfo(int assemblageNid) throws IOException, ContradictionException
 	{
-		RefexDynamicVersionBI<?> rdv = findCurrentIndexConfigRefex(assemblageNid);
-		
-		if (rdv != null && rdv.isActive())
-		{
-			RefexDynamicDataBI[] indexedCols =  rdv.getData();
-			if (indexedCols == null || indexedCols.length == 0)
-			{
-				return new Integer[0];
-			}
-			else
-			{
-				RefexDynamicStringBI val = (RefexDynamicStringBI)indexedCols[0];
-				String[] split = val.getDataString().split(",");
-				Integer[] finalCols = new Integer[split.length];
-				for (int i = 0; i < split.length; i++)
-				{
-					finalCols[i] = Integer.parseInt(split[i]);
-				}
-				return finalCols;
-			}
-		}
-		else
-		{
-			return null;
-		}
+		return Hk2Looker.get().getService(LuceneDynamicRefexIndexerConfiguration.class).whatColumnsToIndex(assemblageNid);
 	}
 	
 	private static RefexDynamicVersionBI<?> findCurrentIndexConfigRefex(int assemblageNid) throws ValidationException, IOException, ContradictionException
