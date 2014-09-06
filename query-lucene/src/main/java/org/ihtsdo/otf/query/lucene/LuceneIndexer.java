@@ -158,7 +158,7 @@ public abstract class LuceneIndexer implements IndexerBI {
         return indexName;
     }
 
-    protected abstract boolean indexChronicle(ComponentChronicleBI chronicle);
+    protected abstract boolean indexChronicle(ComponentChronicleBI<?> chronicle);
 
     private static Directory initDirectory(File luceneDirFile)
             throws IOException, CorruptIndexException, LockObtainFailedException {
@@ -280,7 +280,7 @@ public abstract class LuceneIndexer implements IndexerBI {
                 return search(long1query, sizeLimit, targetGeneration);
 
             case DESCRIPTION_TEXT:
-                return runTokenizedStringSearch(null, query, field.name(), prefixSearch, sizeLimit, targetGeneration);
+                return search(buildTokenizedStringQuery(query, field.name(), prefixSearch), sizeLimit, targetGeneration);
 
             case ASSEMBLAGE_ID:
                 Query termQuery = new TermQuery(new Term(LuceneDynamicRefexIndexer.COLUMN_FIELD_ASSEMBLAGE, query));
@@ -326,10 +326,10 @@ public abstract class LuceneIndexer implements IndexerBI {
         }
     }
 
-    protected abstract void addFields(ComponentChronicleBI chronicle, Document doc);
+    protected abstract void addFields(ComponentChronicleBI<?> chronicle, Document doc);
 
     @Override
-    public final Future<Long> index(ComponentChronicleBI chronicle) {
+    public final Future<Long> index(ComponentChronicleBI<?> chronicle) {
         if (!enabled) {
             return null;
         }
@@ -363,12 +363,15 @@ public abstract class LuceneIndexer implements IndexerBI {
         IndexSearcher searcher = searcherManager.acquire();
 
         try {
+            if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
+               TermstoreLogger.logger.log(Level.FINE, "Running query: " + q.toString());
+             }
             TopDocs topDocs = searcher.search(q, sizeLimit);
             List<SearchResult> results = new ArrayList<>(topDocs.totalHits);
 
             for (ScoreDoc hit : topDocs.scoreDocs) {
-                if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                    TermstoreLogger.logger.log(Level.FINE, "Hit: {0} Score: {1}", new Object[]{hit.doc, hit.score});
+                if (TermstoreLogger.logger.isLoggable(Level.FINEST)) {
+                    TermstoreLogger.logger.log(Level.FINEST, "Hit: {0} Score: {1}", new Object[]{hit.doc, hit.score});
                 }
 
                 Document doc = searcher.doc(hit.doc);
@@ -377,7 +380,9 @@ public abstract class LuceneIndexer implements IndexerBI {
                         new SearchResult(
                                 doc.getField(ComponentProperty.COMPONENT_ID.name()).numericValue().intValue(), hit.score));
             }
-
+            if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
+                TermstoreLogger.logger.log(Level.FINE, "Returning " + results.size() + " results from query");
+              }
             return results;
         } finally {
             searcherManager.release(searcher);
@@ -418,9 +423,9 @@ public abstract class LuceneIndexer implements IndexerBI {
 
     private class AddDocument implements Callable<Long> {
 
-        ComponentChronicleBI chronicle;
+        ComponentChronicleBI<?> chronicle;
 
-        public AddDocument(ComponentChronicleBI chronicle) {
+        public AddDocument(ComponentChronicleBI<?> chronicle) {
             this.chronicle = chronicle;
         }
 
@@ -504,41 +509,26 @@ public abstract class LuceneIndexer implements IndexerBI {
     }
     
     /**
-     * Construct and run a tokenized query by parsing the query string, either via the Lucene Query Parser (prefexSearch = false) 
-     * or via a custom prefix search algorithm.  Uses a standard analyzer, and if that returns nothing, falls back to a white space
-     * analyzer.
-     * @param preparsedQuery - optional, may be null.  If not null, will become a required part of the final query.
+     * Create a query that will match on the specified text using either the WhitespaceAnalyzer or the StandardAnalyzer.
+     * Uses the Lucene Query Parser if prefixSearch is false, otherwise, uses a custom prefix algorithm.  
+     * See {@link LuceneIndexer#query(String, boolean, ComponentProperty, int, Long)} for details on the prefix search algorithm. 
      */
-    protected List<SearchResult> runTokenizedStringSearch(Query preparsedQuery, String query, String field, boolean prefixSearch, int sizeLimit, 
-            Long targetGeneration) throws IOException, ParseException
+    protected Query buildTokenizedStringQuery(String query, String field, boolean prefixSearch) throws IOException, ParseException
     {
-        for (int i = 0; i < 2; i++)
+        BooleanQuery bq = new BooleanQuery();
+        
+        if (prefixSearch) 
         {
-            BooleanQuery q = new BooleanQuery();
-            
-            if (preparsedQuery != null) {
-                q.add(preparsedQuery, Occur.MUST);
-            }
-            Analyzer analyzer = (i == 0 ? new StandardAnalyzer(LuceneIndexer.luceneVersion) : new WhitespaceAnalyzer(LuceneIndexer.luceneVersion));
-            
-            if (prefixSearch) {
-                q.add(buildPrefixQuery(query,field, analyzer), Occur.MUST);
-            }
-            else {
-                q.add( new QueryParser(LuceneIndexer.luceneVersion, field, analyzer).parse(query), Occur.MUST);
-            }
-
-            List<SearchResult> result = search(q, sizeLimit, targetGeneration);
-            if (result.size() > 0) {
-                return result;
-            }
-            if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
-                TermstoreLogger.logger.log(Level.FINE, analyzer.getClass().getName() +  " query " + (prefixSearch ? "prefixAlgorithm " : "") 
-                        + "returned {0} hits", result.size());
-            }
+            bq.add(buildPrefixQuery(query,field, new StandardAnalyzer(LuceneIndexer.luceneVersion)), Occur.SHOULD);
+            bq.add(buildPrefixQuery(query,field, new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)), Occur.SHOULD);
         }
-
-        return new ArrayList<>();
+        else {
+            bq.add(new QueryParser(LuceneIndexer.luceneVersion, field, new StandardAnalyzer(LuceneIndexer.luceneVersion)).parse(query), Occur.SHOULD);
+            bq.add(new QueryParser(LuceneIndexer.luceneVersion, field, new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)).parse(query), Occur.SHOULD);
+        }
+        BooleanQuery wrap = new BooleanQuery();
+        wrap.add(bq, Occur.MUST);
+        return wrap;
     }
     
     protected static Query buildPrefixQuery(String searchString, String field, Analyzer analyzer) throws IOException

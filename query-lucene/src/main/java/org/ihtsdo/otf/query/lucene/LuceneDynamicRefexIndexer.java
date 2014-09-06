@@ -75,7 +75,6 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 	private static final Logger logger = Logger.getLogger(LuceneDynamicRefexIndexer.class.getName());
 	
 	public static final String INDEX_NAME = "dynamicRefex";
-	private static final String COLUMN_FIELD_ID = "colID";
 	private static final String COLUMN_FIELD_DATA = "colData";
 	protected static final String COLUMN_FIELD_ASSEMBLAGE = "assemblage";
 
@@ -117,9 +116,16 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 				for (int col : columns)
 				{
 					RefexDynamicDataBI dataCol = rdv.getData(col);
-
-					//add an entry for the column ID, to support very specific searches
-					doc.add(new StringField(COLUMN_FIELD_ID, col + "", Store.NO));
+					
+					//Not the greatest design for diskspace / performance... but if we want to be able to support searching across 
+					//all fields / all refexes - and also support searching per-field within a single refex, we need to double index 
+					//all of the data.  Once with a standard field name, and once with a field name that includes the column number.
+					//at search time, restricting to certain field matches is only allowed if they are also restricting to an assemblage,
+					//so we can compute the correct field number list at search time.
+					
+					//the cheaper option from a disk space perspective (maybe, depending on the data) would be to create a document per 
+					//column.  The queries would be trivial to write then, but we would be duplicating the component nid and assemblage nid
+					//in each document, which is also expensive.  It also doesn't fit the model in OTF, of a document per component.
 
 					if (dataCol == null)
 					{
@@ -128,6 +134,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					else if (dataCol instanceof RefexDynamicBooleanBI)
 					{
 						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
+						doc.add(new StringField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
 					}
 					else if (dataCol instanceof RefexDynamicByteArrayBI)
 					{
@@ -136,23 +143,28 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					else if (dataCol instanceof RefexDynamicDoubleBI)
 					{
 						doc.add(new DoubleField(COLUMN_FIELD_DATA, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
+						doc.add(new DoubleField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
 					}
 					else if (dataCol instanceof RefexDynamicFloatBI)
 					{
 						doc.add(new FloatField(COLUMN_FIELD_DATA, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
+						doc.add(new FloatField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
 					}
 					else if (dataCol instanceof RefexDynamicIntegerBI)
 					{
 						doc.add(new IntField(COLUMN_FIELD_DATA, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
+						doc.add(new IntField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
 					}
 					else if (dataCol instanceof RefexDynamicLongBI)
 					{
 						doc.add(new LongField(COLUMN_FIELD_DATA, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
+						doc.add(new LongField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
 					}
 					else if (dataCol instanceof RefexDynamicNidBI)
 					{
 						//No need for ranges on a nid
 						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
+						doc.add(new StringField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
 					}
 					else if (dataCol instanceof RefexDynamicPolymorphicBI)
 					{
@@ -161,10 +173,12 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					else if (dataCol instanceof RefexDynamicStringBI)
 					{
 						doc.add(new TextField(COLUMN_FIELD_DATA, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+						doc.add(new TextField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
 					}
 					else if (dataCol instanceof RefexDynamicUUIDBI)
 					{
 						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
+						doc.add(new StringField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
 					}
 					else
 					{
@@ -185,8 +199,9 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 	 * @param sizeLimit
 	 * @param targetGeneration (optional) wait for an index to build, or null to not wait
 	 */
-	public final List<SearchResult> queryNumericRange(RefexDynamicDataBI queryDataLower, boolean queryDataLowerInclusive, RefexDynamicDataBI queryDataUpper,
-			boolean queryDataUpperInclusive, Integer assemblageNid, Integer[] searchColumns, int sizeLimit, Long targetGeneration) throws IOException, ParseException
+	public final List<SearchResult> queryNumericRange(final RefexDynamicDataBI queryDataLower, final boolean queryDataLowerInclusive, 
+			final RefexDynamicDataBI queryDataUpper, final boolean queryDataUpperInclusive, Integer assemblageNid, Integer[] searchColumns, 
+			int sizeLimit, Long targetGeneration) throws IOException, ParseException
 	{
 		BooleanQuery bq = new BooleanQuery();
 
@@ -195,14 +210,15 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 			bq.add(new TermQuery(new Term(COLUMN_FIELD_ASSEMBLAGE, assemblageNid + "")), Occur.MUST);
 		}
 
-		addColumnConstraint(bq, searchColumns);
-
-		if (queryDataLower.getRefexDataType() != queryDataUpper.getRefexDataType())
+		bq.add(new QueryWrapperForColumnHandling()
 		{
-			throw new ParseException("Lower and Upper values must be ov the same type");
-		}
+			@Override
+			Query buildQuery(String columnName) throws ParseException
+			{
+				return buildNumericQuery(queryDataLower, queryDataLowerInclusive, queryDataUpper, queryDataUpperInclusive, columnName);
+			}
+		}.buildColumnHandlingQuery(searchColumns), Occur.MUST);
 
-		bq.add(buildNumericQuery(queryDataLower, queryDataLowerInclusive, queryDataUpper, queryDataUpperInclusive), Occur.MUST);
 		return search(bq, sizeLimit, targetGeneration);
 	}
 
@@ -238,7 +254,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 	 * @param sizeLimit
 	 * @param targetGeneration (optional) wait for an index to build, or null to not wait
 	 */
-	public final List<SearchResult> query(RefexDynamicDataBI queryData, Integer assemblageNid, boolean prefixSearch, Integer[] searchColumns, int sizeLimit,
+	public final List<SearchResult> query(final RefexDynamicDataBI queryData, Integer assemblageNid, final boolean prefixSearch, Integer[] searchColumns, int sizeLimit,
 			Long targetGeneration) throws IOException, ParseException
 	{
 		BooleanQuery bq = new BooleanQuery();
@@ -247,23 +263,64 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 			bq.add(new TermQuery(new Term(COLUMN_FIELD_ASSEMBLAGE, assemblageNid + "")), Occur.MUST);
 		}
 
-		addColumnConstraint(bq, searchColumns);
-
 		if (queryData instanceof RefexDynamicStringBI)
 		{
-			//This is the only query type that needs tokenizing, etc.
-			return runTokenizedStringSearch(bq, ((RefexDynamicStringBI) queryData).getDataString(), COLUMN_FIELD_DATA, prefixSearch, sizeLimit, targetGeneration);
+			bq.add(new QueryWrapperForColumnHandling()
+			{
+				@Override
+				Query buildQuery(String columnName) throws ParseException, IOException
+				{
+					//This is the only query type that needs tokenizing, etc.
+					String queryString = ((RefexDynamicStringBI) queryData).getDataString();
+					//'-' signs are operators to lucene... but we want to allow nid lookups.  So escape any leading hyphens
+					//and any hyphens that are preceeded by spaces.  This way, we don't mess up UUID handling.
+					//(lucene handles UUIDs ok, because the - sign is only treated special at the beginning, or when preceeded by a space)
+					
+					if (queryString.startsWith("-"))
+					{
+						queryString = "\\" + queryString;
+					}
+					queryString = queryString.replaceAll("\\s-", " \\\\-");
+					logger.fine("Modified search string is: '" + queryString + "'");
+					return buildTokenizedStringQuery(queryString, columnName, prefixSearch);
+				}
+			}.buildColumnHandlingQuery(searchColumns), Occur.MUST);
 		}
 		else
 		{
 			if (queryData instanceof RefexDynamicBooleanBI || queryData instanceof RefexDynamicNidBI || queryData instanceof RefexDynamicUUIDBI)
 			{
-				bq.add(new TermQuery(new Term(COLUMN_FIELD_DATA, queryData.getDataObject().toString())), Occur.MUST);
+				bq.add(new QueryWrapperForColumnHandling()
+				{
+					@Override
+					Query buildQuery(String columnName) throws ParseException
+					{
+						return new TermQuery(new Term(columnName, queryData.getDataObject().toString()));
+					}
+				}.buildColumnHandlingQuery(searchColumns), Occur.MUST);
 			}
 			else if (queryData instanceof RefexDynamicDoubleBI || queryData instanceof RefexDynamicFloatBI || queryData instanceof RefexDynamicIntegerBI
 					|| queryData instanceof RefexDynamicLongBI)
 			{
-				bq.add(buildNumericQuery(queryData, true, queryData, true), Occur.MUST);
+				bq.add(new QueryWrapperForColumnHandling()
+				{
+					@Override
+					Query buildQuery(String columnName) throws ParseException
+					{
+						Query temp = buildNumericQuery(queryData, true, queryData, true, columnName);
+						
+						if ((queryData instanceof RefexDynamicLongBI && ((RefexDynamicLongBI)queryData).getDataLong() < 0) ||
+								(queryData instanceof RefexDynamicIntegerBI && ((RefexDynamicIntegerBI)queryData).getDataInteger() < 0))
+						{
+							//Looks like a nid... wrap in an or clause that would do a match on the exact term if it was indexed as a nid, rather than a numeric
+							BooleanQuery wrapper = new BooleanQuery();
+							wrapper.add(new TermQuery(new Term(columnName, queryData.getDataObject().toString())), Occur.SHOULD);
+							wrapper.add(temp, Occur.SHOULD);
+							temp = wrapper;
+						}
+						return temp;
+					}
+				}.buildColumnHandlingQuery(searchColumns), Occur.MUST);
 			}
 			else if (queryData instanceof RefexDynamicByteArrayBI)
 			{
@@ -278,8 +335,8 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 				logger.log(Level.SEVERE, "This should have been impossible (no match on col type)");
 				throw new ParseException("unexpected error, see logs");
 			}
-			return search(bq, sizeLimit, targetGeneration);
 		}
+		return search(bq, sizeLimit, targetGeneration);
 	}
 
 	/**
@@ -293,45 +350,101 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 		return query(assemblageNid + "", false, ComponentProperty.ASSEMBLAGE_ID, sizeLimit, targetGeneration);
 	}
 
-	private void addColumnConstraint(BooleanQuery bq, Integer[] columns)
+	private Query buildNumericQuery(RefexDynamicDataBI queryDataLower, boolean queryDataLowerInclusive, RefexDynamicDataBI queryDataUpper, boolean queryDataUpperInclusive,
+			String columnName) throws ParseException
 	{
-		if (columns != null && columns.length > 0)
+		//Convert both to the same type (if they differ) - go largest data type to smallest, so we don't lose precision
+		//Also - if they pass in longs that would fit in an int, also generate an int query.
+		//likewise, with Double - if they pass in a double, that would fit in a float, also generate a float query.
+		try
 		{
-			BooleanQuery nested = new BooleanQuery();
-			for (int i : columns)
+			BooleanQuery bq = new BooleanQuery();
+			boolean fitsInFloat = false;
+			boolean fitsInInt = false;
+			if (queryDataLower instanceof RefexDynamicDoubleBI || queryDataUpper instanceof RefexDynamicDoubleBI)
 			{
-				nested.add(new TermQuery(new Term(COLUMN_FIELD_ID, i + "")), Occur.SHOULD);
+				double upperVal = (queryDataUpper instanceof RefexDynamicDoubleBI ? ((RefexDynamicDoubleBI)queryDataUpper).getDataDouble() :
+					((Number)queryDataUpper.getDataObject()).doubleValue());
+				double lowerVal = (queryDataLower instanceof RefexDynamicDoubleBI ? ((RefexDynamicDoubleBI)queryDataLower).getDataDouble() :
+					((Number)queryDataLower.getDataObject()).doubleValue());
+				bq.add(NumericRangeQuery.newDoubleRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
+				
+				if ((upperVal <= Float.MAX_VALUE && upperVal >= Float.MAX_VALUE) || (lowerVal <= Float.MAX_VALUE && lowerVal >= Float.MIN_VALUE))
+				{
+					fitsInFloat = true;
+				}
 			}
-			bq.add(nested, Occur.MUST);
+			
+			if (fitsInFloat || queryDataLower instanceof RefexDynamicFloatBI || queryDataUpper instanceof RefexDynamicFloatBI)
+			{
+				float upperVal = (queryDataUpper instanceof RefexDynamicFloatBI ? ((RefexDynamicFloatBI)queryDataUpper).getDataFloat() :
+					(fitsInFloat && ((Number)queryDataUpper.getDataObject()).doubleValue() > Float.MAX_VALUE ? Float.MAX_VALUE : 
+						((Number)queryDataUpper.getDataObject()).floatValue()));
+				float lowerVal = (queryDataLower instanceof RefexDynamicFloatBI ? ((RefexDynamicFloatBI)queryDataLower).getDataFloat() :
+					(fitsInFloat && ((Number)queryDataLower.getDataObject()).doubleValue() < Float.MIN_VALUE ? Float.MIN_VALUE :
+						((Number)queryDataLower.getDataObject()).floatValue()));
+				bq.add(NumericRangeQuery.newFloatRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
+			}
+			
+			if (queryDataLower instanceof RefexDynamicLongBI || queryDataUpper instanceof RefexDynamicLongBI)
+			{
+				long upperVal = (queryDataUpper instanceof RefexDynamicLongBI ? ((RefexDynamicLongBI)queryDataUpper).getDataLong() :
+					((Number)queryDataUpper.getDataObject()).longValue());
+				long lowerVal = (queryDataLower instanceof RefexDynamicLongBI ? ((RefexDynamicLongBI)queryDataLower).getDataLong() :
+					((Number)queryDataLower.getDataObject()).longValue());
+				bq.add(NumericRangeQuery.newLongRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
+				if ((upperVal <= Integer.MAX_VALUE && upperVal >= Integer.MIN_VALUE) || (lowerVal <= Integer.MAX_VALUE && lowerVal >= Integer.MIN_VALUE))
+				{
+					fitsInInt = true;
+				}
+			}
+			
+			if (fitsInInt || queryDataLower instanceof RefexDynamicIntegerBI || queryDataUpper instanceof RefexDynamicIntegerBI)
+			{
+				int upperVal = (queryDataUpper instanceof RefexDynamicIntegerBI ? ((RefexDynamicIntegerBI)queryDataUpper).getDataInteger() :
+					(fitsInInt && ((Number)queryDataUpper.getDataObject()).longValue() > Integer.MAX_VALUE ? Integer.MAX_VALUE :
+						((Number)queryDataUpper.getDataObject()).intValue()));
+				int lowerVal = (queryDataLower instanceof RefexDynamicIntegerBI ? ((RefexDynamicIntegerBI)queryDataLower).getDataInteger() :
+					(fitsInInt && ((Number)queryDataLower.getDataObject()).longValue() < Integer.MIN_VALUE ? Integer.MIN_VALUE :
+						((Number)queryDataLower.getDataObject()).intValue()));
+				bq.add(NumericRangeQuery.newIntRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
+			}
+			if (bq.getClauses().length == 0)
+			{
+				throw new ParseException("Not a numeric data type - can't perform a range query");
+			}
+			else
+			{
+				BooleanQuery must = new BooleanQuery();
+				must.add(bq, Occur.MUST);
+				return must;
+			}
+		}
+		catch (ClassCastException e)
+		{
+			throw new ParseException("One of the values is not a numeric data type - can't perform a range query");
 		}
 	}
-
-	private Query buildNumericQuery(RefexDynamicDataBI queryDataLower, boolean queryDataLowerInclusive, RefexDynamicDataBI queryDataUpper, boolean queryDataUpperInclusive)
-			throws ParseException
+	
+	private abstract class QueryWrapperForColumnHandling
 	{
-		if (queryDataLower instanceof RefexDynamicDoubleBI)
+		abstract Query buildQuery(String columnName) throws ParseException, IOException;
+		
+		protected Query buildColumnHandlingQuery(Integer[] searchColumns) throws ParseException, IOException
 		{
-			return NumericRangeQuery.newDoubleRange(COLUMN_FIELD_DATA, ((RefexDynamicDoubleBI) queryDataLower).getDataDouble(),
-					((RefexDynamicDoubleBI) queryDataUpper).getDataDouble(), queryDataLowerInclusive, queryDataUpperInclusive);
-		}
-		else if (queryDataLower instanceof RefexDynamicFloatBI)
-		{
-			return NumericRangeQuery.newFloatRange(COLUMN_FIELD_DATA, ((RefexDynamicFloatBI) queryDataLower).getDataFloat(),
-					((RefexDynamicFloatBI) queryDataUpper).getDataFloat(), queryDataLowerInclusive, queryDataUpperInclusive);
-		}
-		else if (queryDataLower instanceof RefexDynamicIntegerBI)
-		{
-			return NumericRangeQuery.newIntRange(COLUMN_FIELD_DATA, ((RefexDynamicIntegerBI) queryDataLower).getDataInteger(),
-					((RefexDynamicIntegerBI) queryDataUpper).getDataInteger(), queryDataLowerInclusive, queryDataUpperInclusive);
-		}
-		else if (queryDataLower instanceof RefexDynamicLongBI)
-		{
-			return NumericRangeQuery.newLongRange(COLUMN_FIELD_DATA, ((RefexDynamicLongBI) queryDataLower).getDataLong(),
-					((RefexDynamicLongBI) queryDataUpper).getDataLong(), queryDataLowerInclusive, queryDataUpperInclusive);
-		}
-		else
-		{
-			throw new ParseException("Not a numeric data type - can't perform a range query");
+			if (searchColumns == null || searchColumns.length == 0)
+			{
+				return buildQuery(COLUMN_FIELD_DATA);
+			}
+			else
+			{
+				BooleanQuery group = new BooleanQuery();
+				for (int i : searchColumns)
+				{
+					group.add(buildQuery(COLUMN_FIELD_DATA + "_" + i), Occur.SHOULD);
+				}
+				return group;
+			}
 		}
 	}
 }
