@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -366,8 +367,16 @@ public abstract class LuceneIndexer implements IndexerBI {
             if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
                TermstoreLogger.logger.log(Level.FINE, "Running query: " + q.toString());
              }
-            TopDocs topDocs = searcher.search(q, sizeLimit);
+            
+            //Since the index carries some duplicates by design, which we will remove - get a few extra results up front.
+            //so we are more likely to come up with the requested number of results
+            long limitWithExtras = sizeLimit + (long)((double)sizeLimit * 0.25d);
+            
+            int adjustedLimit = (limitWithExtras > Integer.MAX_VALUE ? sizeLimit : (int)limitWithExtras);
+            
+            TopDocs topDocs = searcher.search(q, adjustedLimit);
             List<SearchResult> results = new ArrayList<>(topDocs.totalHits);
+            HashSet<Integer> includedComponentIDs = new HashSet<>();
 
             for (ScoreDoc hit : topDocs.scoreDocs) {
                 if (TermstoreLogger.logger.isLoggable(Level.FINEST)) {
@@ -375,10 +384,20 @@ public abstract class LuceneIndexer implements IndexerBI {
                 }
 
                 Document doc = searcher.doc(hit.doc);
-
-                results.add(
-                        new SearchResult(
-                                doc.getField(ComponentProperty.COMPONENT_ID.name()).numericValue().intValue(), hit.score));
+                int componentId = doc.getField(ComponentProperty.COMPONENT_ID.name()).numericValue().intValue();
+                if (includedComponentIDs.contains(componentId))
+                {
+                    continue;
+                }
+                else
+                {
+                    includedComponentIDs.add(componentId);
+                    results.add(new SearchResult(componentId, hit.score));
+                    if (results.size() == sizeLimit)
+                    {
+                        break;
+                    }
+                }
             }
             if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
                 TermstoreLogger.logger.log(Level.FINE, "Returning " + results.size() + " results from query");
