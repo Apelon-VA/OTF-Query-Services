@@ -231,7 +231,7 @@ public abstract class LuceneIndexer implements IndexerBI {
      * @param targetGeneration target generation that must be included in the
      * search or Long.MIN_VALUE if there is no need to wait for a target
      * generation.  Long.MAX_VALUE can be passed in to force this query to wait until 
-     * any inprogress indexing operations are completed - and then use the latest index.
+     * any in progress indexing operations are completed - and then use the latest index.
      * @param prefixSearch if true, utilize a search algorithm that is optimized 
      * for prefix searching, such as the searching that would be done to implement 
      * a type-ahead style search.  This is currently only applicable to 
