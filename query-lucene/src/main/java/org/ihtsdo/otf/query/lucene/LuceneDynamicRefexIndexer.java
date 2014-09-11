@@ -363,13 +363,14 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 			boolean fitsInInt = false;
 			if (queryDataLower instanceof RefexDynamicDoubleBI || queryDataUpper instanceof RefexDynamicDoubleBI)
 			{
-				double upperVal = (queryDataUpper instanceof RefexDynamicDoubleBI ? ((RefexDynamicDoubleBI)queryDataUpper).getDataDouble() :
-					((Number)queryDataUpper.getDataObject()).doubleValue());
-				double lowerVal = (queryDataLower instanceof RefexDynamicDoubleBI ? ((RefexDynamicDoubleBI)queryDataLower).getDataDouble() :
-					((Number)queryDataLower.getDataObject()).doubleValue());
+				Double upperVal = (queryDataUpper == null ? null : (queryDataUpper instanceof RefexDynamicDoubleBI ? ((RefexDynamicDoubleBI)queryDataUpper).getDataDouble() :
+					((Number)queryDataUpper.getDataObject()).doubleValue()));
+				Double lowerVal = (queryDataLower == null ? null : (queryDataLower instanceof RefexDynamicDoubleBI ? ((RefexDynamicDoubleBI)queryDataLower).getDataDouble() :
+					((Number)queryDataLower.getDataObject()).doubleValue()));
 				bq.add(NumericRangeQuery.newDoubleRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
 				
-				if ((upperVal <= Float.MAX_VALUE && upperVal >= Float.MAX_VALUE) || (lowerVal <= Float.MAX_VALUE && lowerVal >= Float.MIN_VALUE))
+				if ((upperVal != null && upperVal <= Float.MAX_VALUE && upperVal >= Float.MIN_VALUE) 
+						|| (lowerVal != null && lowerVal <= Float.MAX_VALUE && lowerVal >= Float.MIN_VALUE))
 				{
 					fitsInFloat = true;
 				}
@@ -377,23 +378,26 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 			
 			if (fitsInFloat || queryDataLower instanceof RefexDynamicFloatBI || queryDataUpper instanceof RefexDynamicFloatBI)
 			{
-				float upperVal = (queryDataUpper instanceof RefexDynamicFloatBI ? ((RefexDynamicFloatBI)queryDataUpper).getDataFloat() :
-					(fitsInFloat && ((Number)queryDataUpper.getDataObject()).doubleValue() > Float.MAX_VALUE ? Float.MAX_VALUE : 
-						((Number)queryDataUpper.getDataObject()).floatValue()));
-				float lowerVal = (queryDataLower instanceof RefexDynamicFloatBI ? ((RefexDynamicFloatBI)queryDataLower).getDataFloat() :
-					(fitsInFloat && ((Number)queryDataLower.getDataObject()).doubleValue() < Float.MIN_VALUE ? Float.MIN_VALUE :
-						((Number)queryDataLower.getDataObject()).floatValue()));
+				Float upperVal = (queryDataUpper == null ? null : 
+					(queryDataUpper == null ? null : (queryDataUpper instanceof RefexDynamicFloatBI ? ((RefexDynamicFloatBI)queryDataUpper).getDataFloat() :
+						(fitsInFloat && ((Number)queryDataUpper.getDataObject()).doubleValue() > Float.MAX_VALUE ? Float.MAX_VALUE : 
+							((Number)queryDataUpper.getDataObject()).floatValue()))));
+				Float lowerVal = (queryDataLower == null ? null : 
+					(queryDataLower instanceof RefexDynamicFloatBI ? ((RefexDynamicFloatBI)queryDataLower).getDataFloat() :
+						(fitsInFloat && ((Number)queryDataLower.getDataObject()).doubleValue() < Float.MIN_VALUE ? Float.MIN_VALUE :
+							((Number)queryDataLower.getDataObject()).floatValue())));
 				bq.add(NumericRangeQuery.newFloatRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
 			}
 			
 			if (queryDataLower instanceof RefexDynamicLongBI || queryDataUpper instanceof RefexDynamicLongBI)
 			{
-				long upperVal = (queryDataUpper instanceof RefexDynamicLongBI ? ((RefexDynamicLongBI)queryDataUpper).getDataLong() :
-					((Number)queryDataUpper.getDataObject()).longValue());
-				long lowerVal = (queryDataLower instanceof RefexDynamicLongBI ? ((RefexDynamicLongBI)queryDataLower).getDataLong() :
-					((Number)queryDataLower.getDataObject()).longValue());
+				Long upperVal = (queryDataUpper == null ? null : (queryDataUpper instanceof RefexDynamicLongBI ? ((RefexDynamicLongBI)queryDataUpper).getDataLong() :
+					((Number)queryDataUpper.getDataObject()).longValue()));
+				Long lowerVal = (queryDataLower == null ? null : (queryDataLower instanceof RefexDynamicLongBI ? ((RefexDynamicLongBI)queryDataLower).getDataLong() :
+					((Number)queryDataLower.getDataObject()).longValue()));
 				bq.add(NumericRangeQuery.newLongRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
-				if ((upperVal <= Integer.MAX_VALUE && upperVal >= Integer.MIN_VALUE) || (lowerVal <= Integer.MAX_VALUE && lowerVal >= Integer.MIN_VALUE))
+				if ((upperVal != null && upperVal <= Integer.MAX_VALUE && upperVal >= Integer.MIN_VALUE) 
+						|| (lowerVal != null && lowerVal <= Integer.MAX_VALUE && lowerVal >= Integer.MIN_VALUE))
 				{
 					fitsInInt = true;
 				}
@@ -401,12 +405,14 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 			
 			if (fitsInInt || queryDataLower instanceof RefexDynamicIntegerBI || queryDataUpper instanceof RefexDynamicIntegerBI)
 			{
-				int upperVal = (queryDataUpper instanceof RefexDynamicIntegerBI ? ((RefexDynamicIntegerBI)queryDataUpper).getDataInteger() :
-					(fitsInInt && ((Number)queryDataUpper.getDataObject()).longValue() > Integer.MAX_VALUE ? Integer.MAX_VALUE :
-						((Number)queryDataUpper.getDataObject()).intValue()));
-				int lowerVal = (queryDataLower instanceof RefexDynamicIntegerBI ? ((RefexDynamicIntegerBI)queryDataLower).getDataInteger() :
-					(fitsInInt && ((Number)queryDataLower.getDataObject()).longValue() < Integer.MIN_VALUE ? Integer.MIN_VALUE :
-						((Number)queryDataLower.getDataObject()).intValue()));
+				Integer upperVal = (queryDataUpper == null ? null : 
+					(queryDataUpper instanceof RefexDynamicIntegerBI ? ((RefexDynamicIntegerBI)queryDataUpper).getDataInteger() :
+						(fitsInInt && ((Number)queryDataUpper.getDataObject()).longValue() > Integer.MAX_VALUE ? Integer.MAX_VALUE :
+							((Number)queryDataUpper.getDataObject()).intValue())));
+				Integer lowerVal = (queryDataLower == null ? null : 
+					(queryDataLower instanceof RefexDynamicIntegerBI ? ((RefexDynamicIntegerBI)queryDataLower).getDataInteger() :
+						(fitsInInt && ((Number)queryDataLower.getDataObject()).longValue() < Integer.MIN_VALUE ? Integer.MIN_VALUE :
+							((Number)queryDataLower.getDataObject()).intValue())));
 				bq.add(NumericRangeQuery.newIntRange(columnName, lowerVal, upperVal, queryDataLowerInclusive, queryDataUpperInclusive), Occur.SHOULD);
 			}
 			if (bq.getClauses().length == 0)
