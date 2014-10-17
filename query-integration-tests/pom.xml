@@ -91,7 +91,7 @@
                                 <artifact>
                                     <groupId>gov.va.isaac.db</groupId>
                                     <artifactId>solor-snomed</artifactId>
-                                    <version>2014.09.14</version>
+                                    <version>2014.10.17</version>
                                     <classifier>active-only</classifier>
                                     <type>bdb.zip</type>
                                 </artifact>
@@ -109,11 +109,29 @@
                 <executions>
                     <execution>
                         <phase>generate-test-resources</phase>
+                        <id>Move-DB-Folder</id>
                         <configuration>
                             <skip>${skipTests}</skip>
                             <tasks>
                                 <move todir="${project.build.directory}/test-resources">
                                     <fileset dir="${project.build.directory}/test-resources" includes="*/berkeley-db/**" />
+                                    <cutdirsmapper dirs="1" />
+                                </move>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <!-- Put the lucene folder where the test runner expects it -->
+                    <execution>
+                        <phase>generate-test-resources</phase>
+                        <id>Move-Lucene-Folder</id>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <tasks>
+                                <move todir="${project.build.directory}/test-resources/berkeley-db">
+                                    <fileset dir="${project.build.directory}/test-resources" includes="*/lucene/**" />
                                     <cutdirsmapper dirs="1" />
                                 </move>
                             </tasks>
