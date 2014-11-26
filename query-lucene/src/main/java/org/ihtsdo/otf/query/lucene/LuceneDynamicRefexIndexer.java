@@ -113,9 +113,10 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 			Integer[] columns = lric.whatColumnsToIndex(rdv.getAssemblageNid());
 			if (columns != null)
 			{
+				int dataColCount = rdv.getData().length;
 				for (int col : columns)
 				{
-					RefexDynamicDataBI dataCol = rdv.getData(col);
+					RefexDynamicDataBI dataCol = col >= dataColCount ? null : rdv.getData(col);
 					
 					//Not the greatest design for diskspace / performance... but if we want to be able to support searching across 
 					//all fields / all refexes - and also support searching per-field within a single refex, we need to double index 
