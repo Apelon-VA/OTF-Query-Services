@@ -139,7 +139,7 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					}
 					else if (dataCol instanceof RefexDynamicByteArrayBI)
 					{
-						logger.warning("Dynamic Refex Indexer configured to index a field that isn't indexable");
+						logger.warning("Dynamic Refex Indexer configured to index a field that isn't indexable (byte array) in " + rdv.toUserString());
 					}
 					else if (dataCol instanceof RefexDynamicDoubleBI)
 					{
