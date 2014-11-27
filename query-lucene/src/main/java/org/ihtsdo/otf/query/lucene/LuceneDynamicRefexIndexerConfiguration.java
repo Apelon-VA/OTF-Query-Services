@@ -22,6 +22,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
@@ -47,6 +48,7 @@ import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
 import org.ihtsdo.otf.tcc.model.cc.refexDynamic.data.RefexDynamicData;
 import org.ihtsdo.otf.tcc.model.cc.refexDynamic.data.dataTypes.RefexDynamicString;
+import org.ihtsdo.otf.tcc.model.index.service.IndexStatusListenerBI;
 import org.jvnet.hk2.annotations.Service;
 
 /**
@@ -150,6 +152,11 @@ public class LuceneDynamicRefexIndexerConfiguration
 	public static void configureColumnsToIndex(int assemblageNid, Integer[] columnsToIndex) throws ContradictionException, InvalidCAB, IOException
 	{
 		Hk2Looker.get().getService(LuceneDynamicRefexIndexerConfiguration.class).readNeeded_ = true;
+		List<IndexStatusListenerBI> islList = Hk2Looker.get().getAllServices(IndexStatusListenerBI.class);
+		for (IndexStatusListenerBI isl : islList)
+		{
+			isl.indexConfigurationChanged(Hk2Looker.get().getService(LuceneDynamicRefexIndexer.class));
+		}
 
 		ConceptVersionBI assemblageConceptC = Ts.get().getConceptVersion(StandardViewCoordinates.getWbAuxiliary(),
 				RefexDynamic.REFEX_DYNAMIC_INDEX_CONFIGURATION.getNid());
@@ -263,6 +270,11 @@ public class LuceneDynamicRefexIndexerConfiguration
 		if (rdv != null && rdv.isActive())
 		{
 			Hk2Looker.get().getService(LuceneDynamicRefexIndexerConfiguration.class).readNeeded_ = true;
+			List<IndexStatusListenerBI> islList = Hk2Looker.get().getAllServices(IndexStatusListenerBI.class);
+			for (IndexStatusListenerBI isl : islList)
+			{
+				isl.indexConfigurationChanged(Hk2Looker.get().getService(LuceneDynamicRefexIndexer.class));
+			}
 			RefexDynamicCAB rb = rdv.makeBlueprint(StandardViewCoordinates.getWbAuxiliary(), IdDirective.PRESERVE, RefexDirective.EXCLUDE);
 			rb.setStatus(Status.INACTIVE);
 			ConceptVersionBI indexConfigConceptC = Ts.get().getConceptVersion(StandardViewCoordinates.getWbAuxiliary(),
