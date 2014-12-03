@@ -82,7 +82,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jersey-version>2.2</jersey-version>
         <junit.version>4.11</junit.version>
-        <otf-versioning-service.version>1.1-va-1.10-SNAPSHOT</otf-versioning-service.version>
+        <otf-versioning-service.version>1.1-va-1.9.1</otf-versioning-service.version>
         <org.apache.lucene.version>4.3.1</org.apache.lucene.version>
         <hk2.version>2.2.0-b14</hk2.version>
         <maven-plugin-plugin.version>2.6</maven-plugin-plugin.version>
@@ -206,8 +206,7 @@
         </plugins>
     </build>
     <modules>
-        <module>query-client</module>
-        <module>query-jaxb-objects</module>
+        <!-- All done via profiles -->
     </modules>
     <profiles>
         <profile>
@@ -224,14 +223,29 @@
                 <module>query-integration-tests</module>
                 <module>query-documentation</module>
                 <module>query-lucene</module>
+                <module>query-client</module>
+                <module>query-jaxb-objects</module>
             </modules>
         </profile>
         <profile>
             <id>query-service</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <modules>
                 <module>query-service</module>
                 <module>query-implementation</module>
                 <module>query-lucene</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>client-service</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>query-client</module>
+                <module>query-jaxb-objects</module>
             </modules>
         </profile>
         <profile>
@@ -243,7 +257,6 @@
         <profile>
             <id>documentation</id>
             <modules>
-                <module>query-integration-tests</module>
                 <module>query-documentation</module>
             </modules>
         </profile>

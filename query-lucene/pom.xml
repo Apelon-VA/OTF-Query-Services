@@ -44,7 +44,6 @@
             <groupId>org.ihtsdo.otf</groupId>
             <artifactId>tcc-model-impl</artifactId>
             <version>${otf-versioning-service.version}</version>
-            <type>jar</type>
         </dependency>
     </dependencies>
     <build>
