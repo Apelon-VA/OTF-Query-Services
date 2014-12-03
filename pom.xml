@@ -8,7 +8,7 @@
     </parent>
     <groupId>org.ihtsdo.otf</groupId>
     <artifactId>query-parent</artifactId>
-    <version>1.1-va-1.10-SNAPSHOT</version>
+    <version>1.1-va-1.10-test</version>
     <packaging>pom</packaging>
     <name>${branch}: (MMP) Query service parent</name>
     <description>Parent project of modules that support query services.</description>
@@ -68,35 +68,21 @@
         </contributor>
     </contributors>
     <scm>
-        <connection>scm:git:https://github.com/Apelon-VA/OTF-Query-Services.git</connection>
-        <developerConnection>scm:git:git@github.com:Apelon-VA/OTF-Query-Services.git</developerConnection>
         <url>https://github.com/Apelon-VA/OTF-Query-Services</url>
-        <tag>va-branch</tag>
     </scm>
     <distributionManagement>
-        <!-- I don't normally define these here, but the override doesn't seem to work when it is configured in a parent.  Sigh.  Maven. -->
-        <repository>
-          <id>maestro-deploy</id>
-          <name>VA Public Releases Repository</name>
-          <url>http://va-archiva-host:8082/archiva/repository/va-releases/</url>
-        </repository>
-        <snapshotRepository>
-          <id>maestro-deploy</id>
-          <name>VA Public Snapshots Repository</name>
-          <url>http://va-archiva-host:8082/archiva/repository/va-snapshots/</url>
-        </snapshotRepository>
         <site>
             <id>site</id>
             <url>scm:git:git@github.com:Apelon-VA/OTF-Query-Services.git</url>
         </site>
     </distributionManagement>
     <properties>
-        <branch>QS ${project.scm.tag}</branch>
+        <branch>QS va</branch> <!-- gitflow doesn't use scm variables - not sure how to automate this -->
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jersey-version>2.2</jersey-version>
         <junit.version>4.11</junit.version>
-        <otf-versioning-service.version>1.1-va-1.10-SNAPSHOT</otf-versioning-service.version>
+        <otf-versioning-service.version>1.1-va-1.9.1</otf-versioning-service.version>
         <org.apache.lucene.version>4.3.1</org.apache.lucene.version>
         <hk2.version>2.2.0-b14</hk2.version>
         <maven-plugin-plugin.version>2.6</maven-plugin-plugin.version>
@@ -146,7 +132,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -198,39 +183,69 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release-plugin.version}</version>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>1.0-m4.3</version>
                 <configuration>
-                    <preparationGoals>clean install</preparationGoals>
+                    <pushReleases>false</pushReleases>
+                   <noDeploy>true</noDeploy>
+                  <noTag>true</noTag>
+                  
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <!-- Disable the site deploy - do not want this to run from a branch!  Bug filed https://jira.ihtsdotools.org/browse/OTFISSUE-6 -->
-                    <goals>deploy</goals>
+                    <scmCommentPrefix>[jgitflow-plugin]</scmCommentPrefix>
+                    <enableSshAgent>true</enableSshAgent>
+                    <flowInitContext>
+                        <masterBranchName>va-master</masterBranchName>
+                        <developBranchName>va-develop</developBranchName>
+                        <featureBranchPrefix>va-feature-</featureBranchPrefix>
+                        <releaseBranchPrefix>va-release-</releaseBranchPrefix>
+                        <hotfixBranchPrefix>va-hotfix-</hotfixBranchPrefix>
+                    </flowInitContext>
                 </configuration>
             </plugin>
         </plugins>
     </build>
     <modules>
-        <module>query-client</module>
-        <module>query-jaxb-objects</module>
+        <!-- All done via profiles -->
     </modules>
     <profiles>
         <profile>
             <id>all</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
             <modules>
                 <module>query-service</module>
                 <module>query-implementation</module>
                 <module>query-integration-tests</module>
                 <module>query-documentation</module>
                 <module>query-lucene</module>
+                <module>query-client</module>
+                <module>query-jaxb-objects</module>
             </modules>
         </profile>
         <profile>
             <id>query-service</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <modules>
                 <module>query-service</module>
                 <module>query-implementation</module>
                 <module>query-lucene</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>client-service</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>query-client</module>
+                <module>query-jaxb-objects</module>
             </modules>
         </profile>
         <profile>
@@ -242,7 +257,6 @@
         <profile>
             <id>documentation</id>
             <modules>
-                <module>query-integration-tests</module>
                 <module>query-documentation</module>
             </modules>
         </profile>
