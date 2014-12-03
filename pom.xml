@@ -256,6 +256,9 @@
         </profile>
         <profile>
             <id>documentation</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <modules>
                 <module>query-documentation</module>
             </modules>
