@@ -261,6 +261,7 @@
             </activation>
             <modules>
                 <module>query-documentation</module>
+                <module>query-integration-tests</module>
             </modules>
         </profile>
     </profiles>
