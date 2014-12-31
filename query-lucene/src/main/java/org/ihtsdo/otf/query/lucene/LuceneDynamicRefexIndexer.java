@@ -128,6 +128,8 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					//the cheaper option from a disk space perspective (maybe, depending on the data) would be to create a document per 
 					//column.  The queries would be trivial to write then, but we would be duplicating the component nid and assemblage nid
 					//in each document, which is also expensive.  It also doesn't fit the model in OTF, of a document per component.
+					
+					//We also duplicate again, on string fields by indexing with the white space analyzer, in addition to the normal one.
 
 					handleType(doc, dataCol, col, rdv);
 				}
@@ -184,11 +186,17 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 		{
 			doc.add(new TextField(COLUMN_FIELD_DATA, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
 			doc.add(new TextField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+			//yes, indexed 4 different times - twice with the standard analyzer, twice with the whitespace analyzer.
+			doc.add(new TextField(COLUMN_FIELD_DATA + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+			doc.add(new TextField(COLUMN_FIELD_DATA + "_" + colNumber + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, 
+					((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
 		}
 		else if (dataCol instanceof RefexDynamicUUIDBI)
 		{
-			doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
-			doc.add(new StringField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
+			//Use the whitespace analyzer on UUIDs
+			doc.add(new StringField(COLUMN_FIELD_DATA + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
+			doc.add(new StringField(COLUMN_FIELD_DATA + "_" + colNumber + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, 
+					((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
 		}
 		else if (dataCol instanceof RefexDynamicArrayBI<?>)
 		{

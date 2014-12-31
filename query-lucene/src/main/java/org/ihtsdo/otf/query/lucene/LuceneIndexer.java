@@ -3,8 +3,6 @@ package org.ihtsdo.otf.query.lucene;
 //~--- non-JDK imports --------------------------------------------------------
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.FieldType;
@@ -110,7 +108,7 @@ public abstract class LuceneIndexer implements IndexerBI {
 
         indexDirectory.clearLock("write.lock");
 
-        IndexWriterConfig config = new IndexWriterConfig(luceneVersion, new StandardAnalyzer(luceneVersion));
+        IndexWriterConfig config = new IndexWriterConfig(luceneVersion, new PerFieldAnalyzer());
         MergePolicy mergePolicy = new LogByteSizeMergePolicy();
 
         config.setMergePolicy(mergePolicy);
@@ -538,14 +536,14 @@ public abstract class LuceneIndexer implements IndexerBI {
         
         if (prefixSearch) 
         {
-            bq.add(buildPrefixQuery(query,field, new StandardAnalyzer(LuceneIndexer.luceneVersion)), Occur.SHOULD);
-            bq.add(buildPrefixQuery(query,field, new WhitespaceAnalyzer(LuceneIndexer.luceneVersion)), Occur.SHOULD);
+            bq.add(buildPrefixQuery(query,field, new PerFieldAnalyzer()), Occur.SHOULD);
+            bq.add(buildPrefixQuery(query,field + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, new PerFieldAnalyzer()), Occur.SHOULD);
         }
         else {
-            QueryParser qp1 = new QueryParser(LuceneIndexer.luceneVersion, field, new StandardAnalyzer(LuceneIndexer.luceneVersion));
+            QueryParser qp1 = new QueryParser(LuceneIndexer.luceneVersion, field, new PerFieldAnalyzer());
             qp1.setAllowLeadingWildcard(true);
             bq.add(qp1.parse(query), Occur.SHOULD);
-            QueryParser qp2 = new QueryParser(LuceneIndexer.luceneVersion, field, new WhitespaceAnalyzer(LuceneIndexer.luceneVersion));
+            QueryParser qp2 = new QueryParser(LuceneIndexer.luceneVersion, field + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, new PerFieldAnalyzer());
             qp2.setAllowLeadingWildcard(true);
             bq.add(qp2.parse(query), Occur.SHOULD);
         }
