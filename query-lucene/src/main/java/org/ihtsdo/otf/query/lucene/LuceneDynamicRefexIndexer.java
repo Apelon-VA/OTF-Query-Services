@@ -46,6 +46,7 @@ import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.refexDynamic.RefexDynamicChronicleBI;
 import org.ihtsdo.otf.tcc.api.refexDynamic.RefexDynamicVersionBI;
 import org.ihtsdo.otf.tcc.api.refexDynamic.data.RefexDynamicDataBI;
+import org.ihtsdo.otf.tcc.api.refexDynamic.data.dataTypes.RefexDynamicArrayBI;
 import org.ihtsdo.otf.tcc.api.refexDynamic.data.dataTypes.RefexDynamicBooleanBI;
 import org.ihtsdo.otf.tcc.api.refexDynamic.data.dataTypes.RefexDynamicByteArrayBI;
 import org.ihtsdo.otf.tcc.api.refexDynamic.data.dataTypes.RefexDynamicDoubleBI;
@@ -127,66 +128,86 @@ public class LuceneDynamicRefexIndexer extends LuceneIndexer
 					//the cheaper option from a disk space perspective (maybe, depending on the data) would be to create a document per 
 					//column.  The queries would be trivial to write then, but we would be duplicating the component nid and assemblage nid
 					//in each document, which is also expensive.  It also doesn't fit the model in OTF, of a document per component.
+					
+					//We also duplicate again, on string fields by indexing with the white space analyzer, in addition to the normal one.
 
-					if (dataCol == null)
-					{
-						//noop
-					}
-					else if (dataCol instanceof RefexDynamicBooleanBI)
-					{
-						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
-						doc.add(new StringField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
-					}
-					else if (dataCol instanceof RefexDynamicByteArrayBI)
-					{
-						logger.warning("Dynamic Refex Indexer configured to index a field that isn't indexable (byte array) in " + rdv.toUserString());
-					}
-					else if (dataCol instanceof RefexDynamicDoubleBI)
-					{
-						doc.add(new DoubleField(COLUMN_FIELD_DATA, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
-						doc.add(new DoubleField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
-					}
-					else if (dataCol instanceof RefexDynamicFloatBI)
-					{
-						doc.add(new FloatField(COLUMN_FIELD_DATA, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
-						doc.add(new FloatField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
-					}
-					else if (dataCol instanceof RefexDynamicIntegerBI)
-					{
-						doc.add(new IntField(COLUMN_FIELD_DATA, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
-						doc.add(new IntField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
-					}
-					else if (dataCol instanceof RefexDynamicLongBI)
-					{
-						doc.add(new LongField(COLUMN_FIELD_DATA, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
-						doc.add(new LongField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
-					}
-					else if (dataCol instanceof RefexDynamicNidBI)
-					{
-						//No need for ranges on a nid
-						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
-						doc.add(new StringField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
-					}
-					else if (dataCol instanceof RefexDynamicPolymorphicBI)
-					{
-						logger.log(Level.SEVERE, "This should have been impossible (polymorphic?)");
-					}
-					else if (dataCol instanceof RefexDynamicStringBI)
-					{
-						doc.add(new TextField(COLUMN_FIELD_DATA, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
-						doc.add(new TextField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
-					}
-					else if (dataCol instanceof RefexDynamicUUIDBI)
-					{
-						doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
-						doc.add(new StringField(COLUMN_FIELD_DATA + "_" + col, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
-					}
-					else
-					{
-						logger.log(Level.SEVERE, "This should have been impossible (no match on col type) " + dataCol);
-					}
+					handleType(doc, dataCol, col, rdv);
 				}
 			}
+		}
+	}
+	
+	private void handleType(Document doc, RefexDynamicDataBI dataCol, int colNumber, RefexDynamicVersionBI<?> rdv)
+	{
+		if (dataCol == null)
+		{
+			//noop
+		}
+		else if (dataCol instanceof RefexDynamicBooleanBI)
+		{
+			doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
+			doc.add(new StringField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicBooleanBI) dataCol).getDataBoolean() + "", Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicByteArrayBI)
+		{
+			logger.warning("Dynamic Refex Indexer configured to index a field that isn't indexable (byte array) in " + rdv.toUserString());
+		}
+		else if (dataCol instanceof RefexDynamicDoubleBI)
+		{
+			doc.add(new DoubleField(COLUMN_FIELD_DATA, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
+			doc.add(new DoubleField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicDoubleBI) dataCol).getDataDouble(), Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicFloatBI)
+		{
+			doc.add(new FloatField(COLUMN_FIELD_DATA, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
+			doc.add(new FloatField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicFloatBI) dataCol).getDataFloat(), Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicIntegerBI)
+		{
+			doc.add(new IntField(COLUMN_FIELD_DATA, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
+			doc.add(new IntField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicIntegerBI) dataCol).getDataInteger(), Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicLongBI)
+		{
+			doc.add(new LongField(COLUMN_FIELD_DATA, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
+			doc.add(new LongField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicLongBI) dataCol).getDataLong(), Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicNidBI)
+		{
+			//No need for ranges on a nid
+			doc.add(new StringField(COLUMN_FIELD_DATA, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
+			doc.add(new StringField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicNidBI) dataCol).getDataNid() + "", Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicPolymorphicBI)
+		{
+			logger.log(Level.SEVERE, "This should have been impossible (polymorphic?)");
+		}
+		else if (dataCol instanceof RefexDynamicStringBI)
+		{
+			doc.add(new TextField(COLUMN_FIELD_DATA, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+			doc.add(new TextField(COLUMN_FIELD_DATA + "_" + colNumber, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+			//yes, indexed 4 different times - twice with the standard analyzer, twice with the whitespace analyzer.
+			doc.add(new TextField(COLUMN_FIELD_DATA + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, ((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+			doc.add(new TextField(COLUMN_FIELD_DATA + "_" + colNumber + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, 
+					((RefexDynamicStringBI) dataCol).getDataString(), Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicUUIDBI)
+		{
+			//Use the whitespace analyzer on UUIDs
+			doc.add(new StringField(COLUMN_FIELD_DATA + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, ((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
+			doc.add(new StringField(COLUMN_FIELD_DATA + "_" + colNumber + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, 
+					((RefexDynamicUUIDBI) dataCol).getDataUUID().toString(), Store.NO));
+		}
+		else if (dataCol instanceof RefexDynamicArrayBI<?>)
+		{
+			for (RefexDynamicDataBI nestedData : ((RefexDynamicArrayBI)dataCol).getDataArray())
+			{
+				handleType(doc, nestedData, colNumber, rdv);
+			}
+		}
+		else
+		{
+			logger.log(Level.SEVERE, "This should have been impossible (no match on col type) " + dataCol);
 		}
 	}
 

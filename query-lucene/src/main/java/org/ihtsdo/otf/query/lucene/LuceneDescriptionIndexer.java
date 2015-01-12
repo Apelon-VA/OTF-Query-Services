@@ -48,7 +48,10 @@ public class LuceneDescriptionIndexer extends LuceneIndexer implements IndexerBI
             for (DescriptionVersionBI descriptionVersion : desc.getVersions()) {
                 if ((lastDescText == null) || 
                         (lastDescText.equals(descriptionVersion.getText()) == false)) {
+                    //index twice - once with the standard analyzer, once with the whitespace analyzer.
                     doc.add(new TextField(ComponentProperty.DESCRIPTION_TEXT.name(), 
+                            descriptionVersion.getText(), Field.Store.NO));
+                    doc.add(new TextField(ComponentProperty.DESCRIPTION_TEXT.name() + PerFieldAnalyzer.WHITE_SPACE_FIELD_MARKER, 
                             descriptionVersion.getText(), Field.Store.NO));
                     lastDescText = descriptionVersion.getText();
                 } 
