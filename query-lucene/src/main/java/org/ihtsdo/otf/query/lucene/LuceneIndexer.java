@@ -260,7 +260,7 @@ public abstract class LuceneIndexer implements IndexerBI {
      *     Dynamic Refex Assemblage - and that particular Dynamic Refex Assemblage is 
      *     defined as an annotation style refex.  
      *
-     * @return a List of <code>SearchResult</codes> that contins the nid of the
+     * @return a List of <code>SearchResult</codes> that contains the nid of the
      * component that matched, and the score of that match relative to other
      * matches.
      * @throws IOException
