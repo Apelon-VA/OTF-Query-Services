@@ -145,11 +145,14 @@ public class LuceneDynamicRefexIndexerConfiguration
 	 * For annotation style - you can configure just indexing the assemblage itself, or you can also
 	 * index individual data columns.
 	 * 
+	 * @param skipReindex - if true - does not do a full DB reindex (useful if you are enabling an index on a new refex that has never been used)
+	 * otherwise - leave false - so that a full reindex occurs (on this thread) and the index becomes valid.
+	 * 
 	 * @throws IOException
 	 * @throws InvalidCAB
 	 * @throws ContradictionException
 	 */
-	public static void configureColumnsToIndex(int assemblageNid, Integer[] columnsToIndex) throws ContradictionException, InvalidCAB, IOException
+	public static void configureColumnsToIndex(int assemblageNid, Integer[] columnsToIndex, boolean skipReindex) throws ContradictionException, InvalidCAB, IOException
 	{
 		Hk2Looker.get().getService(LuceneDynamicRefexIndexerConfiguration.class).readNeeded_ = true;
 		List<IndexStatusListenerBI> islList = Hk2Looker.get().getAllServices(IndexStatusListenerBI.class);
@@ -158,10 +161,12 @@ public class LuceneDynamicRefexIndexerConfiguration
 			isl.indexConfigurationChanged(Hk2Looker.get().getService(LuceneDynamicRefexIndexer.class));
 		}
 
+		ConceptChronicleBI referencedAssemblageConceptC = Ts.get().getConcept(assemblageNid);
+		
 		ConceptVersionBI assemblageConceptC = Ts.get().getConceptVersion(StandardViewCoordinates.getWbAuxiliary(),
 				RefexDynamic.REFEX_DYNAMIC_INDEX_CONFIGURATION.getNid());
 		
-		logger.info("Configuring index for dynamic refex assemblage '" + assemblageConceptC.toUserString() + "' on columns " + Arrays.deepToString(columnsToIndex));
+		logger.info("Configuring index for dynamic refex assemblage '" + referencedAssemblageConceptC.toUserString() + "' on columns " + Arrays.deepToString(columnsToIndex));
 
 		StringBuilder buf = new StringBuilder();
 		RefexDynamicData[] data = null;
@@ -215,12 +220,14 @@ public class LuceneDynamicRefexIndexerConfiguration
 				TermAux.WB_AUX_PATH.getLenient().getConceptNid()),
 				StandardViewCoordinates.getWbAuxiliary()).construct(rdb);
 		
-		ConceptChronicleBI referencedAssemblageConceptC = Ts.get().getConcept(assemblageNid);
 		Ts.get().addUncommitted(assemblageConceptC);
 		Ts.get().addUncommitted(referencedAssemblageConceptC);
 		Ts.get().commit(assemblageConceptC);
 		Ts.get().commit(referencedAssemblageConceptC);
-		Ts.get().index(new Class[] {LuceneDynamicRefexIndexer.class});
+		if (!skipReindex)
+		{
+			Ts.get().index(new Class[] {LuceneDynamicRefexIndexer.class});
+		}
 	}
 	
 	/**
