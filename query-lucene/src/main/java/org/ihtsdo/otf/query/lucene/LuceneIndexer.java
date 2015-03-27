@@ -330,6 +330,7 @@ public abstract class LuceneIndexer implements IndexerBI {
     @Override
     public final Future<Long> index(ComponentChronicleBI<?> chronicle) {
         if (!enabled) {
+            releaseLatch(chronicle.getNid(), Long.MIN_VALUE);
             return null;
         }
 
@@ -339,6 +340,10 @@ public abstract class LuceneIndexer implements IndexerBI {
             luceneWriterFutureCheckerService.execute(new FutureChecker(future));
 
             return future;
+        }
+        else
+        {
+            releaseLatch(chronicle.getNid(), Long.MIN_VALUE);
         }
 
         return unindexedFuture;
@@ -448,7 +453,6 @@ public abstract class LuceneIndexer implements IndexerBI {
 
         @Override
         public Long call() throws Exception {
-            IndexedGenerationCallable latch = componentNidLatch.remove(chronicle.getNid());
             Document doc = new Document();
 
             doc.add(new IntField(ComponentProperty.COMPONENT_ID.name(), chronicle.getNid(),
@@ -467,11 +471,18 @@ public abstract class LuceneIndexer implements IndexerBI {
             // by regenerating the index.
             long indexGeneration = trackingIndexWriter.addDocument(doc);
 
-            if (latch != null) {
-                latch.setIndexGeneration(indexGeneration);
-            }
+            releaseLatch(chronicle.getNid(), indexGeneration);
 
             return indexGeneration;
+        }
+    }
+    
+    protected void releaseLatch(int latchNid, long indexGeneration)
+    {
+        IndexedGenerationCallable latch = componentNidLatch.remove(latchNid);
+
+        if (latch != null) {
+            latch.setIndexGeneration(indexGeneration);
         }
     }
 
